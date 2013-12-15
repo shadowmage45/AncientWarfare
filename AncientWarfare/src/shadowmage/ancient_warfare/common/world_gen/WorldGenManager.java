@@ -177,6 +177,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     map = new WorldGenStructureMap();
     WorldGenManager.instance().dimensionStructures.put(dim, map);
     }
+  
   Pair<Float, Integer> values =  WorldGenManager.instance().dimensionStructures.get(dim).getClosestStructureDistance(chunkX, chunkZ, maxRange);
   foundValue = values.value();
   if(values.key()==-1)
@@ -191,6 +192,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     return;//early out for structures too close together
     }
+
   /**
    * select structure from those available to the current available value....
    */
@@ -418,7 +420,7 @@ public void addStructureMapForDimension(int dim, WorldGenStructureMap map)
  * if so, it chcks to see if structBB has overlap with the previously generated struct BB
  * @return
  */
-private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockPosition hit, int face, int chunkX, int chunkZ)
+public boolean checkBBCollisions(World world, ProcessedStructure struct, BlockPosition hit, int face, int chunkX, int chunkZ)
   {
   int dim = world.provider.dimensionId;
   if(!dimensionStructures.containsKey(dim))
@@ -426,7 +428,12 @@ private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockP
     return false;
     }
   WorldGenStructureMap mp = dimensionStructures.get(dim);
-  StructureBB bb = null;
+  StructureBB bb = struct.getStructureBB(hit, face);
+  int expA = struct.getClearingBuffer();
+  int expB = struct.getLevelingBuffer();
+  int expAmt = expA > expB ? expA : expB;
+  bb.expand(expAmt, expAmt, expAmt);
+  
   StructureBB checkBB = null;
   ProcessedStructure check;
   for(int cX = chunkX-1; cX <= chunkX+1; cX++)
@@ -435,25 +442,20 @@ private boolean checkBBCollisions(World world, ProcessedStructure struct, BlockP
       {
       GeneratedStructureEntry gen = mp.getEntryFor(cX, cZ);
       if(gen!=null)
-        {
-        if(bb==null)
-          {
-          bb=struct.getStructureBB(hit, face);  
-          int expA = struct.getClearingBuffer();
-          int expB = struct.getLevelingBuffer();
-          int expAmt = expA > expB ? expA : expB;
-          bb.expand(expAmt, expAmt, expAmt);
-          }
+        {     
         check = StructureManager.instance().getStructureServer(gen.name);
-        checkBB = check.getStructureBB(new BlockPosition(cX*16+gen.xOff, gen.yPos, cZ*16+gen.zOff), gen.face);
-        int expA = check.getClearingBuffer();
-        int expB = check.getLevelingBuffer();
-        int expAmt = expA > expB ? expA : expB;
-        checkBB.expand(expAmt, expAmt, expAmt);
-        if(bb.collidesWith(checkBB))
+        if(check!=null)
           {
-          return true;
-          }
+          checkBB = check.getStructureBB(new BlockPosition(cX*16+gen.xOff, gen.yPos, cZ*16+gen.zOff), gen.face);
+          expA = check.getClearingBuffer();
+          expB = check.getLevelingBuffer();
+          expAmt = expA > expB ? expA : expB;
+          checkBB.expand(expAmt, expAmt, expAmt);
+          if(bb.collidesWith(checkBB))
+            {
+            return true;
+            }
+          }  
         }
       }
     }

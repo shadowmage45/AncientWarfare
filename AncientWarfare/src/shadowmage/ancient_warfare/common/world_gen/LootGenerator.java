@@ -115,8 +115,7 @@ public void addLootToTables()
 //    {
 //    if(c==null){continue;}
 //    addLoot(c.getItemToConstruct(), 1, 1, 1);
-//    }   
-  
+//    }
   }
 
 private void addLoot(ItemStack item, int min, int max, int weight)

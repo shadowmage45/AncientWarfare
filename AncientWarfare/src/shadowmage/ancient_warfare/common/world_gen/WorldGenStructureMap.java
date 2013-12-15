@@ -84,9 +84,9 @@ public void readFromNBT(NBTTagCompound tag)
       this.generatedStructures.get(xPos).put(zPos, ent);
       }
     }
-  NBTTagList uniqueList = tag.getTagList("uniques");  
+  NBTTagList uniqueList = tag.getTagList("uniques");
   for(int i = 0; i < uniqueList.tagCount(); i++)
-    {    
+    {
     this.generatedUniques.add(((NBTTagString)uniqueList.tagAt(i)).data);
     }
   }
