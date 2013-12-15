@@ -187,7 +187,10 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     dist = values.key();
     } 
-
+  if(dist<WorldGenStructureManager.structureGenMinDistance)
+    {
+    return;//early out for structures too close together
+    }
   /**
    * select structure from those available to the current available value....
    */
