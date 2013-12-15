@@ -534,7 +534,26 @@ private List<String> getConfigLines()
     {
     lines.add("validDimensions="+StringTools.getCSVStringForArray(validDimensions));
     }
+  lines.add("structureGenMinDistance="+structureGenMinDistance);
+  lines.add("structureGenMaxCheckRange="+structureGenMaxCheckRange);
+  lines.add("structureGenRandomChance="+structureGenRandomChance);
+  lines.add("structureGenRandomRange="+structureGenRandomRange);
+  lines.add("structureGenMaxClusterValue="+structureGenMaxClusterValue);
+  lines.add("structureGenMinMinDistance="+structureGenMinDistance);
+  lines.add("structureGenSpawnProtection="+structureGenSpawnProtection);  
   lines.add(":endconfig");
+  lines.add("#example entry, remove all the # marks");
+  lines.add("#entry:");
+  lines.add("#name=villageGardenLarge");
+  lines.add("#weight=1");
+  lines.add("#value=1");
+  lines.add("#maxVerticalClear=2");
+  lines.add("#clearingBuffer=0");
+  lines.add("#maxLeveling=1");
+  lines.add("#levelingBuffer=0");
+  lines.add("#fillType=0");
+  lines.add("#biomesNotIn=desert");
+  lines.add("#:endentry");
   return lines;
   }
 
