@@ -128,6 +128,8 @@ public List<String> getEntryLines()
   lines.add("name="+name);
   lines.add("weight="+weight);
   lines.add("value="+value);
+  lines.add("unique="+unique);
+  lines.add("filltype="+fillType);
   if(overhangOverride)
     {
     lines.add("overhang="+overhang);
