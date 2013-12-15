@@ -20,7 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.world_gen;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -28,7 +30,6 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -209,6 +210,13 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   int maxValue = WorldGenStructureManager.structureGenMaxClusterValue - foundValue;
   maxValue = maxValue < 0 ? 0 : maxValue;
   
+  Collection<String> generatedUniques = map.getUniqueStructureList();
+  Config.logDebug("gen unique list: ");
+  for(String st : generatedUniques)
+    {
+    Config.logDebug(st);
+    }
+  
   ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random, map.getUniqueStructureList());
   if(struct!=null)
     {
@@ -240,10 +248,10 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
       }    
     if(placed)
       {   
-      Config.logDebug("generated : "+struct.name);
       WorldGenStructureEntry ent = struct.getWorldGenEntry();
       if(ent!=null)
         {
+        Config.logDebug("generated : "+struct.name + " unique: "+ent.unique + " in biome: "+biomeName + " has exclusions of: "+ent.biomesNot + "  has inclusions of: "+ent.biomesOnly);
         WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);
         }      
       }
