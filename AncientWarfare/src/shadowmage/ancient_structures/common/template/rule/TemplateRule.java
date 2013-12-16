@@ -22,20 +22,26 @@ package shadowmage.ancient_structures.common.template.rule;
 
 import net.minecraft.world.World;
 
-public class TemplateRule
+/**
+ * base template-rule class.  Plugins should define their own rule classes.
+ * all data to place the block/entity/target of the rule must be contained in the rule.
+ * ONLY one rule per block-position in the template.  So -- no entity/block combination in same space unless
+ * handled specially via a plugin rule
+ * @author Shadowmage
+ */
+public abstract class TemplateRule
 {
 
 private Object parentPlugin;//the plugin responsible for this rule
-String[] ruleData;
 
-public TemplateRule()
-  {
-
-  }
-
-public void handlePlacement(World world, int x, int y, int z)
-  {
-  
-  }
+/**
+ * input params are the target position for placement of this rule and destination orientation
+ * @param world
+ * @param facing
+ * @param x
+ * @param y
+ * @param z 
+ */
+public abstract void handlePlacement(World world, int facing, int x, int y, int z);
 
 }
