@@ -93,11 +93,9 @@ public void onElementActivated(IGuiElement element)
   case 1:
   mc.displayGuiScreen(new GuiVehicleStats(new ContainerDummy(), ((ContainerVehicle)this.inventorySlots).vehicle));
   break;
+  
   case 2:
-  Packet02Entity pkt = new Packet02Entity();
-  pkt.setParams( ((ContainerVehicle)this.inventorySlots).vehicle );
-  pkt.setPackCommand();
-  pkt.sendPacketToServer();
+  ((ContainerVehicle)this.inventorySlots).vehicle.packetHandler.setPackCommand();
   this.closeGUI();
   break;
   

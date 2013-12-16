@@ -84,13 +84,7 @@ public void decreaseCurrentAmmo(int num)
       }
     if(entry.ammoCount!=origCount)
       {
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setInteger("num", this.currentAmmoType);
-      tag.setInteger("cnt", entry.ammoCount);    
-      Packet02Entity pkt = new Packet02Entity();
-      pkt.setParams(vehicle);
-      pkt.setAmmoUpdate(tag);
-      pkt.sendPacketToAllTrackingClients(vehicle);
+      vehicle.packetHandler.setAmmoCount(entry.baseAmmoType.getAmmoType(), entry.ammoCount);      
       }    
     }
   }
@@ -154,13 +148,8 @@ public void handleClientAmmoSelection(IAmmoType type)
 public void handleClientAmmoSelection(int type)
   {
   if(type>=0 && type<=this.ammoEntries.size() && type != this.currentAmmoType)
-    {
-    NBTTagCompound innerTag = new NBTTagCompound();
-    innerTag.setInteger("num", type);    
-    Packet02Entity pkt = new Packet02Entity();
-    pkt.setParams(vehicle);
-    pkt.setAmmoSelect(innerTag);
-    pkt.sendPacketToServer();
+    {    
+    this.vehicle.packetHandler.setAmmoSelect(type);
     }
   }
 
@@ -200,12 +189,7 @@ public void handleAmmoSelectPacket(NBTTagCompound tag)
     this.currentAmmoType = num;
     if(!vehicle.worldObj.isRemote)
       {    
-      NBTTagCompound innerTag = new NBTTagCompound();
-      innerTag.setInteger("num", num);    
-      Packet02Entity pkt = new Packet02Entity();
-      pkt.setParams(vehicle);
-      pkt.setAmmoSelect(innerTag);
-      pkt.sendPacketToAllTrackingClients(vehicle);
+      vehicle.packetHandler.setAmmoSelect(num);
       }
     float maxPower = vehicle.firingHelper.getAdjustedMaxMissileVelocity();
     if(!vehicle.canAimPower())

@@ -124,38 +124,21 @@ public void updateUpgrades()
     {
     upInts[i] = this.upgrades.get(i).getUpgradeGlobalTypeNum();
     }
-  
-  tag.setIntArray("ints", upInts);
-  
   this.installedArmor.clear();
   List<IVehicleArmorType> armors = vehicle.inventory.getInventoryArmor();
   for(IVehicleArmorType ar : armors)
     {
-//    Config.logDebug("installed armor: "+ar.getDisplayName());
     if(this.validArmorTypes.contains(ar))
       {
       this.installedArmor.add(ar);
-      }
-    else
-      {
-//      Config.logDebug("invalid armor! this vehicle has: "+this.validArmorTypes.size()+" valid armor types");
-//      for(IVehicleArmorType type : this.validArmorTypes)
-//        {
-//        Config.logDebug(type.getDisplayName());
-//        }
-      }
+      }    
     }
   int [] arInts = new int[this.installedArmor.size()];
   for(int i = 0; i < this.installedArmor.size(); i++)
     {
     arInts[i] = this.installedArmor.get(i).getGlobalArmorType();        
     }
-  tag.setIntArray("ints2", arInts);  
-  
-  Packet02Entity pkt = new Packet02Entity();
-  pkt.setParams(vehicle);
-  pkt.setUpgradeData(tag);
-  pkt.sendPacketToAllTrackingClients(vehicle);
+  vehicle.packetHandler.setUpgradeUpdate(upInts, arInts);
   this.updateUpgradeStats();
   }
 

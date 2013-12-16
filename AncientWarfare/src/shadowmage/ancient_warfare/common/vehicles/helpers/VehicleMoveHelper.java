@@ -256,9 +256,7 @@ protected void onUpdateServer()
   sendUpdate = sendUpdate || this.vehicle.ticksExisted%60==0; 
   if(sendUpdate)
     {
-    Packet02Entity pkt = new Packet02Entity();
-    pkt.setMoveUpdate(this.vehicle, true, move == VehicleMovementType.AIR1 || move==VehicleMovementType.AIR2, true);
-    pkt.sendPacketToAllTrackingClients(vehicle);
+    this.vehicle.packetHandler.setMoveData(this.vehicle);
     }
   }
 
