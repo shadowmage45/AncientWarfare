@@ -24,7 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_framework.common.network.GUIHandler;
 
 public class TETrashcan extends TEMachine implements IInventory
 {

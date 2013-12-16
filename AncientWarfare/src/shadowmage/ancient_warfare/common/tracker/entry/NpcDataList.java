@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class NpcDataList implements INBTTaggable

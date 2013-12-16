@@ -28,7 +28,6 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public class TEFoodProcessor extends TEMachine implements IInventory, ISidedInventory

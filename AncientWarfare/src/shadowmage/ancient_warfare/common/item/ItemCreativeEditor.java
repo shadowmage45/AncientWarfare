@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_warfare.common.config.AWCoreStatics;
 
 public class ItemCreativeEditor extends AWItemClickable
@@ -50,7 +51,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     }
   else
     {
-    GUIHandler.instance().openGUI(AWCoreStatics.guiEditor, player, 0, 0, 0);
+    GUIHandler.instance().openGUI(AWStructureStatics.guiEditor, player, 0, 0, 0);
     }
   return true;
   }

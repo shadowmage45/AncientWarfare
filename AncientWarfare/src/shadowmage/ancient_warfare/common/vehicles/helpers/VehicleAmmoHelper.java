@@ -25,9 +25,8 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_framework.common.network.Packet02Entity;
+import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.config.AWCoreStatics;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.entry.VehicleAmmoEntry;

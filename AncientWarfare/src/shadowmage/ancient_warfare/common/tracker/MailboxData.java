@@ -28,7 +28,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
+import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;
 import shadowmage.ancient_warfare.common.tracker.entry.MailboxSaveData;

@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.interfaces;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public interface ITargetEntry extends INBTTaggable

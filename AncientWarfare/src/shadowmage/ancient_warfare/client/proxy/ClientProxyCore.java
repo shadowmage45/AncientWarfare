@@ -23,7 +23,6 @@
 package shadowmage.ancient_warfare.client.proxy;
 
 import net.minecraftforge.common.MinecraftForge;
-import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;

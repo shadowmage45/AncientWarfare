@@ -89,10 +89,7 @@ public static final String guiResearch = "Research";
 public static final String guiRoutingSlip = "RoutingSlip";
 public static final String guiBaton = "Baton";
 public static final String guiInfo = "Info";
-public static final String guiEditor = "StructureEditor";
-public static final String guiScanner = "StructureScanner";
-public static final String guiBuilder = "StructureBuilder";
-public static final String guiBuilderOverrides = "StructureBuilderOverrides";
+
 
 public AWCoreStatics(File configFile, Logger log, String version)
   {

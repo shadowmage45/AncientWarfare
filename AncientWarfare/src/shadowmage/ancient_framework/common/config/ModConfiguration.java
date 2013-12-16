@@ -37,8 +37,8 @@ public abstract class ModConfiguration
 public Configuration config;
 public Logger logger;
 private boolean debug = false;
-private boolean updatedVersion = false;
-private boolean exportOnUpdate = false;
+public static boolean updatedVersion = false;
+public static boolean autoExportOnUpdate = false;
 
 public ModConfiguration(File configFile, Logger log, String version)
   {
