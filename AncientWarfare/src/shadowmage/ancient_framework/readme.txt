@@ -1,2 +1,0 @@
-common classes and framework stuff for any/all AW mods. 
-This base package is required for the use of any/all AW mods.
