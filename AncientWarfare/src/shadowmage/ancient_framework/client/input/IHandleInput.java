@@ -25,6 +25,10 @@ public interface IHandleInput
 
 public abstract void onKeyUp(Keybind kb);
 public abstract void onKeyPressed(Keybind kb);
-public abstract void onTickEnd();  
+public abstract void onTickEnd();
+public abstract void onMouseMoved(int x, int y);
+public abstract void onMouseButtonPressed(int num);
+public abstract void onMouseButtonUp(int num);
+public abstract void onMouseWheel(int delta);
 
 }

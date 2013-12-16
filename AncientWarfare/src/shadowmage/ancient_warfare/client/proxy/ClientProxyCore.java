@@ -23,13 +23,11 @@
 package shadowmage.ancient_warfare.client.proxy;
 
 import net.minecraftforge.common.MinecraftForge;
-import shadowmage.ancient_framework.client.input.InputHelper;
 import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 import shadowmage.ancient_warfare.client.registry.RenderRegistry;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
 import shadowmage.ancient_warfare.client.render.RenderOverlay;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -48,15 +46,8 @@ public void registerClientData()
    * register single render for all vehicles, local renderManager handles from there...
    */
   RenderRegistry.instance().loadRenders();
-  TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
   TickRegistry.registerTickHandler(new RenderOverlay(), Side.CLIENT);
-  
-  /**
-   * load keybinds and register keybind handler
-   */
-  InputHelper.instance().loadKeysFromConfig();
-  KeyBindingRegistry.registerKeyBinding(InputHelper.instance());
-  
+    
   /**
    * event helper for world-render ticks for BB rendering
    */

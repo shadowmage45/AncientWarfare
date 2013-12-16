@@ -25,16 +25,17 @@ import org.lwjgl.input.Keyboard;
 public class Keybind
 {
 
-
 int keyCode;
 String keyName;
 boolean isPressed;
-boolean checked = false;
+boolean changedThisTick = false;
+IHandleInput owner;
 
-public Keybind(int keyCode, String name)
+public Keybind(IHandleInput owner, int keyCode, String name)
   {
   this.keyCode = keyCode;
   this.keyName = name;
+  this.owner = owner;
   }
 
 public String getKeyName()

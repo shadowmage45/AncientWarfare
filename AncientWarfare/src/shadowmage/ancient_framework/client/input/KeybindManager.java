@@ -21,16 +21,52 @@
 package shadowmage.ancient_framework.client.input;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 
-public class KeybindManager
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import shadowmage.ancient_framework.common.network.GUIHandler;
+import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
+import cpw.mods.fml.common.TickType;
+
+public class KeybindManager extends KeyHandler
 {
 
+/**
+ * vanilla keybinds setup, used to access/control base mod keybinds for team and options menu
+ * options menu has further options to change other AW settings
+ */
+static KeyBinding options = new KeyBinding("AW-options", Keyboard.KEY_F7);
+static KeyBinding teamControl = new KeyBinding("AW-TeamControl", Keyboard.KEY_F6);
+private static KeyBinding[] keys = new KeyBinding[]{options, teamControl};
+private static boolean[] keyRepeats = new boolean []{false, false};
+
+/**
+ * @param keyBindings
+ * @param repeatings
+ */
+public KeybindManager(KeyBinding[] keyBindings, boolean[] repeatings)
+  {
+  super(keys, keyRepeats);
+  }
+
 private static List<Keybind> keybinds = new ArrayList<Keybind>();
-private static List<IHandleInput> inputHandlers = new ArrayList<IHandleInput>();
+private static List<IHandleInput> mouseInputHandlers = new ArrayList<IHandleInput>();
+static int mouseX;
+static int mouseY;
+static boolean[] mouseButtonStates = new boolean[3];//left, right, middle/wheel?
+static int mouseWheelState = 0;
+
+public static void addMouseHandler(IHandleInput mouseHandler)
+  {
+  mouseInputHandlers.add(mouseHandler);
+  }
 
 public static List<Keybind> getKeybinds()
   {
@@ -42,14 +78,6 @@ public static void addKeybind(Keybind kb)
   keybinds.add(kb);
   }
 
-public static void addHandler(IHandleInput handler)
-  {
-  if(!inputHandlers.contains(handler))
-    {
-    inputHandlers.add(handler);
-    }
-  }
-
 public static void onTick()
   {
   Iterator<Keybind> it = keybinds.iterator();
@@ -57,26 +85,91 @@ public static void onTick()
   while(it.hasNext())
     {
     kb = it.next();
+    kb.changedThisTick = false;
     boolean down = Keyboard.isKeyDown(kb.keyCode);
-    if(kb.isPressed && !down)//KEY UP
-      {
-      kb.isPressed = false;
-      for(IHandleInput ih : inputHandlers)
-        {
-        ih.onKeyUp(kb);
-        }
-      }
-    else if(!kb.isPressed && down)//KEY DOWN
+    if(down && !kb.isPressed)
       {
       kb.isPressed = true;
-      kb.checked = false;
-      for(IHandleInput ih : inputHandlers)
+      kb.owner.onKeyPressed(kb);
+      kb.changedThisTick = true;
+      }    
+    else if(!down && kb.isPressed)
+      {
+      kb.isPressed = false;
+      kb.owner.onKeyUp(kb);
+      kb.changedThisTick = true;
+      }
+    }  
+  int x = Mouse.getX();
+  int y = Mouse.getY();
+  if(x!=mouseX || y!=mouseY)
+    {
+    mouseX = x;
+    mouseY = y;
+    for(IHandleInput handle : mouseInputHandlers)
+      {
+      handle.onMouseMoved(x, y);
+      }
+    }
+  boolean down;
+  for(int i = 0; i< 3; i++)
+    {
+    down = Mouse.isButtonDown(i);
+    if(down && !mouseButtonStates[i])
+      {
+      mouseButtonStates[i] = down;
+      for(IHandleInput handle : mouseInputHandlers)
         {
-        ih.onKeyPressed(kb);
+        handle.onMouseButtonPressed(i);
         }
+      }
+    else if(!down && mouseButtonStates[i])
+      {
+      mouseButtonStates[i] = down;
+      for(IHandleInput handle : mouseInputHandlers)
+        {
+        handle.onMouseButtonUp(i);
+        }
+      }
+    }
+  }
+
+@Override
+public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat)
+  {
+  if(!tickEnd)
+    {
+    return;
+    }
+  if(Minecraft.getMinecraft().currentScreen==null && Minecraft.getMinecraft().thePlayer!=null && Minecraft.getMinecraft().theWorld!=null)
+    {    
+    if(kb==options)
+      {
+      GUIHandler.instance().openGUI("Settings", Minecraft.getMinecraft().thePlayer,  0, 0, 0);
+      }
+    else if(kb==teamControl)
+      {
+      GUIHandler.instance().openGUI("Teams", Minecraft.getMinecraft().thePlayer, 0, 0, 0);
       }    
     }
   }
 
+@Override
+public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd)
+  {
+  
+  }
+
+@Override
+public String getLabel()
+  {
+  return "Ancient Warfare Keybind Handler";
+  }
+
+@Override
+public EnumSet<TickType> ticks()
+  {
+  return EnumSet.of(TickType.CLIENT);
+  }
 
 }

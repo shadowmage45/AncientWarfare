@@ -31,7 +31,7 @@ Modules:
         --plugin to civic system for worker (IWorker interface)        
         --plugin to research and crafting to add recipes
         --plugin to crafting to add
-    Civic
+    Automation
         --civic system config
         --civics...
         --machines

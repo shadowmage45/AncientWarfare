@@ -22,9 +22,12 @@
  */
 package shadowmage.ancient_framework.client.proxy;
 
+import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxyBase extends CommonProxy
 {
@@ -38,6 +41,12 @@ public ClientProxyBase()
 public void sendPacketToServer(PacketBase pkt)
   {
   PacketDispatcher.sendPacketToServer(pkt.get250Packet());
+  }
+
+@Override
+public void registerClientData()
+  {
+  TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
   }
 
 }

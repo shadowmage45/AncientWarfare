@@ -32,14 +32,12 @@ public class TickHandlerClientKeyboard implements ITickHandler
 @Override
 public void tickStart(EnumSet<TickType> type, Object... tickData)
   {
-  KeybindManager.onTick();
   }
 
 @Override
 public void tickEnd(EnumSet<TickType> type, Object... tickData)
   {
   KeybindManager.onTick();
-  InputHelper.instance().onTickEnd();
   }
 
 @Override
