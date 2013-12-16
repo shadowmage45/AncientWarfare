@@ -29,15 +29,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_structures.common.block.TECivicBuilder;
 import shadowmage.ancient_structures.common.structures.StructureManager;
 import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.civics.types.Civic;
-import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
-import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -115,17 +111,17 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
   /**
    * TODO
    */
-
-  TECivicBuilder te = (TECivicBuilder)world.getBlockTileEntity(hit.x, hit.y, hit.z);
-  if(te!=null)
-    { 
-    BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
-    builder.startConstruction();
-    builder.setOverrides(-1, false, false, true);
-    te.setBuilder(builder);
-    struct.addBuilder(builder);    
-    return true;
-    }  
+//
+//  TECivicBuilder te = (TECivicBuilder)world.getBlockTileEntity(hit.x, hit.y, hit.z);
+//  if(te!=null)
+//    { 
+//    BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
+//    builder.startConstruction();
+//    builder.setOverrides(-1, false, false, true);
+//    te.setBuilder(builder);
+//    struct.addBuilder(builder);    
+//    return true;
+//    }  
   return false;
   } 
 

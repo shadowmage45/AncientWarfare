@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.interfaces.IScannerItem;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
@@ -36,8 +37,6 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.ScannedStructureData;
-import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
-import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 
 public class ItemStructureScanner extends AWItemClickable implements IScannerItem

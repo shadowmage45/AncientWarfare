@@ -27,7 +27,6 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
 
 public abstract class ItemBuilderBase extends AWItemClickable 
 {

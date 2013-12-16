@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_structures.common.item.ItemBuilderBase;
 import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
 
 public class ContainerCSB extends ContainerBase

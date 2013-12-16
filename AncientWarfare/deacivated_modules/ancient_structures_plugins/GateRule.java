@@ -29,8 +29,7 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.gates.EntityGate;
-import shadowmage.ancient_warfare.common.gates.types.Gate;
+import buildcraft.transport.Gate;
 
 public class GateRule
 {

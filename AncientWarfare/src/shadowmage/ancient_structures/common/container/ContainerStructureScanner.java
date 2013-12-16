@@ -28,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.item.ItemStructureScanner;
 import shadowmage.ancient_structures.common.structures.StructureManager;
@@ -36,7 +35,6 @@ import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.file.StructureExporter;
 import shadowmage.ancient_structures.common.structures.file.StructureExporterRuins;
 import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
-import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class ContainerStructureScanner extends ContainerBase
 {

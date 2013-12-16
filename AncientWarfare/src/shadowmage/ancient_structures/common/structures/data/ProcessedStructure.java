@@ -30,9 +30,6 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
-import shadowmage.ancient_structures.common.item.ItemCivicBuilder;
-import shadowmage.ancient_warfare.common.crafting.RecipeType;
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 
 /**
  * fully processed structure, ready to build in-game. 
@@ -322,17 +319,6 @@ public Collection<ItemStack> getResourcesNeeded()
     }
   this.cachedResources.addAll(items);
   return items;
-  }
-
-public ResourceListRecipe constructRecipe()
-  {
-  if(!this.survival){return null;}
-  Collection<ItemStack> stacks = this.getResourcesNeeded();
-  ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
-  ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
-  recipe.setDisplayName(name);
-  recipe.addResources(stacks, false, false);
-  return recipe;
   }
 
 public boolean isValidBiome(String biomeName)

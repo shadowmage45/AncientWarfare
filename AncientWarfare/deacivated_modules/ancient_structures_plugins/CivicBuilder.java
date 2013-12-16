@@ -18,18 +18,38 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.interfaces;
+package shadowmage.ancient_structures.common.civic;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_structures.common.block.TECivicBuilder;
 
-public interface IScannerItem
+public class CivicBuilder extends Civic
 {
 
+/**
+ * @param id
+ */
+public CivicBuilder(int id)
+  {
+  super(id);
+  this.addToCreative = false;
+  this.name = "Civic Structure Builder";
+  this.tooltip = "Work site for building of structures.";
+  this.teClass = TECivicBuilder.class;
+  this.workType = CivicWorkType.MINE;
+  this.maxWorkers = 4;
+  this.isWorkSite = true;
+  this.itemIconTexture = "civicMine1";
+  this.setBlockIcons("civicBuilderBottom", "civicBuilderTop", "civicBuilderSides");
+  }
 
-abstract BlockPosition getScanPos1(ItemStack stack);
-abstract BlockPosition getScanPos2(ItemStack stack);
-
-
+@Override
+public ItemStack getItemToConstruct()
+  {
+ /**
+  * TODO
+  */
+  return null;
+  }
 
 }

@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.interfaces.IScannerItem;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
@@ -43,7 +44,6 @@ import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.ScannedStructureData;
 import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
 
 public class ItemBuilderDirect extends ItemBuilderBase implements IScannerItem
 {

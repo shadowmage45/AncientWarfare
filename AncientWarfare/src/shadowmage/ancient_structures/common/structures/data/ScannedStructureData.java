@@ -34,26 +34,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
-import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
-import shadowmage.ancient_structures.common.structures.data.rules.GateRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
-import shadowmage.ancient_structures.common.structures.data.rules.MachineRule;
-import shadowmage.ancient_structures.common.structures.data.rules.NpcRule;
-import shadowmage.ancient_structures.common.structures.data.rules.ScannedGateEntry;
-import shadowmage.ancient_structures.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_structures.common.structures.file.StructureExporter;
-import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
-import shadowmage.ancient_warfare.common.gates.EntityGate;
-import shadowmage.ancient_warfare.common.machine.TEEngine;
-import shadowmage.ancient_warfare.common.machine.TEMachine;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class ScannedStructureData
 {
@@ -65,14 +49,8 @@ public int originFacing;
 public int xSize;
 public int ySize;
 public int zSize;
-//public BlockData[][][] allBlocks;
 
-//public ArrayList<BlockData> blockIDs = new ArrayList<BlockData>();
-
-private List<ScannedGateEntry> includedGates = new ArrayList<ScannedGateEntry>();
 private List<ScannedEntityEntry> includedEntities = new ArrayList<ScannedEntityEntry>();
-protected List<CivicRule> scannedCivics = new ArrayList<CivicRule>();
-protected List<MachineRule> scannedMachines = new ArrayList<MachineRule>();
 private HashMap<Integer, InventoryRule> inventoryRules = new HashMap<Integer, InventoryRule>();
 
 private List<ScannedBlock> scannedBlocks = new ArrayList<ScannedBlock>();
@@ -181,67 +159,23 @@ public void scan(World world)
   }
 
 protected void handleBlockScan(World world, int x, int y, int z, int ix, int iy, int iz, int id, int meta)
-  { 
-  if(id==BlockLoader.gateProxy.blockID)
+  {   
+  InventoryRule rule = null;
+  TileEntity te = world.getBlockTileEntity(x, y, z);    
+  if(te instanceof IInventory)
     {
-    return;
-    }
-  if(id==BlockLoader.civicBlock1.blockID || id==BlockLoader.civicBlock2.blockID || id==BlockLoader.civicBlock3.blockID || id==BlockLoader.civicBlock4.blockID)
-    {
-    TileEntity te = world.getBlockTileEntity(x, y, z);
-    if(te!=null)
+    IInventory inventory = (IInventory)te;
+    rule = InventoryRule.populateRule(inventory, nextInventoryNumber);
+    if(rule!=null && rule.ruleNumber>0)
       {
-      this.scannedCivics.add(CivicRule.populateRule(ix, iy, iz, (TECivic)te));
+      nextInventoryNumber++;
+      inventoryRules.put(rule.ruleNumber, rule);
       }
     }
-  else if(id==BlockLoader.crafting.blockID)
-    {
-    TileEntity te = world.getBlockTileEntity(x, y, z);
-    if(te!=null)
-      {
-      this.scannedMachines.add(new MachineRule((TEAWCrafting)te, ix, iy, iz, meta));
-      }
-    }
-  else if(id==BlockLoader.machineBlock.blockID)
-    {
-    TileEntity te = world.getBlockTileEntity(x, y, z);
-    if(te!=null)
-      {
-      this.scannedMachines.add(new MachineRule((TEMachine)te, ix, iy, iz, meta));
-      }
-    }
-  else if(id==BlockLoader.engineBlock.blockID)
-    {
-    TileEntity te = world.getBlockTileEntity(x, y, z);
-    if(te!=null)
-      {
-      this.scannedMachines.add(new MachineRule((TEEngine)te, ix, iy, iz, meta));
-      }
-    }
-  else if(id==BlockLoader.reinforced.blockID)
-    {
-    TileEntity te = world.getBlockTileEntity(x, y, z);
-    if(te!=null)
-      {
-      this.scannedMachines.add(new MachineRule((TEAWBlockReinforced)te, ix, iy, iz, meta));
-      }
-    }
-  else
-    {    
-    InventoryRule rule = null;
-    TileEntity te = world.getBlockTileEntity(x, y, z);    
-    if(te instanceof IInventory)
-      {
-      IInventory inventory = (IInventory)te;
-      rule = InventoryRule.populateRule(inventory, nextInventoryNumber);
-      if(rule!=null && rule.ruleNumber>0)
-        {
-        nextInventoryNumber++;
-        inventoryRules.put(rule.ruleNumber, rule);
-        }
-      }
-    scannedBlocks.add(new ScannedBlock(ix, iy, iz, id, meta, rule));
-    }
+  scannedBlocks.add(new ScannedBlock(ix, iy, iz, id, meta, rule));
+  /**
+   * TODO add plugin support
+   */
   }
 
 protected void scanForEntities(World world)
@@ -294,18 +228,6 @@ private void normalizeForNorthFacing()
   this.zSize = newZSize;
   
   this.normalizeScannedEntities(newXSize, newZSize);
-  for(CivicRule rule : this.scannedCivics)
-    {
-    rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
-    }  
-  for(ScannedGateEntry gate : this.includedGates)
-    {
-    gate.normalizeForNorthFacing(originFacing, newXSize, newZSize);    
-    }
-  for(MachineRule rule : this.scannedMachines)
-    {
-    rule.normalizeForNorthFacing(originFacing, newXSize, newZSize);
-    }
   }
 
 private void normalizeScannedEntities(int xSize, int zSize)
@@ -432,10 +354,7 @@ public ProcessedStructure convertToProcessedStructure()
    * add specials
    */
   this.addEntitiesToStructure(struct, includedEntities);
-  this.addCivicsToStructrure(struct);
   this.addInventoryRulesToStructure(struct);
-  this.addGateRulesToStructure(struct);
-  this.addMachinesToStructure(struct);
   /**
    * set the in-game template/default export template
    */
@@ -456,27 +375,10 @@ protected BlockRule getRuleFor(ProcessedStructure struct, int id, int meta)
   return null;
   }
 
-protected void addGateRulesToStructure(ProcessedStructure struct)
-  {
-  for(ScannedGateEntry gate : this.includedGates)
-    {
-    struct.gateRules.add(GateRule.populateRule(gate));
-    }
-  }
 
 protected void addInventoryRulesToStructure(ProcessedStructure struct)
   {
   struct.inventoryRules.putAll(inventoryRules);  
-  }
-
-private void addCivicsToStructrure(ProcessedStructure struct)
-  { 
-  struct.civicRules.addAll(scannedCivics);
-  }
-
-private void addMachinesToStructure(ProcessedStructure struct)
-  {
-  struct.machineRules.addAll(scannedMachines);
   }
 
 private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntityEntry> entities)
@@ -488,15 +390,7 @@ private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntit
     {
     entry = entities.get(i);
     clz = entry.ent.getClass();
-    if(clz==NpcBase.class)
-      {
-      addNpcToStructure(struct, entry, (NpcBase)entry.ent);
-      }
-    else if(clz==VehicleBase.class)
-      {
-      addVehicleToStructure(struct, entry, (VehicleBase)entry.ent);
-      }
-    else if(clz==EntityVillager.class)
+    if(clz==EntityVillager.class)
       {
       addVillagerToStructure(struct, entry, (EntityVillager)entry.ent);
       }
@@ -512,39 +406,13 @@ private void addEntitiesToStructure(ProcessedStructure struct, List<ScannedEntit
   }
 
 
-private void addNpcToStructure(ProcessedStructure struct, ScannedEntityEntry entry, NpcBase npc)
-  {
-  NpcRule rule = NpcRule.populateRule(entry, npc);
-  if(rule!=null)
-    {
-    struct.NPCRules.add(rule);
-    }
-  }
-
-
-private void addVehicleToStructure(ProcessedStructure struct, ScannedEntityEntry entry, VehicleBase vehicle)
-  {
-  VehicleRule rule = VehicleRule.populateRule(entry, vehicle);
-  if(rule!=null)
-    {
-    struct.vehicleRules.add(rule);
-    }
-  }
-
-
-private void addGateToStructure(ProcessedStructure struct, ScannedEntityEntry entry, Entity gate)
-  {
-  
-  }
-
-
 private void addVillagerToStructure(ProcessedStructure struct, ScannedEntityEntry entry, EntityVillager villager)
   {
-  NpcRule rule = NpcRule.populateRule(entry, villager);
-  if(rule!=null)
-    {
-    struct.NPCRules.add(rule);
-    }
+//  NpcRule rule = NpcRule.populateRule(entry, villager);
+//  if(rule!=null)
+//    {
+//    struct.NPCRules.add(rule);
+//    }
   }
 
 }

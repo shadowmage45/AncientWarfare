@@ -33,14 +33,6 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.ScannedEntityEntry;
-import shadowmage.ancient_warfare.common.registry.AmmoRegistry;
-import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
-import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.vehicles.armors.IVehicleArmorType;
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
-import shadowmage.ancient_warfare.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleRule
 {

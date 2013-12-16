@@ -25,14 +25,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.block.TEBuilder;
 import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
-import shadowmage.ancient_warfare.AWCore;
-import shadowmage.ancient_warfare.common.block.BlockLoader;
 
 public class ItemBuilderTicked extends ItemBuilderInstant
 {
@@ -66,7 +64,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct, Block
     builder.startConstruction();
     builder.setOverrides(settings.teamOverride, settings.spawnVehicle, settings.spawnNpc, settings.spawnGate);
     te.setBuilder(builder);
-    Ticket tk = ForgeChunkManager.requestTicket(AWCore.instance, world, Type.NORMAL);
+    Ticket tk = ForgeChunkManager.requestTicket(AWFramework.instance, world, Type.NORMAL);
     if(tk!=null)
       {
       ForgeChunkManager.forceChunk(tk, new ChunkCoordIntPair(hit.x/16, hit.z/16));

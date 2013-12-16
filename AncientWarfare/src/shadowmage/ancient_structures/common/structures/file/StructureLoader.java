@@ -36,18 +36,12 @@ import java.util.Scanner;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
 import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
-import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
-import shadowmage.ancient_structures.common.structures.data.rules.GateRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
-import shadowmage.ancient_structures.common.structures.data.rules.MachineRule;
-import shadowmage.ancient_structures.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_structures.common.structures.data.rules.SwapRule;
-import shadowmage.ancient_structures.common.structures.data.rules.VehicleRule;
 
 import com.google.common.io.ByteStreams;
 
@@ -401,18 +395,6 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
       {      
       this.parseRule(struct, it);
       }
-    else if(line.toLowerCase().startsWith("vehicle:"))
-      {      
-      this.parseVehicle(struct, it);
-      }
-    else if(line.toLowerCase().startsWith("npc:"))
-      {      
-      this.parseNPC(struct, it);
-      }    
-    else if(line.toLowerCase().startsWith("civic:"))
-      {
-      this.parseCivic(struct, it);
-      }
     else if(line.toLowerCase().startsWith("resources:"))
       {
       this.parseResources(struct, it);
@@ -432,15 +414,7 @@ public ProcessedStructure loadStructureAW(List<String> lines, String md5)
     else if(line.toLowerCase().startsWith("inventory:"))
       {
       this.parseInventory(struct, it);
-      }    
-    else if(line.toLowerCase().startsWith("gate:"))
-      {
-      this.parseGate(struct, it);
-      }
-    else if(line.toLowerCase().startsWith("machine:"))
-      {
-      this.parseMachine(struct, it);
-      }
+      } 
     if(!struct.isValid)
       {
       return null;
@@ -599,80 +573,6 @@ private void parseResources(ProcessedStructure struct, Iterator<String> it)
     }  
   }
 
-private void parseGate(ProcessedStructure struct, Iterator<String> it)
-  {
-  if(!it.hasNext())
-    {
-    struct.isValid = false;
-    return;
-    }
-  ArrayList<String> ruleLines = new ArrayList<String>();  
-  String line;  
-  while(it.hasNext())
-    {
-    line = it.next();
-    if(line.toLowerCase().startsWith("gate:"))
-      {
-      continue;
-      }
-    else if(line.toLowerCase().startsWith(":endgate"))
-      {
-      break;      
-      }
-    else
-      {
-      ruleLines.add(line);      
-      }    
-    }     
-  GateRule rule = GateRule.parseRule(ruleLines);
-  if(rule!=null)
-    {    
-    struct.gateRules.add(rule);    
-    }
-  else
-    {
-    AWLog.logError("Error parsing gate rule for structure!");
-    struct.isValid = false;
-    }
-  }
-
-private void parseMachine(ProcessedStructure struct, Iterator<String> it)
-  {
-  if(!it.hasNext())
-    {
-    struct.isValid = false;
-    return;
-    }
-  ArrayList<String> ruleLines = new ArrayList<String>();  
-  String line;  
-  while(it.hasNext())
-    {
-    line = it.next();
-    if(line.toLowerCase().startsWith("machine:"))
-      {
-      continue;
-      }
-    else if(line.toLowerCase().startsWith(":endmachine"))
-      {
-      break;      
-      }
-    else
-      {
-      ruleLines.add(line);      
-      }    
-    }     
-  MachineRule rule = MachineRule.parseLines(ruleLines);
-  if(rule!=null)
-    {    
-    struct.machineRules.add(rule);    
-    }
-  else
-    {
-    AWLog.logError("Error parsing machine rule for structure!");
-    struct.isValid = false;
-    }
-  }
-
 private void parseEntity(ProcessedStructure struct, Iterator<String> it)
   {
   if(!it.hasNext())
@@ -805,47 +705,6 @@ private void parseRule(ProcessedStructure struct, Iterator<String> it)
     }
   }
 
-/**
- * parse out a single vehicleRule/setup type from the iterator of lines
- * @param it
- */
-private void parseVehicle(ProcessedStructure struct, Iterator<String> it)
-  {
-  if(!it.hasNext())
-    {
-    struct.isValid = false;
-    return;
-    }
-  ArrayList<String> ruleLines = new ArrayList<String>();  
-  String line;  
-  while(it.hasNext())
-    {
-    line = it.next();
-    if(line.toLowerCase().startsWith("vehicle:"))
-      {
-      continue;
-      }
-    else if(line.toLowerCase().startsWith(":endvehicle"))
-      {
-      break;      
-      }
-    else
-      {
-      ruleLines.add(line);      
-      }    
-    }     
-  VehicleRule rule = VehicleRule.parseRule(ruleLines);
-  if(rule!=null)
-    {    
-    struct.vehicleRules.add(rule);     
-    }
-  else
-    {
-    AWLog.logError("Error parsing vehicle rule for structure!");
-    struct.isValid = false;
-    }
-  }
-
 private void parseInventory(ProcessedStructure struct, Iterator<String> it)
   {
   if(!it.hasNext())
@@ -882,85 +741,6 @@ private void parseInventory(ProcessedStructure struct, Iterator<String> it)
     struct.isValid = false;
     }
   }
-
-private void parseCivic(ProcessedStructure struct, Iterator<String> it)
-  {
-  if(!it.hasNext())
-    {
-    struct.isValid = false;
-    return;
-    }
-  ArrayList<String> ruleLines = new ArrayList<String>();  
-  String line;  
-  while(it.hasNext())
-    {
-    line = it.next();
-    if(line.toLowerCase().startsWith("civic:"))
-      {
-      continue;
-      }
-    else if(line.toLowerCase().startsWith(":endcivic"))
-      {
-      break;      
-      }
-    else
-      {
-      ruleLines.add(line);      
-      }    
-    }     
-  CivicRule rule = CivicRule.parseLines(ruleLines);
-  if(rule!=null)
-    {    
-    struct.civicRules.add(rule);     
-    }
-  else
-    {
-    AWLog.logError("Error parsing civic rule for structure!");
-    struct.isValid = false;
-    }
-  }
-
-/**
- * parse out a single npcRule/setup type from the iterator of lines
- * @param it
- */
-private void parseNPC(ProcessedStructure struct, Iterator<String> it)
-  {
-  if(!it.hasNext())
-    {
-    struct.isValid = false;
-    return;
-    }
-  ArrayList<String> ruleLines = new ArrayList<String>();  
-  String line;  
-  while(it.hasNext())
-    {
-    line = it.next();
-    if(line.toLowerCase().startsWith("npc:"))
-      {
-      continue;
-      }
-    else if(line.toLowerCase().startsWith(":endnpc"))
-      {
-      break;      
-      }
-    else
-      {
-      ruleLines.add(line);      
-      }    
-    }     
-  NpcRule rule = NpcRule.parseRule(ruleLines);
-  if(rule!=null)
-    {    
-    struct.NPCRules.add(rule);     
-    }
-  else
-    {
-    AWLog.logError("Error parsing npc rule for structure!");
-    struct.isValid = false;
-    }
-  }
-
 
 private void parseSwap(ProcessedStructure struct, Iterator<String> it)
   {

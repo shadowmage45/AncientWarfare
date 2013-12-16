@@ -26,10 +26,6 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.structures.build.BuilderTicked;
 import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
-import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.interfaces.IWorker;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class TECivicBuilder extends TEWorkSite
 {

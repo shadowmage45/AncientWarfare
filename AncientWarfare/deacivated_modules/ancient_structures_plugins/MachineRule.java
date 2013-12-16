@@ -34,11 +34,6 @@ import shadowmage.ancient_framework.common.utils.NBTReader;
 import shadowmage.ancient_framework.common.utils.NBTWriter;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
-import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
-import shadowmage.ancient_warfare.common.machine.TEEngine;
-import shadowmage.ancient_warfare.common.machine.TEMachine;
 
 public class MachineRule
 {

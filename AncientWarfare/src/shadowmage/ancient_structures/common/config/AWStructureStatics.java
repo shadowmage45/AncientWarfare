@@ -37,10 +37,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
-
 import shadowmage.ancient_framework.common.config.ModConfiguration;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AWStructureStatics extends ModConfiguration
 {
@@ -81,8 +78,6 @@ public void initializeCategories()
 @Override
 public void initializeValues()
   {
-  this.validEntitiesToScan.add(VehicleBase.class);
-  this.validEntitiesToScan.add(NpcBase.class);
   this.validEntitiesToScan.add(EntityVillager.class);
   this.validEntitiesToScan.add(EntityPig.class);
   this.validEntitiesToScan.add(EntitySheep.class);

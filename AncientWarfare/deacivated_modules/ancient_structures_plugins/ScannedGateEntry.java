@@ -22,7 +22,6 @@ package shadowmage.ancient_structures.common.structures.data.rules;
 
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.gates.EntityGate;
 
 public class ScannedGateEntry
 {

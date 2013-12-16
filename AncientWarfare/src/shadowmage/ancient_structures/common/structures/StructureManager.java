@@ -37,8 +37,6 @@ import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
-import shadowmage.ancient_warfare.AWCore;
-import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 
 /**
  * Manages server side processed structures, and their client-side data equivalents
@@ -92,7 +90,7 @@ public boolean tryRemoveStructure(String name)
       WorldGenStructureManager.instance().removeStructure(name);      
       NBTTagCompound structData = new NBTTagCompound();
       structData.setString("remove", name);   
-      AWCore.proxy.sendPacketToAllPlayers(constructPacket(structData));
+      AWStructures.proxy.sendPacketToAllPlayers(constructPacket(structData));
       return true;
       }    
     }
@@ -147,7 +145,7 @@ public void addTempStructure(EntityPlayer player, ProcessedStructure struct)
   
   NBTTagCompound structData = new NBTTagCompound();
   structData.setCompoundTag("addTemp", StructureClientInfo.getClientTag(struct));
-  AWCore.proxy.sendPacketToPlayer(player, constructPacket(structData));
+  AWStructures.proxy.sendPacketToPlayer(player, constructPacket(structData));
   }
 
 /**
@@ -184,7 +182,7 @@ public void handlePlayerLogin(EntityPlayer player)
     {
     NBTTagCompound structData = new NBTTagCompound();
     structData.setTag("structInit", this.getClientInitData());
-    AWCore.proxy.sendPacketToPlayer(player, constructPacket(structData));
+    AWStructures.proxy.sendPacketToPlayer(player, constructPacket(structData));
     }
   }
 

@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.container;
+package shadowmage.ancient_structures.common.container;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

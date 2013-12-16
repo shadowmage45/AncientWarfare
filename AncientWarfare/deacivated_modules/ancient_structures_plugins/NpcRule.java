@@ -32,11 +32,6 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.ScannedEntityEntry;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
-import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.registry.NpcRegistry;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class NpcRule
 {

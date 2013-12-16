@@ -32,9 +32,9 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_structures.client.utils.ClientStructureComparator;
+import shadowmage.ancient_structures.common.container.ContainerEditor;
 import shadowmage.ancient_structures.common.structures.StructureManager;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class GuiEditorSelect extends GuiContainerAdvanced
 {

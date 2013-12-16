@@ -26,10 +26,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import shadowmage.ancient_warfare.common.item.ItemLoaderCore;
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
-import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
 public class LootGenerator
 {
@@ -64,26 +60,26 @@ public void generateLootFor(IInventory inventory, int slots, int level, Random r
 
 public void addLootToTables()
   {    
-  for(ResearchGoal g : ResearchGoal.researchGoals)
-    {
-    if(g==null){continue;}
-    if(g.isEnabled() && g.isEnabledForLoot())
-      {
-      addLoot(new ItemStack(ItemLoaderCore.researchNotes,1,g.getGlobalResearchNum()) , 1 , 1 , 1);      
-      }
-    }
-  for(IVehicleType t : VehicleType.vehicleTypes)
-    {
-    if(t==null || !t.isEnabled() || !t.isEnabledForLoot()){continue;}
-    int level = t.getMaterialType().getNumOfLevels();
-    for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
-      {
-      level = i;
-      level /=2;
-      if(level==0){level=1;}
-      addLoot(t.getStackForLevel(i), 1, 1, level);
-      }
-    }
+//  for(ResearchGoal g : ResearchGoal.researchGoals)
+//    {
+//    if(g==null){continue;}
+//    if(g.isEnabled() && g.isEnabledForLoot())
+//      {
+//      addLoot(new ItemStack(ItemLoaderCore.researchNotes,1,g.getGlobalResearchNum()) , 1 , 1 , 1);      
+//      }
+//    }
+//  for(IVehicleType t : VehicleType.vehicleTypes)
+//    {
+//    if(t==null || !t.isEnabled() || !t.isEnabledForLoot()){continue;}
+//    int level = t.getMaterialType().getNumOfLevels();
+//    for(int i = 0; i< t.getMaterialType().getNumOfLevels(); i++)
+//      {
+//      level = i;
+//      level /=2;
+//      if(level==0){level=1;}
+//      addLoot(t.getStackForLevel(i), 1, 1, level);
+//      }
+//    }
 //  for(IVehicleUpgradeType t : VehicleUpgradeRegistry.instance().getUpgradeList())
 //    {
 //    if(t==null){continue;}
@@ -100,9 +96,9 @@ public void addLootToTables()
 //    addLoot(c.getItemToConstruct(), 1, 1, 1);
 //    }
   
-  addLoot(new ItemStack(ItemLoaderCore.npcCommandBaton,1,0),1,1,15);
-  addLoot(new ItemStack(ItemLoaderCore.npcCommandBaton,1,1),1,1,5);
-    
+//  addLoot(new ItemStack(ItemLoaderCore.npcCommandBaton,1,0),1,1,15);
+//  addLoot(new ItemStack(ItemLoaderCore.npcCommandBaton,1,1),1,1,5);
+//    
   
   }
 

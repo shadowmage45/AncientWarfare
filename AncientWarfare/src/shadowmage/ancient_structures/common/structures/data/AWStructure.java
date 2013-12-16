@@ -37,14 +37,9 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
 import shadowmage.ancient_structures.common.structures.build.StructureBuilder;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
-import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
-import shadowmage.ancient_structures.common.structures.data.rules.GateRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
-import shadowmage.ancient_structures.common.structures.data.rules.MachineRule;
-import shadowmage.ancient_structures.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_structures.common.structures.data.rules.SwapRule;
-import shadowmage.ancient_structures.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_structures.common.world_gen.WorldGenStructureEntry;
 
 public abstract class AWStructure
@@ -100,14 +95,9 @@ public boolean preserveBlocks = false;
  * (incl advanced feature not supported by Ruins--per block preserve info)
  */
 public Map<Integer, BlockRule> blockRules = new HashMap<Integer, BlockRule>();
-public ArrayList<VehicleRule> vehicleRules = new ArrayList<VehicleRule>();
-public ArrayList<NpcRule> NPCRules = new ArrayList<NpcRule>();
 public Map<Integer, SwapRule> swapRules = new HashMap<Integer, SwapRule>();
 public ArrayList<EntityRule> entityRules = new ArrayList<EntityRule>();
-public ArrayList<CivicRule> civicRules = new ArrayList<CivicRule>();
 public Map<Integer, InventoryRule> inventoryRules = new HashMap<Integer, InventoryRule>();
-public ArrayList<GateRule> gateRules = new ArrayList<GateRule>();
-public ArrayList<MachineRule> machineRules = new ArrayList<MachineRule>();
 
 /**
  * only set to false for bad values during parsing, struct is then discarded and not loaded into structures map

@@ -30,9 +30,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
-import shadowmage.ancient_structures.common.item.ItemCivicBuilder;
-import shadowmage.ancient_warfare.common.crafting.RecipeType;
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 
 public class StructureClientInfo
 {
@@ -159,16 +156,20 @@ public Collection<ItemStack> getResourcesNeeded()
   return items;
   }
 
-public ResourceListRecipe constructRecipe()
-  {
-  if(!this.survival){return null;}
-  Collection<ItemStack> stacks = this.getResourcesNeeded();
-  ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
-  ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
-  recipe.addResources(stacks, false, false);
-  recipe.setDisplayName(name);
-  return recipe;
-  }
+/**
+ * TODO 
+ */
+//public ResourceListRecipe constructRecipe()
+//  {
+//  if(!this.survival){return null;}
+//  Collection<ItemStack> stacks = this.getResourcesNeeded();
+//  ItemStack result = ItemCivicBuilder.getCivicBuilderItem(this.name);
+//  ResourceListRecipe recipe = new ResourceListRecipe(result, RecipeType.STRUCTURE);
+//  recipe.addResources(stacks, false, false);
+//  recipe.setDisplayName(name);
+//  return recipe;
+//  }
+
 
 
 }

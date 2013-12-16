@@ -29,8 +29,8 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.container.ContainerEditor;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
-import shadowmage.ancient_warfare.common.container.ContainerEditor;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
 {

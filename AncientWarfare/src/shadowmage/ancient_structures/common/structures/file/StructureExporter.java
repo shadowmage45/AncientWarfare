@@ -35,14 +35,9 @@ import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.BlockData;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
-import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
-import shadowmage.ancient_structures.common.structures.data.rules.GateRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
-import shadowmage.ancient_structures.common.structures.data.rules.MachineRule;
-import shadowmage.ancient_structures.common.structures.data.rules.NpcRule;
 import shadowmage.ancient_structures.common.structures.data.rules.SwapRule;
-import shadowmage.ancient_structures.common.structures.data.rules.VehicleRule;
 
 public class StructureExporter
 {
@@ -159,17 +154,6 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("####SWAP RULESS####");
   addSwapRules(lines, struct);
   lines.add("");  
-  lines.add("####VEHICLE RULES####");
-  addVehicleRules(lines, struct);
-  lines.add("");
-  lines.add("####NPC RULES####");
-  addNpcRules(lines, struct);
-  lines.add("####CIVIC RULES####");
-  addCivicRules(lines, struct);
-  lines.add("");
-  lines.add("####GATE RULES####");
-  addGateRules(lines, struct);
-  lines.add("");
   lines.add("####ENTITY RULES####");
   addEntityRules(lines, struct);
   lines.add("");
@@ -181,77 +165,15 @@ public static List<String> getExportLinesFor(ProcessedStructure struct)
   lines.add("");
   lines.add("####INVENTORIES####\n");
   addInventoryRules(lines, struct);    
-  lines.add("");
-  lines.add("####MACHINES####\n");
-  addMachineRules(lines, struct);
-  lines.add("");
+  lines.add(""); 
   return lines;
   }
 
-private static void addMachineRules(List<String> lines, ProcessedStructure struct)
-  {
-  List<String> ruleLines;
-  for(MachineRule rule : struct.machineRules)
-    {
-    ruleLines = rule.getRuleLines();
-    lines.add("");
-    lines.addAll(ruleLines);
-    lines.add("");
-    }
-  }
-
-private static void addGateRules(List<String> lines, ProcessedStructure struct)
-  {
-  List<String> ruleLines;
-  for(GateRule rule : struct.gateRules)
-    {
-    ruleLines = rule.getRuleLines();
-    lines.add("");
-    lines.addAll(ruleLines);
-    lines.add("");
-    }
-  }
 
 private static void addInventoryRules(List<String> lines, ProcessedStructure struct)
   {
   List<String> ruleLines;
   for(InventoryRule rule : struct.inventoryRules.values())
-    {
-    ruleLines = rule.getRuleLines();
-    lines.add("");
-    lines.addAll(ruleLines);
-    lines.add("");
-    }
-  }
-
-private static void addVehicleRules(List<String> lines, ProcessedStructure struct)
-  {
-  List<String> ruleLines;
-  for(VehicleRule rule : struct.vehicleRules)
-    {
-    ruleLines = rule.getRuleLines();
-    lines.add("");
-    lines.addAll(ruleLines);
-    lines.add("");
-    }
-  }
-
-private static void addCivicRules(List<String> lines, ProcessedStructure struct)
-  {
-  List<String> ruleLines;
-  for(CivicRule rule : struct.civicRules)
-    {
-    ruleLines = rule.getRuleLines();
-    lines.add("");
-    lines.addAll(ruleLines);
-    lines.add("");
-    }
-  }
-
-private static void addNpcRules(List<String> lines, ProcessedStructure struct)
-  {
-  List<String> ruleLines;
-  for(NpcRule rule : struct.NPCRules)
     {
     ruleLines = rule.getRuleLines();
     lines.add("");

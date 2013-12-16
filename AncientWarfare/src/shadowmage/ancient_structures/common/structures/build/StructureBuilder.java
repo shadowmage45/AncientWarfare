@@ -46,15 +46,9 @@ import shadowmage.ancient_structures.common.structures.data.BlockData;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureBB;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
-import shadowmage.ancient_structures.common.structures.data.rules.CivicRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
-import shadowmage.ancient_structures.common.structures.data.rules.GateRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
-import shadowmage.ancient_structures.common.structures.data.rules.MachineRule;
-import shadowmage.ancient_structures.common.structures.data.rules.NpcRule;
-import shadowmage.ancient_structures.common.structures.data.rules.VehicleRule;
 import shadowmage.ancient_structures.common.world_gen.LootGenerator;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public abstract class StructureBuilder implements INBTTaggable
 {
@@ -701,61 +695,6 @@ protected void placeBlockData(World world, int x, int y, int z, BlockData data, 
     }
   }
 
-private void placeVehicles(World world)
-  {
-  VehicleBase vehicle;
-  for(VehicleRule rule : this.struct.vehicleRules)
-    {
-    vehicle = rule.getVehicleToSpawn(world, facing, struct, buildPos, this.overrideTeam);
-    if(vehicle!=null)
-      {
-      world.spawnEntityInWorld(vehicle);
-      }
-    }
-  }
-
-private void placeNpcs(World world)
-  {
-  Entity npc = null;
-  for(NpcRule rule : this.struct.NPCRules)
-    {
-    npc = rule.getEntityToSpawn(world, facing, struct, buildPos, this.overrideTeam);
-    if(npc!=null)
-      {
-      world.spawnEntityInWorld(npc);
-      }
-    }
-  }
-
-private void placeCivics(World world)
-  {
-  for(CivicRule civ : struct.civicRules)
-    {
-    civ.handleWorldPlacement(world, facing, struct, buildPos);
-    }
-  }
-
-private void placeGates(World world)
-  {
-	Entity e;
-  for(GateRule g : this.struct.gateRules)
-    {
-	  e = g.getEntityToSpawn(world, facing, struct, buildPos, this.overrideTeam);
-	  if(e!=null)
-	  {
-		    world.spawnEntityInWorld(e);		  
-	  }
-    }
-  }
-
-private void placeMachines(World world)
-  {
-  for(MachineRule m : this.struct.machineRules)
-    {
-    m.createBlock(world, buildPos, struct, facing);
-    }
-  }
-
 /**
  * called to start placing entities from the EntityRule list, first -> last
  * @param world
@@ -776,20 +715,9 @@ private void placeEntities(World world)
 protected void placeNonBlocks(World world)
   {
   this.placeEntities(world);
-  if(spawnVehicles)
-    {
-    this.placeVehicles(world);
-    }
-  if(spawnNpcs)
-    {
-    this.placeNpcs(world);
-    }
-  if(spawnGates)
-    {
-    this.placeGates(world);
-    }
-  this.placeMachines(world);
-  this.placeCivics(world);
+  /**
+   * TODO handle placement of plugin stuff
+   */
   }
 
 protected void placeSpecials(World world, int x, int y, int z, String name)
