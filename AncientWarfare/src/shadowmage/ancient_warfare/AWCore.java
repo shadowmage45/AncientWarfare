@@ -80,7 +80,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 
-@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Core", version=Statics.CORE_VERSION, dependencies="required-after:AncientWarfare")
+@Mod( modid = "AncientWarfare", name="Ancient Warfare", version=Statics.CORE_VERSION, dependencies="required-after:AncientWarfare")
 @NetworkMod
 (
 clientSideRequired = true,

@@ -29,7 +29,7 @@ import com.google.common.io.ByteArrayDataOutput;
 public class Packet02Entity extends PacketBase
 {
 
-int entityID;
+public int entityID;
 
 @Override
 public String getChannel()

@@ -172,7 +172,7 @@ public void setHealth(int val)
     {
     Packet02Entity pkt = new Packet02Entity();
     pkt.setParams(this);
-    pkt.setHealthUpdate(val);
+    pkt.packetData.setInteger("health", val);
     pkt.sendPacketToAllTrackingClients(this);
     }
   this.health = val;
