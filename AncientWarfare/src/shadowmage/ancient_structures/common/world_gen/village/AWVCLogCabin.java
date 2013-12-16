@@ -23,7 +23,7 @@ package shadowmage.ancient_structures.common.world_gen.village;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.world_gen.VillageGenComponent;
+import shadowmage.ancient_structures.common.village_gen.VillageGenComponent;
 
 public class AWVCLogCabin extends VillageGenComponent
 {

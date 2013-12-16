@@ -40,6 +40,7 @@ import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
 import shadowmage.ancient_structures.common.structures.data.rules.SwapRule;
+import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldGenStructureEntry;
 
 public abstract class AWStructure

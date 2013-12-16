@@ -30,6 +30,7 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
+import shadowmage.ancient_structures.common.template.build.StructureBB;
 
 /**
  * fully processed structure, ready to build in-game. 

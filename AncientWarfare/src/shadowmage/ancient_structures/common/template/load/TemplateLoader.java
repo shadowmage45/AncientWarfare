@@ -1,5 +1,5 @@
 /**
-   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   Copyright 2012-2013 John Cummens (aka Shadowmage, Shadowmage4513)
    This software is distributed under the terms of the GNU General Public License.
    Please see COPYING for precise license information.
 
@@ -18,31 +18,17 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.world_gen.village;
+package shadowmage.ancient_structures.common.template.load;
 
-import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.village_gen.VillageGenComponent;
-
-public class AWVCFortress extends VillageGenComponent
+public class TemplateLoader
 {
 
-
-public AWVCFortress()
-  {
-  
-  }
 /**
- * @param start
- * @param par2
- * @param face
- * @param struct
+ * 
  */
-public AWVCFortress(ComponentVillageStartPiece start, int par2, int face, ProcessedStructure struct, StructureBoundingBox box)
+public TemplateLoader()
   {
-  super(start, par2, face, struct, box);
+  // TODO Auto-generated constructor stub
   }
-
 
 }

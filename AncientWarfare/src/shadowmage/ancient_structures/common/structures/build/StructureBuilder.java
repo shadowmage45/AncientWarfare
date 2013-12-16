@@ -37,6 +37,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
+import shadowmage.ancient_framework.common.registry.LootGenerator;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
@@ -44,11 +45,10 @@ import shadowmage.ancient_structures.common.structures.StructureManager;
 import shadowmage.ancient_structures.common.structures.data.AWStructure;
 import shadowmage.ancient_structures.common.structures.data.BlockData;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.structures.data.StructureBB;
 import shadowmage.ancient_structures.common.structures.data.rules.BlockRule;
 import shadowmage.ancient_structures.common.structures.data.rules.EntityRule;
 import shadowmage.ancient_structures.common.structures.data.rules.InventoryRule;
-import shadowmage.ancient_structures.common.world_gen.LootGenerator;
+import shadowmage.ancient_structures.common.template.build.StructureBB;
 
 public abstract class StructureBuilder implements INBTTaggable
 {
