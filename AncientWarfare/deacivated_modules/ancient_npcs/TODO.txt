@@ -1,0 +1,71 @@
+Modules:
+    Core
+        --network framework
+        --gui framework
+        --base logger and base config file
+        --plugin loading system / API
+            --interfaces will be the main component of the API
+        --rendering framework / texture / asset hooks
+        --shared utilities
+        --research and crafting systems
+            --crafting will contain: research(research), engineering(most), recruiting(npc), drafting(structure)
+        --vanilla scoreboard teams hooks
+        --object/description/language registry hooks
+        --game data tracking
+    Structures
+        --structure system config        
+        --structure system plugin handling
+        --structure template parsing/loading
+        --structure scanning and template export
+        --world generation
+        --village generation hooks
+        --plugin to research and crafting to add recipes
+    Vehicles
+        --vehicle system config
+        --vehicle definitions loading and parsing
+        --vehicle input and movement system
+        --plugin to npc system for vehicle related npcs and their AI
+    Npc
+        --npc system config
+        --npc definitions loading and parsing?
+        --plugin to civic system for worker (IWorker interface)        
+        --plugin to research and crafting to add recipes
+        --plugin to crafting to add
+    Automation
+        --civic system config
+        --civics...
+        --machines
+        --bc plugin for engines
+    
+        
+        
+        
+
+*************************************************************************************************************************************************************************************
+[youtube]http://youtu.be/WDwPZ4qCfP0[/youtube]
+
+[youtube]http://youtu.be/euKFV3FJ47E[/youtube]
+
+
+server opt flags::
+ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
+https://forums.bukkit.org/threads/optimize-java-for-minecraft-in-a-extreme-way-p-need-feedback-thx-i-am-back.25994/page-2
+http://forums.bukkit.org/threads/how-can-i-optimize-java-on-my-server.3967/page-2#post-184208
+    
+WORLD SEEDS with villages:
+* 6663435395855598992
+* REDSTONEUPDATE
+* 119540751128687641 (large biomes) (has fortress)
+* 207140310
+* -10011002
+* -915855788 (bad, no village)
+* 5504436305081970315
+
+
+
+********************* DONE STUFF ************************* 
+*  denotes done
+** denotes done and tested
+
+
+
