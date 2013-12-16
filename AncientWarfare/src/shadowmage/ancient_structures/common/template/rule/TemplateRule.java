@@ -18,22 +18,24 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.plugins;
+package shadowmage.ancient_structures.common.template.rule;
 
-/**
- * in-template data storage for a single plugin for a single structure
- * @author Shadowmage
- *
- */
-public class StructurePluginData
+import net.minecraft.world.World;
+
+public class TemplateRule
 {
 
-/**
- * 
- */
-public StructurePluginData()
+private Object parentPlugin;//the plugin responsible for this rule
+String[] ruleData;
+
+public TemplateRule()
   {
-  // TODO Auto-generated constructor stub
+
+  }
+
+public void handlePlacement(World world, int x, int y, int z)
+  {
+  
   }
 
 }
