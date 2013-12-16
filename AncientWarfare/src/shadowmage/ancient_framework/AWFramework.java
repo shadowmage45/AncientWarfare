@@ -49,7 +49,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 
 
-@Mod( modid = "AncientWarfare", name="Ancient Warfare Mod Framework", version=Statics.FRAMEWORK_VERSION)
+@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Mod Framework", version=Statics.FRAMEWORK_VERSION)
 @NetworkMod
 (
 clientSideRequired = true,
