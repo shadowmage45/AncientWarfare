@@ -29,7 +29,6 @@ import net.minecraft.world.gen.structure.ComponentVillage;
 import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_structures.common.structures.build.BuilderInstant;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 
 public abstract class VillageGenComponent extends ComponentVillage
@@ -91,30 +90,30 @@ public boolean addComponentParts(World world, Random random, StructureBoundingBo
   hit.moveRight(coordBaseMode, structure.xOffset);
   hit.moveBack(coordBaseMode, structure.zOffset);
   hit.y = this.boundingBox.minY;
-  
-  BuilderInstant builder = new BuilderInstant(world, structure, coordBaseMode, hit);
-  builder.setWorldGen();
-  if(team>=0)
-    {
-    builder.setTeamOverride(team);    
-    } 
-  boolean build = true;
-  for(StructureBoundingBox b : this.builtStructs)
-    {
-    if(b.intersectsWith(boundingBox))
-      {
-      build = false;
-//      Config.logDebug("intersecting bounding boxes, aborting final build...");
-      break;
-      }
-    }
-  if(build)
-    {
-    this.builtStructs.add(this.boundingBox);
-//    Config.logDebug("actually building component:  "+this + " at: "+this.boundingBox + " client: "+world.isRemote);
-    builder.startConstruction();
-    return true;
-    } 
+//  
+//  BuilderInstant builder = new BuilderInstant(world, structure, coordBaseMode, hit);
+//  builder.setWorldGen();
+//  if(team>=0)
+//    {
+//    builder.setTeamOverride(team);    
+//    } 
+//  boolean build = true;
+//  for(StructureBoundingBox b : this.builtStructs)
+//    {
+//    if(b.intersectsWith(boundingBox))
+//      {
+//      build = false;
+////      Config.logDebug("intersecting bounding boxes, aborting final build...");
+//      break;
+//      }
+//    }
+//  if(build)
+//    {
+//    this.builtStructs.add(this.boundingBox);
+////    Config.logDebug("actually building component:  "+this + " at: "+this.boundingBox + " client: "+world.isRemote);
+//    builder.startConstruction();
+//    return true;
+//    } 
   return true;
   }
 

@@ -1046,27 +1046,27 @@ public void readFromNBT(NBTTagCompound tag)
   this.spawnGates = tag.getBoolean("sG");  
   }
 
-public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
-  {  
-  String name = tag.getString("name");
-  String md5 = tag.getString("md5");
-  ProcessedStructure struct = StructureManager.instance().getStructureServer(name);
-  if(struct==null)
-    {
-    return null;
-    }
-  if(!struct.md5.equals(md5))
-    {
-    AWLog.logError("Severe error loading ticked builder from disc (MD5 Failure).  The structure it was building has been changed.  The builder will be invalidated.");
-    return null;
-    }
-  BlockPosition hit = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));
-  int facing = tag.getByte("face");
-  BuilderTicked builder = new BuilderTicked(struct, facing, hit);
-  builder.readFromNBT(tag);
-  struct.addBuilder(builder);
-  return builder;
-  }
+//public static BuilderTicked readTickedBuilderFromNBT(NBTTagCompound tag)
+//  {  
+//  String name = tag.getString("name");
+//  String md5 = tag.getString("md5");
+//  ProcessedStructure struct = StructureManager.instance().getStructureServer(name);
+//  if(struct==null)
+//    {
+//    return null;
+//    }
+//  if(!struct.md5.equals(md5))
+//    {
+//    AWLog.logError("Severe error loading ticked builder from disc (MD5 Failure).  The structure it was building has been changed.  The builder will be invalidated.");
+//    return null;
+//    }
+//  BlockPosition hit = new BlockPosition(tag.getInteger("bX"), tag.getInteger("bY"), tag.getInteger("bZ"));
+//  int facing = tag.getByte("face");
+//  BuilderTicked builder = new BuilderTicked(struct, facing, hit);
+//  builder.readFromNBT(tag);
+//  struct.addBuilder(builder);
+//  return builder;
+//  }
 
 
 }

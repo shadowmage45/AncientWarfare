@@ -24,11 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.interfaces.IScannerItem;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
@@ -54,6 +59,8 @@ public ItemStructureScanner(int itemID)
   super(itemID);
   this.setMaxStackSize(1);  
   this.hasLeftClick = true;
+  this.setCreativeTab(AWStructuresItemLoader.structureTab);
+  AWLog.logDebug("set creative tab for structure scanner to: "+AWStructuresItemLoader.structureTab);
   }
 
 @Override
@@ -200,6 +207,24 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     stack.setTagInfo("structData", tag);
     }
   return true;
+  }
+
+/**
+ * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
+ */
+@SideOnly(Side.CLIENT)
+@Override
+public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
+  {  
+  if(description!=null)
+    {
+    AWLog.logDebug("getting sub-items for structure scanner...");
+    par3List.addAll(description.getDisplayStackCache());
+    }
+  else
+    {
+    super.getSubItems(par1, par2CreativeTabs, par3List);
+    } 
   }
 
 @Override

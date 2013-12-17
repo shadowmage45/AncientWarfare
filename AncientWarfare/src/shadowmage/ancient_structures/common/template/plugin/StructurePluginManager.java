@@ -28,19 +28,30 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaBlocks;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class StructurePluginManager
 {
 
-private List<StructurePlugin> loadedPlugins = new ArrayList<StructurePlugin>();
-private HashMap<Block, StructurePlugin> blockHandlers = new HashMap<Block, StructurePlugin>();
-private HashMap<Class, StructurePlugin> entityHandlers = new HashMap<Class, StructurePlugin>();
+private List<StructureContentPlugin> loadedPlugins = new ArrayList<StructureContentPlugin>();
+private HashMap<Block, StructureContentPlugin> blockHandlers = new HashMap<Block, StructureContentPlugin>();
+private HashMap<Class, StructureContentPlugin> entityHandlers = new HashMap<Class, StructureContentPlugin>();
 
 private List<Class> entityInputCache = new ArrayList<Class>();
 private List<Block> blockInputCache = new ArrayList<Block>();
 
-public void addPlugin(StructurePlugin plugin)
+/**
+ * should be called during pre-init to load default included block and entity handlers
+ * needs to be called prior to loading templates, as the plugin-provided rules are needed by the
+ * structure templates
+ */
+public void loadDefaultPlugins()
+  {
+  this.addPlugin(new StructurePluginVanillaBlocks());
+  }
+
+public void addPlugin(StructureContentPlugin plugin)
   {
   this.loadedPlugins.add(plugin);  
   
@@ -56,7 +67,7 @@ public void addPlugin(StructurePlugin plugin)
       AWLog.logError("Could not register block for plugin:\n" +
       		"block:"+ b +"\n"+
       		"plugin:"+ plugin.getClass() +"\n"+
-          "Attempt to overwrite block handler for : "+b);
+          "Attempt to overwrite existing block handler");
       }
     }
   blockInputCache.clear();
@@ -64,29 +75,39 @@ public void addPlugin(StructurePlugin plugin)
   plugin.addHandledEntities(entityInputCache);
   for(Class clz : entityInputCache)
     {
-    if(!entityHandlers.containsKey(clz) && Entity.class.isAssignableFrom(clz))
+    if(Entity.class.isAssignableFrom(clz))
       {
-      entityHandlers.put(clz, plugin);
+      if(!entityHandlers.containsKey(clz))
+        {
+        entityHandlers.put(clz, plugin);
+        }
+      else
+        {
+        AWLog.logError("Could not register entity for plugin:\n" +
+            "entity:"+ clz +"\n"+
+            "plugin:"+ plugin.getClass() +"\n"+
+            "Attempt to overwrite existing entity handler");
+        }
       }
     else
       {
       AWLog.logError("Could not register entity for plugin:\n" +
           "entity:"+ clz +"\n"+
           "plugin:"+ plugin.getClass() +"\n"+
-          "Improper entity class or attempt to overwrite existing handler");
-      }
+          "Class to register was not an Entity subclass");
+      }    
     }
   }
 
 public TemplateRule getRuleForBlock(World world, Block block, int face, int x, int y, int z, List<TemplateRule> priorRules)
   {
-  StructurePlugin plugin = blockHandlers.get(block);  
+  StructureContentPlugin plugin = blockHandlers.get(block);  
   return plugin != null ? plugin.getRuleForBlock(world, block, face, x, y, z, priorRules) : null;
   }
 
 public TemplateRule getRuleForEntity(World world, Entity entity, int face, int x, int y, int z, List<TemplateRule> priorRules)
   {
-  StructurePlugin plugin = entityHandlers.get(entity);
+  StructureContentPlugin plugin = entityHandlers.get(entity);
   return plugin != null ? plugin.getRuleForEntity(world, entity, face, x, y, z, priorRules) : null;
   }
 

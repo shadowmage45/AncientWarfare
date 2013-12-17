@@ -28,6 +28,7 @@ import shadowmage.ancient_framework.common.config.AWConfig;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_framework.common.lang.LanguageLoader;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
@@ -62,7 +63,7 @@ versionBounds="["+Statics.FRAMEWORK_VERSION+",)"
 public class AWFramework extends AWMod
 {
 
-@Instance("AncientWarfare")
+@Instance("AncientWarfareCore")
 public static AWFramework instance;
 @SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxyBase", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
 public static CommonProxy proxy;
@@ -73,7 +74,7 @@ public shadowmage.ancient_framework.common.event.EventHandler eventHandler;
 
 @Override
 public void loadConfiguration(File config, Logger log)
-  {
+  {  
   this.config = new AWConfig(config, log, Statics.FRAMEWORK_VERSION);
   objectRegistry = new ObjectRegistry(this.config);
   AWLog.setLogger(log);
@@ -84,10 +85,12 @@ public void loadConfiguration(File config, Logger log)
 public void preInit(FMLPreInitializationEvent evt)
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.FRAMEWORK_VERSION);
   gameData = new AWGameData();
   eventHandler = new shadowmage.ancient_framework.common.event.EventHandler();
   MinecraftForge.EVENT_BUS.register(eventHandler);
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
+  LanguageLoader.instance().loadLanguageFiles();
   }
 
 @Override
@@ -101,7 +104,7 @@ public void init(FMLInitializationEvent evt)
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-
+  config.saveConfig();
   }
 
 @Override

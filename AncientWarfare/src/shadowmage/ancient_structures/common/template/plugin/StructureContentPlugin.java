@@ -27,7 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
-public abstract class StructurePlugin
+public abstract class StructureContentPlugin
 {
 
 /**

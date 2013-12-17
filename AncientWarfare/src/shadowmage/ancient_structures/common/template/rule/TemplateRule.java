@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.common.template.rule;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 
 /**
  * base template-rule class.  Plugins should define their own rule classes.
@@ -32,7 +33,7 @@ import net.minecraft.world.World;
 public abstract class TemplateRule
 {
 
-private Object parentPlugin;//the plugin responsible for this rule
+private StructureContentPlugin parentPlugin;//the plugin responsible for this rule
 
 /**
  * input params are the target position for placement of this rule and destination orientation
@@ -43,5 +44,13 @@ private Object parentPlugin;//the plugin responsible for this rule
  * @param z 
  */
 public abstract void handlePlacement(World world, int facing, int x, int y, int z);
+
+/**
+ * sub-classes should return a name to be inserted into templates as to a reference to this rule
+ * this reference should be unique among rule names to avoid conflict
+ * end-users should be able to use this name to look up reference documentation about the rule
+ * @return
+ */
+public abstract String getRuleTypeName();
 
 }

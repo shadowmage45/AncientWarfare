@@ -43,16 +43,10 @@ public class AWStructureStatics extends ModConfiguration
 {
 
 public static String templateExtension = "aws";
-public static final String defaultTemplateDirectory = "/assets/ancientwarfare/templates/";
-public static String outputDirectory = null;
-public static String includeDirectory = null;
-public static String convertDirectory = null;
-public static String configBaseDirectory = null;
+
 public static boolean enableVillageGen;
 
 public static final Set<Class> validEntitiesToScan = new HashSet<Class>();
-public static final List<String> defaultExportStructures = new ArrayList<String>();
-public static boolean shouldExportDefaults = false;
 
 public static final String guiEditor = "StructureEditor";
 public static final String guiScanner = "StructureScanner";
@@ -87,27 +81,7 @@ public void initializeValues()
   this.validEntitiesToScan.add(EntityBoat.class);
   this.validEntitiesToScan.add(EntityItemFrame.class);
   this.validEntitiesToScan.add(EntityPainting.class);
-  this.validEntitiesToScan.add(EntityMinecart.class);
-  this.defaultExportStructures.add("villageGardenLarge.aws");
-  this.defaultExportStructures.add("villageGardenSmall.aws");
-  this.defaultExportStructures.add("villageHouse1.aws");
-  this.defaultExportStructures.add("villageHouse2.aws");
-  this.defaultExportStructures.add("villageHouseGarden.aws");
-  this.defaultExportStructures.add("villageHouseSmall.aws");
-  this.defaultExportStructures.add("villageHouseSmall2.aws");
-  this.defaultExportStructures.add("villageLibrary.aws");
-  this.defaultExportStructures.add("villageSmith.aws");
-  this.defaultExportStructures.add("villageTorch.aws");
-  this.defaultExportStructures.add("villageWell.aws");
-  this.defaultExportStructures.add("advancedVillageLibrary.aws");
-  this.defaultExportStructures.add("obsidianVault.aws");
-  this.defaultExportStructures.add("banditCamp.aws");
-  this.defaultExportStructures.add("lavaFarm.aws");
-  this.defaultExportStructures.add("fountain1.aws");
-  this.defaultExportStructures.add("logCabin.aws");
-  this.defaultExportStructures.add("fortress1.aws");
-  this.defaultExportStructures.add("fortress2.aws");
-  this.defaultExportStructures.add("tower1.aws");
+  this.validEntitiesToScan.add(EntityMinecart.class); 
   }
 
 }

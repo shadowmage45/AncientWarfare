@@ -72,7 +72,7 @@ public AWItemBase createItem(String name, Class<? extends AWItemBase> itemClz)
   {
   try
     {
-    AWItemBase item = itemClz.getDeclaredConstructor(int.class).newInstance(nextItemID++);
+    AWItemBase item = itemClz.getDeclaredConstructor(int.class).newInstance(config.getItemID(name, nextItemID++));
     registerItem(name, item);
     return item;
     } 
@@ -87,9 +87,9 @@ public AWBlockBase createBlock(String name, Class<? extends AWBlockBase> blockCl
   {
   try
     {
-    AWBlockBase item = blockClz.getDeclaredConstructor(int.class).newInstance(nextBlockID++);
-    registerBlock(name, item);
-    return item;
+    AWBlockBase block = blockClz.getDeclaredConstructor(int.class).newInstance(config.getBlockID(name, nextBlockID++));
+    registerBlock(name, block);
+    return block;
     } 
   catch (Exception e)
     {   
@@ -102,7 +102,7 @@ public AWBlockBase createBlock(String name, Class<? extends AWBlockBase> blockCl
   {
   try
     {
-    AWBlockBase item = blockClz.getDeclaredConstructor(int.class).newInstance(nextBlockID++);
+    AWBlockBase item = blockClz.getDeclaredConstructor(int.class).newInstance(config.getBlockID(name, nextBlockID++));
     registerBlock(name, item, itemClz);
     return item;
     } 
@@ -118,7 +118,7 @@ public <T>T createItemBasic(String name, Class<T> itemClz)
   Item item;
   try
     {
-    item = (Item) itemClz.getDeclaredConstructor(int.class).newInstance(nextItemID++);
+    item = (Item) itemClz.getDeclaredConstructor(int.class).newInstance(config.getItemID(name, nextItemID++));
     return (T) item;
     } 
   catch (Exception e)

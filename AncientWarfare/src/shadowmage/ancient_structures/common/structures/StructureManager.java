@@ -81,34 +81,34 @@ private Packet01ModData constructPacket(NBTTagCompound tag)
 /************************************* SERVER METHODS ************************************/
 public boolean tryRemoveStructure(String name)
   {
-  if(this.structures.containsKey(name))
-    {
-    ProcessedStructure struct = this.structures.get(name);
-    if(!struct.isLocked() && !AWStructures.instance.isBeingBuilt(name))
-      {
-      this.structures.remove(name);
-      WorldGenStructureManager.instance().removeStructure(name);      
-      NBTTagCompound structData = new NBTTagCompound();
-      structData.setString("remove", name);   
-      AWStructures.proxy.sendPacketToAllPlayers(constructPacket(structData));
-      return true;
-      }    
-    }
+//  if(this.structures.containsKey(name))
+//    {
+//    ProcessedStructure struct = this.structures.get(name);
+//    if(!struct.isLocked() && !AWStructures.instance.isBeingBuilt(name))
+//      {
+//      this.structures.remove(name);
+//      WorldGenStructureManager.instance().removeStructure(name);      
+//      NBTTagCompound structData = new NBTTagCompound();
+//      structData.setString("remove", name);   
+//      AWStructures.proxy.sendPacketToAllPlayers(constructPacket(structData));
+//      return true;
+//      }    
+//    }
   return false;
   }
 
 public boolean tryDeleteStructure(String name)
   {
-  if(this.tryRemoveStructure(name))
-    {
-    File f = new File(AWStructureStatics.includeDirectory+"/"+name+"."+AWStructureStatics.templateExtension);
-    if(f.exists())
-      {
-      AWLog.log("Deleting structure for name: "+name + " file: "+f.getAbsolutePath());
-      f.delete();      
-      return true;
-      }
-    }  
+//  if(this.tryRemoveStructure(name))
+//    {
+//    File f = new File(AWStructureStatics.includeDirectory+"/"+name+"."+AWStructureStatics.templateExtension);
+//    if(f.exists())
+//      {
+//      AWLog.log("Deleting structure for name: "+name + " file: "+f.getAbsolutePath());
+//      f.delete();      
+//      return true;
+//      }
+//    }  
   return false;
   }
 

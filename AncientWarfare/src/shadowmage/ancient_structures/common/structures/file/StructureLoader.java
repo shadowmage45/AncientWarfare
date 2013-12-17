@@ -79,8 +79,8 @@ int currentLayer = 0;
 public void scanForPrebuiltFiles()
   {
   probableStructureFiles.clear();  
-  this.recursiveScan(new File(AWStructureStatics.includeDirectory), probableStructureFiles, "."+AWStructureStatics.templateExtension);  
-  this.recursiveScan(new File(AWStructureStatics.convertDirectory), probableRuinsFiles, ".tml");
+//  this.recursiveScan(new File(AWStructureStatics.includeDirectory), probableStructureFiles, "."+AWStructureStatics.templateExtension);  
+//  this.recursiveScan(new File(AWStructureStatics.convertDirectory), probableRuinsFiles, ".tml");
   }
 
 private void recursiveScan(File directory, List<File> fileList, String extension)
@@ -246,27 +246,27 @@ public List<ProcessedStructure> processStructureFiles()
 
 public void convertRuinsTemplates()
   {
-  for(File file : this.probableRuinsFiles)
-    {
-    String name = file.getName();
-    name = name.split(".tml")[0];
-    String newFile = String.valueOf(AWStructureStatics.outputDirectory+name+"."+AWStructureStatics.templateExtension);
-
-    ProcessedStructure raw = processFile(file);
-    if(raw==null || !raw.isValid)
-      {
-      continue;
-      }    
-    raw.name = String.valueOf(name);
-    raw.setTemplateLines(StructureExporter.getExportLinesFor(raw));
-    if(!StructureExporter.writeStructureToFile(raw, newFile, false))
-      {
-      continue;
-      }       
-    String renamedName = file.getName()+".cvt";
-    File renamedFile = new File(AWStructureStatics.convertDirectory+renamedName);
-    file.renameTo(renamedFile);
-    }
+//  for(File file : this.probableRuinsFiles)
+//    {
+//    String name = file.getName();
+//    name = name.split(".tml")[0];
+//    String newFile = String.valueOf(AWStructureStatics.outputDirectory+name+"."+AWStructureStatics.templateExtension);
+//
+//    ProcessedStructure raw = processFile(file);
+//    if(raw==null || !raw.isValid)
+//      {
+//      continue;
+//      }    
+//    raw.name = String.valueOf(name);
+//    raw.setTemplateLines(StructureExporter.getExportLinesFor(raw));
+//    if(!StructureExporter.writeStructureToFile(raw, newFile, false))
+//      {
+//      continue;
+//      }       
+//    String renamedName = file.getName()+".cvt";
+//    File renamedFile = new File(AWStructureStatics.convertDirectory+renamedName);
+//    file.renameTo(renamedFile);
+//    }
   }
 
 public ProcessedStructure loadStructureAW(List<String> lines, String md5)

@@ -188,58 +188,58 @@ public void sendSettingsAndExport(String name, boolean world, boolean surv, bool
  */
 public void export()
   {
-  ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
-  ItemStructureScanner.scannedStructures.remove(this.player);
-  if(struct==null)
-    {
-    AWLog.logError("Could not locate structure for: "+this.player.getEntityName());
-    return;
-    }
-  if(this.name==null || this.name.equals(""))
-    {
-    AWLog.logError("Improperly named structure for export");
-    return;
-    }
-  struct.name = this.name;
-
-  
-  struct.survival = this.survival;
-  List<String> templateLines = StructureExporter.getExportLinesFor(struct); 
-  struct.setTemplateLines(templateLines);  
-  String path;
-  if(this.formatAW)
-    {
-    player.addChatMessage("Exporting structure to AW Format: "+name);
-    if(!this.includeOnExport)
-      {
-      path = String.valueOf(AWStructureStatics.outputDirectory+name+"."+AWStructureStatics.templateExtension);
-      }
-    else
-      {
-      path = String.valueOf(AWStructureStatics.includeDirectory+name+"."+AWStructureStatics.templateExtension);
-      }    
-    boolean success = StructureExporter.writeStructureToFile(struct, path, false);
-    struct.filePath = path;
-    if(success && includeOnExport)
-      {
-      player.addChatMessage("Including structure in live structure lists");
-      StructureManager.instance().addStructure(struct, true);
-      }    
-    else if(!success)
-      {
-      player.addChatMessage("Error exporting to AW Format, check naming");
-      }
-    }
-  if(this.world)
-    {
-    WorldGenStructureManager.instance().addEntry(struct, weight, value, unique);
-    }
-  if(this.formatRuins)
-    {
-    player.addChatMessage("Exporting structure to Ruins Format");
-    path = String.valueOf(AWStructureStatics.outputDirectory+name+".tml");
-    StructureExporterRuins.writeStructureToFile(struct, path);
-    }  
+//  ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
+//  ItemStructureScanner.scannedStructures.remove(this.player);
+//  if(struct==null)
+//    {
+//    AWLog.logError("Could not locate structure for: "+this.player.getEntityName());
+//    return;
+//    }
+//  if(this.name==null || this.name.equals(""))
+//    {
+//    AWLog.logError("Improperly named structure for export");
+//    return;
+//    }
+//  struct.name = this.name;
+//
+//  
+//  struct.survival = this.survival;
+//  List<String> templateLines = StructureExporter.getExportLinesFor(struct); 
+//  struct.setTemplateLines(templateLines);  
+//  String path;
+//  if(this.formatAW)
+//    {
+//    player.addChatMessage("Exporting structure to AW Format: "+name);
+//    if(!this.includeOnExport)
+//      {
+//      path = String.valueOf(AWStructureStatics.outputDirectory+name+"."+AWStructureStatics.templateExtension);
+//      }
+//    else
+//      {
+//      path = String.valueOf(AWStructureStatics.includeDirectory+name+"."+AWStructureStatics.templateExtension);
+//      }    
+//    boolean success = StructureExporter.writeStructureToFile(struct, path, false);
+//    struct.filePath = path;
+//    if(success && includeOnExport)
+//      {
+//      player.addChatMessage("Including structure in live structure lists");
+//      StructureManager.instance().addStructure(struct, true);
+//      }    
+//    else if(!success)
+//      {
+//      player.addChatMessage("Error exporting to AW Format, check naming");
+//      }
+//    }
+//  if(this.world)
+//    {
+//    WorldGenStructureManager.instance().addEntry(struct, weight, value, unique);
+//    }
+//  if(this.formatRuins)
+//    {
+//    player.addChatMessage("Exporting structure to Ruins Format");
+//    path = String.valueOf(AWStructureStatics.outputDirectory+name+".tml");
+//    StructureExporterRuins.writeStructureToFile(struct, path);
+//    }  
   }
 
 public void clearItem()
