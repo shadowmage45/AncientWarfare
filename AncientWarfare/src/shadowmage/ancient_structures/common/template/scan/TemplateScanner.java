@@ -116,7 +116,7 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
               }
             pluginRules =pluginRuleMap.get(scanPlugin);
             scannedRule = scanPlugin.getRuleForBlock(world, scannedBlock, turns, scanX, scanY, scanZ, pluginRules);   
-            if(scannedRule!=null)
+            if(scannedRule!=null && scannedRule.ruleNumber==-1)
               {
               pluginRules.add(scannedRule);
               scannedRule.ruleNumber = nextRuleID;
@@ -135,7 +135,7 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
               }
             pluginRules = pluginRuleMap.get(scanPlugin);
             scannedRule = scanPlugin.getRuleForEntity(world, scannedEntity, turns, scanX, scanY, scanZ, pluginRules);   
-            if(scannedRule!=null)
+            if(scannedRule!=null && scannedRule.ruleNumber==-1)
               {
               pluginRules.add(scannedRule);
               scannedRule.ruleNumber = nextRuleID;
@@ -156,10 +156,10 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
         }
       }
     }  
-  TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()];
-  for(int i = 0; i < templateRules.length; i++)
+  TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()+1];  
+  for(int i = 0; i < currentRulesAll.size(); i++)//offset by 1 -- we want a null rule for 0==air
     {
-    templateRules[i] = currentRulesAll.get(i);
+    templateRules[i+1] = currentRulesAll.get(i);
     }
   StructureTemplate template = new StructureTemplate("testTemplate"+System.currentTimeMillis(), xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);

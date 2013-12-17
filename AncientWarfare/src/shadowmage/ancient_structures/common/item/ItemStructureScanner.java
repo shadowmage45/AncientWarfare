@@ -44,9 +44,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemStructureScanner extends AWItemClickable
 {
 
-
-public static Map<EntityPlayer, ProcessedStructure> scannedStructures = new HashMap<EntityPlayer, ProcessedStructure>();
-
+public static StructureTemplate currentTemplate = null;
 
 public ItemStructureScanner(int itemID)
   {
@@ -115,8 +113,10 @@ public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
   TemplateScanner scanner = new TemplateScanner();
-  int turns = (4-(face+2))%4;
-  StructureTemplate template = scanner.scan(world, min, max, key, (face+2)%4); 
+  int turns = face==0 ? 2 : face==1 ? 1 : face==2 ? 0 : face==3 ? 3 : 0; 
+  
+  StructureTemplate template = scanner.scan(world, min, max, key, turns); 
+  currentTemplate = template;
   return true;
   }
 

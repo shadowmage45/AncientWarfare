@@ -120,6 +120,13 @@ public BlockPosition offsetBy(BlockPosition offsetVector)
   return this;
   }
 
+public void offset(int x, int y, int z)
+  {
+  this.x += x;
+  this.y += y;
+  this.z += z;
+  }
+
 /**
  * returns the DIFFERENCE between THIS and BASE
  * or the distance and directions needed to travel to

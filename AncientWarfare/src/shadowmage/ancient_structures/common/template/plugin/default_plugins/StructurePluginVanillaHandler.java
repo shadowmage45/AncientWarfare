@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
+import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -37,11 +38,15 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_structures.common.block.BlockDataManager;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class StructurePluginVanillaHandler extends StructureContentPlugin
 {
+
+private HashSet<Block> specialHandledBlocks = new HashSet<Block>();
 
 public StructurePluginVanillaHandler()
   {
@@ -51,10 +56,34 @@ public StructurePluginVanillaHandler()
 @Override
 public void addHandledBlocks(List<Block> handledBlocks)
   {
-  handledBlocks.add(Block.grass);
-  handledBlocks.add(Block.dirt);
-  handledBlocks.add(Block.stone);
-  handledBlocks.add(Block.cobblestone);
+  Block block;
+  for(int i = 0; i < 256; i++)
+    {
+    block = Block.blocksList[i];
+    if(block!=null)
+      {
+      handledBlocks.add(block);
+      }
+    }
+  
+  /**
+   * tile-entity / nbt based blocks. 
+   * some need proper rotation support in addition to specialized
+   * nbt handling 
+   */
+  specialHandledBlocks.add(Block.chest);
+  specialHandledBlocks.add(Block.dropper);
+  specialHandledBlocks.add(Block.dispenser);
+  specialHandledBlocks.add(Block.enderChest);
+  specialHandledBlocks.add(Block.commandBlock);
+  specialHandledBlocks.add(Block.mobSpawner);
+  specialHandledBlocks.add(Block.signPost);
+  specialHandledBlocks.add(Block.signWall);
+  specialHandledBlocks.add(Block.furnaceBurning);
+  specialHandledBlocks.add(Block.furnaceIdle);
+  specialHandledBlocks.add(Block.hopperBlock);
+  specialHandledBlocks.add(Block.skull);
+  specialHandledBlocks.add(Block.brewingStand);
   }
 
 @Override
@@ -78,13 +107,31 @@ public void addHandledEntities(List<Class> handledEntities)
   }
 
 @Override
-public TemplateRule getRuleForBlock(World world, Block block, int facing, int x, int y, int z, List<TemplateRule> priorRules)
+public TemplateRule getRuleForBlock(World world, Block block, int turns, int x, int y, int z, List<TemplateRule> priorRules)
   {
-  return block==null ? null : new TemplateRuleVanillaBlocks();
+  TemplateRuleVanillaBlocks rule = null;  
+  int meta = world.getBlockMetadata(x, y, z);
+  if(block!=null)
+    {
+    meta = BlockDataManager.getRotatedMeta(block.blockID, meta, turns);
+    for(TemplateRule r : priorRules)
+      {
+      if(r.shouldReuseRule(world, block, meta, x, y, z))
+        {
+        return r;
+        }
+      }
+    rule = new TemplateRuleVanillaBlocks(block, meta);
+    if(specialHandledBlocks.contains(block))
+      {
+      AWLog.logDebug("should add special info to block...");
+      }
+    }
+  return rule;
   }
 
 @Override
-public TemplateRule getRuleForEntity(World world, Entity entity, int facing, int x, int y, int z, List<TemplateRule> priorRules)
+public TemplateRule getRuleForEntity(World world, Entity entity, int turns, int x, int y, int z, List<TemplateRule> priorRules)
   {
   return null;
   }

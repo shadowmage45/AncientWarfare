@@ -25,6 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 
 
 public class ItemBuilderCreative extends AWItemClickable
@@ -41,7 +44,23 @@ public ItemBuilderCreative(int itemID)
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-  {
+  {  
+  if(player==null || hit==null || world.isRemote)
+    {
+    return false;
+    }
+  if(player.isSneaking())
+    {
+    hit.offsetForMCSide(side);
+    }
+  StructureTemplate template = ItemStructureScanner.currentTemplate;
+  if(template==null)
+    {
+    player.addChatMessage("no structure found to build...");
+    return false;
+    }
+  StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
+  builder.instantConstruction();
   return false;
   }
 

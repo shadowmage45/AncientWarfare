@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_structures.common.template.rule;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 
@@ -34,6 +36,25 @@ public abstract class TemplateRule
 {
 
 public int ruleNumber = -1;
+public int buildPriority = 0;
+
+private String pluginTypeName = "";
+
+public TemplateRule(String ruleTypeName)
+  {
+  this.pluginTypeName = ruleTypeName;
+  }
+
+/**
+ * sub-classes should return a name to be inserted into templates as to a reference to this rule
+ * this reference should be unique among rule names to avoid conflict
+ * end-users should be able to use this name to look up reference documentation about the rule
+ * @return
+ */
+public String getRuleTypeName()
+  {
+  return this.pluginTypeName;
+  }
 
 private StructureContentPlugin parentPlugin;//the plugin responsible for this rule
 
@@ -47,13 +68,8 @@ private StructureContentPlugin parentPlugin;//the plugin responsible for this ru
  */
 public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
-/**
- * sub-classes should return a name to be inserted into templates as to a reference to this rule
- * this reference should be unique among rule names to avoid conflict
- * end-users should be able to use this name to look up reference documentation about the rule
- * @return
- */
-public abstract String getRuleTypeName();
+public abstract boolean shouldReuseRule(World world, Block block, int meta, int x, int y, int z);
+public abstract boolean shouldReuseRule(World world, Entity entity, int x, int y, int z);
 
 public abstract String[] getRuleLines();
 

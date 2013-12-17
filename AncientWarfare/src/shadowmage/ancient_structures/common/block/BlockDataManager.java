@@ -20,12 +20,19 @@
  */
 package shadowmage.ancient_structures.common.block;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import shadowmage.ancient_structures.common.structures.data.BlockInfo;
 
 public class BlockDataManager
 {
+
+private static HashMap<String, Block> foundBlockMap = new HashMap<String, Block>();
+private static Set<String> notFoundBlocks = new HashSet<String>();
 
 private static BlockDataManager INSTANCE;
 private BlockDataManager(){}
@@ -223,6 +230,29 @@ public static int getRotatedMeta(int id, int meta, int rotationAmt)
     return meta;
     }
   return BlockInfo.blockList[id].rotateRight(meta, rotationAmt);
+  }
+
+public static int getRotatedMeta(Block block, int meta, int rotationAmt)
+  {
+  return getRotatedMeta(block.blockID, meta, rotationAmt);
+  }
+
+public static Block getBlockByName(String name)
+  {
+  Block block = foundBlockMap.get(name);
+  if(block==null && !notFoundBlocks.contains(name))
+    {
+    for(int i = 0; i < Block.blocksList.length; i++)
+      {
+      block = Block.blocksList[i];
+      if(block!=null && name.equals(block.getUnlocalizedName()))
+        {
+        foundBlockMap.put(name, block);
+        break;
+        }
+      }
+    }
+  return block;
   }
 
 }

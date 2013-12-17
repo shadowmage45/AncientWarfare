@@ -20,11 +20,22 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateRuleVanillaEntity extends TemplateRule
 {
+
+/**
+ * @param ruleTypeName
+ */
+public TemplateRuleVanillaEntity(String ruleTypeName)
+  {
+  super(ruleTypeName);
+  // TODO Auto-generated constructor stub
+  }
 
 @Override
 public void handlePlacement(World world, int facing, int x, int y, int z)
@@ -43,6 +54,19 @@ public String[] getRuleLines()
   {
   // TODO Auto-generated method stub
   return null;
+  }
+
+@Override
+public boolean shouldReuseRule(World world, Block block, int meta, int x, int y, int z)
+  {
+  return false;
+  }
+
+@Override
+public boolean shouldReuseRule(World world, Entity entity, int x, int y, int z)
+  {
+  // TODO Auto-generated method stub
+  return false;
   }
 
 }

@@ -250,7 +250,7 @@ public void clearItem()
     AWLog.logError("Could not clear structure data from item, improper item detected");
     return;
     }
-  ItemStructureScanner.scannedStructures.remove(player);
+//  ItemStructureScanner.scannedStructures.remove(player);
   player.addChatMessage("Clearing Structure Scanner Item, it is now ready to scan the next area");
   }
 
@@ -267,14 +267,14 @@ public List<NBTTagCompound> getInitData()
   {
   ArrayList<NBTTagCompound> packetTags = new ArrayList<NBTTagCompound>();
   NBTTagCompound tag = new NBTTagCompound();
-  ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
-  if(struct==null)
-    {
-    return null;
-    }
-  tag.setInteger("x", struct.xSize);
-  tag.setInteger("y", struct.ySize);
-  tag.setInteger("z", struct.zSize);  
+//  ProcessedStructure struct = ItemStructureScanner.scannedStructures.get(this.player);
+//  if(struct==null)
+//    {
+//    return null;
+//    }
+//  tag.setInteger("x", struct.xSize);
+//  tag.setInteger("y", struct.ySize);
+//  tag.setInteger("z", struct.zSize);  
   packetTags.add(tag);
   return packetTags;
   }
