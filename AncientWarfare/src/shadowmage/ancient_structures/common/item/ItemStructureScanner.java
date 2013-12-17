@@ -24,9 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,17 +31,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.interfaces.IScannerItem;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
-import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.structures.data.ScannedStructureData;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 
-public class ItemStructureScanner extends AWItemClickable implements IScannerItem
+public class ItemStructureScanner extends AWItemClickable
 {
 
 
@@ -119,11 +116,10 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
  */
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
-  key = BlockTools.offsetBuildKey(face, pos1, pos2, key);
-  ScannedStructureData scanData = new ScannedStructureData(face, pos1, pos2, key);
-  scanData.scan(world);     
-  this.scannedStructures.put(player, scanData.convertToProcessedStructure());
-  GUIHandler.instance().openGUI(AWStructureStatics.guiScanner, player, 0, 0, 0);
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  TemplateScanner scanner = new TemplateScanner();
+  StructureTemplate template = scanner.scan(world, min, max, key, (face+2)%4); 
   return true;
   }
 
@@ -136,35 +132,7 @@ public static ItemStack clearStructureData(ItemStack stack)
   return stack;
   }
 
-public static BlockPosition getPos1(ItemStack stack)
-  {
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData") && stack.getTagCompound().getCompoundTag("structData").hasKey("pos1"))
-    {
-    return new BlockPosition(stack.getTagCompound().getCompoundTag("structData").getCompoundTag("pos1"));
-    }
-  return null;
-  }
-
-public static BlockPosition getPos2(ItemStack stack)
-  {
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData") && stack.getTagCompound().getCompoundTag("structData").hasKey("pos2"))
-    {
-    return new BlockPosition(stack.getTagCompound().getCompoundTag("structData").getCompoundTag("pos2"));
-    }
-  return null;
-  }
-
-@Override
-public BlockPosition getScanPos1(ItemStack stack)
-  {
-  return getPos1(stack);
-  }
-
-@Override
-public BlockPosition getScanPos2(ItemStack stack)
-  {
-  return getPos2(stack);
-  }
+ItemStructureSettings scanSettings = new ItemStructureSettings();
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  BlockPosition hit, int side)
@@ -177,35 +145,29 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     {
     return true;
     }
-  NBTTagCompound tag;
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+  scanSettings.getSettingsFor(stack, scanSettings);
+  if(player.isSneaking())
     {
-    tag = stack.getTagCompound().getCompoundTag("structData");
+    scanSettings.clearSettings();
+    scanSettings.setSettingsFor(stack, scanSettings);
     }
-  else
+  else if(scanSettings.hasPos1() && scanSettings.hasPos2() && scanSettings.hasBuildKey())
     {
-    tag = new NBTTagCompound();
-    }
-  if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
-    {
-    BlockPosition pos1 = new BlockPosition(tag.getCompoundTag("pos1"));
-    BlockPosition pos2 = new BlockPosition(tag.getCompoundTag("pos2"));
-    BlockPosition key = new BlockPosition(tag.getCompoundTag("buildKey"));
+    BlockPosition pos1 = scanSettings.pos1;
+    BlockPosition pos2 = scanSettings.pos2;
+    BlockPosition key = scanSettings.key;
+    int face = scanSettings.buildFace;
     if(player.getDistance(key.x+0.5d, key.y, key.z+0.5d) > 10)
       {
       player.addChatMessage("You are too far away to scan that building, move closer to chosen build-key position");
       return false;
       }
-    int face = tag.getCompoundTag("buildKey").getInteger("face");
     player.addChatMessage("Initiating Scan and clearing Position Data (Step 4/4)");
-    scanStructure(world, player,pos1, pos2, key, face);
+    scanStructure(world, player, pos1, pos2, key, face);
+    scanSettings.clearSettings();
+    scanSettings.setSettingsFor(stack, scanSettings);
     return true;
     } 
-  else if(player.isSneaking())
-    {
-    tag = new NBTTagCompound();  
-    stack.setTagInfo("structData", tag);
-    }
   return true;
   }
 
@@ -218,7 +180,6 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {  
   if(description!=null)
     {
-    AWLog.logDebug("getting sub-items for structure scanner...");
     par3List.addAll(description.getDisplayStackCache());
     }
   else
@@ -243,35 +204,27 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     hit.offsetForMCSide(side);
     }
-  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
-    {
-    tag = stack.getTagCompound().getCompoundTag("structData");
-    }
-  else
-    {
-    tag = new NBTTagCompound();
-    }
-  if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
+  scanSettings.getSettingsFor(stack, scanSettings);
+  if(scanSettings.hasPos1() && scanSettings.hasPos2() && scanSettings.hasBuildKey())
     {
     player.addChatMessage("Right Click to Process");
-    }        
-  else if(!tag.hasKey("pos1"))
+    }
+  else if(!scanSettings.hasPos1())
     {
-    tag.setCompoundTag("pos1", hit.writeToNBT(new NBTTagCompound()));
+    scanSettings.setPos1(hit.x, hit.y, hit.z);
     player.addChatMessage("Setting Scan Position 1 (Step 1/4)");
     }
-  else if(!tag.hasKey("pos2"))
+  else if(!scanSettings.hasPos2())
     {
-    tag.setCompoundTag("pos2", hit.writeToNBT(new NBTTagCompound()));
+    scanSettings.setPos2(hit.x, hit.y, hit.z);
     player.addChatMessage("Setting Scan Position 2 (Step 2/4)");
     }
-  else if(!tag.hasKey("buildKey"))
+  else if(!scanSettings.hasBuildKey())
     {
-    tag.setCompoundTag("buildKey", hit.writeToNBT(new NBTTagCompound()));
-    tag.getCompoundTag("buildKey").setInteger("face", BlockTools.getPlayerFacingFromYaw(player.rotationYaw));
+    scanSettings.setBuildKey(hit.x, hit.y, hit.z, BlockTools.getPlayerFacingFromYaw(player.rotationYaw));
     player.addChatMessage("Setting Scan Build Position and Facing (Step 3/4)");
     }
-  stack.setTagInfo("structData", tag);
+  scanSettings.setSettingsFor(stack, scanSettings);
   return true;
   }
 

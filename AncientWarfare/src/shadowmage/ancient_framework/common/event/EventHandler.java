@@ -22,8 +22,12 @@ package shadowmage.ancient_framework.common.event;
 
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
 import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.item.AWItemClickable;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 
 public class EventHandler
 {
@@ -34,6 +38,20 @@ public void onWorlLoad(WorldEvent.Load evt)
   if(evt.world instanceof WorldServer)
     {
     AWFramework.instance.gameData.handleWorldLoad(evt.world);
+    }  
+  }
+
+@ForgeSubscribe
+public void onItemUsed(PlayerInteractEvent evt)
+  {
+  if(evt.entityPlayer!=null && evt.action == Action.LEFT_CLICK_BLOCK && evt.entityPlayer.inventory.getCurrentItem()!=null && evt.entityPlayer.inventory.getCurrentItem().getItem() instanceof AWItemClickable)
+    {
+    AWItemClickable item = (AWItemClickable) evt.entityPlayer.inventory.getCurrentItem().getItem();
+    if(item.hasLeftClick)
+      {
+      item.onUsedFinalLeft(evt.entityPlayer.worldObj, evt.entityPlayer, evt.entityPlayer.inventory.getCurrentItem(), new BlockPosition(evt.x, evt.y, evt.z), evt.face);
+      evt.setCanceled(true);
+      }    
     }  
   }
 

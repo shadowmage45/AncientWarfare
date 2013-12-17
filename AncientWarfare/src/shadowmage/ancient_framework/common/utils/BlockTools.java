@@ -734,6 +734,46 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
   return realKey;
   }
 
+public static void rotateInArea(BlockPosition pos, int xSize, int zSize, int turns)
+  {
+  int xSize1 = xSize;
+  int zSize1 = zSize;  
+  int x = pos.x;
+  int z = pos.z;
+  if(x>=xSize)
+    {
+    x = 0;
+    }
+  if(z>=zSize)
+    {
+    z = 0;
+    }
+  int x1 = x;
+  int z1 = z;  
+  for(int i = 0; i < turns; i++)
+    {
+    x =  zSize - 1 - z1;
+    z =  x1;
+    x1 = x;
+    z1 = z;
+    xSize = zSize1;
+    zSize = xSize1;
+    xSize1 = xSize;
+    zSize1 = zSize;
+    }
+  pos.x = x;
+  pos.z = z;
+  }
+
+public static int getRotatedX(int x, int z, int xSize, int zSize)
+  {
+  return zSize -1 - z;
+  }
+
+public static int getRotatedZ(int x, int z, int xSize, int zSize)
+  {
+  return x;
+  }
 
 public static void breakBlockAndDrop(World world, int x, int y, int z)
   {

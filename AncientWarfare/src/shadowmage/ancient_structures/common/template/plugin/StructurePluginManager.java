@@ -28,7 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaBlocks;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class StructurePluginManager
@@ -48,7 +48,7 @@ private List<Block> blockInputCache = new ArrayList<Block>();
  */
 public void loadDefaultPlugins()
   {
-  this.addPlugin(new StructurePluginVanillaBlocks());
+  this.addPlugin(new StructurePluginVanillaHandler());
   }
 
 public void addPlugin(StructureContentPlugin plugin)

@@ -24,14 +24,26 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
-public class StructurePluginVanillaBlocks extends StructureContentPlugin
+public class StructurePluginVanillaHandler extends StructureContentPlugin
 {
 
-public StructurePluginVanillaBlocks()
+public StructurePluginVanillaHandler()
   {
   
   }
@@ -39,13 +51,30 @@ public StructurePluginVanillaBlocks()
 @Override
 public void addHandledBlocks(List<Block> handledBlocks)
   {
-  
+  handledBlocks.add(Block.grass);
+  handledBlocks.add(Block.dirt);
+  handledBlocks.add(Block.stone);
+  handledBlocks.add(Block.cobblestone);
   }
 
 @Override
 public void addHandledEntities(List<Class> handledEntities)
   {
+  handledEntities.add(EntityVillager.class);
+  handledEntities.add(EntityIronGolem.class);
+  handledEntities.add(EntityChicken.class);
+  handledEntities.add(EntityCow.class);
+  handledEntities.add(EntityPig.class);
+  handledEntities.add(EntitySheep.class);
   
+  handledEntities.add(EntityHorse.class);  
+  handledEntities.add(EntityWolf.class);
+  
+  handledEntities.add(EntityMinecart.class);
+  handledEntities.add(EntityBoat.class);
+  
+  handledEntities.add(EntityPainting.class);
+  handledEntities.add(EntityItemFrame.class);  
   }
 
 @Override

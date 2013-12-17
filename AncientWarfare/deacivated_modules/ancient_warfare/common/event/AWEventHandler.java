@@ -85,18 +85,6 @@ public void onEntitySpawn(EntityJoinWorldEvent evt)
     }
   }
 
-@ForgeSubscribe
-public void onItemUsed(PlayerInteractEvent evt)
-  {
-  if(evt.entityPlayer!=null && evt.action == Action.LEFT_CLICK_BLOCK && evt.entityPlayer.inventory.getCurrentItem()!=null && evt.entityPlayer.inventory.getCurrentItem().getItem() instanceof AWItemClickable)
-    {
-    AWItemClickable item = (AWItemClickable) evt.entityPlayer.inventory.getCurrentItem().getItem();
-    if(item.hasLeftClick)
-      {
-      item.onUsedFinalLeft(evt.entityPlayer.worldObj, evt.entityPlayer, evt.entityPlayer.inventory.getCurrentItem(), new BlockPosition(evt.x, evt.y, evt.z), evt.face);
-      evt.setCanceled(true);
-      }    
-    }  
-  }
+
 
 }
