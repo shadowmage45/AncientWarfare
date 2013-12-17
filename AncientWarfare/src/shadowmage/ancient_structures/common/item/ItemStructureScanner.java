@@ -113,8 +113,7 @@ public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
   TemplateScanner scanner = new TemplateScanner();
-  int turns = face==0 ? 2 : face==1 ? 1 : face==2 ? 0 : face==3 ? 3 : 0; 
-  
+  int turns = face==0 ? 2 : face==1 ? 1 : face==2 ? 0 : face==3 ? 3 : 0; //because for some reason my mod math was off?  
   StructureTemplate template = scanner.scan(world, min, max, key, turns); 
   currentTemplate = template;
   return true;
