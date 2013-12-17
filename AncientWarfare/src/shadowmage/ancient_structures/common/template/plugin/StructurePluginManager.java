@@ -99,16 +99,16 @@ public void addPlugin(StructureContentPlugin plugin)
     }
   }
 
-public TemplateRule getRuleForBlock(World world, Block block, int face, int x, int y, int z, List<TemplateRule> priorRules)
+public TemplateRule getRuleForBlock(World world, Block block, int turns, int x, int y, int z, List<TemplateRule> priorRules)
   {
   StructureContentPlugin plugin = blockHandlers.get(block);  
-  return plugin != null ? plugin.getRuleForBlock(world, block, face, x, y, z, priorRules) : null;
+  return plugin != null ? plugin.getRuleForBlock(world, block, turns, x, y, z, priorRules) : null;
   }
 
-public TemplateRule getRuleForEntity(World world, Entity entity, int face, int x, int y, int z, List<TemplateRule> priorRules)
+public TemplateRule getRuleForEntity(World world, Entity entity, int turns, int x, int y, int z, List<TemplateRule> priorRules)
   {
   StructureContentPlugin plugin = entityHandlers.get(entity);
-  return plugin != null ? plugin.getRuleForEntity(world, entity, face, x, y, z, priorRules) : null;
+  return plugin != null ? plugin.getRuleForEntity(world, entity, turns, x, y, z, priorRules) : null;
   }
 
 }

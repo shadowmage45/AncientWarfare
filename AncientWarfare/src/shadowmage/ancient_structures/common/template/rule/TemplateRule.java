@@ -33,6 +33,8 @@ import shadowmage.ancient_structures.common.template.plugin.StructureContentPlug
 public abstract class TemplateRule
 {
 
+public int ruleNumber = -1;
+
 private StructureContentPlugin parentPlugin;//the plugin responsible for this rule
 
 /**

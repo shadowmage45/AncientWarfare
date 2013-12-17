@@ -20,10 +20,16 @@
  */
 package shadowmage.ancient_structures.common.template.scan;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
@@ -55,64 +61,89 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   int xOutSize, zOutSize;
   xOutSize = xSize;
   zOutSize = zSize;
-    {
-    int swap;
-    for(int i = 0; i < turns; i++)
-      {
-      swap = xOutSize;
-      xOutSize = zOutSize;
-      zOutSize = swap;
-      }
-    }
     
-  boolean [][][] testOut = new boolean[xOutSize][ySize][zOutSize];
-  
-  
+  int swap;
+  for(int i = 0; i < turns; i++)
+    {
+    swap = xOutSize;
+    xOutSize = zOutSize;
+    zOutSize = swap;
+    }    
+    
   key.x = key.x - min.x;
   key.y = key.y - min.y;
   key.z = key.z - min.z; 
   
+  short[] templateRuleData = new short[xSize*ySize*zSize];
   BlockTools.rotateInArea(key, xSize, zSize, turns);    
-  AWLog.logDebug("should scan: "+min+"::"+max+ " key:"+key + " turns: "+turns);
   
+  List<TemplateRule> currentBlockRules = new ArrayList<TemplateRule>();
+  List<TemplateRule> currentEntityRules = new ArrayList<TemplateRule>();
+  List<TemplateRule> currentRulesAll = new ArrayList<TemplateRule>();
+  Block scannedBlock;
+  Entity scannedEntity = null;
+  TemplateRule scannedRule;
+  
+  int index;
   int scanX, scanZ, scanY;
   BlockPosition destination = new BlockPosition();
+  int nextRuleID = 1;
   for(scanY = min.y; scanY<=max.y; scanY++)  
     {
     for(scanZ = min.z; scanZ<=max.z; scanZ++)
       {
       for(scanX = min.x; scanX<=max.x; scanX++)
         {
-//        AWLog.logDebug("scanX :"+scanX+" minX: "+min.x);
         destination.x = scanX - min.x;
         destination.y = scanY - min.y; 
         destination.z = scanZ - min.z;
-        AWLog.logDebug("scanning block..input : "+destination);
+        AWLog.logDebug("input :"+destination);
         BlockTools.rotateInArea(destination, xSize, zSize, turns);
-        AWLog.logDebug("scanning block..output: "+destination);
-        if(world.getBlockId(scanX, scanY, scanZ)!=0)
+        AWLog.logDebug("output:"+destination);
+        scannedBlock = Block.blocksList[world.getBlockId(scanX, scanY, scanZ)];
+        if(scannedBlock!=null)
           {
-          testOut[destination.x][destination.y][destination.z]=true;
+          scannedRule = AWStructures.instance.pluginManager.getRuleForBlock(world, scannedBlock, turns, scanX, scanY, scanZ, currentBlockRules);   
+          if(scannedRule!=null)
+            {
+            currentBlockRules.add(scannedRule);
+            scannedRule.ruleNumber = nextRuleID;
+            nextRuleID++;
+            }
           }
+        else if(scannedEntity!=null)
+          {       
+          scannedRule = AWStructures.instance.pluginManager.getRuleForEntity(world, scannedEntity, turns, scanX, scanY, scanZ, currentEntityRules);
+          if(scannedRule!=null)
+            {
+            currentEntityRules.add(scannedRule);
+            scannedRule.ruleNumber = nextRuleID;
+            nextRuleID++;
+            }
+          }
+        else
+          {
+          scannedRule = null;
+          }
+        if(scannedRule!=null)
+          {
+          currentRulesAll.add(scannedRule);
+          index = StructureTemplate.getIndex(destination.x, destination.y, destination.z, xOutSize, ySize, zOutSize);
+          templateRuleData[index] = (short) scannedRule.ruleNumber;
+          }        
         }
       }
-    }
-  
-  String line = "";
-  for(int y = 0; y <ySize; y++)
+    }  
+  TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()];
+  for(int i = 0; i < templateRules.length; i++)
     {
-    AWLog.logDebug("level");
-    for(int z = 0; z<zOutSize; z++)
-      {
-      for(int x = 0; x<xOutSize; x++)
-        {
-        line = line + (testOut[x][y][z]==true? "1" : "0");
-        }
-      AWLog.logDebug(line);
-      line = "";
-      }
+    templateRules[i] = currentRulesAll.get(i);
     }
-  return null;
+  StructureTemplate template = new StructureTemplate("testTemplate"+System.currentTimeMillis(), xOutSize, ySize, zOutSize, key.x, key.y, key.z);
+  template.setTemplateData(templateRuleData);
+  template.setRuleArray(templateRules);
+  AWLog.logDebug("template :\n"+template);
+  return template;
   }
 
 }

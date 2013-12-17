@@ -80,7 +80,7 @@ public void addHandledEntities(List<Class> handledEntities)
 @Override
 public TemplateRule getRuleForBlock(World world, Block block, int facing, int x, int y, int z, List<TemplateRule> priorRules)
   {
-  return null;
+  return block==null ? null : new TemplateRuleVanillaBlocks();
   }
 
 @Override

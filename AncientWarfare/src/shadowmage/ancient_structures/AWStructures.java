@@ -33,6 +33,7 @@ import shadowmage.ancient_structures.common.block.BlockDataManager;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
+import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -67,6 +68,7 @@ public static CommonProxy proxy;
 @Instance("AncientStructures")
 public static AWStructures instance;  
 
+public StructurePluginManager pluginManager;
 
 @Override
 public void loadConfiguration(File config, Logger log)
@@ -80,7 +82,10 @@ public void preInit(FMLPreInitializationEvent evt)
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Statics.STRUCTURE_VERSION);
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
-
+  
+  pluginManager = new StructurePluginManager();
+  pluginManager.loadDefaultPlugins();
+  
   BlockDataManager.instance().loadBlockList();
   AWStructuresItemLoader.instance().registerItems();
   TemplateLoader.instance().initializeAndExportDefaults(path);

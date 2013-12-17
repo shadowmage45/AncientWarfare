@@ -79,9 +79,39 @@ public void setValidationSettings(StructureValidationSettings settings)
 
 public TemplateRule getRuleAt(int x, int y, int z)
   {
-  int index = y * ySize * zSize + z * zSize + x;
+  int index = getIndex(x, y, z, xSize, ySize, zSize);
   int ruleIndex = index >=0 && index < templateData.length ? templateData[index]: -1;
   return  ruleIndex >= 0 && ruleIndex < templateRules.length ? templateRules[index] : null;
+  }
+
+public static int getIndex(int x, int y, int z, int xSize, int ySize, int zSize)
+  {
+  return (y * ySize * zSize) + (z * ySize) + x; 
+  }
+
+@Override
+public String toString()
+  {
+  StringBuilder b = new StringBuilder();
+  int index;
+  for(int y = 0; y < ySize; y++)
+    {
+    b.append("\n\n level: ").append(y).append("\n");
+    for(int z = 0; z < zSize; z++)
+      {
+      for(int x = 0; x < xSize; x++)
+        {
+        index = y*ySize*zSize + z*zSize + x;
+        b.append(templateData[index]);
+        if(x<xSize-1)
+          {
+          b.append(",");
+          }
+        }
+      b.append("\n");
+      }
+    }
+  return b.toString();
   }
 
 }
