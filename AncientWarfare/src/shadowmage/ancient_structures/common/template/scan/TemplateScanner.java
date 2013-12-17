@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.common.template.scan;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -31,6 +32,7 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateScanner
@@ -77,12 +79,16 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   short[] templateRuleData = new short[xSize*ySize*zSize];
   BlockTools.rotateInArea(key, xSize, zSize, turns);    
   
-  List<TemplateRule> currentBlockRules = new ArrayList<TemplateRule>();
-  List<TemplateRule> currentEntityRules = new ArrayList<TemplateRule>();
+//  List<TemplateRule> currentBlockRules = new ArrayList<TemplateRule>();
+//  List<TemplateRule> currentEntityRules = new ArrayList<TemplateRule>();
+  HashMap<StructureContentPlugin, List<TemplateRule>> pluginRuleMap = new HashMap<StructureContentPlugin, List<TemplateRule>>();
   List<TemplateRule> currentRulesAll = new ArrayList<TemplateRule>();
   Block scannedBlock;
   Entity scannedEntity = null;
-  TemplateRule scannedRule;
+  TemplateRule scannedRule = null;
+  
+  StructureContentPlugin scanPlugin;
+  List<TemplateRule> pluginRules;
   
   int index;
   int scanX, scanZ, scanY;
@@ -97,29 +103,45 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
         destination.x = scanX - min.x;
         destination.y = scanY - min.y; 
         destination.z = scanZ - min.z;
-        AWLog.logDebug("input :"+destination);
         BlockTools.rotateInArea(destination, xSize, zSize, turns);
-        AWLog.logDebug("output:"+destination);
         scannedBlock = Block.blocksList[world.getBlockId(scanX, scanY, scanZ)];
         if(scannedBlock!=null)
           {
-          scannedRule = AWStructures.instance.pluginManager.getRuleForBlock(world, scannedBlock, turns, scanX, scanY, scanZ, currentBlockRules);   
-          if(scannedRule!=null)
+          scanPlugin = AWStructures.instance.pluginManager.getPluginFor(scannedBlock);
+          if(scanPlugin!=null)
             {
-            currentBlockRules.add(scannedRule);
-            scannedRule.ruleNumber = nextRuleID;
-            nextRuleID++;
+            if(!pluginRuleMap.containsKey(scanPlugin))
+              {
+              pluginRuleMap.put(scanPlugin, new ArrayList<TemplateRule>());
+              }
+            pluginRules =pluginRuleMap.get(scanPlugin);
+            scannedRule = scanPlugin.getRuleForBlock(world, scannedBlock, turns, scanX, scanY, scanZ, pluginRules);   
+            if(scannedRule!=null)
+              {
+              pluginRules.add(scannedRule);
+              scannedRule.ruleNumber = nextRuleID;
+              nextRuleID++;
+              }            
             }
           }
         else if(scannedEntity!=null)
-          {       
-          scannedRule = AWStructures.instance.pluginManager.getRuleForEntity(world, scannedEntity, turns, scanX, scanY, scanZ, currentEntityRules);
-          if(scannedRule!=null)
+          {               
+          scanPlugin = AWStructures.instance.pluginManager.getPluginFor(scannedEntity);
+          if(scanPlugin!=null)
             {
-            currentEntityRules.add(scannedRule);
-            scannedRule.ruleNumber = nextRuleID;
-            nextRuleID++;
-            }
+            if(!pluginRuleMap.containsKey(scanPlugin))
+              {
+              pluginRuleMap.put(scanPlugin, new ArrayList<TemplateRule>());
+              }
+            pluginRules = pluginRuleMap.get(scanPlugin);
+            scannedRule = scanPlugin.getRuleForEntity(world, scannedEntity, turns, scanX, scanY, scanZ, pluginRules);   
+            if(scannedRule!=null)
+              {
+              pluginRules.add(scannedRule);
+              scannedRule.ruleNumber = nextRuleID;
+              nextRuleID++;
+              }            
+            }    
           }
         else
           {

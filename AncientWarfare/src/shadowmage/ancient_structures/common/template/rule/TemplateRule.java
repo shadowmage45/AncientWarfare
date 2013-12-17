@@ -40,12 +40,12 @@ private StructureContentPlugin parentPlugin;//the plugin responsible for this ru
 /**
  * input params are the target position for placement of this rule and destination orientation
  * @param world
- * @param facing
+ * @param turns
  * @param x
  * @param y
  * @param z 
  */
-public abstract void handlePlacement(World world, int facing, int x, int y, int z);
+public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
 /**
  * sub-classes should return a name to be inserted into templates as to a reference to this rule
@@ -54,5 +54,7 @@ public abstract void handlePlacement(World world, int facing, int x, int y, int 
  * @return
  */
 public abstract String getRuleTypeName();
+
+public abstract String[] getRuleLines();
 
 }

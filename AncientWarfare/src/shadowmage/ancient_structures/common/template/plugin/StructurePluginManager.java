@@ -99,6 +99,16 @@ public void addPlugin(StructureContentPlugin plugin)
     }
   }
 
+public StructureContentPlugin getPluginFor(Block block)
+  {
+  return blockHandlers.get(block);
+  }
+
+public StructureContentPlugin getPluginFor(Entity entity)
+  {
+  return entityHandlers.get(entity);
+  }
+
 public TemplateRule getRuleForBlock(World world, Block block, int turns, int x, int y, int z, List<TemplateRule> priorRules)
   {
   StructureContentPlugin plugin = blockHandlers.get(block);  

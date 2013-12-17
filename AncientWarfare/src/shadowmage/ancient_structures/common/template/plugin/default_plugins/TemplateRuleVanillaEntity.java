@@ -38,4 +38,11 @@ public String getRuleTypeName()
   return null;
   }
 
+@Override
+public String[] getRuleLines()
+  {
+  // TODO Auto-generated method stub
+  return null;
+  }
+
 }

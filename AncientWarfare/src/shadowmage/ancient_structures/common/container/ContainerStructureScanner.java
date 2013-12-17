@@ -250,7 +250,6 @@ public void clearItem()
     AWLog.logError("Could not clear structure data from item, improper item detected");
     return;
     }
-  ItemStructureScanner.clearStructureData(stack);
   ItemStructureScanner.scannedStructures.remove(player);
   player.addChatMessage("Clearing Structure Scanner Item, it is now ready to scan the next area");
   }

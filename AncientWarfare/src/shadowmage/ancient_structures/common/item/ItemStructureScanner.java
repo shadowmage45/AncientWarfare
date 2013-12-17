@@ -47,10 +47,7 @@ public class ItemStructureScanner extends AWItemClickable
 
 public static Map<EntityPlayer, ProcessedStructure> scannedStructures = new HashMap<EntityPlayer, ProcessedStructure>();
 
-/**
- * @param itemID
- *  
- */
+
 public ItemStructureScanner(int itemID)
   {
   super(itemID);
@@ -60,12 +57,17 @@ public ItemStructureScanner(int itemID)
   AWLog.logDebug("set creative tab for structure scanner to: "+AWStructuresItemLoader.structureTab);
   }
 
+/**
+ * client-side structure setting container, do not access from server-methods!!
+ */
+ItemStructureSettings viewSettings = new ItemStructureSettings();
 @Override
 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4)
   {
   super.addInformation(par1ItemStack, par2EntityPlayer, list, par4);  
   if(par1ItemStack!=null)
     {
+    viewSettings.getSettingsFor(par1ItemStack, viewSettings);
     NBTTagCompound tag;
     if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
       {
@@ -75,24 +77,24 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
       {
       tag = new NBTTagCompound();
       }
-    if(tag.hasKey("pos1")&&tag.hasKey("pos2") && tag.hasKey("buildKey"))
+    if(viewSettings.hasPos1() && viewSettings.hasPos2() && viewSettings.hasBuildKey())
       {
       list.add("Right Click: Scan and Process (4/4)");
       list.add("(Shift)Right Click: Cacnel/clear");
       }        
-    else if(!tag.hasKey("pos1"))
+    else if(!viewSettings.hasPos1())
       {
       list.add("Left Click: Set first bound (1/4)");
       list.add("Hold shift to offset for side hit");
       list.add("(Shift)Right Click: Cacnel/clear");
       }
-    else if(!tag.hasKey("pos2"))
+    else if(!viewSettings.hasPos2())
       {
       list.add("Left Click: Set second bound (2/4)");
       list.add("Hold shift to offset for side hit");
       list.add("(Shift)Right Click: Cacnel/clear");
       }
-    else if(!tag.hasKey("buildKey"))
+    else if(!viewSettings.hasBuildKey())
       {
       list.add("Left Click: Set build key and");
       list.add("    direction (3/4)");
@@ -108,30 +110,19 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
   return false;
   }
 
-/**
- * actually scan the structure.
- * @param world
- * @param player
- * @return
- */
 public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
   {
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
   TemplateScanner scanner = new TemplateScanner();
+  int turns = (4-(face+2))%4;
   StructureTemplate template = scanner.scan(world, min, max, key, (face+2)%4); 
   return true;
   }
 
-public static ItemStack clearStructureData(ItemStack stack)
-  {
-  if(stack!=null && stack.hasTagCompound())
-    {    
-    stack.setTagInfo("structData", new NBTTagCompound());    
-    } 
-  return stack;
-  }
-
+/**
+ * server-side structure setting container, do not access from client-methods!!
+ */
 ItemStructureSettings scanSettings = new ItemStructureSettings();
 
 @Override
@@ -171,9 +162,6 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
   return true;
   }
 
-/**
- * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
- */
 @SideOnly(Side.CLIENT)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)

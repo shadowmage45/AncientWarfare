@@ -86,7 +86,7 @@ public TemplateRule getRuleAt(int x, int y, int z)
 
 public static int getIndex(int x, int y, int z, int xSize, int ySize, int zSize)
   {
-  return (y * ySize * zSize) + (z * ySize) + x; 
+  return (y * xSize * zSize) + (z * xSize) + x; 
   }
 
 @Override
@@ -94,6 +94,7 @@ public String toString()
   {
   StringBuilder b = new StringBuilder();
   int index;
+  b.append("buildKey: ").append(xOffset).append(", ").append(yOffset).append(", ").append(zOffset).append("\n");
   for(int y = 0; y < ySize; y++)
     {
     b.append("\n\n level: ").append(y).append("\n");
@@ -101,7 +102,7 @@ public String toString()
       {
       for(int x = 0; x < xSize; x++)
         {
-        index = y*ySize*zSize + z*zSize + x;
+        index = getIndex( x, y, z, xSize, ySize, zSize);
         b.append(templateData[index]);
         if(x<xSize-1)
           {

@@ -27,7 +27,7 @@ public class TemplateRuleVanillaBlocks extends TemplateRule
 {
 
 @Override
-public void handlePlacement(World world, int facing, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z)
   {
   
   }
@@ -38,4 +38,10 @@ public String getRuleTypeName()
   return null;
   }
 
+@Override
+public String[] getRuleLines()
+  {
+  // TODO Auto-generated method stub
+  return null;
+  }
 }

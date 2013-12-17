@@ -734,7 +734,7 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
   return realKey;
   }
 
-public static void rotateInArea(BlockPosition pos, int xSize, int zSize, int turns)
+public static BlockPosition rotateInArea(BlockPosition pos, int xSize, int zSize, int turns)
   {
   int xSize1 = xSize;
   int zSize1 = zSize;  
@@ -763,6 +763,7 @@ public static void rotateInArea(BlockPosition pos, int xSize, int zSize, int tur
     }
   pos.x = x;
   pos.z = z;
+  return pos;
   }
 
 public static int getRotatedX(int x, int z, int xSize, int zSize)
