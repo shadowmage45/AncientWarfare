@@ -22,11 +22,13 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
 
 public class TemplateRuleVanillaSign extends TemplateRuleVanillaBlocks
@@ -103,15 +105,14 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
   }
 
 @Override
-public void parseRuleData(String[] ruleData)
-  {  
+public void parseRuleData(List<String> ruleData)
+  {
   super.parseRuleData(ruleData);
   this.signContents = new String[4];
-  signContents[0] = ruleData[2];
-  signContents[1] = ruleData[3];
-  signContents[2] = ruleData[4];
-  signContents[3] = ruleData[5];
+  signContents[0] = ruleData.get(2);
+  signContents[1] = ruleData.get(3);
+  signContents[2] = ruleData.get(4);
+  signContents[3] = ruleData.get(5);  
   }
-
 
 }

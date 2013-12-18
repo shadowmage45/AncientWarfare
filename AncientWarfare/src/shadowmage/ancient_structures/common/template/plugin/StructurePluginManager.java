@@ -23,11 +23,13 @@ package shadowmage.ancient_structures.common.template.plugin;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
@@ -127,11 +129,80 @@ public void registerBlockHandler(String pluginName, Block block, Class<? extends
   idByRuleClass.put(ruleClass, pluginName);
   }
 
-public TemplateRule getRule(String pluginName, String[] ruleData)
+public TemplateRule getRule(List<String> ruleData)
   {
-  /**
-   * TODO rule parsing
-   */
+  Iterator<String> it = ruleData.iterator();
+  String name = null;
+  int ruleNumber = -1;
+  String line;
+  List<String> ruleDataPackage = new ArrayList<String>();
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.startsWith("rule: "))
+      {
+      continue;
+      }
+    if(line.startsWith(":endrule"))
+      {
+      break;
+      }
+    if(line.startsWith("plugin="))
+      {
+      name = StringTools.safeParseString("=", line);
+      }
+    if(line.startsWith("number="))
+      {
+      ruleNumber = StringTools.safeParseInt("=", line);
+      }
+    if(line.startsWith("data:"))
+      {
+      while(it.hasNext())
+        {
+        line = it.next();
+        if(line.startsWith(":enddata"))
+          {
+          break;
+          }
+        ruleDataPackage.add(line);
+        }
+      }
+    }
+  StructureRuleRegistration reg = registrationByName.get(name);
+  if(name==null || ruleNumber<=0 || ruleDataPackage.size()==0 || reg==null)
+    {
+    throw new IllegalArgumentException("not enough data to create template rule");
+    }
+  Class<?extends TemplateRule> clz = reg.ruleClass;
+  try
+    {
+    TemplateRule rule = clz.getConstructor().newInstance();
+    rule.parseRuleData(ruleDataPackage);
+    } catch (InstantiationException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } catch (IllegalAccessException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } catch (IllegalArgumentException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } catch (InvocationTargetException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } catch (NoSuchMethodException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } catch (SecurityException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    }
   return null;
   }
 

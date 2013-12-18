@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -83,11 +84,11 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
   }
 
 @Override
-public void parseRuleData(String[] ruleData)
+public void parseRuleData(List<String> ruleData)
   {
-  if(ruleData.length<2){throw new IllegalArgumentException("not enough data for block rule");}
-  this.blockName = StringTools.safeParseString("=", ruleData[0]);
-  this.meta = StringTools.safeParseInt("=", ruleData[1]);
+  if(ruleData.size()<2){throw new IllegalArgumentException("not enough data for block rule");}
+  this.blockName = StringTools.safeParseString("=", ruleData.get(0));
+  this.meta = StringTools.safeParseInt("=", ruleData.get(1));
   }
 
 }

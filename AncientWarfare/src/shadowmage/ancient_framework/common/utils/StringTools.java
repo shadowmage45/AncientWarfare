@@ -101,6 +101,27 @@ public static int[] parseIntArray(String csv)
   return array;
   }
 
+public static short[] safeParseShortArray(String regex, String test)
+  {
+  String[] splits = test.split(regex);
+  if(splits.length>1)
+    {
+    return parseShortArray(splits[1]);
+    }
+  return new short[1];
+  }
+
+public static short[] parseShortArray(String csv)
+  {
+  String[] splits = csv.split(",");
+  short[] array = new short[splits.length];
+  for(int i = 0; i< splits.length; i++)
+    {
+    array[i]=Short.parseShort(splits[i].trim());
+    }
+  return array;
+  }
+
 /**
  * splits test at regex, returns parsed byte array from csv value of remaining string
  * returns size 1 byte array if no valid split is found

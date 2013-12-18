@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.template.rule;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.world.World;
 
@@ -57,6 +58,6 @@ public TemplateRule(String[] ruleData)
  */
 public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
-public abstract void parseRuleData(String[] ruleData);
+public abstract void parseRuleData(List<String> ruleData);
 public abstract void writeRuleData(BufferedWriter out) throws IOException;
 }

@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.List;
 
 import shadowmage.ancient_framework.common.utils.StringTools;
 
@@ -77,11 +78,10 @@ public void writeRuleData(BufferedWriter out) throws IOException
   }
 
 @Override
-public void parseRuleData(String[] ruleData)
+public void parseRuleData(List<String> ruleData)
   {
   super.parseRuleData(ruleData);
-  this.mobID = StringTools.safeParseString("=", ruleData[2]);
+  this.mobID = StringTools.safeParseString("=", ruleData.get(2));
   }
-
 
 }

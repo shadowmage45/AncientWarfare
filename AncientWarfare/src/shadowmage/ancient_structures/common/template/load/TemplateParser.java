@@ -132,8 +132,7 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
           int[] sizes = StringTools.safeParseIntArray("=", line);
           xSize = sizes[0];
           ySize = sizes[1];
-          zSize = sizes[2];
-          templateData = new short[xSize*ySize*zSize];
+          zSize = sizes[2];          
           initData[2] = true;
           }
         if(line.startsWith("offset="))
@@ -157,6 +156,7 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
           return null;
           }
         }
+      templateData = new short[xSize*ySize*zSize];
       }
     
     /**
@@ -219,11 +219,15 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
           break;
           }
         }
-      parseLayer(groupedLines, parsedLayers, xSize, ySize, zSize, templateData);//TODO fix template size validation...
+      parseLayer(groupedLines, parsedLayers, xSize, ySize, zSize, templateData);
       parsedLayers++;
       groupedLines.clear();
       }
     }
+  
+  /**
+   * initialze data for construction of template -- put rules into array
+   */
   ruleArray = new TemplateRule[parsedRules.size()+1];
   for(TemplateRule rule : parsedRules)
     {
@@ -251,7 +255,20 @@ private StructureTemplate constructTemplate(String name, int x, int y, int z, in
  */
 private void parseLayer(List<String> templateLines, int yLayer, int xSize, int ySize, int zSize, short[] templateData)
   {
-
+  int z = 0;
+  for(String st : templateLines)
+    {
+    if(st.startsWith("layer:") || st.startsWith(":endlayer"))
+      {
+      continue;
+      }
+    short[] data = StringTools.safeParseShortArray("=", st);
+    for(int x = 0; x < xSize && x < data.length; x++)
+      {
+      templateData[StructureTemplate.getIndex(x, yLayer, z, xSize, ySize, zSize)]=data[x];
+      }
+    z++;
+    }
   }
 
 private Object parseValidation(List<String> lines)
