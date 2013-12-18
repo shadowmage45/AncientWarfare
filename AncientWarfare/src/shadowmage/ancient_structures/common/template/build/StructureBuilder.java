@@ -63,45 +63,28 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
     destXSize = destZSize;
     destZSize = swap;
     }
-  turns = ((face+2)%4);//sets rotation properly
-   
-  destinationKey = new BlockPosition(template.xOffset, template.yOffset, template.zOffset);
-  AWLog.logDebug("destination key preRotate: "+destinationKey);
+  turns = ((face+2)%4);
+  
+  /**
+   * here we take the top-left corner, in template space
+   */
+  destinationKey = new BlockPosition(0, 0, 0);
+  
+  /**
+   * and we rotate that corner into local space
+   */
   BlockTools.rotateInArea(destinationKey, template.xSize, template.zSize, turns);
-  AWLog.logDebug("destination key: "+destinationKey);    
   
-  BlockPosition destination1 = new BlockPosition(x, y, z);
-  destination1.moveLeft(face, template.xSize - 1 - template.xOffset);
-  destination1.moveForward(face, template.zSize - 1 - template.zOffset);
-  
-  switch(face)
-  {
-  case 0:
-  break;
-  case 1:
-  destination1.x--;
-  break;
-  case 2:
-  destination1.x--;
-  destination1.z--;
-  break;
-  case 3:
-  destination1.z--;
-  break;
-  }
-  
+  /**
+   * our first destination point should then be
+   */
+  BlockPosition destination1 = new BlockPosition(x-destinationKey.x, y-destinationKey.y, z-destinationKey.z);
+  destination1.moveLeft(face, template.xSize - 1 - (template.xSize - 1 -template.xOffset));
+  destination1.moveForward(face, template.zSize - 1 - (template.zSize-1 - template.zOffset));  
   BlockPosition destination2 = new BlockPosition(destination1);
-  destination2.offset(destXSize-1, template.ySize-1, destZSize-1);
-    
-  
-  AWLog.logDebug("back left corner should be: "+destination1);
-  AWLog.logDebug("front left corner should be: "+destination2);
-    
-  
+  destination2.offset(destXSize-1, template.ySize-1, destZSize-1);            
   min = BlockTools.getMin(destination1, destination2);
-  max = BlockTools.getMax(destination1, destination2);  
-  AWLog.logDebug("build area BB: "+min+", " +max + " hit: "+x+", "+y+", "+z + " turns: "+turns);
-   
+  max = BlockTools.getMax(destination1, destination2);     
   incrementDestination();//set destination to start piece...
   }
 
@@ -132,7 +115,6 @@ protected void placeCurrentPosition()
 
 protected void placeRule(TemplateRule rule)
   {
-  AWLog.logDebug("handling block placement at: "+destination);
   rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);
   }
 

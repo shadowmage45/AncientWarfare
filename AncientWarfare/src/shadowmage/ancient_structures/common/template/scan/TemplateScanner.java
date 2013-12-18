@@ -75,12 +75,12 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   key.x = key.x - min.x;
   key.y = key.y - min.y;
   key.z = key.z - min.z; 
-  
+    
   short[] templateRuleData = new short[xSize*ySize*zSize];
-  BlockTools.rotateInArea(key, xSize, zSize, turns);    
+  AWLog.logDebug("key: "+key);  
+  BlockTools.rotateInArea(key, xSize, zSize, turns);
+  AWLog.logDebug("postkey: "+key);
   
-//  List<TemplateRule> currentBlockRules = new ArrayList<TemplateRule>();
-//  List<TemplateRule> currentEntityRules = new ArrayList<TemplateRule>();
   HashMap<StructureContentPlugin, List<TemplateRule>> pluginRuleMap = new HashMap<StructureContentPlugin, List<TemplateRule>>();
   List<TemplateRule> currentRulesAll = new ArrayList<TemplateRule>();
   Block scannedBlock;
