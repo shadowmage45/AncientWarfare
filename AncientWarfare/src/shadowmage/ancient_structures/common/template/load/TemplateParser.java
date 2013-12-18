@@ -264,7 +264,7 @@ private void parseLayer(List<String> templateLines, int yLayer, int xSize, int y
       {
       continue;
       }
-    short[] data = StringTools.safeParseShortArray("=", st);
+    short[] data = StringTools.parseShortArray(st);
     for(int x = 0; x < xSize && x < data.length; x++)
       {
       templateData[StructureTemplate.getIndex(x, yLayer, z, xSize, ySize, zSize)]=data[x];

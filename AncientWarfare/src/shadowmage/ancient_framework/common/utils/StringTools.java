@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import shadowmage.ancient_framework.common.config.AWLog;
+
 public class StringTools
 {
 
@@ -116,7 +118,7 @@ public static short[] parseShortArray(String csv)
   String[] splits = csv.split(",");
   short[] array = new short[splits.length];
   for(int i = 0; i< splits.length; i++)
-    {
+    {    
     array[i]=Short.parseShort(splits[i].trim());
     }
   return array;

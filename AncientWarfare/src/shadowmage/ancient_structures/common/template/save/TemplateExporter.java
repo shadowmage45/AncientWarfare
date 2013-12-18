@@ -29,6 +29,7 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateExporter
@@ -54,53 +55,12 @@ public static void exportTo(StructureTemplate template, File directory)
   BufferedWriter writer = null;
   try
     {
-    short[] templateData = template.getTemplateData();
     writer = new BufferedWriter(new FileWriter(exportFile));
-    writer.write("header:");
-    writer.newLine();
-    writer.write("version=2.0");
-    writer.newLine();    
-    writer.write("name="+template.name);
-    writer.newLine();
-    writer.write("size="+template.xSize+","+template.ySize+","+template.zSize);
-    writer.newLine();
-    writer.write("offset="+template.xOffset+","+template.yOffset+","+template.zOffset);
-    writer.newLine();
-    writer.write(":endheader");
-    writer.newLine();
     
-    writer.newLine();  
-    writer.write("#### VALIDATION ####");    
-    writer.newLine();    
-    /**
-     * TODO add structure validation settings load/save
-     */
+    writeHeader(template, writer);    
+    writeValidationSettings(template.getValidationSettings(), writer);    
+    writeLayers(template, writer);
     
-    writer.newLine();  
-    writer.write("#### LAYERS ####");
-    writer.newLine();
-    for(int y = 0; y< template.ySize; y++)
-      {
-      writer.write("layer: "+y);
-      writer.newLine();
-      for(int z = 0 ; z<template.zSize; z++)
-        {
-        for(int x = 0; x<template.xSize; x++)
-          {
-          short data = templateData[template.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];          
-          writer.write(String.valueOf(data));
-          if(x<template.xSize-1)
-            {
-            writer.write(",");
-            }
-          }
-        writer.newLine();
-        }
-      writer.write(":endlayer");
-      writer.newLine();
-      }
-    writer.newLine();
-    writer.newLine();
     writer.write("#### RULES ####");
     writer.newLine();
     TemplateRule[] templateRules = template.getTemplateRules();
@@ -129,6 +89,59 @@ public static void exportTo(StructureTemplate template, File directory)
         }
       }
     }
+  }
+
+private static void writeValidationSettings(StructureValidationSettings settings, BufferedWriter writer) throws IOException
+  {
+  writer.write("#### VALIDATION ####");    
+  writer.newLine(); 
+  writer.newLine();  
+  /**
+   * TODO add structure validation settings load/save
+   */  
+  }
+
+private static void writeHeader(StructureTemplate template, BufferedWriter writer) throws IOException
+  {
+  writer.write("header:");
+  writer.newLine();
+  writer.write("version=2.0");
+  writer.newLine();    
+  writer.write("name="+template.name);
+  writer.newLine();
+  writer.write("size="+template.xSize+","+template.ySize+","+template.zSize);
+  writer.newLine();
+  writer.write("offset="+template.xOffset+","+template.yOffset+","+template.zOffset);
+  writer.newLine();
+  writer.write(":endheader");
+  writer.newLine();
+  }
+
+private static void writeLayers(StructureTemplate template, BufferedWriter writer) throws IOException
+  { 
+  writer.write("#### LAYERS ####");
+  writer.newLine();
+  for(int y = 0; y< template.ySize; y++)
+    {
+    writer.write("layer: "+y);
+    writer.newLine();
+    for(int z = 0 ; z<template.zSize; z++)
+      {
+      for(int x = 0; x<template.xSize; x++)
+        {
+        short data = template.getTemplateData()[template.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];          
+        writer.write(String.valueOf(data));
+        if(x<template.xSize-1)
+          {
+          writer.write(",");
+          }
+        }
+      writer.newLine();
+      }
+    writer.write(":endlayer");
+    writer.newLine();
+    }
+  writer.newLine();
   }
 
 public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
