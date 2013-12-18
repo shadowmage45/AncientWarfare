@@ -129,6 +129,7 @@ public void loadTemplates()
     template = TemplateParser.instance().parseTemplate(f);
     if(template!=null)
       {
+      AWLog.logDebug("loaded a new template: "+template);
       /**
        * TODO add to loaded list
        */

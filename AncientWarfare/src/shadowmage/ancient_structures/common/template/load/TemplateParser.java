@@ -58,6 +58,7 @@ public StructureTemplate parseTemplate(File file)
       {
       templateLines.add(scan.nextLine());
       }
+    AWLog.logDebug("parsing templateLines for: "+file.getAbsolutePath());
     return parseTemplateLines(templateLines); 
     } 
   catch (FileNotFoundException e)
@@ -143,11 +144,7 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
           zOffset = offsets[2];
           initData[3] = true;
           }        
-        } 
-      if(!newVersion)
-        {
-        return converter.convertOldTemplate(lines);
-        }
+        }  
       for(int i = 0; i < 4; i++)
         {
         if(initData[i]==false)
@@ -159,6 +156,11 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
       templateData = new short[xSize*ySize*zSize];
       }
     
+    if(!newVersion)
+      {
+      AWLog.logDebug("found a possible old format file...offering for conversion");
+      return converter.convertOldTemplate(lines);
+      }
     /**
      * parse out validation data
      */

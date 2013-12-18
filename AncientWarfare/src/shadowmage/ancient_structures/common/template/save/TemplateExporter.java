@@ -56,13 +56,27 @@ public static void exportTo(StructureTemplate template, File directory)
     {
     short[] templateData = template.getTemplateData();
     writer = new BufferedWriter(new FileWriter(exportFile));
-    writer.write("name: "+template.name);
+    writer.write("header:");
+    writer.newLine();
+    writer.write("version=2.0");
+    writer.newLine();    
+    writer.write("name="+template.name);
     writer.newLine();
     writer.write("size="+template.xSize+","+template.ySize+","+template.zSize);
     writer.newLine();
     writer.write("offset="+template.xOffset+","+template.yOffset+","+template.zOffset);
     writer.newLine();
+    writer.write(":endheader");
     writer.newLine();
+    
+    writer.newLine();  
+    writer.write("#### VALIDATION ####");    
+    writer.newLine();    
+    /**
+     * TODO add structure validation settings load/save
+     */
+    
+    writer.newLine();  
     writer.write("#### LAYERS ####");
     writer.newLine();
     for(int y = 0; y< template.ySize; y++)
@@ -73,8 +87,7 @@ public static void exportTo(StructureTemplate template, File directory)
         {
         for(int x = 0; x<template.xSize; x++)
           {
-          short data = templateData[template.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];
-          AWLog.logDebug("export data: "+data);
+          short data = templateData[template.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];          
           writer.write(String.valueOf(data));
           if(x<template.xSize-1)
             {
@@ -102,21 +115,20 @@ public static void exportTo(StructureTemplate template, File directory)
     e.printStackTrace();
     }
   finally
-  {
-  if(writer!=null)
     {
-    try
+    if(writer!=null)
       {
-      writer.close();
-      } 
-    catch (IOException e)
-      {
-      AWLog.logError("Could not export template..could not close file : "+exportFile.getAbsolutePath());
-      e.printStackTrace();
+      try
+        {
+        writer.close();
+        } 
+      catch (IOException e)
+        {
+        AWLog.logError("Could not export template..could not close file : "+exportFile.getAbsolutePath());
+        e.printStackTrace();
+        }
       }
     }
-  }
-
   }
 
 public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
