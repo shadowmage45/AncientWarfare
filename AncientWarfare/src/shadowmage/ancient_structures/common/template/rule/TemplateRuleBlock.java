@@ -33,11 +33,13 @@ public TemplateRuleBlock(World world, int x, int y, int z, Block block, int meta
   
   }
 
-public TemplateRuleBlock(String[] ruleData)
+public TemplateRuleBlock()
   {
   
   }
 
 public abstract boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z);
+
+
 
 }

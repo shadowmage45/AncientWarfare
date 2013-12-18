@@ -61,9 +61,8 @@ public TemplateRuleVanillaSign(World world, int x, int y, int z, Block block, in
     } 
   }
 
-public TemplateRuleVanillaSign(String[] ruleData)
+public TemplateRuleVanillaSign()
   {
-  super(ruleData);
   }
 
 @Override

@@ -20,7 +20,14 @@
  */
 package shadowmage.ancient_structures.common.template;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
@@ -56,6 +63,26 @@ public StructureTemplate(String name, int xSize, int ySize, int zSize, int xOffs
   this.xOffset = xOffset;
   this.yOffset = yOffset;
   this.zOffset = zOffset;  
+  }
+
+public TemplateRule[] getTemplateRules()
+  {
+  return templateRules;
+  }
+
+public short[] getTemplateData()
+  {
+  return templateData;
+  }
+
+public String[] getTemplateLines()
+  {
+  return templateLines;
+  }
+
+public StructureValidationSettings getValidationSettings()
+  {
+  return validationSettings;
   }
 
 public void setTemplateLines(String[] lines)
@@ -95,10 +122,13 @@ public String toString()
   {
   StringBuilder b = new StringBuilder();
   int index;
+  b.append("name: ").append(name).append("\n");
+  b.append("size: ").append(xSize).append(", ").append(ySize).append(", ").append(zSize).append("\n");
   b.append("buildKey: ").append(xOffset).append(", ").append(yOffset).append(", ").append(zOffset).append("\n");
+  b.append("levels:");
   for(int y = 0; y < ySize; y++)
     {
-    b.append("\n\n level: ").append(y).append("\n");
+    b.append("\n\nlevel: ").append(y).append("\n");
     for(int z = 0; z < zSize; z++)
       {
       for(int x = 0; x < xSize; x++)
@@ -113,7 +143,103 @@ public String toString()
       b.append("\n");
       }
     }
+  b.append("\n\nrules:\n");
+  String[] lines;
+  for(TemplateRule rule : this.templateRules)
+    {
+	  if(rule==null){continue;}	 
+	  b.append("rule: ").append(rule.ruleNumber).append("\n");
+    lines = rule.getRuleLines();
+    for(String st : lines)
+      {
+      b.append(st).append("\n");
+      }
+    b.append("\n");
+    }
   return b.toString();
+  }
+
+public void exportTo(File directory)
+  {
+  File exportFile = new File(directory, name+"."+AWStructureStatics.templateExtension);
+  if(!exportFile.exists())
+    {
+    try
+      {
+      exportFile.createNewFile();
+      } 
+    catch (IOException e)
+      {
+      AWLog.logError("Could not export template..could not create file : "+exportFile.getAbsolutePath());
+      e.printStackTrace();
+      return;
+      }
+    }  
+  BufferedWriter writer = null;
+  try
+    {
+    writer = new BufferedWriter(new FileWriter(exportFile));
+    writer.write("name: "+name);
+    writer.newLine();
+    writer.write("size="+xSize+","+ySize+","+zSize);
+    writer.newLine();
+    writer.write("offset="+xOffset+","+yOffset+","+zOffset);
+    writer.newLine();
+    writer.newLine();
+    writer.write("#### LAYERS ####");
+    writer.newLine();
+    for(int y = 0; y< ySize; y++)
+      {
+      writer.write("layer: "+y);
+      writer.newLine();
+      for(int z = 0 ; z<zSize; z++)
+        {
+        for(int x = 0; x<xSize; x++)
+          {
+          short data = templateData[getIndex(x, y, z, xSize, ySize, zSize)];
+          AWLog.logDebug("export data: "+data);
+          writer.write(String.valueOf(data));
+          if(x<xSize-1)
+            {
+            writer.write(",");
+            }
+          }
+        writer.newLine();
+        }
+      writer.write(":endlayer");
+      writer.newLine();
+      }
+    writer.newLine();
+    writer.newLine();
+    writer.write("#### RULES ####");
+    writer.newLine();
+    
+    for(TemplateRule rule : this.templateRules)
+      {
+      AWStructures.instance.pluginManager.writeRuleLines(rule, writer);
+      }
+    } 
+  catch (IOException e)
+    {
+    AWLog.logError("Could not export template..could not create file : "+exportFile.getAbsolutePath());
+    e.printStackTrace();
+    }
+  finally
+    {
+    if(writer!=null)
+      {
+      try
+        {
+        writer.close();
+        } 
+      catch (IOException e)
+        {
+        AWLog.logError("Could not export template..could not close file : "+exportFile.getAbsolutePath());
+        e.printStackTrace();
+        }
+      }
+    }
+  
   }
 
 }

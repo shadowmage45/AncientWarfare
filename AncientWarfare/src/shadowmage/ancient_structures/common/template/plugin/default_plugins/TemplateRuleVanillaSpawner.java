@@ -45,9 +45,8 @@ public TemplateRuleVanillaSpawner(World world, int x, int y, int z, Block block,
   mobID = te.getSpawnerLogic().getEntityNameToSpawn();  
   }
 
-public TemplateRuleVanillaSpawner(String[] ruleData)
+public TemplateRuleVanillaSpawner()
   {
-  super(ruleData);
   }
 
 @Override

@@ -61,26 +61,8 @@ public TemplateRule(String[] ruleData)
  */
 public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
-public final void writeRuleLines(BufferedWriter out)
-  {  
-//  try
-//    {
-//    out.write("rule:");
-//    out.write("plugin="+this.pluginTypeName);
-//    out.write("data:");
-//    for(String st : getRuleLines())
-//      {
-//      out.write(st);
-//      }
-//    out.write(":enddata");
-//    out.write(":endrule");
-//    } 
-//  catch (IOException e)
-//    {
-//    e.printStackTrace();
-//    }
-  }
+
 
 public abstract String[] getRuleLines();
-
+public abstract void parseRuleData(String[] ruleData);
 }

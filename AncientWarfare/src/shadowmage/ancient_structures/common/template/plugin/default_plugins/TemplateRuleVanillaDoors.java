@@ -35,9 +35,8 @@ public TemplateRuleVanillaDoors(World world, int x, int y, int z, Block block, i
   super(world, x, y, z, block, meta, turns);
   }
 
-public TemplateRuleVanillaDoors(String[] ruleData)
+public TemplateRuleVanillaDoors()
   {
-  super(ruleData);
   }
 
 @Override

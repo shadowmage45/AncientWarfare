@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template.scan;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
@@ -161,7 +163,8 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   StructureTemplate template = new StructureTemplate("testTemplate"+System.currentTimeMillis(), xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);
   template.setRuleArray(templateRules);
-  AWLog.logDebug("template :\n"+template);
+  AWLog.logDebug("template :\n"+template);  
+  template.exportTo(new File(TemplateLoader.outputDirectory));
   return template;
   }
 

@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_structures.common.template.plugin;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
@@ -36,6 +38,7 @@ public class StructurePluginManager
 private HashMap<Block, StructureRuleRegistration> blockRules = new HashMap<Block, StructureRuleRegistration>();
 private HashMap<Class<?extends Entity>, StructureRuleRegistration> entityRules = new HashMap<Class<?extends Entity>, StructureRuleRegistration>();
 private HashMap<String, StructureRuleRegistration> registrationByName = new HashMap<String, StructureRuleRegistration>();
+private HashMap<Class<?extends TemplateRule>, String> idByRuleClass = new HashMap<Class<? extends TemplateRule>, String>();
 
 private StructurePluginVanillaHandler vanillaPlugin;
 
@@ -105,7 +108,8 @@ public void registerEntityHandler(String pluginName, Class<?extends Entity> enti
   {
   StructureRuleRegistration reg = new StructureRuleRegistration(pluginName, ruleClass); 
   entityRules.put(entityClass, reg);
-  registrationByName.put(pluginName, reg);  
+  registrationByName.put(pluginName, reg); 
+  idByRuleClass.put(ruleClass, pluginName);
   }
 
 public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRule> ruleClass)
@@ -113,6 +117,7 @@ public void registerBlockHandler(String pluginName, Block block, Class<? extends
   StructureRuleRegistration reg = new StructureRuleRegistration(pluginName, ruleClass); 
   blockRules.put(block, reg);
   registrationByName.put(pluginName, reg);
+  idByRuleClass.put(ruleClass, pluginName);
   }
 
 public TemplateRule getRule(String pluginName, String[] ruleData)
@@ -121,6 +126,32 @@ public TemplateRule getRule(String pluginName, String[] ruleData)
    * TODO rule parsing
    */
   return null;
+  }
+
+public final void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
+  {  
+  if(rule==null || !idByRuleClass.containsKey(rule.getClass()))
+    {
+    return;
+    }
+  out.write("rule:");
+  out.newLine();
+  out.write("plugin="+this.idByRuleClass.get(rule.getClass()));
+  out.newLine();
+  out.write("number="+rule.ruleNumber);
+  out.newLine();
+  out.write("data:");
+  out.newLine();
+  for(String st : rule.getRuleLines())
+    {
+    out.write(st);
+    out.newLine();
+    }
+  out.write(":enddata");
+  out.newLine();
+  out.write(":endrule");
+  out.newLine();
+  out.newLine();
   }
 
 public String getPluginNameFor(Block block)

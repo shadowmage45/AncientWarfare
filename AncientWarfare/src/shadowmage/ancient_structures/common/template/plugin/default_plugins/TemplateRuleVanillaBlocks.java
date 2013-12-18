@@ -25,6 +25,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
@@ -50,9 +51,9 @@ public TemplateRuleVanillaBlocks(World world, int x, int y, int z, Block block, 
   this.meta = BlockDataManager.getRotatedMeta(block, meta, turns);
   }
 
-public TemplateRuleVanillaBlocks(String [] ruleData)
-  {
-  super(ruleData);
+public TemplateRuleVanillaBlocks()
+  {  
+  
   }
 
 @Override
@@ -66,13 +67,21 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
 @Override
 public String[] getRuleLines()
   {
-  return null;
+  return new String[]{"blockName="+this.blockName, "meta="+this.meta};
   }
   
 @Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
   return block!=null && blockName.equals(block.getUnlocalizedName()) && BlockDataManager.getRotatedMeta(block, meta, turns) == this.meta;
+  }
+
+@Override
+public void parseRuleData(String[] ruleData)
+  {
+  if(ruleData.length<2){throw new IllegalArgumentException("not enough data for block rule");}
+  this.blockName = StringTools.safeParseString("=", ruleData[0]);
+  this.meta = StringTools.safeParseInt("=", ruleData[1]);
   }
 
 }

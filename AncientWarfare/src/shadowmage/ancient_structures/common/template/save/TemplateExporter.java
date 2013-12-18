@@ -20,15 +20,28 @@
  */
 package shadowmage.ancient_structures.common.template.save;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
+
 public class TemplateExporter
 {
 
+StructureTemplate template;
 /**
  * 
  */
-public TemplateExporter()
+public TemplateExporter(StructureTemplate template)
   {
-  // TODO Auto-generated constructor stub
+  this.template = template;
   }
+
+
+
 
 }
