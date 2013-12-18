@@ -18,9 +18,22 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.plugin;
+package shadowmage.ancient_structures.common.template.rule;
 
-public class StructureValidationPlugin
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public abstract class TemplateRuleEntity extends TemplateRule
 {
+
+public TemplateRuleEntity()
+  {
+  // TODO Auto-generated constructor stub
+  }
+
+public abstract boolean shouldReuseRule(World world, Entity entity, int x, int y, int z);
+
 
 }

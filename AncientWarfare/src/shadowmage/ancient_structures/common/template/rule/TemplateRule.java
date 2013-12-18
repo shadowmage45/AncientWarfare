@@ -20,8 +20,12 @@
  */
 package shadowmage.ancient_structures.common.template.rule;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 
@@ -36,27 +40,16 @@ public abstract class TemplateRule
 {
 
 public int ruleNumber = -1;
-public int buildPriority = 0;
 
-private String pluginTypeName = "";
-
-public TemplateRule(String ruleTypeName)
+public TemplateRule()
   {
-  this.pluginTypeName = ruleTypeName;
+ 
   }
 
-/**
- * sub-classes should return a name to be inserted into templates as to a reference to this rule
- * this reference should be unique among rule names to avoid conflict
- * end-users should be able to use this name to look up reference documentation about the rule
- * @return
- */
-public String getRuleTypeName()
+public TemplateRule(String[] ruleData)
   {
-  return this.pluginTypeName;
+  
   }
-
-private StructureContentPlugin parentPlugin;//the plugin responsible for this rule
 
 /**
  * input params are the target position for placement of this rule and destination orientation
@@ -68,8 +61,25 @@ private StructureContentPlugin parentPlugin;//the plugin responsible for this ru
  */
 public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
-public abstract boolean shouldReuseRule(World world, Block block, int meta, int x, int y, int z);
-public abstract boolean shouldReuseRule(World world, Entity entity, int x, int y, int z);
+public final void writeRuleLines(BufferedWriter out)
+  {  
+//  try
+//    {
+//    out.write("rule:");
+//    out.write("plugin="+this.pluginTypeName);
+//    out.write("data:");
+//    for(String st : getRuleLines())
+//      {
+//      out.write(st);
+//      }
+//    out.write(":enddata");
+//    out.write(":endrule");
+//    } 
+//  catch (IOException e)
+//    {
+//    e.printStackTrace();
+//    }
+  }
 
 public abstract String[] getRuleLines();
 

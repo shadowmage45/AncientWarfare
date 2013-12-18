@@ -18,31 +18,26 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.plugin;
-
-import java.io.BufferedReader;
-import java.util.List;
+package shadowmage.ancient_structures.common.template.rule;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
-public abstract class StructureContentPlugin
+public abstract class TemplateRuleBlock extends TemplateRule
 {
 
-/**
- * add to the input list any blocks that this plugin handles
- * @param handledBlocks
- */
-public abstract void addHandledBlocks(StructurePluginManager manager);
+public TemplateRuleBlock(World world, int x, int y, int z, Block block, int meta, int turns)
+  {
+  
+  }
 
-/**
- * add to the input list any entities that this plugin handles
- * @param handledEntities
- */
-public abstract void addHandledEntities(StructurePluginManager manager);
+public TemplateRuleBlock(String[] ruleData)
+  {
+  
+  }
 
-
+public abstract boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z);
 
 }

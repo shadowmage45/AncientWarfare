@@ -84,7 +84,7 @@ public void preInit(FMLPreInitializationEvent evt)
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
   
   pluginManager = new StructurePluginManager();
-  pluginManager.loadDefaultPlugins();
+  pluginManager.loadPlugins();
   
   BlockDataManager.instance().loadBlockList();
   AWStructuresItemLoader.instance().registerItems();

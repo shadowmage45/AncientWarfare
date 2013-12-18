@@ -82,7 +82,7 @@ public TemplateRule getRuleAt(int x, int y, int z)
   {
   int index = getIndex(x, y, z, xSize, ySize, zSize);
   int ruleIndex = index >=0 && index < templateData.length ? templateData[index]: -1;
-  return  ruleIndex >= 0 && ruleIndex < templateRules.length ? templateRules[ruleIndex] : null;
+  return ruleIndex >= 0 && ruleIndex < templateRules.length ? templateRules[ruleIndex] : null;
   }
 
 public static int getIndex(int x, int y, int z, int xSize, int ySize, int zSize)

@@ -21,21 +21,16 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.block.BlockDataManager;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
-public class TemplateRuleVanillaBlocks extends TemplateRuleBlock
+public class TemplateRuleVanillaSpawner extends TemplateRuleVanillaBlocks
 {
 
-String blockName;
-int meta;
+String mobID;
 
 /**
- * constructor for dynamic construction.  passed world and coords so that the rule can handle its own logic internally
  * @param world
  * @param x
  * @param y
@@ -43,14 +38,14 @@ int meta;
  * @param block
  * @param meta
  */
-public TemplateRuleVanillaBlocks(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleVanillaSpawner(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
-  this.blockName = block.getUnlocalizedName();
-  this.meta = BlockDataManager.getRotatedMeta(block, meta, turns);
+  TileEntityMobSpawner te = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);
+  mobID = te.getSpawnerLogic().getEntityNameToSpawn();  
   }
 
-public TemplateRuleVanillaBlocks(String [] ruleData)
+public TemplateRuleVanillaSpawner(String[] ruleData)
   {
   super(ruleData);
   }
@@ -58,21 +53,15 @@ public TemplateRuleVanillaBlocks(String [] ruleData)
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  Block block = BlockDataManager.getBlockByName(blockName);
-  int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns);  
-  world.setBlock(x, y, z, block.blockID, localMeta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
+  world.setBlock(x, y, z, Block.mobSpawner.blockID, meta, 2);
+  TileEntityMobSpawner te = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);
+  te.getSpawnerLogic().setMobID(mobID);
   }
 
 @Override
-public String[] getRuleLines()
-  {
-  return null;
-  }
-  
-@Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
-  {
-  return block!=null && blockName.equals(block.getUnlocalizedName()) && BlockDataManager.getRotatedMeta(block, meta, turns) == this.meta;
+  {  
+  return te instanceof TileEntityMobSpawner && mobID.equals(((TileEntityMobSpawner)te).getSpawnerLogic().getEntityNameToSpawn());
   }
 
 }

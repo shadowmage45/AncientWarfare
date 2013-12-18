@@ -38,7 +38,6 @@ int currentPriority;//current build priority...may not be needed anymore?
 int currentX, currentY, currentZ;//coords in template
 int destXSize, destYSize, destZSize;
 BlockPosition destination;
-BlockPosition destinationKey;
 
 BlockPosition min;
 BlockPosition max;
@@ -68,7 +67,7 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
   /**
    * here we take the top-left corner, in template space
    */
-  destinationKey = new BlockPosition(0, 0, 0);
+  BlockPosition destinationKey = new BlockPosition(0, 0, 0);
   
   /**
    * and we rotate that corner into local space
@@ -76,7 +75,9 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
   BlockTools.rotateInArea(destinationKey, template.xSize, template.zSize, turns);
   
   /**
-   * our first destination point should then be
+   * our first destination point should be the back-left corner
+   * in order to get this point, we add the rotated destinationKey with the input cooridnates
+   * we then offset by facing direction for template size and build-key to place the final 
    */
   BlockPosition destination1 = new BlockPosition(x-destinationKey.x, y-destinationKey.y, z-destinationKey.z);
   destination1.moveLeft(face, template.xSize - 1 - (template.xSize - 1 -template.xOffset));

@@ -40,6 +40,7 @@ public ItemBuilderCreative(int itemID)
   {
   super(itemID);
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
+  this.hasLeftClick = true;
   }
 
 @Override
@@ -67,6 +68,12 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
+  if(!world.isRemote && hit!=null)
+    {
+    int id = world.getBlockId(hit.x, hit.y, hit.z);
+    int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
+    player.addChatMessage("block hit is: "+id+" :: "+meta);
+    }
   return false;
   }
 

@@ -20,105 +20,125 @@
  */
 package shadowmage.ancient_structures.common.template.plugin;
 
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
 public class StructurePluginManager
 {
 
-private List<StructureContentPlugin> loadedPlugins = new ArrayList<StructureContentPlugin>();
-private HashMap<Block, StructureContentPlugin> blockHandlers = new HashMap<Block, StructureContentPlugin>();
-private HashMap<Class, StructureContentPlugin> entityHandlers = new HashMap<Class, StructureContentPlugin>();
+private HashMap<Block, StructureRuleRegistration> blockRules = new HashMap<Block, StructureRuleRegistration>();
+private HashMap<Class<?extends Entity>, StructureRuleRegistration> entityRules = new HashMap<Class<?extends Entity>, StructureRuleRegistration>();
+private HashMap<String, StructureRuleRegistration> registrationByName = new HashMap<String, StructureRuleRegistration>();
 
-private List<Class> entityInputCache = new ArrayList<Class>();
-private List<Block> blockInputCache = new ArrayList<Block>();
+private StructurePluginVanillaHandler vanillaPlugin;
 
 /**
  * should be called during pre-init to load default included block and entity handlers
  * needs to be called prior to loading templates, as the plugin-provided rules are needed by the
  * structure templates
  */
-public void loadDefaultPlugins()
+public void loadPlugins()
   {
-  this.addPlugin(new StructurePluginVanillaHandler());
+  vanillaPlugin = new StructurePluginVanillaHandler();
+  this.addPlugin(vanillaPlugin);
   }
 
 public void addPlugin(StructureContentPlugin plugin)
   {
-  this.loadedPlugins.add(plugin);  
-  
-  plugin.addHandledBlocks(blockInputCache);
-  for(Block b : blockInputCache)
+  plugin.addHandledBlocks(this);
+  plugin.addHandledEntities(this);
+  }
+
+public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, int x, int y, int z)
+  {
+  TemplateRule rule;    
+  StructureRuleRegistration reg = blockRules.get(block);
+  if(reg!=null)
     {
-    if(!blockHandlers.containsKey(b))
+    int meta = world.getBlockMetadata(x, y, z);  
+    try
       {
-      blockHandlers.put(b, plugin);      
-      }
-    else
+      rule = reg.ruleClass.getConstructor(World.class, int.class, int.class, int.class, Block.class, int.class, int.class).newInstance(world, x, y, z, block, meta, turns);
+      return (TemplateRuleBlock) rule;
+      } 
+    catch (InstantiationException e)
       {
-      AWLog.logError("Could not register block for plugin:\n" +
-      		"block:"+ b +"\n"+
-      		"plugin:"+ plugin.getClass() +"\n"+
-          "Attempt to overwrite existing block handler");
-      }
-    }
-  blockInputCache.clear();
-  
-  plugin.addHandledEntities(entityInputCache);
-  for(Class clz : entityInputCache)
-    {
-    if(Entity.class.isAssignableFrom(clz))
+      e.printStackTrace();
+      } 
+    catch (IllegalAccessException e)
       {
-      if(!entityHandlers.containsKey(clz))
-        {
-        entityHandlers.put(clz, plugin);
-        }
-      else
-        {
-        AWLog.logError("Could not register entity for plugin:\n" +
-            "entity:"+ clz +"\n"+
-            "plugin:"+ plugin.getClass() +"\n"+
-            "Attempt to overwrite existing entity handler");
-        }
-      }
-    else
+      e.printStackTrace();
+      } 
+    catch (IllegalArgumentException e)
       {
-      AWLog.logError("Could not register entity for plugin:\n" +
-          "entity:"+ clz +"\n"+
-          "plugin:"+ plugin.getClass() +"\n"+
-          "Class to register was not an Entity subclass");
-      }    
-    }
+      e.printStackTrace();
+      } 
+    catch (InvocationTargetException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (NoSuchMethodException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (SecurityException e)
+      {
+      e.printStackTrace();
+      }      
+    }  
+  return null;
   }
 
-public StructureContentPlugin getPluginFor(Block block)
+public TemplateRule getRuleForEntity(World world, Entity entity, int turns, int x, int y, int z)
   {
-  return blockHandlers.get(block);
+  return null;//TODO
   }
 
-public StructureContentPlugin getPluginFor(Entity entity)
+public void registerEntityHandler(String pluginName, Class<?extends Entity> entityClass, Class<? extends TemplateRule> ruleClass)
   {
-  return entityHandlers.get(entity);
+  StructureRuleRegistration reg = new StructureRuleRegistration(pluginName, ruleClass); 
+  entityRules.put(entityClass, reg);
+  registrationByName.put(pluginName, reg);  
   }
 
-public TemplateRule getRuleForBlock(World world, Block block, int turns, int x, int y, int z, List<TemplateRule> priorRules)
+public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRule> ruleClass)
   {
-  StructureContentPlugin plugin = blockHandlers.get(block);  
-  return plugin != null ? plugin.getRuleForBlock(world, block, turns, x, y, z, priorRules) : null;
+  StructureRuleRegistration reg = new StructureRuleRegistration(pluginName, ruleClass); 
+  blockRules.put(block, reg);
+  registrationByName.put(pluginName, reg);
   }
 
-public TemplateRule getRuleForEntity(World world, Entity entity, int turns, int x, int y, int z, List<TemplateRule> priorRules)
+public TemplateRule getRule(String pluginName, String[] ruleData)
   {
-  StructureContentPlugin plugin = entityHandlers.get(entity);
-  return plugin != null ? plugin.getRuleForEntity(world, entity, turns, x, y, z, priorRules) : null;
+  /**
+   * TODO rule parsing
+   */
+  return null;
   }
+
+public String getPluginNameFor(Block block)
+  {
+  StructureRuleRegistration reg = blockRules.get(block);  
+  return reg!=null ? reg.pluginName : null;
+  }
+
+public class StructureRuleRegistration
+{
+String pluginName;
+Class<?extends TemplateRule> ruleClass;
+
+public StructureRuleRegistration(String name, Class<?extends TemplateRule> ruleClass)
+  {
+  this.pluginName = name;
+  this.ruleClass = ruleClass;
+  }
+}
 
 }

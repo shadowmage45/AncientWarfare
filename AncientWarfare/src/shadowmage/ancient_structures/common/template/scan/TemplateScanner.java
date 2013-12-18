@@ -26,14 +26,15 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
 public class TemplateScanner
 {
@@ -77,20 +78,21 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   key.z = key.z - min.z; 
     
   short[] templateRuleData = new short[xSize*ySize*zSize];
-  AWLog.logDebug("key: "+key);  
   BlockTools.rotateInArea(key, xSize, zSize, turns);
-  AWLog.logDebug("postkey: "+key);
   
-  HashMap<StructureContentPlugin, List<TemplateRule>> pluginRuleMap = new HashMap<StructureContentPlugin, List<TemplateRule>>();
+  HashMap<String, List<TemplateRuleBlock>> pluginBlockRuleMap = new HashMap<String, List<TemplateRuleBlock>>();
+    
   List<TemplateRule> currentRulesAll = new ArrayList<TemplateRule>();
   Block scannedBlock;
   Entity scannedEntity = null;
-  TemplateRule scannedRule = null;
+  TemplateRuleBlock scannedBlockRule = null;
+    
+  List<TemplateRuleBlock> pluginBlockRules;
   
-  StructureContentPlugin scanPlugin;
-  List<TemplateRule> pluginRules;
-  
+  String pluginId;
   int index;
+  int meta;
+  TileEntity te;
   int scanX, scanZ, scanY;
   BlockPosition destination = new BlockPosition();
   int nextRuleID = 1;
@@ -106,60 +108,55 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
         BlockTools.rotateInArea(destination, xSize, zSize, turns);
         scannedBlock = Block.blocksList[world.getBlockId(scanX, scanY, scanZ)];
         if(scannedBlock!=null)
-          {
-          scanPlugin = AWStructures.instance.pluginManager.getPluginFor(scannedBlock);
-          if(scanPlugin!=null)
+          {   
+          pluginId = AWStructures.instance.pluginManager.getPluginNameFor(scannedBlock);
+          if(pluginId!=null)
             {
-            if(!pluginRuleMap.containsKey(scanPlugin))
+            meta = world.getBlockMetadata(scanX, scanY, scanZ);
+            te = world.getBlockTileEntity(scanX, scanY, scanZ);
+            pluginBlockRules = pluginBlockRuleMap.get(pluginId);
+            if(pluginBlockRules==null)
               {
-              pluginRuleMap.put(scanPlugin, new ArrayList<TemplateRule>());
+              pluginBlockRules = new ArrayList<TemplateRuleBlock>();
+              pluginBlockRuleMap.put(pluginId, pluginBlockRules);
               }
-            pluginRules =pluginRuleMap.get(scanPlugin);
-            scannedRule = scanPlugin.getRuleForBlock(world, scannedBlock, turns, scanX, scanY, scanZ, pluginRules);   
-            if(scannedRule!=null && scannedRule.ruleNumber==-1)
+            boolean found = false;
+            for(TemplateRuleBlock rule : pluginBlockRules)
               {
-              pluginRules.add(scannedRule);
-              scannedRule.ruleNumber = nextRuleID;
+              if(rule.shouldReuseRule(world, scannedBlock, meta, turns, te, scanX, scanY, scanZ))
+                {
+                scannedBlockRule = rule;
+                found = true;
+                break;
+                }
+              }
+            if(!found)
+              {
+              scannedBlockRule = (TemplateRuleBlock) AWStructures.instance.pluginManager.getRuleForBlock(world, scannedBlock, turns, scanX, scanY, scanZ);
+              scannedBlockRule.ruleNumber = nextRuleID;
               nextRuleID++;
-              }            
+              pluginBlockRules.add(scannedBlockRule);
+              currentRulesAll.add(scannedBlockRule);
+              }
+            index = StructureTemplate.getIndex(destination.x, destination.y, destination.z, xOutSize, ySize, zOutSize);
+            templateRuleData[index] = (short) scannedBlockRule.ruleNumber;
             }
           }
         else if(scannedEntity!=null)
-          {               
-          scanPlugin = AWStructures.instance.pluginManager.getPluginFor(scannedEntity);
-          if(scanPlugin!=null)
-            {
-            if(!pluginRuleMap.containsKey(scanPlugin))
-              {
-              pluginRuleMap.put(scanPlugin, new ArrayList<TemplateRule>());
-              }
-            pluginRules = pluginRuleMap.get(scanPlugin);
-            scannedRule = scanPlugin.getRuleForEntity(world, scannedEntity, turns, scanX, scanY, scanZ, pluginRules);   
-            if(scannedRule!=null && scannedRule.ruleNumber==-1)
-              {
-              pluginRules.add(scannedRule);
-              scannedRule.ruleNumber = nextRuleID;
-              nextRuleID++;
-              }            
-            }    
-          }
-        else
           {
-          scannedRule = null;
+          /**
+           * TODO
+           */
           }
-        if(scannedRule!=null)
-          {
-          currentRulesAll.add(scannedRule);
-          index = StructureTemplate.getIndex(destination.x, destination.y, destination.z, xOutSize, ySize, zOutSize);
-          templateRuleData[index] = (short) scannedRule.ruleNumber;
-          }        
         }
       }
     }  
-  TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()+1];  
+  TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()+1];
+  TemplateRule copyRule;
   for(int i = 0; i < currentRulesAll.size(); i++)//offset by 1 -- we want a null rule for 0==air
     {
-    templateRules[i+1] = currentRulesAll.get(i);
+	copyRule = currentRulesAll.get(i);
+    templateRules[i+1] = copyRule;
     }
   StructureTemplate template = new StructureTemplate("testTemplate"+System.currentTimeMillis(), xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);

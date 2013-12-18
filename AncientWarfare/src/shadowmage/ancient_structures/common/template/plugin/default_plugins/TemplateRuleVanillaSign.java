@@ -20,22 +20,19 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
+import shadowmage.ancient_structures.common.block.BlockDataManager;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.block.BlockDataManager;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
-public class TemplateRuleVanillaBlocks extends TemplateRuleBlock
+public class TemplateRuleVanillaSign extends TemplateRuleVanillaBlocks
 {
 
-String blockName;
-int meta;
-
+String signContents[];
+boolean wall = true;
 /**
- * constructor for dynamic construction.  passed world and coords so that the rule can handle its own logic internally
  * @param world
  * @param x
  * @param y
@@ -43,14 +40,28 @@ int meta;
  * @param block
  * @param meta
  */
-public TemplateRuleVanillaBlocks(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleVanillaSign(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
-  this.blockName = block.getUnlocalizedName();
-  this.meta = BlockDataManager.getRotatedMeta(block, meta, turns);
+  TileEntitySign te = (TileEntitySign) world.getBlockTileEntity(x, y, z);
+  signContents = new String[te.signText.length];
+  for(int i = 0; i < signContents.length; i++)
+    {
+    signContents[i] = te.signText[i];
+    }
+  if(block==Block.signPost)
+    {
+    wall = false;
+    /**
+     * figure out meta-rotation
+     */
+    /**
+     * else...already handled by super-call
+     */
+    } 
   }
 
-public TemplateRuleVanillaBlocks(String [] ruleData)
+public TemplateRuleVanillaSign(String[] ruleData)
   {
   super(ruleData);
   }
@@ -58,21 +69,27 @@ public TemplateRuleVanillaBlocks(String [] ruleData)
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  Block block = BlockDataManager.getBlockByName(blockName);
-  int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns);  
-  world.setBlock(x, y, z, block.blockID, localMeta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
+  Block block = wall? Block.signWall : Block.signPost;//BlockDataManager.getBlockByName(blockName);
+  int meta = 0;
+  if(block==Block.signPost)
+    {
+    /**
+     * figure out meta-rotation
+     */
+    }
+  else
+    {
+    meta = BlockDataManager.getRotatedMeta(block, this.meta, turns);
+    }
+  world.setBlock(x, y, z, block.blockID, meta, 2);
+  TileEntitySign te = (TileEntitySign) world.getBlockTileEntity(x, y, z);
+  te.signText = new String[this.signContents.length];
+  for(int i = 0; i < this.signContents.length; i++)
+    {
+    te.signText[i] = this.signContents[i];
+    }
+  world.markBlockForUpdate(x, y, z);
   }
 
-@Override
-public String[] getRuleLines()
-  {
-  return null;
-  }
-  
-@Override
-public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
-  {
-  return block!=null && blockName.equals(block.getUnlocalizedName()) && BlockDataManager.getRotatedMeta(block, meta, turns) == this.meta;
-  }
 
 }

@@ -21,52 +21,35 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.item.ItemDoor;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_structures.common.block.BlockDataManager;
 
-public class TemplateRuleVanillaEntity extends TemplateRule
+public class TemplateRuleVanillaDoors extends TemplateRuleVanillaBlocks
 {
 
-/**
- * @param ruleTypeName
- */
-public TemplateRuleVanillaEntity(String ruleTypeName)
+public TemplateRuleVanillaDoors(World world, int x, int y, int z, Block block, int meta, int turns)
   {
-  super(ruleTypeName);
-  // TODO Auto-generated constructor stub
+  super(world, x, y, z, block, meta, turns);
+  }
+
+public TemplateRuleVanillaDoors(String[] ruleData)
+  {
+  super(ruleData);
   }
 
 @Override
-public void handlePlacement(World world, int facing, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  
+  Block block = BlockDataManager.getBlockByName(blockName);
+  int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns); 
+  if(world.getBlockId(x, y-1, z)!=block.blockID)//this is the bottom door block, call placeDoor from our block...
+    {
+    world.setBlock(x, y, z, block.blockID, meta, 0);    
+    world.setBlock(x, y+1, z, block.blockID, 8, 2);
+    world.setBlockMetadataWithNotify(x, y, z, localMeta, 2);
+    }
   }
-
-@Override
-public String getRuleTypeName()
-  {
-  return null;
-  }
-
-@Override
-public String[] getRuleLines()
-  {
-  // TODO Auto-generated method stub
-  return null;
-  }
-
-@Override
-public boolean shouldReuseRule(World world, Block block, int meta, int x, int y, int z)
-  {
-  return false;
-  }
-
-@Override
-public boolean shouldReuseRule(World world, Entity entity, int x, int y, int z)
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
-
 }
