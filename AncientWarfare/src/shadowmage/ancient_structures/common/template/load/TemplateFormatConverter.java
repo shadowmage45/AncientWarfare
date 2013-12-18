@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_structures.common.template.load;
 
+import java.util.List;
+
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 
 
@@ -28,8 +31,9 @@ public class TemplateFormatConverter
 {
 
 
-public StructureTemplate convertOldTemplate(String[] templateLines)
+public StructureTemplate convertOldTemplate(List<String> templateLines)
   {
+  AWLog.logDebug("should read old template format...");
   return null;
   }
 

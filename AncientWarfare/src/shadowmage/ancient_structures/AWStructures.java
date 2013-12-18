@@ -82,9 +82,7 @@ public void preInit(FMLPreInitializationEvent evt)
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Statics.STRUCTURE_VERSION);
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
-  
-  pluginManager = new StructurePluginManager();
-  pluginManager.loadPlugins();
+  pluginManager = new StructurePluginManager(); 
   
   BlockDataManager.instance().loadBlockList();
   AWStructuresItemLoader.instance().registerItems();
@@ -99,6 +97,7 @@ public void preInit(FMLPreInitializationEvent evt)
 public void init(FMLInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Init started.");
+  pluginManager.loadPlugins();
   /**
    * TODO
    */

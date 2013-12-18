@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_structures.common.template.plugin;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -34,6 +34,8 @@ import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
 public class StructurePluginManager
 {
+
+private List<StructureContentPlugin> loadedPlugins = new ArrayList<StructureContentPlugin>();
 
 private HashMap<Block, StructureRuleRegistration> blockRules = new HashMap<Block, StructureRuleRegistration>();
 private HashMap<Class<?extends Entity>, StructureRuleRegistration> entityRules = new HashMap<Class<?extends Entity>, StructureRuleRegistration>();
@@ -51,12 +53,17 @@ public void loadPlugins()
   {
   vanillaPlugin = new StructurePluginVanillaHandler();
   this.addPlugin(vanillaPlugin);
+  
+  for(StructureContentPlugin plugin : this.loadedPlugins)
+    {
+    plugin.addHandledBlocks(this);
+    plugin.addHandledEntities(this);
+    }
   }
 
 public void addPlugin(StructureContentPlugin plugin)
   {
-  plugin.addHandledBlocks(this);
-  plugin.addHandledEntities(this);
+  loadedPlugins.add(plugin);
   }
 
 public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, int x, int y, int z)

@@ -102,27 +102,31 @@ public static void exportTo(StructureTemplate template, File directory)
     e.printStackTrace();
     }
   finally
+  {
+  if(writer!=null)
     {
-    if(writer!=null)
+    try
       {
-      try
-        {
-        writer.close();
-        } 
-      catch (IOException e)
-        {
-        AWLog.logError("Could not export template..could not close file : "+exportFile.getAbsolutePath());
-        e.printStackTrace();
-        }
+      writer.close();
+      } 
+    catch (IOException e)
+      {
+      AWLog.logError("Could not export template..could not close file : "+exportFile.getAbsolutePath());
+      e.printStackTrace();
       }
     }
-  
+  }
+
   }
 
 public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
   {
+  if(rule==null)
+    {
+    return;
+    }
   String id = AWStructures.instance.pluginManager.getPluginNameFor(rule.getClass());
-  if(rule==null || id==null)
+  if(id==null)
     {
     return;
     }

@@ -28,6 +28,7 @@ import java.util.List;
 
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
 
 import com.google.common.io.ByteStreams;
 
@@ -114,14 +115,26 @@ public void initializeAndExportDefaults(String path)
     this.setDefaultStructureNames();
     this.copyDefaultStructures(includeDirectory);
     AWStructureStatics.shouldExport = false;
-    this.defaultExportStructures.clear();
     }
+  this.defaultExportStructures.clear();
   }
 
 public void loadTemplates()
   {
   this.locateStructureFiles();
   AWLog.logDebug("Located "+probableStructureFiles.size()+" probable structure files");
+  StructureTemplate template;
+  for(File f : this.probableStructureFiles)
+    {
+    template = TemplateParser.instance().parseTemplate(f);
+    if(template!=null)
+      {
+      /**
+       * TODO add to loaded list
+       */
+      }
+    }
+  this.probableStructureFiles.clear();
   }
 
 private void copyDefaultStructures(String pathName)
