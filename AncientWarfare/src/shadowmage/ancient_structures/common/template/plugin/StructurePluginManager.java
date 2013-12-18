@@ -128,36 +128,15 @@ public TemplateRule getRule(String pluginName, String[] ruleData)
   return null;
   }
 
-public final void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
-  {  
-  if(rule==null || !idByRuleClass.containsKey(rule.getClass()))
-    {
-    return;
-    }
-  out.write("rule:");
-  out.newLine();
-  out.write("plugin="+this.idByRuleClass.get(rule.getClass()));
-  out.newLine();
-  out.write("number="+rule.ruleNumber);
-  out.newLine();
-  out.write("data:");
-  out.newLine();
-  for(String st : rule.getRuleLines())
-    {
-    out.write(st);
-    out.newLine();
-    }
-  out.write(":enddata");
-  out.newLine();
-  out.write(":endrule");
-  out.newLine();
-  out.newLine();
-  }
-
 public String getPluginNameFor(Block block)
   {
   StructureRuleRegistration reg = blockRules.get(block);  
   return reg!=null ? reg.pluginName : null;
+  }
+
+public String getPluginNameFor(Class<?extends TemplateRule> ruleClass)
+  {
+  return this.idByRuleClass.get(ruleClass);
   }
 
 public class StructureRuleRegistration

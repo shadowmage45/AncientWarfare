@@ -37,6 +37,7 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
+import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 
 public class TemplateScanner
 {
@@ -157,14 +158,13 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   TemplateRule copyRule;
   for(int i = 0; i < currentRulesAll.size(); i++)//offset by 1 -- we want a null rule for 0==air
     {
-	copyRule = currentRulesAll.get(i);
+    copyRule = currentRulesAll.get(i);
     templateRules[i+1] = copyRule;
     }
   StructureTemplate template = new StructureTemplate("testTemplate"+System.currentTimeMillis(), xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);
-  template.setRuleArray(templateRules);
-  AWLog.logDebug("template :\n"+template);  
-  template.exportTo(new File(TemplateLoader.outputDirectory));
+  template.setRuleArray(templateRules);  
+  TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
   return template;
   }
 

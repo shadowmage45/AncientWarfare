@@ -32,14 +32,16 @@ public abstract class StructureContentPlugin
 {
 
 /**
- * add to the input list any blocks that this plugin handles
- * @param handledBlocks
+ * implementing classes should use this callback to register any 
+ * block handlers with the passed in manager
+ * @param manager
  */
 public abstract void addHandledBlocks(StructurePluginManager manager);
 
 /**
- * add to the input list any entities that this plugin handles
- * @param handledEntities
+ * implementing classes should use this callback to register any 
+ * entity handlers with the passed in manager
+ * @param manager
  */
 public abstract void addHandledEntities(StructurePluginManager manager);
 

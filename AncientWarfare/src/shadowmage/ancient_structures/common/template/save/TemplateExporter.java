@@ -26,22 +26,125 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateExporter
 {
 
-StructureTemplate template;
-/**
- * 
- */
-public TemplateExporter(StructureTemplate template)
+
+public static void exportTo(StructureTemplate template, File directory)
   {
-  this.template = template;
+  File exportFile = new File(directory, template.name+"."+AWStructureStatics.templateExtension);
+  if(!exportFile.exists())
+    {
+    try
+      {
+      exportFile.createNewFile();
+      } 
+    catch (IOException e)
+      {
+      AWLog.logError("Could not export template..could not create file : "+exportFile.getAbsolutePath());
+      e.printStackTrace();
+      return;
+      }
+    }  
+  BufferedWriter writer = null;
+  try
+    {
+    short[] templateData = template.getTemplateData();
+    writer = new BufferedWriter(new FileWriter(exportFile));
+    writer.write("name: "+template.name);
+    writer.newLine();
+    writer.write("size="+template.xSize+","+template.ySize+","+template.zSize);
+    writer.newLine();
+    writer.write("offset="+template.xOffset+","+template.yOffset+","+template.zOffset);
+    writer.newLine();
+    writer.newLine();
+    writer.write("#### LAYERS ####");
+    writer.newLine();
+    for(int y = 0; y< template.ySize; y++)
+      {
+      writer.write("layer: "+y);
+      writer.newLine();
+      for(int z = 0 ; z<template.zSize; z++)
+        {
+        for(int x = 0; x<template.xSize; x++)
+          {
+          short data = templateData[template.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];
+          AWLog.logDebug("export data: "+data);
+          writer.write(String.valueOf(data));
+          if(x<template.xSize-1)
+            {
+            writer.write(",");
+            }
+          }
+        writer.newLine();
+        }
+      writer.write(":endlayer");
+      writer.newLine();
+      }
+    writer.newLine();
+    writer.newLine();
+    writer.write("#### RULES ####");
+    writer.newLine();
+    TemplateRule[] templateRules = template.getTemplateRules();
+    for(TemplateRule rule : templateRules)
+      {
+      writeRuleLines(rule, writer);
+      }
+    } 
+  catch (IOException e)
+    {
+    AWLog.logError("Could not export template..could not create file : "+exportFile.getAbsolutePath());
+    e.printStackTrace();
+    }
+  finally
+    {
+    if(writer!=null)
+      {
+      try
+        {
+        writer.close();
+        } 
+      catch (IOException e)
+        {
+        AWLog.logError("Could not export template..could not close file : "+exportFile.getAbsolutePath());
+        e.printStackTrace();
+        }
+      }
+    }
+  
   }
 
-
+public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
+  {
+  String id = AWStructures.instance.pluginManager.getPluginNameFor(rule.getClass());
+  if(rule==null || id==null)
+    {
+    return;
+    }
+  out.write("rule:");
+  out.newLine();
+  out.write("plugin="+id);
+  out.newLine();
+  out.write("number="+rule.ruleNumber);
+  out.newLine();
+  out.write("data:");
+  out.newLine();
+  for(String st : rule.getRuleLines())
+    {
+    out.write(st);
+    out.newLine();
+    }
+  out.write(":enddata");
+  out.newLine();
+  out.write(":endrule");
+  out.newLine();
+  out.newLine();
+  }
 
 
 }
