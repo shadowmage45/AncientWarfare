@@ -20,26 +20,21 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
-import shadowmage.ancient_structures.common.block.BlockDataManager;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.block.BlockDataManager;
 
 public class TemplateRuleVanillaSign extends TemplateRuleVanillaBlocks
 {
 
 String signContents[];
 boolean wall = true;
-/**
- * @param world
- * @param x
- * @param y
- * @param z
- * @param block
- * @param meta
- */
+
 public TemplateRuleVanillaSign(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
@@ -52,12 +47,7 @@ public TemplateRuleVanillaSign(World world, int x, int y, int z, Block block, in
   if(block==Block.signPost)
     {
     wall = false;
-    /**
-     * figure out meta-rotation
-     */
-    /**
-     * else...already handled by super-call
-     */
+    this.meta = (meta+4*turns)%16;
     } 
   }
 
@@ -72,9 +62,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   int meta = 0;
   if(block==Block.signPost)
     {
-    /**
-     * figure out meta-rotation
-     */
+    meta = (this.meta+4*turns)%16; 
     }
   else
     {
@@ -88,6 +76,41 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     te.signText[i] = this.signContents[i];
     }
   world.markBlockForUpdate(x, y, z);
+  }
+
+@Override
+public void writeRuleData(BufferedWriter out) throws IOException
+  {
+  super.writeRuleData(out);
+  for(int i = 0; i<4 ;i++)
+    {
+    out.write(signContents[i]);
+    out.newLine();
+    }
+  }
+
+@Override
+public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
+  {
+  if(te instanceof TileEntitySign)
+    {
+    if(!signContents.equals(((TileEntitySign)te).signText))
+      {
+      return false;
+      }
+    }
+  return ((block==Block.signPost && !this.wall && (meta+4*turns%16)==this.meta)||(block==Block.signWall && this.wall && BlockDataManager.getRotatedMeta(block, meta, turns)==this.meta));
+  }
+
+@Override
+public void parseRuleData(String[] ruleData)
+  {  
+  super.parseRuleData(ruleData);
+  this.signContents = new String[4];
+  signContents[0] = ruleData[2];
+  signContents[1] = ruleData[3];
+  signContents[2] = ruleData[4];
+  signContents[3] = ruleData[5];
   }
 
 

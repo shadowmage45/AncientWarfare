@@ -134,11 +134,7 @@ public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) t
   out.newLine();
   out.write("data:");
   out.newLine();
-  for(String st : rule.getRuleLines())
-    {
-    out.write(st);
-    out.newLine();
-    }
+  rule.writeRuleData(out);
   out.write(":enddata");
   out.newLine();
   out.write(":endrule");

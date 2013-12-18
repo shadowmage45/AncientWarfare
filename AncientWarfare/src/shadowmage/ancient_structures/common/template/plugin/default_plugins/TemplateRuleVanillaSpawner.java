@@ -20,6 +20,11 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+import shadowmage.ancient_framework.common.utils.StringTools;
+
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -62,5 +67,21 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
   {  
   return te instanceof TileEntityMobSpawner && mobID.equals(((TileEntityMobSpawner)te).getSpawnerLogic().getEntityNameToSpawn());
   }
+
+@Override
+public void writeRuleData(BufferedWriter out) throws IOException
+  {
+  super.writeRuleData(out);
+  out.write("mobID="+mobID);
+  out.newLine();
+  }
+
+@Override
+public void parseRuleData(String[] ruleData)
+  {
+  super.parseRuleData(ruleData);
+  this.mobID = StringTools.safeParseString("=", ruleData[2]);
+  }
+
 
 }

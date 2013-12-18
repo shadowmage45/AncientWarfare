@@ -23,6 +23,7 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.item.ItemDoor;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
@@ -51,4 +52,5 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     world.setBlockMetadataWithNotify(x, y, z, localMeta, 2);
     }
   }
+
 }

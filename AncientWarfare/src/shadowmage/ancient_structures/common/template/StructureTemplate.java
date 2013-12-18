@@ -143,19 +143,6 @@ public String toString()
       b.append("\n");
       }
     }
-  b.append("\n\nrules:\n");
-  String[] lines;
-  for(TemplateRule rule : this.templateRules)
-    {
-	  if(rule==null){continue;}	 
-	  b.append("rule: ").append(rule.ruleNumber).append("\n");
-    lines = rule.getRuleLines();
-    for(String st : lines)
-      {
-      b.append(st).append("\n");
-      }
-    b.append("\n");
-    }
   return b.toString();
   }
 

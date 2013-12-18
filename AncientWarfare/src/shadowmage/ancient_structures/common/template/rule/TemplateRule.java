@@ -23,11 +23,7 @@ package shadowmage.ancient_structures.common.template.rule;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 
 /**
  * base template-rule class.  Plugins should define their own rule classes.
@@ -61,8 +57,6 @@ public TemplateRule(String[] ruleData)
  */
 public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
-
-
-public abstract String[] getRuleLines();
 public abstract void parseRuleData(String[] ruleData);
+public abstract void writeRuleData(BufferedWriter out) throws IOException;
 }

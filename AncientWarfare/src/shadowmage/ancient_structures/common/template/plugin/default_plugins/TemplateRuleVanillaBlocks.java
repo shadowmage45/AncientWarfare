@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -65,9 +68,12 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public String[] getRuleLines()
+public void writeRuleData(BufferedWriter out) throws IOException
   {
-  return new String[]{"blockName="+this.blockName, "meta="+this.meta};
+  out.write("blockName="+this.blockName);
+  out.newLine();
+  out.write("meta="+this.meta);
+  out.newLine();
   }
   
 @Override
