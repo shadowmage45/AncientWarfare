@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 /**
@@ -38,14 +39,12 @@ public abstract class TemplateRule
 
 public int ruleNumber = -1;
 
+/**
+ * all sub-classes must implement a no-param constructor for when loaded from file (at which point they should initialize from the parseRuleData method)
+ */
 public TemplateRule()
   {
  
-  }
-
-public TemplateRule(String[] ruleData)
-  {
-  
   }
 
 /**
@@ -60,4 +59,6 @@ public abstract void handlePlacement(World world, int turns, int x, int y, int z
 
 public abstract void parseRuleData(List<String> ruleData);
 public abstract void writeRuleData(BufferedWriter out) throws IOException;
+
+public abstract void addResources(List<ItemStack> resources);
 }

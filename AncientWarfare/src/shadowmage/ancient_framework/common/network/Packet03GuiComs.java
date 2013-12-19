@@ -21,11 +21,13 @@
 package shadowmage.ancient_framework.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+
+import cpw.mods.fml.common.network.FMLNetworkHandler;
 
 public class Packet03GuiComs extends PacketBase
 {
@@ -78,33 +80,32 @@ public void setInitData(NBTTagCompound tag)
 public void execute()
   {
   if(packetData.hasKey("openGUI"))
-    {
+    {  
+    if(world.isRemote)
+      {
+      AWLog.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");
+      return;
+      }
     NBTTagCompound tag = packetData.getCompoundTag("openGUI");
     int id = tag.getByte("id");
     int x = tag.getInteger("x");
     int y = tag.getInteger("y");
     int z = tag.getInteger("z");
-    GUIHandler.instance().openGUI(id, player, x, y, z);    
-    if(world.isRemote)
-      {
-      AWFramework.instance.logError("Opening GUI on client-side only from openGUI packet.  This is not proper gui handling.");
-      }
-    return;
+    GUIHandler.instance().openGUI(id, player, x, y, z);  
     }
   if(player.openContainer instanceof IHandlePacketData)
     {
     if(packetData.hasKey("data"))
       {
-      ((IHandlePacketData)player.openContainer).handleRawPacketData(packetData.getCompoundTag("data"));
+      ((IHandlePacketData)player.openContainer).handlePacketData(packetData.getCompoundTag("data"));
       return;
       }
     if(packetData.hasKey("init") && world.isRemote)
       {
       ((IHandlePacketData)player.openContainer).handleInitData(packetData.getCompoundTag("init"));
       return;      
-      }    
+      }
     }  
-  //Config.logError("Attempt to send container data packet to non-applicable container (no valid interface)");
   }
 
 }

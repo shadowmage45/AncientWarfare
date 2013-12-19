@@ -43,15 +43,7 @@ public class AWStructureStatics extends ModConfiguration
 {
 
 public static String templateExtension = "aws";
-
 public static boolean enableVillageGen;
-
-public static final Set<Class> validEntitiesToScan = new HashSet<Class>();
-
-public static final String guiEditor = "StructureEditor";
-public static final String guiScanner = "StructureScanner";
-public static final String guiBuilder = "StructureBuilder";
-public static final String guiBuilderOverrides = "StructureBuilderOverrides";
 
 /**
  * @param configFile
@@ -72,16 +64,7 @@ public void initializeCategories()
 @Override
 public void initializeValues()
   {
-  this.validEntitiesToScan.add(EntityVillager.class);
-  this.validEntitiesToScan.add(EntityPig.class);
-  this.validEntitiesToScan.add(EntitySheep.class);
-  this.validEntitiesToScan.add(EntityCow.class);
-  this.validEntitiesToScan.add(EntityWolf.class);
-  this.validEntitiesToScan.add(EntityOcelot.class);
-  this.validEntitiesToScan.add(EntityBoat.class);
-  this.validEntitiesToScan.add(EntityItemFrame.class);
-  this.validEntitiesToScan.add(EntityPainting.class);
-  this.validEntitiesToScan.add(EntityMinecart.class); 
+ 
   }
 
 }

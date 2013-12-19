@@ -71,7 +71,6 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     PacketBase realPacket = this.constructPacket(packetType);
     if(realPacket==null)
       {
-      //i think it will throw before this..but w/e
       return;
       }
     realPacket.packetData = tag;

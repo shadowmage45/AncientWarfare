@@ -112,21 +112,6 @@ public void sendDataToGUI(NBTTagCompound tag)
   this.sendDataToPlayer(baseTag);
   }
 
-public void handleRawPacketData(NBTTagCompound tag)
-  {
-  if(tag.hasKey("guiData"))
-    {
-    if(this.gui!=null)
-      {    
-      this.gui.handleDataFromContainer(tag.getCompoundTag("guiData"));
-      }
-    }
-  else
-    {
-    this.handlePacketData(tag);
-    }
-  }
-
 @Override
 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)
   {

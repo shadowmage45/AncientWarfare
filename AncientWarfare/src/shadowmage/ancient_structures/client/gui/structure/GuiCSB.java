@@ -30,6 +30,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_structures.client.utils.ClientStructureComparator;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
 import shadowmage.ancient_structures.common.structures.StructureManager;
@@ -43,12 +44,9 @@ import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
 public class GuiCSB extends GuiContainerAdvanced
 {
 
-private final ContainerCSB container;
-private final List<StructureClientInfo> clientStructures;
+private ContainerCSB container;
+private List<StructureClientInfo> clientStructures;
 
-//int currentLowestViewed = 0;
-//private static final int numberDisplayed = 8;
-//private boolean shouldForceUpdate = false;
 String currentStructure = "";
 
 
@@ -56,24 +54,13 @@ String currentStructure = "";
 /**
  * @param par1Container
  */
-public GuiCSB(ContainerCSB container)
+public GuiCSB(ContainerBase container)
   {
   super(container);
-  this.container = container;
-  if(container instanceof ContainerCSB)
-    {
-    clientStructures = new ArrayList<StructureClientInfo>();
-    clientStructures.addAll(StructureManager.instance().getClientStructures());
-    Collections.sort(clientStructures, ClientStructureComparator.COMPARATOR);
-    }  
-  else
-    {
-    clientStructures = null;
-    }    
-  if(clientStructures==null)
-    {
-    closeGUI();
-    }
+  this.container = (ContainerCSB) container;
+  clientStructures = new ArrayList<StructureClientInfo>();
+  clientStructures.addAll(StructureManager.instance().getClientStructures());
+  Collections.sort(clientStructures, ClientStructureComparator.COMPARATOR);
   }
 
 @Override

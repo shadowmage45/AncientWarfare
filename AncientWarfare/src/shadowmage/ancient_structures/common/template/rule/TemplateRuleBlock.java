@@ -20,8 +20,10 @@
  */
 package shadowmage.ancient_structures.common.template.rule;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -38,6 +40,21 @@ public TemplateRuleBlock()
   
   }
 
+/**
+ * should this rule be re-used in the template for the passed in block/te parameters?
+ * common things to check are simple block ID / meta combinations. 
+ * keep in mind you must rotate the passed in meta if you wish to compare it with the meta stored in your rule (you did normalize to north-oriented on construction, right?)
+ * more complex blocks may check the tile-entity for specific data  
+ * @param world 
+ * @param block
+ * @param meta -- pure meta as from world.getblockMetaData
+ * @param turns -- 90' clockwise turns needed for proper orientation from normalized template orientation 
+ * @param te -- the tile entity from world.getblockTileEntity -- may be null if none
+ * @param x
+ * @param y
+ * @param z
+ * @return true if this rule can handle the input block
+ */
 public abstract boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z);
 
 

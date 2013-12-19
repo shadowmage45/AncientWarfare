@@ -22,6 +22,11 @@ package shadowmage.ancient_framework.common.utils;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * need to remove, it is pretty much just an item-stack
+ * @author Shadowmage
+ *
+ */
 public class IDPairCount extends IDPair
 {
 

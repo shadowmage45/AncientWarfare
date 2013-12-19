@@ -55,6 +55,7 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
   destZSize = template.zSize;
   currentPriority = 0;
   
+  turns = ((face+2)%4);
   int swap;
   for(int i = 0; i<turns; i++)
     {
@@ -62,10 +63,9 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
     destXSize = destZSize;
     destZSize = swap;
     }
-  turns = ((face+2)%4);
-  
+    
   /**
-   * here we take the top-left corner, in template space
+   * here we take the back-left corner in template space
    */
   BlockPosition destinationKey = new BlockPosition(0, 0, 0);
   
@@ -75,18 +75,37 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
   BlockTools.rotateInArea(destinationKey, template.xSize, template.zSize, turns);
   
   /**
-   * our first destination point should be the back-left corner
-   * in order to get this point, we add the rotated destinationKey with the input cooridnates
-   * we then offset by facing direction for template size and build-key to place the final 
+   * we are placing destination1 to be the back-let corner of the structure. offset it by the rotated corner to get the correct corner
    */
   BlockPosition destination1 = new BlockPosition(x-destinationKey.x, y-destinationKey.y, z-destinationKey.z);
-  destination1.moveLeft(face, template.xSize - 1 - (template.xSize - 1 -template.xOffset));
-  destination1.moveForward(face, template.zSize - 1 - (template.zSize-1 - template.zOffset));  
+  
+  /**
+   * next, offset the back-left corner by the structures build-key offsets
+   */
+  destination1.moveLeft(face, template.xOffset);
+  destination1.moveForward(face, template.zOffset);
+  destination1.y-=template.yOffset;
+  
+  /**
+   * copy position to make the front-right corner.
+   */
   BlockPosition destination2 = new BlockPosition(destination1);
+  
+  /**
+   * offset this position directly by the size of the structure to get the actual front-right corner
+   */
   destination2.offset(destXSize-1, template.ySize-1, destZSize-1);            
+  
+  /**
+   * calculate structure bounding box min/max from destination 1 and destination 2
+   */
   min = BlockTools.getMin(destination1, destination2);
   max = BlockTools.getMax(destination1, destination2);     
-  incrementDestination();//set destination to start piece...
+  
+  /**
+   * initialize the first target destination so that the structure is ready to start building when called on to build
+   */
+  incrementDestination();
   }
 
 public void instantConstruction()

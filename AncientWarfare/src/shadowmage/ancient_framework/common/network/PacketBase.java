@@ -141,5 +141,4 @@ public void sendPacketToAllPlayers()
   {
   AWFramework.proxy.sendPacketToAllPlayers(this);
   }
-
 }

@@ -40,7 +40,7 @@ public StructureBuildSettings serverSettings;
  * @param openingPlayer
  * @param synch
  */
-public ContainerCSB(EntityPlayer openingPlayer) 
+public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z) 
   {
   super(openingPlayer, null);
 

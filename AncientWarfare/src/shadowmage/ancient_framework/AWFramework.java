@@ -50,7 +50,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 
 
-@Mod( modid = "AncientWarfareCore", name="Ancient Warfare Mod Framework", version=Statics.FRAMEWORK_VERSION)
+@Mod( modid = "AncientWarfareCore", name="Ancient Warfare", version=Statics.FRAMEWORK_VERSION)
 @NetworkMod
 (
 clientSideRequired = true,
@@ -72,6 +72,14 @@ public ObjectRegistry objectRegistry;
 public AWGameData gameData;
 public shadowmage.ancient_framework.common.event.EventHandler eventHandler;
 
+/**
+ * flags for loading/loaded status of different modules, so that modules can register plugins/etc
+ */
+public static boolean loadedStructures = false;
+public static boolean loadedVehicles = false;
+public static boolean loadedNpcs = false;
+public static boolean loadedAutomation = false;
+
 @Override
 public void loadConfiguration(File config, Logger log)
   {  
@@ -85,7 +93,7 @@ public void loadConfiguration(File config, Logger log)
 public void preInit(FMLPreInitializationEvent evt)
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
-  AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.FRAMEWORK_VERSION);
+  AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.FRAMEWORK_VERSION);  
   gameData = new AWGameData();
   eventHandler = new shadowmage.ancient_framework.common.event.EventHandler();
   MinecraftForge.EVENT_BUS.register(eventHandler);

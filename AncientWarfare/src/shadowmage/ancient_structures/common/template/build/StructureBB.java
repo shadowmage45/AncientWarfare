@@ -29,6 +29,60 @@ public class StructureBB
 public BlockPosition pos1;
 public BlockPosition pos2;
 
+public StructureBB(int x, int y, int z, int face, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
+  {
+  int destXSize = xSize;
+  int destYSize = ySize;
+  int destZSize = zSize;
+  
+  int turns = ((face+2)%4);
+  int swap;
+  for(int i = 0; i<turns; i++)
+    {
+    swap = destXSize;
+    destXSize = destZSize;
+    destZSize = swap;
+    }
+    
+  /**
+   * here we take the back-left corner in template space
+   */
+  BlockPosition destinationKey = new BlockPosition(0, 0, 0);
+  
+  /**
+   * and we rotate that corner into local space
+   */
+  BlockTools.rotateInArea(destinationKey, xSize, zSize, turns);
+  
+  /**
+   * we are placing destination1 to be the back-let corner of the structure. offset it by the rotated corner to get the correct corner
+   */
+  BlockPosition destination1 = new BlockPosition(x-destinationKey.x, y-destinationKey.y, z-destinationKey.z);
+  
+  /**
+   * next, offset the back-left corner by the structures build-key offsets
+   */
+  destination1.moveLeft(face, xOffset);
+  destination1.moveForward(face, zOffset);
+  destination1.y-=yOffset;
+  
+  /**
+   * copy position to make the front-right corner.
+   */
+  BlockPosition destination2 = new BlockPosition(destination1);
+  
+  /**
+   * offset this position directly by the size of the structure to get the actual front-right corner
+   */
+  destination2.offset(destXSize-1, ySize-1, destZSize-1);            
+  
+  /**
+   * calculate structure bounding box min/max from destination 1 and destination 2
+   */
+  this.pos1 = BlockTools.getMin(destination1, destination2);
+  this.pos2 = BlockTools.getMax(destination1, destination2);     
+  }
+
 public StructureBB(BlockPosition pos1, BlockPosition pos2)
   {
   this.pos1 = BlockTools.getMin(pos1, pos2);

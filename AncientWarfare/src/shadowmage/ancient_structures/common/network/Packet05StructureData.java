@@ -18,24 +18,50 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.client.proxy;
+package shadowmage.ancient_structures.common.network;
 
-import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
-import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_structures.client.gui.structure.GuiCSB;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
-public class ClientProxyStructure extends ClientProxyBase
+import shadowmage.ancient_framework.common.network.PacketBase;
+import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+
+public class Packet05StructureData extends PacketBase
 {
 
-public ClientProxyStructure()
+public Packet05StructureData()
   {
   
   }
 
-public void registerClientData()
+@Override
+public String getChannel()
   {
-  GUIHandler.instance().registerGui(Statics.guiStructureBuilderCreative, GuiCSB.class);
+  return "AW_struct";
+  }
+
+@Override
+public int getPacketType()
+  {
+  return 5;
+  }
+
+@Override
+public void writeDataToStream(ByteArrayDataOutput data)
+  {
+  
+  }
+
+@Override
+public void readDataStream(ByteArrayDataInput data)
+  {
+
+  }
+
+@Override
+public void execute()
+  {
+  StructureTemplateManager.instance().onTemplateData(packetData);
   }
 
 }

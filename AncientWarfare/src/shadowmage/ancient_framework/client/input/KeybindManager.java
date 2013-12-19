@@ -31,6 +31,7 @@ import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -145,11 +146,11 @@ public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boo
     {    
     if(kb==options)
       {
-      GUIHandler.instance().openGUI("Settings", Minecraft.getMinecraft().thePlayer,  0, 0, 0);
+      GUIHandler.instance().openGUI(Statics.guiOptions, Minecraft.getMinecraft().thePlayer,  0, 0, 0);
       }
     else if(kb==teamControl)
       {
-      GUIHandler.instance().openGUI("Teams", Minecraft.getMinecraft().thePlayer, 0, 0, 0);
+      GUIHandler.instance().openGUI(Statics.guiTeamControl, Minecraft.getMinecraft().thePlayer, 0, 0, 0);
       }    
     }
   }

@@ -20,15 +20,58 @@
  */
 package shadowmage.ancient_structures.common.template;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 public class StructureTemplateClient
 {
 
 public final String name;
-private int xSize, ySize, zSize, xOffset, yOffset, zOffset;
+private final int xSize, ySize, zSize, xOffset, yOffset, zOffset;
 
-public StructureTemplateClient(String name)
+public StructureTemplateClient(StructureTemplate template)
+  {
+  this.name = template.name;
+  this.xSize = template.xSize;
+  this.ySize = template.ySize;
+  this.zSize = template.zSize;
+  this.xOffset = template.xOffset;
+  this.yOffset = template.yOffset;
+  this.zOffset = template.zOffset;  
+  }
+
+public StructureTemplateClient(String name, int x, int y, int z, int xo, int yo, int zo)
   {
   this.name = name;
+  this.xSize = x;
+  this.ySize = y;
+  this.zSize = z;
+  this.xOffset = xo;
+  this.yOffset = yo;
+  this.zOffset = zo;
   }
+
+public void writeToNBT(NBTTagCompound tag)
+  {
+  tag.setString("name", name);
+  tag.setInteger("x", xSize);
+  tag.setInteger("y", ySize);
+  tag.setInteger("z", zSize);
+  tag.setInteger("xo", xOffset);
+  tag.setInteger("yo", yOffset);
+  tag.setInteger("zo", zOffset);
+  }
+
+public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
+  {
+  String name = tag.getString("name");
+  int x = tag.getInteger("x");
+  int y = tag.getInteger("y");
+  int z = tag.getInteger("z");
+  int xo = tag.getInteger("xo");
+  int yo = tag.getInteger("yo");
+  int zo = tag.getInteger("zo");
+  return new StructureTemplateClient(name, x, y, z, xo, yo, zo);
+  }
+
 
 }

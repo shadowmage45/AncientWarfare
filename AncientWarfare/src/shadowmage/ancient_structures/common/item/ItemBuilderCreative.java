@@ -20,12 +20,16 @@
  */
 package shadowmage.ancient_structures.common.item;
 
+import buildcraft.builders.GuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 
@@ -46,6 +50,26 @@ public ItemBuilderCreative(int itemID)
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {  
+  if(!world.isRemote && hit!=null && Statics.DEBUG && player.isSneaking())
+    {
+    int id = world.getBlockId(hit.x, hit.y, hit.z);
+    int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
+    if(Statics.DEBUG)
+      {
+      player.addChatMessage("block hit is: "+id+" :: "+meta);      
+      }
+    } 
+  if(!world.isRemote)
+    {
+    GUIHandler.instance().openGUI(Statics.guiStructureBuilderCreative, player, 0, 0, 0);    
+    return true;
+    }    
+  return false;
+  }
+
+@Override
+public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
+  {
   if(player==null || hit==null || world.isRemote)
     {
     return false;
@@ -58,23 +82,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   if(template==null)
     {
     player.addChatMessage("no structure found to build...");
-    return false;
+    return true;
     }
   StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
   builder.instantConstruction();
-  return false;
-  }
-
-@Override
-public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-  {
-  if(!world.isRemote && hit!=null)
-    {
-    int id = world.getBlockId(hit.x, hit.y, hit.z);
-    int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
-    player.addChatMessage("block hit is: "+id+" :: "+meta);
-    }
-  return false;
+  return true;
   }
 
 }

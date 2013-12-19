@@ -32,5 +32,21 @@ public static final String CORE_VERSION = FRAMEWORK_VERSION;
 public static final String STRUCTURE_VERSION = FRAMEWORK_VERSION;
 public static final boolean DEBUG = true;
 
+public static final int guiOptions = 0;
+public static final int guiTeamControl = 1;
+
+public static final int guiStructureBuilderCreative = 10;
+
+public static final int guiVehicleInventory = 20;
+
+public static final int guiNpcInventory = 30;
+
+public static final int guiCivicInventory = 40;
+
+public static final int guiCrafting = 50;
+
+public static final int guiResearch = 60;
+
+public static final int guiInfo = 70;
 
 }

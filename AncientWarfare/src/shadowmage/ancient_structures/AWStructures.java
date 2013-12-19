@@ -23,18 +23,24 @@ package shadowmage.ancient_structures;
 import java.io.File;
 import java.util.logging.Logger;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
+import shadowmage.ancient_structures.common.container.ContainerCSB;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
+import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+import shadowmage.ancient_structures.common.network.Packet05StructureData;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
+import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -48,6 +54,8 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 @Mod( modid = "AncientStructures", name="Ancient Structures", version=Statics.STRUCTURE_VERSION, dependencies="required-after:AncientWarfareCore")
@@ -60,10 +68,10 @@ channels = {"AW_struct"},
 versionBounds="["+Statics.STRUCTURE_VERSION+",)"
 )
 
-public class AWStructures extends AWMod
+public class AWStructures extends AWMod implements IPlayerTracker
 {
 
-@SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxyBase", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
+@SidedProxy(clientSide = "shadowmage.ancient_structures.client.proxy.ClientProxyStructure", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
 public static CommonProxy proxy;
 @Instance("AncientStructures")
 public static AWStructures instance;  
@@ -81,15 +89,17 @@ public void preInit(FMLPreInitializationEvent evt)
   {  
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Statics.STRUCTURE_VERSION);
+  AWFramework.loadedStructures = true;
+  pluginManager = new StructurePluginManager();   
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
-  pluginManager = new StructurePluginManager(); 
-  
+  TemplateLoader.instance().initializeAndExportDefaults(path);  
   BlockDataManager.instance().loadBlockList();
   AWStructuresItemLoader.instance().registerItems();
-  TemplateLoader.instance().initializeAndExportDefaults(path);
-  /**
-   * TODO
-   */
+  PacketHandler.registerPacketType(5, Packet05StructureData.class);
+  GameRegistry.registerPlayerTracker(instance);
+  NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
+  GUIHandler.instance().registerContainer(Statics.guiStructureBuilderCreative, ContainerCSB.class);
+  proxy.registerClientData();
   config.log("Ancient Warfare Structures Pre-Init finished.");
   }
 
@@ -97,11 +107,10 @@ public void preInit(FMLPreInitializationEvent evt)
 public void init(FMLInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Init started.");
-  pluginManager.loadPlugins();
   /**
-   * TODO
+   * listen for plugin registration
+   * TODO 
    */
-  TemplateLoader.instance().loadTemplates();
   config.log("Ancient Warfare Structures Init completed.");
   }
 
@@ -110,9 +119,11 @@ public void init(FMLInitializationEvent evt)
 public void postInit(FMLPostInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Post-Init started");
+  pluginManager.loadPlugins();
   /**
    * TODO
    */
+  TemplateLoader.instance().loadTemplates();
   config.saveConfig();
   config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 
   }
@@ -148,6 +159,33 @@ public void serverStopping(FMLServerStoppingEvent evt)
 @Override
 @EventHandler
 public void serverStopped(FMLServerStoppedEvent evt)
+  {
+  
+  }
+
+@Override
+public void onPlayerLogin(EntityPlayer player)
+  {
+  if(!player.worldObj.isRemote)
+    {
+    StructureTemplateManager.instance().onPlayerConnect(player);
+    }
+  }
+
+@Override
+public void onPlayerLogout(EntityPlayer player)
+  {
+  
+  }
+
+@Override
+public void onPlayerChangedDimension(EntityPlayer player)
+  {
+  
+  }
+
+@Override
+public void onPlayerRespawn(EntityPlayer player)
   {
   
   }

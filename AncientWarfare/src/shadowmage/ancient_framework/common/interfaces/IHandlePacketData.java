@@ -33,19 +33,7 @@ public interface IHandlePacketData
 {
 
 
-/**
- * intial data call, should be set by base container, not overriden
- * @param tag
- */
-public void handleRawPacketData(NBTTagCompound tag);
-
-/**
- * regular coms, should blindly update container.
- * @param tag
- */
 public void handlePacketData(NBTTagCompound tag);
-
-
 
 /**
  * server->client init data, should only exec client side, to setup any params not available

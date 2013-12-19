@@ -28,6 +28,7 @@ import java.util.List;
 
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
+import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 
 import com.google.common.io.ByteStreams;
@@ -124,17 +125,17 @@ public void loadTemplates()
   this.locateStructureFiles();
   AWLog.logDebug("Located "+probableStructureFiles.size()+" probable structure files");
   StructureTemplate template;
+  int loadedCount = 0;
   for(File f : this.probableStructureFiles)
     {
     template = TemplateParser.instance().parseTemplate(f);
     if(template!=null)
       {
-      AWLog.logDebug("loaded a new template: "+template);
-      /**
-       * TODO add to loaded list
-       */
+      StructureTemplateManager.instance().addTemplate(template);
+      loadedCount++;
       }
     }
+  AWLog.log("Loaded "+loadedCount+" structure(s).");
   this.probableStructureFiles.clear();
   }
 

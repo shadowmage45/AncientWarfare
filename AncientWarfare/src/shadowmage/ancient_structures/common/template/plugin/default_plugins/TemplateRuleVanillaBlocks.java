@@ -26,11 +26,14 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.IDPairCount;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
+import shadowmage.ancient_structures.common.structures.data.BlockInfo;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
 public class TemplateRuleVanillaBlocks extends TemplateRuleBlock
@@ -89,6 +92,17 @@ public void parseRuleData(List<String> ruleData)
   if(ruleData.size()<2){throw new IllegalArgumentException("not enough data for block rule");}
   this.blockName = StringTools.safeParseString("=", ruleData.get(0));
   this.meta = StringTools.safeParseInt("=", ruleData.get(1));
+  }
+
+@Override
+public void addResources(List<ItemStack> resources)
+  {
+  Block block = BlockDataManager.getBlockByName(blockName);
+  IDPairCount count = BlockInfo.getInventoryBlock(block.blockID, meta);
+  if(count!=null && count.id>0)
+    {
+    resources.add(new ItemStack(count.id, count.count, count.meta));    
+    }
   }
 
 }

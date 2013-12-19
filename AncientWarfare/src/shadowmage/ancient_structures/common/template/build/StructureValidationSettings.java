@@ -20,15 +20,15 @@
  */
 package shadowmage.ancient_structures.common.template.build;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 
 public class StructureValidationSettings
 {
-
-/**
- * unique structure-name
- */
-String structureName;
 
 /**
  * given an area with a source point, how far above the source-point is the highest acceptable block located? 
@@ -93,13 +93,33 @@ Block[] acceptedTargetBlocks;//list of accepted blocks which the structure may b
 
 Block[] acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
 
-boolean isUnique;//should this structure generate only once?
-
 /**
  * world generation selection and clustering settings
  */
 boolean worldGenEnabled;
+boolean isUnique;//should this structure generate only once?
 int selectionWeight;
 int clusterValue;
 int minDuplicateDistance;
+
+/**
+ * survival mode generation settings
+ */
+boolean survivalEnabled;
+ItemStack[] resourceStacks;
+
+public StructureValidationSettings()
+  {
+    
+  }
+
+public void parseSettings(List<String> lines)
+  {
+  
+  }
+
+public void writeSettings(BufferedWriter writer) throws IOException
+  {
+  
+  }
 }

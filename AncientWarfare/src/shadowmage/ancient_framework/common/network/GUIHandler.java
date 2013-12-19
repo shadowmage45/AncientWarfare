@@ -29,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IGuiHandler;
@@ -38,7 +39,6 @@ public class GUIHandler implements IGuiHandler
 
 private static HashMap<Integer, Class <? extends GuiContainerAdvanced>> guiMap = new HashMap<Integer, Class<? extends GuiContainerAdvanced>>();
 private static HashMap<Integer, Class <? extends ContainerBase>> containerMap = new HashMap<Integer, Class<? extends ContainerBase>>();
-private static HashMap<String, Integer> guisByName = new HashMap<String, Integer>();
 
 private static GUIHandler INSTANCE;
 private GUIHandler(){}
@@ -68,6 +68,7 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
       e.printStackTrace();
       }
     }
+  AWLog.logDebug("returned container was null for id: "+ID);
   return null;
   }
 
@@ -75,21 +76,20 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
 public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
   {  
   ContainerBase c = (ContainerBase) getServerGuiElement(ID, player, world, x, y, z);
-  if(c!=null)
+  Class guiClass = guiMap.get(ID);
+  if(guiClass!=null)
     {
-    Class guiClass = guiMap.get(ID);
-    if(guiClass!=null)
+    try
       {
-      try
-        {
-        GuiContainerAdvanced gui = (GuiContainerAdvanced) guiClass.getConstructor(Container.class).newInstance(c);
-        }
-      catch (Exception e)
-        {
-        e.printStackTrace();
-        } 
+      GuiContainerAdvanced gui = (GuiContainerAdvanced) guiClass.getConstructor(ContainerBase.class).newInstance(c);
+      return gui;
       }
+    catch (Exception e)
+      {
+      e.printStackTrace();
+      } 
     }
+  AWLog.logDebug("returned gui was null for id: "+ID);
   return null;
   }
 
@@ -131,33 +131,14 @@ public void openGUI(int ID, EntityPlayer player, int x, int y, int z)
     }  
   }
 
-public void openGUI(String name, EntityPlayer player, int x, int y, int z)
+public void registerContainer(int id, Class<? extends ContainerBase> containerClz)
   {
-  int id = guisByName.get(name);
-  openGUI(id, player, x, y, z);
+  containerMap.put(id, containerClz); 
   }
 
-public void registerGuiID(String name, int id)
+public void registerGui(int id, Class<? extends GuiContainerAdvanced> guiClass)
   {
-  guisByName.put(name, id);
-  }
-
-public void registerContainer(int id, String name, Class<? extends ContainerBase> containerClz)
-  {
-  int testID = guisByName.get(name);
-  if(testID==id)
-    {
-    containerMap.put(id, containerClz);    
-    }  
-  }
-
-public void registerGui(int id, String name, Class<? extends GuiContainerAdvanced> guiClass)
-  {
-  int testID = guisByName.get(name);
-  if(testID==id)
-    {
-    guiMap.put(id, guiClass);    
-    }
+  guiMap.put(id, guiClass);  
   }
 
 }
