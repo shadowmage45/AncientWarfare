@@ -164,7 +164,6 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   StructureTemplate template = new StructureTemplate(name, xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);
   template.setRuleArray(templateRules);  
-  TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
   return template;
   }
 

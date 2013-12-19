@@ -38,6 +38,7 @@ import shadowmage.ancient_structures.common.item.ItemStructureScanner;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
@@ -75,7 +76,9 @@ public void handlePacketData(NBTTagCompound tag)
     {
     boolean include = tag.getBoolean("export");
     String name = tag.getString("name");
-    scanStructure(player.worldObj, settings.pos1(), settings.pos2(), settings.buildKey(), settings.face(), name, include);
+    scanStructure(player.worldObj, settings.pos1(), settings.pos2(), settings.buildKey(), settings.face(), name, include, tag);
+    
+    
     settings.clearSettings();    
     }
   if(tag.hasKey("reset"))
@@ -84,13 +87,36 @@ public void handlePacketData(NBTTagCompound tag)
     }
   }
 
-public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face, String name, boolean include)
+public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face, String name, boolean include, NBTTagCompound tag)
   {
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
   TemplateScanner scanner = new TemplateScanner();
   int turns = face==0 ? 2 : face==1 ? 1 : face==2 ? 0 : face==3 ? 3 : 0; //because for some reason my mod math was off?  
   StructureTemplate template = scanner.scan(world, min, max, key, turns, name);
+  
+//  tag.setBoolean("world", worldGenBox.checked);
+//  tag.setBoolean("unique", uniqueBox.checked);
+//  tag.setBoolean("survival", survivalBox.checked);
+//  tag.setBoolean("doLeveling", levelingBox.checked);
+//  tag.setBoolean("doFill", fillBox.checked);
+//  tag.setBoolean("doBorderLeveling", borderLevelingBox.checked);
+//  tag.setBoolean("doBorderFill", borderFillBox.checked);
+//  tag.setInteger("leveling", levelingLine.getIntVal());
+//  tag.setInteger("fill", fillLine.getIntVal());
+//  tag.setInteger("border", borderLine.getIntVal());
+//  tag.setInteger("borderLeveling", borderLevelingLine.getIntVal());
+//  tag.setInteger("borderFill", borderFillLine.getIntVal());
+//  tag.setInteger("weight", weightLine.getIntVal());
+//  tag.setInteger("value", clusterLine.getIntVal());
+//  tag.setInteger("dupe", minDuplicateLine.getIntVal());
+
+  StructureValidationSettings settings = new StructureValidationSettings();
+  settings.setToggles(tag.getBoolean("world"), tag.getBoolean("unique"), tag.getBoolean("survival"), tag.getBoolean("doLeveling"), tag.getBoolean("doFill"), tag.getBoolean("doBorderLeveling"), tag.getBoolean("doBorderFill"), tag.getBoolean("preserveBlocks"));
+  settings.setValidationParams(tag.getInteger("leveling"), tag.getInteger("fill"), tag.getInteger("border"), tag.getInteger("borderLeveling"), tag.getInteger("borderFill"));
+  settings.setGenerationValues(tag.getInteger("weight"), tag.getInteger("value"), tag.getInteger("dupe"));
+  template.setValidationSettings(settings);
+  
   if(include)
     {
     StructureTemplateManager.instance().addTemplate(template);    

@@ -123,6 +123,13 @@ protected void placeCurrentPosition()
     {
     placeRule(rule);
     }
+  else
+    {
+    if(!template.getValidationSettings().preserveBlocks)
+      {
+      world.setBlockToAir(destination.x, destination.y, destination.z);
+      }
+    }
   if(incrementPosition())
     {
     incrementDestination();
@@ -134,7 +141,7 @@ protected void placeCurrentPosition()
   }
 
 protected void placeRule(TemplateRule rule)
-  {
+  {  
   rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);
   }
 

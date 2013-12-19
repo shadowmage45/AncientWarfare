@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template.build;
 
+import java.awt.BorderLayout;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
@@ -82,6 +83,9 @@ boolean doBorderLeveling;
  * negative values imply to skip border depth tests
  */
 int borderMissingEdgeDepth;
+boolean doBorderFill;
+
+boolean preserveBlocks;
 
 boolean biomeWhiteList;//should treat biome list as white or blacklist?
 String[] biomeList;//list of biomes for white/black list.  treated as white/black list from whitelist toggle
@@ -113,6 +117,57 @@ public StructureValidationSettings()
     
   }
 
+public StructureValidationSettings setToggles(boolean world, boolean unique, boolean survival, boolean leveling, boolean fill, boolean borderLevel, boolean borderFill, boolean preserveBlocks)
+  {
+  this.worldGenEnabled = world;
+  this.isUnique = unique;
+  this.survivalEnabled = survival;
+  this.doLeveling = leveling;
+  this.doFillBelow = fill;
+  this.doBorderLeveling= borderLevel;
+  this.doBorderFill = borderFill;
+  this.preserveBlocks = preserveBlocks;
+  return this;
+  }
+
+public StructureValidationSettings setValidationParams(int leveling, int fill, int border, int borderLevel, int borderFill)
+  {
+  this.maxLeveling = leveling;
+  this.maxMissingEdgeDepth = fill;
+  this.borderMaxLeveling = borderLevel;
+  this.borderMissingEdgeDepth = borderFill;
+  return this;
+  }
+
+public StructureValidationSettings setValidBlocks(Block[] targetBlocks, Block[] clearableBlocks)
+  {
+  this.acceptedTargetBlocks = targetBlocks;
+  this.acceptedClearBlocks = clearableBlocks;
+  return this;
+  }
+
+public StructureValidationSettings setValidDimensions(int[] dimensions, boolean white)
+  {
+  this.acceptedDimensions = dimensions;
+  this.dimensionWhiteList = white;
+  return this;
+  }
+
+public StructureValidationSettings setValidBiomes(String[] biomes, boolean white)
+  {
+  this.biomeList = biomes;
+  this.biomeWhiteList = white;
+  return this;
+  }
+
+public StructureValidationSettings setGenerationValues(int weight, int value, int dupeDistance)
+  {
+  this.selectionWeight = weight;
+  this.clusterValue = value;
+  this.minDuplicateDistance = dupeDistance;
+  return this;
+  }
+
 public void parseSettings(List<String> lines)
   {
   
@@ -120,6 +175,44 @@ public void parseSettings(List<String> lines)
 
 public void writeSettings(BufferedWriter writer) throws IOException
   {
-  
+  writer.write("validation:");
+  writer.newLine();
+  writer.write("survivalEnabled="+survivalEnabled);
+  writer.newLine();
+  writer.write("worldGenEnabled="+worldGenEnabled);  
+  writer.newLine();
+  writer.write("unique="+isUnique);
+  writer.newLine();
+  writer.write("preserveBlocks="+preserveBlocks);
+  writer.newLine();
+  writer.write("selectionWeight="+selectionWeight);
+  writer.newLine();
+  writer.write("clusterValue="+clusterValue);
+  writer.newLine();
+  writer.write("minDuplicateDistance="+minDuplicateDistance);
+  writer.newLine();
+  writer.write("leveling="+maxLeveling);
+  writer.newLine();
+  writer.write("fill="+maxMissingEdgeDepth);
+  writer.newLine();
+  writer.write("border="+borderSize);
+  writer.newLine();
+  writer.write("borderLeveling="+borderMaxLeveling);
+  writer.newLine();
+  writer.write("borderFill="+borderMissingEdgeDepth);
+  writer.newLine();
+  writer.write("doLeveling="+doLeveling);
+  writer.newLine();
+  writer.write("doFill="+doFillBelow);
+  writer.newLine();
+  writer.write("doBorderLeveling="+doBorderLeveling);
+  writer.newLine();
+  writer.write("doBorderFill="+doBorderFill);
+  writer.newLine();
+  /**
+   * TODO blocks and biomes
+   */
+  writer.write(":endvalidation");
+  writer.newLine();
   }
 }

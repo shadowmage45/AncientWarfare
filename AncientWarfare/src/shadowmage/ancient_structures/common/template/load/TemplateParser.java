@@ -110,7 +110,7 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
   while(it.hasNext())
     {
     line = it.next();    
-    
+    if(line.startsWith("#") || line.equals("")){continue;}
     if(line.startsWith("header:"))
       {
       while(it.hasNext())

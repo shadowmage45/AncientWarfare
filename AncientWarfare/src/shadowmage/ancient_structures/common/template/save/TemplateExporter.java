@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
 
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.AWStructures;
@@ -95,14 +96,20 @@ private static void writeValidationSettings(StructureValidationSettings settings
   {
   writer.write("#### VALIDATION ####");    
   writer.newLine(); 
-  writer.newLine();  
-  /**
-   * TODO add structure validation settings load/save
-   */  
+  settings.writeSettings(writer);  
+  writer.newLine();
   }
 
 private static void writeHeader(StructureTemplate template, BufferedWriter writer) throws IOException
   {
+  Calendar cal = Calendar.getInstance();
+  writer.write("# Ancient Warfare Structure Template File");
+  writer.newLine();
+  writer.write("# auto-generated structure file. created on: "+(cal.get(cal.MONTH)+1)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND));
+  writer.newLine();
+  writer.write("# Lines beginning with # denote comments");
+  writer.newLine();
+  writer.newLine();
   writer.write("header:");
   writer.newLine();
   writer.write("version=2.0");
@@ -114,6 +121,7 @@ private static void writeHeader(StructureTemplate template, BufferedWriter write
   writer.write("offset="+template.xOffset+","+template.yOffset+","+template.zOffset);
   writer.newLine();
   writer.write(":endheader");
+  writer.newLine();
   writer.newLine();
   }
 
