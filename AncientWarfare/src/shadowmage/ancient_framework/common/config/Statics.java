@@ -36,6 +36,7 @@ public static final int guiOptions = 0;
 public static final int guiTeamControl = 1;
 
 public static final int guiStructureBuilderCreative = 10;
+public static final int guiStructureScannerCreative = 11;
 
 public static final int guiVehicleInventory = 20;
 

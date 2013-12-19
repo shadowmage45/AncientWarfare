@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template;
 
+import shadowmage.ancient_framework.common.config.AWLog;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class StructureTemplateClient
@@ -31,6 +32,7 @@ private final int xSize, ySize, zSize, xOffset, yOffset, zOffset;
 public StructureTemplateClient(StructureTemplate template)
   {
   this.name = template.name;
+  if(name==null){throw new IllegalArgumentException("cannot have null name for structure");}
   this.xSize = template.xSize;
   this.ySize = template.ySize;
   this.zSize = template.zSize;
@@ -41,6 +43,7 @@ public StructureTemplateClient(StructureTemplate template)
 
 public StructureTemplateClient(String name, int x, int y, int z, int xo, int yo, int zo)
   {
+  if(name==null){throw new IllegalArgumentException("cannot have null name for structure");}
   this.name = name;
   this.xSize = x;
   this.ySize = y;
@@ -52,6 +55,7 @@ public StructureTemplateClient(String name, int x, int y, int z, int xo, int yo,
 
 public void writeToNBT(NBTTagCompound tag)
   {
+	AWLog.logDebug("writing client structure name: "+name);
   tag.setString("name", name);
   tag.setInteger("x", xSize);
   tag.setInteger("y", ySize);
@@ -63,6 +67,7 @@ public void writeToNBT(NBTTagCompound tag)
 
 public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   {
+	
   String name = tag.getString("name");
   int x = tag.getInteger("x");
   int y = tag.getInteger("y");
@@ -70,6 +75,7 @@ public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   int xo = tag.getInteger("xo");
   int yo = tag.getInteger("yo");
   int zo = tag.getInteger("zo");
+  AWLog.logDebug("reading client structure name: "+name);
   return new StructureTemplateClient(name, x, y, z, xo, yo, zo);
   }
 

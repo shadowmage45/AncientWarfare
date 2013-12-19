@@ -63,12 +63,19 @@ public static void registerPacketType(int id, Class<? extends PacketBase> pktCla
 @Override
 public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
   {
-  try
-    {
     ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
     int packetType = data.readInt();      
     NBTTagCompound tag =  NBTWriter.readTagFromStream(data);      
-    PacketBase realPacket = this.constructPacket(packetType);
+    PacketBase realPacket = null;
+	try {
+		realPacket = this.constructPacket(packetType);
+	} catch (InstantiationException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IllegalAccessException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     if(realPacket==null)
       {
       return;
@@ -78,13 +85,12 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     realPacket.world = realPacket.player.worldObj;    
     realPacket.readDataStream(data);
     realPacket.execute();
-    }
-  catch(Exception e)
-    {    
-    Exception e1 = new Exception("Extreme error during packet handling, could not instantiate packet instance, improper packetType info\n "+"Exception During Packet Handling, problem reading packet data");
-    e1.setStackTrace(e.getStackTrace());
-    e1.printStackTrace();
-    }
+//  catch(Exception e)
+//    {    
+//    Exception e1 = new Exception("Extreme error during packet handling, could not instantiate packet instance, improper packetType info\n "+"Exception During Packet Handling, problem reading packet data");
+//    e1.setStackTrace(e.getStackTrace());
+//    e1.printStackTrace();
+//    }
   
   }
 

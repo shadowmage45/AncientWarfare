@@ -27,7 +27,6 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 public class ItemStructureSettings
 {
 
-boolean[] readKeys = new boolean[4];
 boolean[] setKeys = new boolean[4];
 BlockPosition pos1;
 BlockPosition pos2;
@@ -59,7 +58,7 @@ public static ItemStructureSettings getSettingsFor(ItemStack stack, ItemStructur
     }
   for(int i = 0; i < 4; i++)
     {
-    settings.readKeys[i] = false;
+    settings.setKeys[i] = false;
     }
   if(tag.hasKey("pos1"))
     {
@@ -172,6 +171,16 @@ public BlockPosition pos2()
 public BlockPosition buildKey()
   {
   return key;
+  }
+
+public int face()
+  {
+  return buildFace;
+  }
+
+public String name()
+  {
+  return name;
   }
 
 public void clearSettings()

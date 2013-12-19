@@ -58,7 +58,7 @@ public TemplateScanner()
  * @param turns # of turns for proper orientation
  * @return
  */
-public StructureTemplate scan(World world, BlockPosition min, BlockPosition max, BlockPosition key, int turns)
+public StructureTemplate scan(World world, BlockPosition min, BlockPosition max, BlockPosition key, int turns, String name)
   {
   int xSize = max.x - min.x+1;
   int ySize = max.y - min.y+1;
@@ -161,7 +161,7 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
     copyRule = currentRulesAll.get(i);
     templateRules[i+1] = copyRule;
     }
-  StructureTemplate template = new StructureTemplate("testTemplate"+System.currentTimeMillis(), xOutSize, ySize, zOutSize, key.x, key.y, key.z);
+  StructureTemplate template = new StructureTemplate(name, xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);
   template.setRuleArray(templateRules);  
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));

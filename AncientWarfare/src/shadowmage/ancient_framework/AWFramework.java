@@ -56,7 +56,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
-channels = {"AW_mod"},
+channels = {"AW_mod", "AW_gui"},
 versionBounds="["+Statics.FRAMEWORK_VERSION+",)"
 )
 

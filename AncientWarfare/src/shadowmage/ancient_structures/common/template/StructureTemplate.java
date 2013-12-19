@@ -56,6 +56,7 @@ private StructureValidationSettings validationSettings;
 
 public StructureTemplate(String name, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
+  if(name==null){throw new IllegalArgumentException("cannot have null name for structure");}
   this.name = name;
   this.xSize = xSize;
   this.ySize = ySize;

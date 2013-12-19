@@ -20,15 +20,15 @@
  */
 package shadowmage.ancient_structures.client.gui.structure;
 
-import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
@@ -57,12 +57,18 @@ GuiTextInputLine value;
 
 GuiTextInputLine nameBox;
 
+GuiScrollableArea area;
+
+private ContainerStructureScanner container;
+
+int xSize, ySize, zSize;
 /**
  * @param container
  */
-public GuiStructureScanner(Container container)
+public GuiStructureScanner(ContainerBase container)
   {
   super(container);
+  this.container = (ContainerStructureScanner)container;
   this.shouldCloseOnVanillaKeys = false;
   }
 
@@ -91,7 +97,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   if(container!=null)
     {
     this.drawString(fontRenderer, "Scanned structure size: ", guiLeft+10, guiTop+10, 0xffffffff);
-    this.drawString(fontRenderer, "Width: "+String.valueOf(container.xSize)+" Length: "+String.valueOf(container.zSize)+ " Height: " + String.valueOf(container.ySize), guiLeft+10, guiTop+20, 0xffffffff);
+    this.drawString(fontRenderer, "Width: "+String.valueOf(xSize)+" Length: "+String.valueOf(zSize)+ " Height: " + String.valueOf(ySize), guiLeft+10, guiTop+20, 0xffffffff);
     }
   else
     {
@@ -115,28 +121,25 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   this.name = nameBox.getText();
-  this.weightString = this.weight.getText();  
-  this.valueString = this.value.getText();  
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
 public void setupControls()
   {
+  this.guiElements.clear();
   this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10); 
   this.addGuiButton(1, 45, 18, "Export").updateRenderPos(256-45-10, 30);
   this.addGuiButton(8, 45, 18, "Reset").updateRenderPos(256-45-10, 50);
-  this.addGuiButton(9, 45, 18, "Edit").updateRenderPos(256-45-10, 70);
-  formatAWBox = this.addCheckBox(2, 16, 16).setChecked(formatAW);
-  formatAWBox.updateRenderPos(145, 50);
-  includeBox = this.addCheckBox(3, 16, 16).setChecked(include);
-  includeBox.updateRenderPos(145, 70);
-  formatRuinsBox = this.addCheckBox(4, 16, 16).setChecked(formatRuins);
+  
+  formatAWBox = (GuiCheckBoxSimple) this.addCheckBox(2, 16, 16).setChecked(true).updateRenderPos(145, 50);
+  includeBox = (GuiCheckBoxSimple) this.addCheckBox(3, 16, 16).setChecked(true).updateRenderPos(145, 70);
+  formatRuinsBox = this.addCheckBox(4, 16, 16).setChecked(false);
   formatRuinsBox.updateRenderPos(145, 90);
-  worldGenBox = this.addCheckBox(5,16, 16).setChecked(worldGen);
+  worldGenBox = this.addCheckBox(5,16, 16).setChecked(false);
   worldGenBox.updateRenderPos(145, 110);
   survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
-  uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);  
-  
+  uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);   
   nameBox = this.addTextField(11, 10, 30, 120, 10, 30, name);  
   weight = this.addTextField(12, 145, 150, 40, 10, 3, weightString);
   value = this.addTextField(13, 145, 170, 40, 10, 3, valueString);
@@ -178,57 +181,36 @@ public void onElementActivated(IGuiElement element)
   ContainerStructureScanner container =null;
   switch(element.getElementNumber())
   {
-  case 0:
+  case 0://done
   closeGUI();
   break;
   
-  case 1: 
-  container = (ContainerStructureScanner)this.inventorySlots;
-  if(container!=null && !name.equals(""))
+  case 1://export
     {
-    int weight = StringTools.safeParseInt(this.weight.getText());
-    int value = StringTools.safeParseInt(this.value.getText());
-    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, false); 
-    } 
-  closeGUI();
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("export", include);
+    tag.setString("name", name);
+    this.sendDataToServer(tag);
+    closeGUI();    
+    }
   break;
-  
-  case 2:
-  break;
-  
+    
   case 8://clearData
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setBoolean("clearItem", true);
-  this.sendDataToServer(tag);
-  closeGUI();
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("reset", true);
+    this.sendDataToServer(tag);
+    closeGUI();  
+    }
   break;
-  
-  case 9://manual edit and then save...  
-  NBTTagCompound editTag = new NBTTagCompound();
-  container = (ContainerStructureScanner)this.inventorySlots;
-//  if(container!=null && !name.equals(""))
-//    {
-//    int weight = StringTools.safeParseInt(this.weight.getText());
-//    int value = StringTools.safeParseInt(this.value.getText());
-//    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, true);     
-//    player.openContainer = new ContainerEditor(player);
-//    mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
-//    } 
-  break;
-  
+    
   case 11://text field, validate text
-  this.nameBox.setText(this.validateString(this.nameBox.getText()));
-  break;
-  
-  case 12:
-  case 13:
-  case 14:
-  case 15:
-  case 16:
-  
-  default:
-  break;
+    {
+    this.nameBox.setText(this.validateString(this.nameBox.getText()));
+    }  
+  break;    
   }
+  
   this.formatAW = formatAWBox.checked();
   this.include = includeBox.checked();
   this.formatRuins = formatRuinsBox.checked();

@@ -31,7 +31,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
+import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
@@ -43,8 +45,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemStructureScanner extends AWItemClickable
 {
-
-public static StructureTemplate currentTemplate = null;
 
 public ItemStructureScanner(int itemID)
   {
@@ -78,26 +78,26 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
     if(viewSettings.hasPos1() && viewSettings.hasPos2() && viewSettings.hasBuildKey())
       {
       list.add("Right Click: Scan and Process (4/4)");
-      list.add("(Shift)Right Click: Cacnel/clear");
+      list.add("(Shift)Right Click: Cancel/clear");
       }        
     else if(!viewSettings.hasPos1())
       {
       list.add("Left Click: Set first bound (1/4)");
       list.add("Hold shift to offset for side hit");
-      list.add("(Shift)Right Click: Cacnel/clear");
+      list.add("(Shift)Right Click: Cancel/clear");
       }
     else if(!viewSettings.hasPos2())
       {
       list.add("Left Click: Set second bound (2/4)");
       list.add("Hold shift to offset for side hit");
-      list.add("(Shift)Right Click: Cacnel/clear");
+      list.add("(Shift)Right Click: Cancel/clear");
       }
     else if(!viewSettings.hasBuildKey())
       {
       list.add("Left Click: Set build key and");
       list.add("    direction (3/4)");
       list.add("Hold shift to offset for side hit");
-      list.add("(Shift)Right Click: Cacnel/clear");
+      list.add("(Shift)Right Click: Cancel/clear");
       }    
     }  
   }
@@ -108,22 +108,10 @@ public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par
   return false;
   }
 
-public boolean scanStructure(World world, EntityPlayer player, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face)
-  {
-  BlockPosition min = BlockTools.getMin(pos1, pos2);
-  BlockPosition max = BlockTools.getMax(pos1, pos2);
-  TemplateScanner scanner = new TemplateScanner();
-  int turns = face==0 ? 2 : face==1 ? 1 : face==2 ? 0 : face==3 ? 3 : 0; //because for some reason my mod math was off?  
-  StructureTemplate template = scanner.scan(world, min, max, key, turns); 
-  currentTemplate = template;
-  return true;
-  }
-
 /**
  * server-side structure setting container, do not access from client-methods!!
  */
 ItemStructureSettings scanSettings = new ItemStructureSettings();
-
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  BlockPosition hit, int side)
   {
@@ -152,27 +140,11 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
       player.addChatMessage("You are too far away to scan that building, move closer to chosen build-key position");
       return false;
       }
-    player.addChatMessage("Initiating Scan and clearing Position Data (Step 4/4)");
-    scanStructure(world, player, pos1, pos2, key, face);
-    scanSettings.clearSettings();
-    scanSettings.setSettingsFor(stack, scanSettings);
+    player.addChatMessage("Initiating Scan (4/4)");
+    GUIHandler.instance().openGUI(Statics.guiStructureScannerCreative, player, 0,0,0);    
     return true;
     } 
   return true;
-  }
-
-@SideOnly(Side.CLIENT)
-@Override
-public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
-  {  
-  if(description!=null)
-    {
-    par3List.addAll(description.getDisplayStackCache());
-    }
-  else
-    {
-    super.getSubItems(par1, par2CreativeTabs, par3List);
-    } 
   }
 
 @Override

@@ -24,6 +24,7 @@ import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_structures.client.gui.structure.GuiCSB;
+import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
 
 public class ClientProxyStructure extends ClientProxyBase
 {
@@ -36,6 +37,7 @@ public ClientProxyStructure()
 public void registerClientData()
   {
   GUIHandler.instance().registerGui(Statics.guiStructureBuilderCreative, GuiCSB.class);
+  GUIHandler.instance().registerGui(Statics.guiStructureScannerCreative, GuiStructureScanner.class);
   }
 
 }
