@@ -23,7 +23,10 @@ package shadowmage.ancient_structures.common.template.build;
 import java.awt.BorderLayout;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
+
+import shadowmage.ancient_framework.common.utils.StringTools;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -170,7 +173,32 @@ public StructureValidationSettings setGenerationValues(int weight, int value, in
 
 public void parseSettings(List<String> lines)
   {
-  
+  Iterator<String> it = lines.iterator();
+  String line;
+  while(it.hasNext() && (line = it.next())!=null)
+    {
+    if(line.startsWith("validation:")){continue;}
+    else if(line.toLowerCase().startsWith("survivalenabled=")){survivalEnabled = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("worldgenenabled=")){worldGenEnabled = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("unique=")){isUnique = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("preserveblocks=")){preserveBlocks = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("selectionweight=")){selectionWeight = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("clustervalue=")){clusterValue = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("minduplicatedistance=")){minDuplicateDistance = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("fill=")){maxMissingEdgeDepth = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("borderleveling=")){borderMaxLeveling = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("borderfill=")){borderMissingEdgeDepth = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("doleveling=")){doLeveling = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("dofill=")){doFillBelow = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("doborderleveling=")){doBorderLeveling = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);} 
+    else if(line.toLowerCase().startsWith(":endvalidation"))
+      {
+      break;
+      }
+    }
   }
 
 public void writeSettings(BufferedWriter writer) throws IOException
