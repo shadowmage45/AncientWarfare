@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.container;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -98,17 +99,6 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
   return true;
   }
 
-public void clearItem()
-  {
-  ItemStack stack = player.getCurrentEquippedItem();
-  if(stack==null || !(stack.getItem() instanceof ItemStructureScanner))
-    {
-    AWLog.logError("Could not clear structure data from item, improper item detected");
-    return;
-    }
-  player.addChatMessage("Clearing Structure Scanner Item, it is now ready to scan the next area");
-  }
-
 @Override
 public void onContainerClosed(EntityPlayer par1EntityPlayer)
   {
@@ -133,14 +123,8 @@ public void handleInitData(NBTTagCompound tag)
 
 @Override
 public List<NBTTagCompound> getInitData()
-  {
-  ArrayList<NBTTagCompound> packetTags = new ArrayList<NBTTagCompound>();
-  NBTTagCompound tag = new NBTTagCompound();
-  /**
-   * TODO
-   */  
-  packetTags.add(tag);
-  return packetTags;
+  {  
+  return Collections.emptyList();
   }
 
 }

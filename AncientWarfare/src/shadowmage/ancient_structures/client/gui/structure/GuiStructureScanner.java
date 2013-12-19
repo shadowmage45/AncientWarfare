@@ -34,34 +34,16 @@ import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 public class GuiStructureScanner extends GuiContainerAdvanced
 {
 
-boolean formatAW = true;
-boolean include = false;
-boolean formatRuins;
-boolean worldGen;
-boolean survival;
+
 String name = "";
-String weightString = "";
-String valueString = "";
-boolean unique;
 
-
-GuiCheckBoxSimple formatAWBox;
 GuiCheckBoxSimple includeBox;
-GuiCheckBoxSimple formatRuinsBox;
-GuiCheckBoxSimple worldGenBox;
-GuiCheckBoxSimple survivalBox;
-GuiCheckBoxSimple uniqueBox;
-
-GuiTextInputLine weight;
-GuiTextInputLine value;
-
 GuiTextInputLine nameBox;
 
 GuiScrollableArea area;
 
 private ContainerStructureScanner container;
 
-int xSize, ySize, zSize;
 /**
  * @param container
  */
@@ -93,28 +75,9 @@ public String getGuiBackGroundTexture()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
-  ContainerStructureScanner container = (ContainerStructureScanner)this.inventorySlots;
-  if(container!=null)
-    {
-    this.drawString(fontRenderer, "Scanned structure size: ", guiLeft+10, guiTop+10, 0xffffffff);
-    this.drawString(fontRenderer, "Width: "+String.valueOf(xSize)+" Length: "+String.valueOf(zSize)+ " Height: " + String.valueOf(ySize), guiLeft+10, guiTop+20, 0xffffffff);
-    }
-  else
-    {
-    AWLog.logError("IMPROPER CONTAINER DETECTED IN SCANNING GUI");
-    closeGUI();
-    }
-  this.drawString(fontRenderer, "Export to AW Format    : ", guiLeft+10, guiTop+53, 0xffffffff);
-  this.drawString(fontRenderer, "Add to game immediately: ", guiLeft+10, guiTop+73, 0xffffffff);  
-  this.drawString(fontRenderer, "Export to Ruins Format : ", guiLeft+10, guiTop+93, 0xffffffff);
-  this.drawString(fontRenderer, "Include for World-Gen  : ", guiLeft+10, guiTop+113, 0xffffffff);  
-  this.drawString(fontRenderer, "Include for Survival   : ", guiLeft+10, guiTop+133, 0xffffffff);  
-  if(worldGenBox.checked())
-    {
-    this.drawString(fontRenderer, "World-Gen Weight       : ", guiLeft+10, guiTop+153, 0xffffffff);
-    this.drawString(fontRenderer, "World-Gen Value        : ", guiLeft+10, guiTop+173, 0xffffffff);
-    this.drawString(fontRenderer, "World-Gen Unique?      : ", guiLeft+10, guiTop+193, 0xffffffff);
-    }  
+  this.drawStringGui("Structure Name: ", 8, 8, 0xffffffff);  
+  this.drawString(fontRenderer, "Add to game immediately: ", guiLeft+8, guiTop+38, 0xffffffff);  
+  this.drawStringGui("Validation Settings: ", 8, 55, 0xffffffff);
   }
 
 @Override
@@ -130,49 +93,22 @@ public void setupControls()
   this.guiElements.clear();
   this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10); 
   this.addGuiButton(1, 45, 18, "Export").updateRenderPos(256-45-10, 30);
-  this.addGuiButton(8, 45, 18, "Reset").updateRenderPos(256-45-10, 50);
+  this.area = new GuiScrollableArea(2, this, 8, 70, getXSize()-16, getYSize() - 78, 8);
   
-  formatAWBox = (GuiCheckBoxSimple) this.addCheckBox(2, 16, 16).setChecked(true).updateRenderPos(145, 50);
-  includeBox = (GuiCheckBoxSimple) this.addCheckBox(3, 16, 16).setChecked(true).updateRenderPos(145, 70);
-  formatRuinsBox = this.addCheckBox(4, 16, 16).setChecked(false);
-  formatRuinsBox.updateRenderPos(145, 90);
-  worldGenBox = this.addCheckBox(5,16, 16).setChecked(false);
-  worldGenBox.updateRenderPos(145, 110);
-  survivalBox = this.addCheckBox(7, 145, 130, 16, 16).setChecked(survival);
-  uniqueBox = this.addCheckBox(10, 145, 190, 16, 16).setChecked(unique);   
-  nameBox = this.addTextField(11, 10, 30, 120, 10, 30, name);  
-  weight = this.addTextField(12, 145, 150, 40, 10, 3, weightString);
-  value = this.addTextField(13, 145, 170, 40, 10, 3, valueString);
   
-  if(worldGenBox.checked())
-    {
-    weight.hidden = false;
-    value.hidden = false;;
-    uniqueBox.hidden = false;
-    }
-  else
-    {
-    uniqueBox.hidden = true;
-    weight.hidden = true;
-    value.hidden = true;
-    }
+  this.guiElements.put(2, area);
+  this.addGuiButton(3, 45, 18, "Reset").updateRenderPos(256-45-10, 50);
+    
+  nameBox = this.addTextField(4, 8, 20, 120, 10, 30, name);
+  
+  includeBox = (GuiCheckBoxSimple) this.addCheckBox(5, 16, 16).setChecked(true).updateRenderPos(145, 35);
+ 
   }
 
 @Override
 public void updateControls()
   {
-  if(worldGenBox.checked())
-    {
-    weight.hidden = false;
-    value.hidden = false;;
-    uniqueBox.hidden = false;
-    }
-  else
-    {
-    uniqueBox.hidden = true;
-    weight.hidden = true;
-    value.hidden = true;
-    }
+
   }
 
 @Override
@@ -187,15 +123,18 @@ public void onElementActivated(IGuiElement element)
   
   case 1://export
     {
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setBoolean("export", include);
-    tag.setString("name", name);
-    this.sendDataToServer(tag);
-    closeGUI();    
+    if(!name.equals(""))
+      {
+      NBTTagCompound tag = new NBTTagCompound();
+      tag.setBoolean("export", includeBox.checked);
+      tag.setString("name", name);
+      this.sendDataToServer(tag);
+      closeGUI();      
+      }    
     }
   break;
     
-  case 8://clearData
+  case 3://clearData
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("reset", true);
@@ -204,34 +143,13 @@ public void onElementActivated(IGuiElement element)
     }
   break;
     
-  case 11://text field, validate text
+  case 4://text field, validate text
     {
     this.nameBox.setText(this.validateString(this.nameBox.getText()));
     }  
   break;    
-  }
-  
-  this.formatAW = formatAWBox.checked();
-  this.include = includeBox.checked();
-  this.formatRuins = formatRuinsBox.checked();
-  this.worldGen = worldGenBox.checked();
-  this.survival = survivalBox.checked();
-  this.unique = uniqueBox.checked();
-  this.name = nameBox.getText();
-  this.valueString = value.getText();
-  this.weightString = weight.getText();
-  if(worldGenBox.checked())
-    {
-    weight.hidden = false;
-    value.hidden = false;;
-    uniqueBox.hidden = false;
-    }
-  else
-    {
-    uniqueBox.hidden = true;
-    weight.hidden = true;
-    value.hidden = true;
-    }
+  }  
+  this.name = nameBox.getText(); 
   }
 
 protected String validateString(String input)
