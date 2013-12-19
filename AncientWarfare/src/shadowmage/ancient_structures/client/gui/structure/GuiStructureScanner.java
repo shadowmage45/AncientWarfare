@@ -29,7 +29,6 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.common.container.ContainerEditor;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
@@ -207,14 +206,14 @@ public void onElementActivated(IGuiElement element)
   case 9://manual edit and then save...  
   NBTTagCompound editTag = new NBTTagCompound();
   container = (ContainerStructureScanner)this.inventorySlots;
-  if(container!=null && !name.equals(""))
-    {
-    int weight = StringTools.safeParseInt(this.weight.getText());
-    int value = StringTools.safeParseInt(this.value.getText());
-    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, true);     
-    player.openContainer = new ContainerEditor(player);
-    mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
-    } 
+//  if(container!=null && !name.equals(""))
+//    {
+//    int weight = StringTools.safeParseInt(this.weight.getText());
+//    int value = StringTools.safeParseInt(this.value.getText());
+//    container.sendSettingsAndExport(name, worldGen, survival, formatRuins, formatAW, include, weight, value, unique, true);     
+//    player.openContainer = new ContainerEditor(player);
+//    mc.displayGuiScreen(new GuiEditor((ContainerEditor)player.openContainer, null));
+//    } 
   break;
   
   case 11://text field, validate text

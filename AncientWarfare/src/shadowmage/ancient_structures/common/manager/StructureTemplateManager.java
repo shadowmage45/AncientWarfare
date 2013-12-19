@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.manager;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -95,6 +96,16 @@ private void readClientStructure(NBTTagCompound tag)
   {
   StructureTemplateClient template = StructureTemplateClient.readFromNBT(tag);
   addTemplate(template);
+  }
+
+public Collection<StructureTemplateClient> getClientStructures()
+  {
+  return clientTemplates.values();
+  }
+
+public StructureTemplate getTemplate(String name)
+  {
+  return this.loadedTemplates.get(name);
   }
 
 }

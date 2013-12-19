@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.common.container;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,13 +29,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_structures.common.structures.data.StructureBuildSettings;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
+import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 
 public class ContainerCSB extends ContainerBase
 {
 
-public StructureBuildSettings clientSettings;
-public StructureBuildSettings serverSettings;
+public String structureName = "";
+
+ItemStructureSettings settings = new ItemStructureSettings();
 
 /**
  * @param openingPlayer
@@ -49,76 +52,46 @@ public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || builderItem.getItem()==null)
+  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative)
     {
     return;
     } 
-  NBTTagCompound stackTag;
-  if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData"))
-    {
-    stackTag = builderItem.getTagCompound().getCompoundTag("structData");
-    }
-  else
-    {
-    stackTag = new NBTTagCompound();
-    }  
-  this.serverSettings = StructureBuildSettings.constructFromNBT(stackTag); 
-  }
-
-/**
- * relay the client-side info back to parent
- */
-public void updateServerContainer()
-  {
-  if(clientSettings!=null)
-    {
-    NBTTagCompound baseTag = new NBTTagCompound();
-    NBTTagCompound tag = clientSettings.getNBTTag();
-    baseTag.setCompoundTag("structData", tag);
-    this.sendDataToServer(baseTag);
-    }
+  settings.getSettingsFor(builderItem, settings);
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  if(player.worldObj.isRemote)
-    {
-    AWLog.logError("Server packet recieved on client side!");
-    return;
-    }  
-  if(tag.hasKey("structData") && this.serverSettings!=null)
-    {
-    this.serverSettings.readFromNBT(tag.getCompoundTag("structData"));
-    }
+  AWLog.logDebug("rec info...");
   if(tag.hasKey("name"))
     {
-    this.serverSettings.name = tag.getString("name");
+    this.settings.setName(tag.getString("name")); 
     }
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  if(tag.hasKey("structData"))
+  if(tag.hasKey("name"))
     {
-    this.clientSettings = StructureBuildSettings.constructFromNBT(tag.getCompoundTag("structData"));
+    this.structureName = tag.getString("name");
     }
+  this.refreshGui();
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
   {  
-  if(this.serverSettings!=null)
+  ItemStack builderItem = player.inventory.getCurrentItem();  
+  if(builderItem!=null && builderItem.getItem() == AWStructuresItemLoader.structureBuilderCreative && builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData") && builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
     {
-    List<NBTTagCompound> initList = new ArrayList<NBTTagCompound>();  
-    NBTTagCompound baseTag = new NBTTagCompound();
-    NBTTagCompound tag = serverSettings.getNBTTag();    
-    baseTag.setCompoundTag("structData", tag);
-    initList.add(baseTag);
-    return initList;    
-    }
-  return null;
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setString("name", builderItem.getTagCompound().getCompoundTag("structData").getString("name"));    
+    ArrayList<NBTTagCompound> initList = new ArrayList<NBTTagCompound>();    
+    initList.add(tag);
+    return initList;
+    } 
+  return Collections.emptyList();
   }
 
 @Override
@@ -130,14 +103,11 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();  
-  if(builderItem==null || builderItem.getItem()==null)
+  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative)
     {
     return;
     }
-  /**
-   * TODO fix validation of item prior to setting nbt data
-   */
-  builderItem.setTagInfo("structData", serverSettings.getNBTTag());  
+  settings.setSettingsFor(builderItem, settings);  
   }
 
 }

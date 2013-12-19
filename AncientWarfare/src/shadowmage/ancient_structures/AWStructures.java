@@ -64,7 +64,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 clientSideRequired = true,
 serverSideRequired = true,
 packetHandler = PacketHandler.class,
-channels = {"AW_struct"},
+channels = {"AW_struct", "AW_gui"},
 versionBounds="["+Statics.STRUCTURE_VERSION+",)"
 )
 

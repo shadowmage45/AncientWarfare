@@ -117,6 +117,11 @@ public void refreshGui()
   this.forceUpdate = true;
   }
 
+public void addElement(GuiElement element)
+  {
+  this.guiElements.put(element.getElementNumber(), element);
+  }
+
 @Override
 public void onElementReleased(IGuiElement element)
   {  

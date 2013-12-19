@@ -18,29 +18,43 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.client.utils;
+package shadowmage.ancient_structures.common.utils;
 
 import java.util.Comparator;
 
-import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.template.StructureTemplateClient;
 
-public class ClientStructureComparator implements Comparator<StructureClientInfo>
+public class ComparatorStructureTemplateClient implements Comparator<StructureTemplateClient>
 {
 
-public static final ClientStructureComparator COMPARATOR = new ClientStructureComparator();
+String filterText = "";
 
-/**
- * 
- */
-public ClientStructureComparator()
+public void setFilterText(String tex)
   {
-  // TODO Auto-generated constructor stub
+  this.filterText = tex;
   }
 
 @Override
-public int compare(StructureClientInfo arg0, StructureClientInfo arg1)
+public int compare(StructureTemplateClient arg0, StructureTemplateClient arg1)
   {
-  return arg0.name.toLowerCase().compareTo(arg1.name.toLowerCase());
+  if(arg0==null && arg1!=null){return 1;}
+  else if(arg0!=null && arg1==null){return -1;}
+  else if(arg0==null && arg1==null){return 0;}
+  String a = arg0.name.toLowerCase();
+  String b = arg1.name.toLowerCase();
+  String tex = filterText.toLowerCase();
+  if(a.startsWith(tex) && b.startsWith(tex))
+    {
+    return arg0.name.compareTo(arg1.name);
+    }
+  else if(a.startsWith(tex))
+    {
+    return -1;
+    }
+  else if(b.startsWith(tex))
+    {
+    return 1;
+    }
+  return arg0.name.compareTo(arg1.name);  
   }
-
 }

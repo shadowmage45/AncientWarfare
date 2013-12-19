@@ -146,12 +146,12 @@ public void handleExportSettings(NBTTagCompound tag)
 
 public void handleEditServer(NBTTagCompound tag)
   {
-  this.handleExportSettings(tag);
-  this.export();
-  ContainerEditor edit = new ContainerEditor(player);
-  edit.setStructureServer(tag);
-  this.clearItem();
-  player.openContainer = edit;
+//  this.handleExportSettings(tag);
+//  this.export();
+//  ContainerEditor edit = new ContainerEditor(player);
+//  edit.setStructureServer(tag);
+//  this.clearItem();
+//  player.openContainer = edit;
   }
 
 public void sendSettingsAndExport(String name, boolean world, boolean surv, boolean fR, boolean fAW, boolean inc, int weight, int val, boolean unique, boolean edit)

@@ -27,12 +27,13 @@ import shadowmage.ancient_framework.common.utils.BlockPosition;
 public class ItemStructureSettings
 {
 
-boolean[] readKeys = new boolean[3];
-boolean[] setKeys = new boolean[3];
+boolean[] readKeys = new boolean[4];
+boolean[] setKeys = new boolean[4];
 BlockPosition pos1;
 BlockPosition pos2;
 BlockPosition key;
 int buildFace;
+String name;
 
 public ItemStructureSettings()
   {
@@ -56,7 +57,7 @@ public static ItemStructureSettings getSettingsFor(ItemStack stack, ItemStructur
     {
     tag = new NBTTagCompound();
     }
-  for(int i = 0; i < 3; i++)
+  for(int i = 0; i < 4; i++)
     {
     settings.readKeys[i] = false;
     }
@@ -75,6 +76,11 @@ public static ItemStructureSettings getSettingsFor(ItemStack stack, ItemStructur
     settings.key.read(tag.getCompoundTag("buildKey"));
     settings.setKeys[2] = true;
     settings.buildFace = tag.getCompoundTag("buildKey").getInteger("face");
+    }
+  if(tag.hasKey("name"))
+    {
+    settings.name = tag.getString("name");
+    settings.setKeys[3] = true;
     }
   return settings;
   }
@@ -101,6 +107,10 @@ public static void setSettingsFor(ItemStack item, ItemStructureSettings settings
     tag1.setInteger("face", settings.buildFace);
     tag.setTag("buildKey", tag1);
     }  
+  if(settings.setKeys[3])
+    {
+    tag.setString("name", settings.name);
+    }
   item.setTagInfo("structData", tag);
   }
 
@@ -123,6 +133,12 @@ public void setBuildKey(int x, int y, int z, int face)
   setKeys[2] = true;
   }
 
+public void setName(String name)
+  {
+  this.name = name;
+  setKeys[3] = true;
+  }
+
 public boolean hasPos1()
   {
   return setKeys[0];
@@ -136,6 +152,11 @@ public boolean hasPos2()
 public boolean hasBuildKey()
   {
   return setKeys[2];
+  }
+
+public boolean hasName()
+  {
+  return setKeys[3];
   }
 
 public BlockPosition pos1()

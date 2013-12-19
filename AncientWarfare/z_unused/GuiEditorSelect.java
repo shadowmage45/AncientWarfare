@@ -31,10 +31,10 @@ import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_structures.client.utils.ClientStructureComparator;
 import shadowmage.ancient_structures.common.container.ContainerEditor;
 import shadowmage.ancient_structures.common.structures.StructureManager;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.utils.ClientStructureComparator;
 
 public class GuiEditorSelect extends GuiContainerAdvanced
 {

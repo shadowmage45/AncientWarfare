@@ -31,8 +31,10 @@ import java.util.Scanner;
 
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
+import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateParser
@@ -233,14 +235,17 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
   ruleArray = new TemplateRule[parsedRules.size()+1];
   for(TemplateRule rule : parsedRules)
     {
-    ruleArray[rule.ruleNumber] = rule;
+	if(rule!=null && rule.ruleNumber>0)
+	  {
+	  ruleArray[rule.ruleNumber] = rule;
+	  }    
     }
   return constructTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset, templateData, ruleArray, validation);  
   }
 
 private TemplateRule parseRule(List<String> templateLines)
   {
-  return null;
+  return AWStructures.instance.pluginManager.getRule(templateLines);
   }
 
 private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, StructureValidationSettings validation)

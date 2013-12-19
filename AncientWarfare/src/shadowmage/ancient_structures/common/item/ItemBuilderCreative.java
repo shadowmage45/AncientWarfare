@@ -20,16 +20,20 @@
  */
 package shadowmage.ancient_structures.common.item;
 
+import java.util.List;
+
 import buildcraft.builders.GuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
+import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 
@@ -45,6 +49,7 @@ public ItemBuilderCreative(int itemID)
   super(itemID);
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
   this.hasLeftClick = true;
+  this.setMaxStackSize(1);  
   }
 
 @Override
@@ -67,6 +72,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   return false;
   }
 
+ItemStructureSettings buildSettings = new ItemStructureSettings();
 @Override
 public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
@@ -74,19 +80,46 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     return false;
     }
-  if(player.isSneaking())
+  AWLog.logDebug("left click on builder item...");
+  buildSettings.getSettingsFor(stack, buildSettings);
+  if(buildSettings.hasName())
     {
-    hit.offsetForMCSide(side);
-    }
-  StructureTemplate template = ItemStructureScanner.currentTemplate;
-  if(template==null)
+    StructureTemplate template = StructureTemplateManager.instance().getTemplate(buildSettings.name);
+    if(template==null)
+      {
+      player.addChatMessage("no structure found to build...");
+      return true;
+      }
+    if(player.isSneaking())
+      {
+      hit.offsetForMCSide(side);
+      }
+    AWLog.logDebug("constructing template: "+template);    
+    StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
+    builder.instantConstruction();
+    }  
+  else
     {
     player.addChatMessage("no structure found to build...");
     return true;
     }
-  StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
-  builder.instantConstruction();
   return true;
   }
+
+ItemStructureSettings viewSettings = new ItemStructureSettings();
+@Override
+public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
+  {
+  super.addInformation(stack, player, list, par4);
+  String structure = "none";
+  viewSettings.getSettingsFor(stack, viewSettings);
+  if(viewSettings.hasName())
+    {
+    structure = viewSettings.name;
+    }
+  list.add("Current Structure: "+structure);
+  }
+
+
 
 }

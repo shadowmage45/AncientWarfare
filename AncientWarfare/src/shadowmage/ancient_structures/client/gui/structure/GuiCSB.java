@@ -22,19 +22,20 @@ package shadowmage.ancient_structures.client.gui.structure;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.ancient_structures.client.utils.ClientStructureComparator;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
-import shadowmage.ancient_structures.common.structures.StructureManager;
-import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
+import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+import shadowmage.ancient_structures.common.template.StructureTemplateClient;
+import shadowmage.ancient_structures.common.utils.ComparatorStructureTemplateClient;
 
 /**
  * creative structure builder
@@ -45,11 +46,10 @@ public class GuiCSB extends GuiContainerAdvanced
 {
 
 private ContainerCSB container;
-private List<StructureClientInfo> clientStructures;
-
 String currentStructure = "";
 
-
+ArrayList<StructureTemplateClient> clientStructures = new ArrayList<StructureTemplateClient>();
+ComparatorStructureTemplateClient sorter = new ComparatorStructureTemplateClient();
 
 /**
  * @param par1Container
@@ -58,9 +58,8 @@ public GuiCSB(ContainerBase container)
   {
   super(container);
   this.container = (ContainerCSB) container;
-  clientStructures = new ArrayList<StructureClientInfo>();
-  clientStructures.addAll(StructureManager.instance().getClientStructures());
-  Collections.sort(clientStructures, ClientStructureComparator.COMPARATOR);
+  clientStructures.addAll(StructureTemplateManager.instance().getClientStructures());
+  Collections.sort(clientStructures, sorter);
   }
 
 @Override
@@ -90,46 +89,35 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-  if(this.container.clientSettings!=null)
-    {
-    if(!this.currentStructure.equals(container.clientSettings.name))
-      {
-      this.currentStructure = container.clientSettings.name;
-      }
-    } 
   area.updateGuiPos(guiLeft, guiTop);
   }
 
-
-public void setStructureName(String name)
+@Override
+public void refreshGui()
   {
-  this.currentStructure = name;
-  this.container.clientSettings.name = name;
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("name", name);
-  this.sendDataToServer(tag);
+  super.refreshGui();
+  this.currentStructure = this.container.structureName;
   }
 
 GuiScrollableArea area;
+GuiTextInputLine searchBox;
 
 @Override
 public void setupControls()
   {
   this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10); 
-  GuiButtonSimple button = (GuiButtonSimple)this.addGuiButton(3, 85, 16, "Advanced Setup").updateRenderPos(256-85-10, 30);
-  button.renderTooltip = true;
-  button.addToToolitp("Access advanced controls for spawning");
-  button.addToToolitp("vehicles/npcs/gates, and team overrides");
-  
+
+  searchBox = (GuiTextInputLine) this.addTextField(1, getXSize()-16, 12, 30, "").updateRenderPos(8, 10+18+4);
+
   int totalHeight = clientStructures.size()*14;
   area = new GuiScrollableArea(4, this, 10, 50, this.getXSize()-20, this.getYSize()-60, totalHeight);
   this.guiElements.put(4, area);
-  
+
   int kX = 5;
   int kY = 0;
   int buttonHeight = 12;
   int buffer = 2;
-  
+
   for(int i = 0; i < clientStructures.size(); i++)
     {
     String name = this.clientStructures.get(i).name;
@@ -138,12 +126,29 @@ public void setupControls()
     } 
   }
 
-
-
 @Override
 public void updateControls()
   {
 
+  }
+
+@Override
+public void onElementKeyTyped(char ch, int keyNum)
+  {
+  super.onElementKeyTyped(ch, keyNum);
+  sorter.setFilterText(searchBox.getText());
+  Collections.sort(clientStructures, sorter);  
+  area.elements.clear();
+  int kX = 5;
+  int kY = 0;
+  int buttonHeight = 12;
+  int buffer = 2;
+  for(int i = 0; i < clientStructures.size(); i++)
+    {
+    String name = this.clientStructures.get(i).name;
+    kY = i * (buffer+buttonHeight);
+    area.addGuiElement(new GuiButtonSimple(i+20, area, this.getXSize()-20-16-10, buttonHeight, name).updateRenderPos(kX, kY));
+    } 
   }
 
 @Override
@@ -153,13 +158,9 @@ public void onElementActivated(IGuiElement button)
     {
     case 0:
     closeGUI();
-    return;
-  
-    case 3:
-    mc.displayGuiScreen(new GuiCSBAdvancedSelection((ContainerCSB)inventorySlots, this));
-    return;   
+    return; 
     }  
- 
+
   if(button.getElementNumber()>=20)
     {
     int index = button.getElementNumber()-20;
@@ -167,8 +168,12 @@ public void onElementActivated(IGuiElement button)
       { 
       return;
       }
+    AWLog.logDebug("sending datas...");
     this.forceUpdate = true;
-    this.setStructureName(this.clientStructures.get(index).name);
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setString("name", this.clientStructures.get(index).name);
+    this.currentStructure = this.clientStructures.get(index).name;
+    this.sendDataToServer(tag);
     }  
   }
 

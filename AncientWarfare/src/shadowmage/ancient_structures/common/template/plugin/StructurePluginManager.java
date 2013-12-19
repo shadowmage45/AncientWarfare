@@ -29,6 +29,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
@@ -168,6 +169,7 @@ public TemplateRule getRule(List<String> ruleData)
         }
       }
     }
+  AWLog.logDebug("parsed rule: "+ruleNumber);
   StructureRuleRegistration reg = registrationByName.get(name);
   if(name==null || ruleNumber<=0 || ruleDataPackage.size()==0 || reg==null)
     {
@@ -177,7 +179,10 @@ public TemplateRule getRule(List<String> ruleData)
   try
     {
     TemplateRule rule = clz.getConstructor().newInstance();
+    
+    rule.ruleNumber = ruleNumber;
     rule.parseRuleData(ruleDataPackage);
+    return rule;
     } catch (InstantiationException e)
     {
     // TODO Auto-generated catch block
