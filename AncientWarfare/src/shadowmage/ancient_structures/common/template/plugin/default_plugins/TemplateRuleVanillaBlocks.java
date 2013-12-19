@@ -94,9 +94,16 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
 public void parseRuleData(List<String> ruleData)
   {
   if(ruleData.size()<2){throw new IllegalArgumentException("not enough data for block rule");}
-  this.blockName = StringTools.safeParseString("=", ruleData.get(0));
-  this.meta = StringTools.safeParseInt("=", ruleData.get(1));
-  this.buildPass = StringTools.safeParseInt("=", ruleData.get(2));
+  for(String line : ruleData)
+    {
+    if(line.toLowerCase().startsWith("blockname=")){this.blockName = StringTools.safeParseString("=", line);}
+    else if(line.toLowerCase().startsWith("meta=")){this.meta = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("buildpass=")){this.buildPass = StringTools.safeParseInt("=", line);}
+    }
+  if(this.blockName==null || this.blockName.equals(""))
+    {
+    throw new IllegalArgumentException("Not enough data to fill block rule for blockName: "+blockName);
+    }
   }
 
 @Override
