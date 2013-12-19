@@ -28,7 +28,7 @@ import java.io.IOException;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 
@@ -47,12 +47,11 @@ public final int xOffset, yOffset, zOffset;
  */
 private TemplateRule[] templateRules;
 private short[] templateData;
-private String[] templateLines;
 
 /**
  * world generation placement validation settings, optional, should only exist if a world-gen entry was loaded/parsed for this structure
  */
-private StructureValidationSettings validationSettings;
+private StructureValidationSettingsDefault validationSettings;
 
 public StructureTemplate(String name, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
@@ -76,19 +75,9 @@ public short[] getTemplateData()
   return templateData;
   }
 
-public String[] getTemplateLines()
-  {
-  return templateLines;
-  }
-
-public StructureValidationSettings getValidationSettings()
+public StructureValidationSettingsDefault getValidationSettings()
   {
   return validationSettings;
-  }
-
-public void setTemplateLines(String[] lines)
-  {
-  this.templateLines = lines;
   }
 
 public void setRuleArray(TemplateRule[] rules)
@@ -101,7 +90,7 @@ public void setTemplateData(short[] datas)
   this.templateData = datas;
   }
 
-public void setValidationSettings(StructureValidationSettings settings)
+public void setValidationSettings(StructureValidationSettingsDefault settings)
   {
   this.validationSettings = settings;
   }

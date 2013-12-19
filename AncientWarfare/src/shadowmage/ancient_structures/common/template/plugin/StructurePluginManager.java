@@ -31,6 +31,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
@@ -38,7 +39,11 @@ import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 public class StructurePluginManager
 {
 
-private List<StructureContentPlugin> loadedPlugins = new ArrayList<StructureContentPlugin>();
+private List<StructureValidationPlugin> loadedValidationPlugins = new ArrayList<StructureValidationPlugin>();
+private HashMap<String, Class<? extends StructureValidationSettings>> validationClassesByName = new HashMap<String, Class<? extends StructureValidationSettings>>();
+private HashMap<Class<? extends StructureValidationSettings>, String> validationClassesByClass = new HashMap<Class<? extends StructureValidationSettings>, String>();
+
+private List<StructureContentPlugin> loadedContentPlugins = new ArrayList<StructureContentPlugin>();
 
 private HashMap<Block, StructureRuleRegistration> blockRules = new HashMap<Block, StructureRuleRegistration>();
 private HashMap<Class<?extends Entity>, StructureRuleRegistration> entityRules = new HashMap<Class<?extends Entity>, StructureRuleRegistration>();
@@ -57,16 +62,26 @@ public void loadPlugins()
   vanillaPlugin = new StructurePluginVanillaHandler();
   this.addPlugin(vanillaPlugin);
   
-  for(StructureContentPlugin plugin : this.loadedPlugins)
+  for(StructureContentPlugin plugin : this.loadedContentPlugins)
     {
     plugin.addHandledBlocks(this);
     plugin.addHandledEntities(this);
+    }
+  
+  for(StructureValidationPlugin plugin : this.loadedValidationPlugins)
+    {
+    plugin.registerValidationClasses(this);
     }
   }
 
 public void addPlugin(StructureContentPlugin plugin)
   {
-  loadedPlugins.add(plugin);
+  loadedContentPlugins.add(plugin);
+  }
+
+public void addPlugin(StructureValidationPlugin plugin)
+  {
+  loadedValidationPlugins.add(plugin);
   }
 
 public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, int x, int y, int z)
@@ -130,6 +145,12 @@ public void registerBlockHandler(String pluginName, Block block, Class<? extends
   idByRuleClass.put(ruleClass, pluginName);
   }
 
+public void registerValidationClass(String pluginName, Class<? extends StructureValidationSettings> validationClass)
+  {
+  validationClassesByClass.put(validationClass, pluginName);
+  validationClassesByName.put(pluginName, validationClass);
+  }
+
 public TemplateRule getRule(List<String> ruleData)
   {
   Iterator<String> it = ruleData.iterator();
@@ -140,7 +161,7 @@ public TemplateRule getRule(List<String> ruleData)
   while(it.hasNext())
     {
     line = it.next();
-    if(line.startsWith("rule: "))
+    if(line.startsWith("rule:"))
       {
       continue;
       }
@@ -183,29 +204,29 @@ public TemplateRule getRule(List<String> ruleData)
     rule.ruleNumber = ruleNumber;
     rule.parseRuleData(ruleDataPackage);
     return rule;
-    } catch (InstantiationException e)
+    } 
+  catch (InstantiationException e)
     {
-    // TODO Auto-generated catch block
     e.printStackTrace();
-    } catch (IllegalAccessException e)
+    } 
+  catch (IllegalAccessException e)
     {
-    // TODO Auto-generated catch block
     e.printStackTrace();
-    } catch (IllegalArgumentException e)
+    } 
+  catch (IllegalArgumentException e)
     {
-    // TODO Auto-generated catch block
     e.printStackTrace();
-    } catch (InvocationTargetException e)
+    } 
+  catch (InvocationTargetException e)
     {
-    // TODO Auto-generated catch block
     e.printStackTrace();
-    } catch (NoSuchMethodException e)
+    } 
+  catch (NoSuchMethodException e)
     {
-    // TODO Auto-generated catch block
     e.printStackTrace();
-    } catch (SecurityException e)
+    } 
+  catch (SecurityException e)
     {
-    // TODO Auto-generated catch block
     e.printStackTrace();
     }
   return null;

@@ -33,7 +33,7 @@ public class StructureBuilder
 StructureTemplate template;
 World world;
 int turns;
-int maxPriority;
+int maxPriority = 4;
 int currentPriority;//current build priority...may not be needed anymore?
 int currentX, currentY, currentZ;//coords in template
 int destXSize, destYSize, destZSize;
@@ -142,7 +142,10 @@ protected void placeCurrentPosition()
 
 protected void placeRule(TemplateRule rule)
   {  
-  rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);
+  if(rule.shouldPlaceOnBuildPass(world, turns, destination.x, destination.y, destination.z, currentPriority))
+    {
+    rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);    
+    }
   }
 
 protected void incrementDestination()

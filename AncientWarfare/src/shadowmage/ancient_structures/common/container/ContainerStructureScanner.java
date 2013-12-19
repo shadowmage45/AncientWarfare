@@ -38,7 +38,7 @@ import shadowmage.ancient_structures.common.item.ItemStructureScanner;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
@@ -111,7 +111,7 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
 //  tag.setInteger("value", clusterLine.getIntVal());
 //  tag.setInteger("dupe", minDuplicateLine.getIntVal());
 
-  StructureValidationSettings settings = new StructureValidationSettings();
+  StructureValidationSettingsDefault settings = new StructureValidationSettingsDefault();
   settings.setToggles(tag.getBoolean("world"), tag.getBoolean("unique"), tag.getBoolean("survival"), tag.getBoolean("doLeveling"), tag.getBoolean("doFill"), tag.getBoolean("doBorderLeveling"), tag.getBoolean("doBorderFill"), tag.getBoolean("preserveBlocks"));
   settings.setValidationParams(tag.getInteger("leveling"), tag.getInteger("fill"), tag.getInteger("border"), tag.getInteger("borderLeveling"), tag.getInteger("borderFill"));
   settings.setGenerationValues(tag.getInteger("weight"), tag.getInteger("value"), tag.getInteger("dupe"));

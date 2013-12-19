@@ -39,8 +39,9 @@ import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 public class TemplateRuleVanillaBlocks extends TemplateRuleBlock
 {
 
-String blockName;
-int meta;
+public String blockName;
+public int meta;
+public int buildPass = 0;
 
 /**
  * constructor for dynamic construction.  passed world and coords so that the rule can handle its own logic internally
@@ -56,6 +57,7 @@ public TemplateRuleVanillaBlocks(World world, int x, int y, int z, Block block, 
   super(world, x, y, z, block, meta, turns);
   this.blockName = block.getUnlocalizedName();
   this.meta = BlockDataManager.getRotatedMeta(block, meta, turns);
+  this.buildPass = BlockDataManager.getBlockPriority(block.blockID, meta);
   }
 
 public TemplateRuleVanillaBlocks()
@@ -78,6 +80,8 @@ public void writeRuleData(BufferedWriter out) throws IOException
   out.newLine();
   out.write("meta="+this.meta);
   out.newLine();
+  out.write("buildPass="+this.buildPass);
+  out.newLine();
   }
   
 @Override
@@ -92,6 +96,7 @@ public void parseRuleData(List<String> ruleData)
   if(ruleData.size()<2){throw new IllegalArgumentException("not enough data for block rule");}
   this.blockName = StringTools.safeParseString("=", ruleData.get(0));
   this.meta = StringTools.safeParseInt("=", ruleData.get(1));
+  this.buildPass = StringTools.safeParseInt("=", ruleData.get(2));
   }
 
 @Override
@@ -103,6 +108,12 @@ public void addResources(List<ItemStack> resources)
     {
     resources.add(new ItemStack(count.id, count.count, count.meta));    
     }
+  }
+
+@Override
+public boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass)
+  {
+  return buildPass == this.buildPass;
   }
 
 }

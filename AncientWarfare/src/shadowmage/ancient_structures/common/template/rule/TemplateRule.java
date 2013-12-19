@@ -61,4 +61,6 @@ public abstract void parseRuleData(List<String> ruleData);
 public abstract void writeRuleData(BufferedWriter out) throws IOException;
 
 public abstract void addResources(List<ItemStack> resources);
+
+public abstract boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass);
 }

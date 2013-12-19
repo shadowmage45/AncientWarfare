@@ -33,7 +33,7 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
@@ -61,7 +61,7 @@ public StructureTemplate parseTemplate(File file)
       templateLines.add(scan.nextLine());
       }
     AWLog.logDebug("parsing templateLines for: "+file.getAbsolutePath());
-    return parseTemplateLines(templateLines); 
+    return parseTemplateLines(file, templateLines); 
     } 
   catch (FileNotFoundException e)
     {
@@ -88,14 +88,14 @@ public StructureTemplate parseTemplate(File file)
   return null;
   }
 
-private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalArgumentException
+private StructureTemplate parseTemplateLines(File file, List<String> lines) throws IllegalArgumentException
   {
   Iterator<String> it = lines.iterator();
   String line;
  
   List<TemplateRule> parsedRules = new ArrayList<TemplateRule>();  
   TemplateRule[] ruleArray = null;
-  StructureValidationSettings validation = null;  
+  StructureValidationSettingsDefault validation = null;  
   List<String> groupedLines = new ArrayList<String>();
   
   
@@ -161,7 +161,7 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
     if(!newVersion)
       {
       AWLog.logDebug("found a possible old format file...offering for conversion");
-      return converter.convertOldTemplate(lines);
+      return converter.convertOldTemplate(file, lines);
       }
     /**
      * parse out validation data
@@ -178,10 +178,7 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
           break;
           }
         }
-      parseValidation(groupedLines);
-      /**
-       * parse out validation data
-       */   
+      parseValidation(groupedLines);    
       groupedLines.clear();
       }
     
@@ -235,10 +232,10 @@ private StructureTemplate parseTemplateLines(List<String> lines) throws IllegalA
   ruleArray = new TemplateRule[parsedRules.size()+1];
   for(TemplateRule rule : parsedRules)
     {
-	if(rule!=null && rule.ruleNumber>0)
-	  {
-	  ruleArray[rule.ruleNumber] = rule;
-	  }    
+  	if(rule!=null && rule.ruleNumber>0)
+  	  {
+  	  ruleArray[rule.ruleNumber] = rule;
+  	  }    
     }
   return constructTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset, templateData, ruleArray, validation);  
   }
@@ -248,7 +245,7 @@ private TemplateRule parseRule(List<String> templateLines)
   return AWStructures.instance.pluginManager.getRule(templateLines);
   }
 
-private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, StructureValidationSettings validation)
+private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, StructureValidationSettingsDefault validation)
   {
   StructureTemplate template = new StructureTemplate(name, x, y, z, xo, yo, zo);
   template.setRuleArray(rules);

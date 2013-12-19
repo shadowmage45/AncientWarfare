@@ -18,20 +18,16 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.build;
+package shadowmage.ancient_structures.common.template.plugin;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
-import shadowmage.ancient_framework.common.utils.StringTools;
-
-public abstract class StructureValidationSettings
+public abstract class StructureValidationPlugin
 {
 
-public abstract void parseSettings(List<String> lines);
+public StructureValidationPlugin()
+  {
+  
+  }
 
-public abstract void writeSettings(BufferedWriter writer) throws IOException;
+public abstract void registerValidationClasses(StructurePluginManager manager);
 
 }
