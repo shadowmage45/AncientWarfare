@@ -1,5 +1,5 @@
 /**
-   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   Copyright 2012-2013 John Cummens (aka Shadowmage, Shadowmage4513)
    This software is distributed under the terms of the GNU General Public License.
    Please see COPYING for precise license information.
 
@@ -20,76 +20,50 @@
  */
 package shadowmage.ancient_structures.common.container;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
-import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 
-public class ContainerCSB extends ContainerBase
+public class ContainerSpawnerPlacer extends ContainerBase
 {
-
-public String structureName = "";
-
-ItemStructureSettings settings = new ItemStructureSettings();
-
+public String mobID = "Pig";
 /**
  * @param openingPlayer
  * @param synch
  */
-public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z) 
+public ContainerSpawnerPlacer(EntityPlayer openingPlayer, int x, int y, int z)
   {
   super(openingPlayer, null);
-  if(player.worldObj.isRemote)
+  ItemStack builderItem = player.inventory.getCurrentItem(); 
+  if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("spawnData"))
     {
-    return;
+    this.mobID = builderItem.getTagCompound().getCompoundTag("spawnData").getString("mobID");
     }
-  ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative)
-    {
-    return;
-    } 
-  settings.getSettingsFor(builderItem, settings);
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  AWLog.logDebug("rec info...");
-  if(tag.hasKey("name"))
+  if(tag.hasKey("mobID"))
     {
-    this.settings.setName(tag.getString("name")); 
+    this.mobID = tag.getString("mobID");
     }
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  if(tag.hasKey("name"))
-    {
-    this.structureName = tag.getString("name");
-    }
-  this.refreshGui();
+  this.mobID = tag.getString("mobID");
   }
 
 @Override
 public List<NBTTagCompound> getInitData()
-  {  
-  ItemStack builderItem = player.inventory.getCurrentItem();  
-  if(builderItem!=null && builderItem.getItem() == AWStructuresItemLoader.structureBuilderCreative && builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData") && builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
-    {
-    NBTTagCompound tag = new NBTTagCompound();
-    tag.setString("name", builderItem.getTagCompound().getCompoundTag("structData").getString("name"));    
-    ArrayList<NBTTagCompound> initList = new ArrayList<NBTTagCompound>();    
-    initList.add(tag);
-    return initList;
-    } 
+  {
   return Collections.emptyList();
   }
 
@@ -102,11 +76,15 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();  
-  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative)
+  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.spawnerPlacer)
     {
     return;
     }
-  settings.setSettingsFor(builderItem, settings);  
+  if(!builderItem.hasTagCompound() || !builderItem.getTagCompound().hasKey("spawnData"))
+    {
+    builderItem.setTagInfo("spawnData", new NBTTagCompound());
+    }
+  builderItem.getTagCompound().getCompoundTag("spawnData").setString("mobID", mobID);
   }
 
 }

@@ -18,28 +18,39 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.client.proxy;
+package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
-import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
-import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_structures.client.gui.structure.GuiCSB;
-import shadowmage.ancient_structures.client.gui.structure.GuiSpawnerPlacer;
-import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
+import net.minecraft.block.Block;
+import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
+import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 
-public class ClientProxyStructure extends ClientProxyBase
+public class StructurePluginModDefault extends StructureContentPlugin
 {
 
-public ClientProxyStructure()
+public StructurePluginModDefault()
   {
   
   }
 
-public void registerClientData()
+@Override
+public void addHandledBlocks(StructurePluginManager manager)
   {
-  GUIHandler.instance().registerGui(Statics.guiStructureBuilderCreative, GuiCSB.class);
-  GUIHandler.instance().registerGui(Statics.guiStructureScannerCreative, GuiStructureScanner.class);
-  GUIHandler.instance().registerGui(Statics.guiSpawnerPlacer, GuiSpawnerPlacer.class);
+  Block block;
+  for(int i = 256; i < 4096; i++)
+    {
+    block = Block.blocksList[i];
+    if(block==null){continue;}
+    /**
+     * TODO register default block handler
+     * TODO should check if block has tile entity first? possibly disallow tile-based block duplication without special plugin for it?
+     */
+    }
+  }
+
+@Override
+public void addHandledEntities(StructurePluginManager manager)
+  {
+  
   }
 
 }

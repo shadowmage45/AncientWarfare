@@ -24,6 +24,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.block.AWBlockBase;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_framework.common.registry.entry.Description;
@@ -52,11 +53,13 @@ public String getTranslatedTabLabel()
 
 public static AWItemBase structureScanner = registry.createItem("item.structurescanner", ItemStructureScanner.class);
 public static AWItemBase structureBuilderCreative = registry.createItem("item.structurebuilder", ItemBuilderCreative.class);
+public static AWItemBase spawnerPlacer = registry.createItem("item.spawnerplacer", ItemSpawnerPlacer.class);
 
 public void registerItems()
   {
   addDescription(structureScanner, "item.structurescanner",  0, "item.structurescanner.tooltip", "ancientwarfare:builder/structureScanner1");
   addDescription(structureBuilderCreative, "item.structurebuilder", 0, "item.structurebuilder.tooltip", "ancientwarfare:builder/structureBuilder1");
+  addDescription(spawnerPlacer, "item.spawnerplacer", 0, "item.spawnerplacer.tooltip", "ancientwarfare:builder/structureBuilder1");
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)

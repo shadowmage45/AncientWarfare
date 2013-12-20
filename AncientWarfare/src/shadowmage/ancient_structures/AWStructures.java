@@ -34,6 +34,7 @@ import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
+import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
@@ -97,9 +98,9 @@ public void preInit(FMLPreInitializationEvent evt)
   AWStructuresItemLoader.instance().registerItems();
   PacketHandler.registerPacketType(5, Packet05StructureData.class);
   GameRegistry.registerPlayerTracker(instance);
-  NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   GUIHandler.instance().registerContainer(Statics.guiStructureBuilderCreative, ContainerCSB.class);
   GUIHandler.instance().registerContainer(Statics.guiStructureScannerCreative, ContainerStructureScanner.class);
+  GUIHandler.instance().registerContainer(Statics.guiSpawnerPlacer, ContainerSpawnerPlacer.class);
   proxy.registerClientData();
   config.log("Ancient Warfare Structures Pre-Init finished.");
   }

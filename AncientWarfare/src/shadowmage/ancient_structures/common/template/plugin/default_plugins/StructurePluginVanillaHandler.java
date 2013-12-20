@@ -82,8 +82,8 @@ public void addHandledBlocks(StructurePluginManager manager)
   manager.registerBlockHandler("vanillaLogic", Block.beacon, TemplateRuleLogic.class);
   manager.registerBlockHandler("vanillaLogic", Block.skull, TemplateRuleLogic.class);
   manager.registerBlockHandler("vanillaLogic", Block.furnaceBurning, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.furnaceIdle, TemplateRuleInventoried.class);
-  manager.registerBlockHandler("vanillaLogic", Block.dispenser, TemplateRuleInventoried.class);
+  manager.registerBlockHandler("vanillaLogic", Block.furnaceIdle, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaInventory", Block.dispenser, TemplateRuleInventoried.class);
   manager.registerBlockHandler("vanillaInventory", Block.chest, TemplateRuleInventoried.class);
   manager.registerBlockHandler("vanillaInventory", Block.dropper, TemplateRuleInventoried.class);
   manager.registerBlockHandler("vanillaInventory", Block.hopperBlock, TemplateRuleInventoried.class);

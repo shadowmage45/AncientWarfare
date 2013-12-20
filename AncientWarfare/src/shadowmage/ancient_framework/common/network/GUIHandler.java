@@ -105,6 +105,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
  */
 public void openGUI(int ID, EntityPlayer player, int x, int y, int z)
   {
+  AWLog.logDebug("opening gui: "+ID + " onSide client: "+player.worldObj.isRemote);
   if(player.worldObj.isRemote)//send open GUI packet to server, let server relay actual open command
     {
     Packet03GuiComs pkt = new Packet03GuiComs();

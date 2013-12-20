@@ -136,7 +136,7 @@ public static NBTBase parseBaseTag(String leadLine, Iterator<String> it)
     }
   else
     {
-    String name = split[2];
+    String name = split[2].split("\\{",-1)[0];
     String data = split[2];
     String data1 = data.split("\\{",-1)[1];
     String data2 = data1.split("\\}",-1)[0];

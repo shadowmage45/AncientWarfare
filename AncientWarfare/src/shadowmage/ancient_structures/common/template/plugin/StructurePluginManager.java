@@ -45,10 +45,12 @@ private HashMap<Class<? extends StructureValidationSettings>, String> validation
 
 private List<StructureContentPlugin> loadedContentPlugins = new ArrayList<StructureContentPlugin>();
 
-private HashMap<Block, StructureRuleRegistration> blockRules = new HashMap<Block, StructureRuleRegistration>();
-private HashMap<Class<?extends Entity>, StructureRuleRegistration> entityRules = new HashMap<Class<?extends Entity>, StructureRuleRegistration>();
-private HashMap<String, StructureRuleRegistration> registrationByName = new HashMap<String, StructureRuleRegistration>();
+private HashMap<Class<?extends Entity>, Class<? extends TemplateRule>> entityRules = new HashMap<Class<?extends Entity>, Class<? extends TemplateRule>>();
+private HashMap<Block, Class<?extends TemplateRule>> blockRules = new HashMap<Block, Class<?extends TemplateRule>>();
 private HashMap<Class<?extends TemplateRule>, String> idByRuleClass = new HashMap<Class<? extends TemplateRule>, String>();
+private HashMap<String, Class<?extends TemplateRule>> ruleByID = new HashMap<String, Class<?extends TemplateRule>>();
+private HashMap<Block, String> pluginByBlock = new HashMap<Block, String>();
+private HashMap<Class<? extends Entity>, String> pluginByEntity = new HashMap<Class<? extends Entity>, String>();
 
 private StructurePluginVanillaHandler vanillaPlugin;
 
@@ -84,16 +86,37 @@ public void addPlugin(StructureValidationPlugin plugin)
   loadedValidationPlugins.add(plugin);
   }
 
+public String getPluginNameForEntity(Class<? extends Entity> entityClass)
+  {
+  return this.pluginByEntity.get(entityClass);
+  }
+
+public String getPluginNameFor(Block block)
+  {  
+  return pluginByBlock.get(block);
+  }
+
+public String getPluginNameFor(Class<?extends TemplateRule> ruleClass)
+  {
+  return this.idByRuleClass.get(ruleClass);
+  }
+
+public Class<?extends TemplateRule> getRuleByName(String name)
+  {
+  return this.ruleByID.get(name);
+  }
+
 public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, int x, int y, int z)
   {
   TemplateRule rule;    
-  StructureRuleRegistration reg = blockRules.get(block);
-  if(reg!=null)
+  Class<?extends TemplateRule> clz = blockRules.get(block);
+  if(clz!=null)
     {
     int meta = world.getBlockMetadata(x, y, z);  
     try
       {
-      rule = reg.ruleClass.getConstructor(World.class, int.class, int.class, int.class, Block.class, int.class, int.class).newInstance(world, x, y, z, block, meta, turns);
+      rule = clz.getConstructor(World.class, int.class, int.class, int.class, Block.class, int.class, int.class).newInstance(world, x, y, z, block, meta, turns);
+      AWLog.logDebug("getting block rule for block during scan: "+rule);
       return (TemplateRuleBlock) rule;
       } 
     catch (InstantiationException e)
@@ -131,18 +154,34 @@ public TemplateRule getRuleForEntity(World world, Entity entity, int turns, int 
 
 public void registerEntityHandler(String pluginName, Class<?extends Entity> entityClass, Class<? extends TemplateRule> ruleClass)
   {
-  StructureRuleRegistration reg = new StructureRuleRegistration(pluginName, ruleClass); 
-  entityRules.put(entityClass, reg);
-  registrationByName.put(pluginName, reg); 
+  if(ruleByID.containsKey(pluginName))
+    {
+    if(!ruleByID.get(pluginName).equals(ruleClass))
+      {
+      Class clz = ruleByID.get(pluginName);
+      throw new IllegalArgumentException("Attempt to overwrite "+clz+" with "+ruleClass+" by "+pluginName + " for entityClass: "+entityClass);
+      }
+    }
+  entityRules.put(entityClass, ruleClass);
+  ruleByID.put(pluginName, ruleClass);
   idByRuleClass.put(ruleClass, pluginName);
+  pluginByEntity.put(entityClass, pluginName);
   }
 
 public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRule> ruleClass)
-  {
-  StructureRuleRegistration reg = new StructureRuleRegistration(pluginName, ruleClass); 
-  blockRules.put(block, reg);
-  registrationByName.put(pluginName, reg);
+  {  
+  if(ruleByID.containsKey(pluginName))
+    {
+    if(!ruleByID.get(pluginName).equals(ruleClass))
+      {
+      Class clz = ruleByID.get(pluginName);
+      throw new IllegalArgumentException("Attempt to overwrite "+clz+" with "+ruleClass+" by "+pluginName + " for block: "+block);
+      }
+    }  
+  blockRules.put(block, ruleClass);
+  ruleByID.put(pluginName, ruleClass);
   idByRuleClass.put(ruleClass, pluginName);
+  pluginByBlock.put(block, pluginName);  
   }
 
 public void registerValidationClass(String pluginName, Class<? extends StructureValidationSettings> validationClass)
@@ -191,16 +230,20 @@ public TemplateRule getRule(List<String> ruleData)
       }
     }
   AWLog.logDebug("parsed rule: "+ruleNumber);
-  StructureRuleRegistration reg = registrationByName.get(name);
-  if(name==null || ruleNumber<=0 || ruleDataPackage.size()==0 || reg==null)
+  Class<?extends TemplateRule> clz = getRuleByName(name);
+  if(name==null || ruleNumber<=0 || ruleDataPackage.size()==0 || clz==null)
     {
-    throw new IllegalArgumentException("not enough data to create template rule");
+    throw new IllegalArgumentException("Not enough data to create template rule.\n"+
+    		"name: "+name+"\n"+
+    		"number:"+ruleNumber+"\n"+
+    		"ruleDataPackage.size:"+ruleDataPackage.size()+"\n"+
+    		"ruleClass: "+clz);
     }
-  Class<?extends TemplateRule> clz = reg.ruleClass;
+  
   try
-    {
+    {    
     TemplateRule rule = clz.getConstructor().newInstance();
-    
+    AWLog.logDebug("parsed rule of type: "+clz + "  for name: "+name);
     rule.ruleNumber = ruleNumber;
     rule.parseRuleData(ruleDataPackage);
     return rule;
@@ -232,27 +275,5 @@ public TemplateRule getRule(List<String> ruleData)
   return null;
   }
 
-public String getPluginNameFor(Block block)
-  {
-  StructureRuleRegistration reg = blockRules.get(block);  
-  return reg!=null ? reg.pluginName : null;
-  }
-
-public String getPluginNameFor(Class<?extends TemplateRule> ruleClass)
-  {
-  return this.idByRuleClass.get(ruleClass);
-  }
-
-public class StructureRuleRegistration
-{
-String pluginName;
-Class<?extends TemplateRule> ruleClass;
-
-public StructureRuleRegistration(String name, Class<?extends TemplateRule> ruleClass)
-  {
-  this.pluginName = name;
-  this.ruleClass = ruleClass;
-  }
-}
 
 }

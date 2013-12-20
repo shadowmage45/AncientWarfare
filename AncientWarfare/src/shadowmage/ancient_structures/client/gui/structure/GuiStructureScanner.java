@@ -107,7 +107,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   this.name = nameBox.getText();
-  area.updateGuiPos(guiLeft, guiTop);
+  //area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override

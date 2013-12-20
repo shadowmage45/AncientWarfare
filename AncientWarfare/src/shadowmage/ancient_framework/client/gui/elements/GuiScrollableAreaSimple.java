@@ -196,6 +196,7 @@ public void onMouseMoved(int x, int y, int num)
     if(over)
       {
       this.scrollBar.onMouseMoved(adjX, adjY, num);
+      this.updateGuiPos(parentGui.getGuiLeft(), parentGui.getGuiTop());
       }
     }
   super.onMouseMoved(x, y, num);  
@@ -291,6 +292,7 @@ public boolean handleMouseMoved(int x, int y, int num)
   {
   if(this.scrollBar==null)
     {
+    this.updateGuiPos(parentGui.getGuiLeft(), parentGui.getGuiTop());
     this.updateScrollPos(x, y);
     }
   return true;
@@ -301,6 +303,7 @@ public boolean handleMouseWheel(int x, int y, int wheel)
   {
   if(this.scrollBar!=null)
     {
+    this.updateGuiPos(parentGui.getGuiLeft(), parentGui.getGuiTop());
     this.scrollBar.handleMouseWheel(x, y, wheel);
     return true;
     }
