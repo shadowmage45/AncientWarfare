@@ -131,8 +131,17 @@ public void loadTemplates()
     template = TemplateParser.instance().parseTemplate(f);
     if(template!=null)
       {
+      if(template.getValidationSettings()==null)
+        {
+        AWLog.logError("could not load template for: "+f.getAbsolutePath() + " no validation settings present.");
+        continue;
+        }
       StructureTemplateManager.instance().addTemplate(template);
       loadedCount++;
+      }
+    else
+      {
+      AWLog.logError("could not load template for: "+f.getAbsolutePath() + " error parsing.");
       }
     }
   AWLog.log("Loaded "+loadedCount+" structure(s).");

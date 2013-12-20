@@ -23,6 +23,8 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 import java.util.HashSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityPig;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleInventoried;
@@ -30,6 +32,7 @@ import shadowmage.ancient_structures.common.template.plugin.default_plugins.bloc
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaDoors;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaSign;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleVanillaEntity;
 
 public class StructurePluginVanillaHandler extends StructureContentPlugin
 {
@@ -92,7 +95,9 @@ public void addHandledBlocks(StructurePluginManager manager)
 
 @Override
 public void addHandledEntities(StructurePluginManager manager)
-  {
+  {  
+  manager.registerEntityHandler("vanillaEntities", EntityPig.class, TemplateRuleVanillaEntity.class);
+  manager.registerEntityHandler("vanillaEntities", EntityZombie.class, TemplateRuleVanillaEntity.class);
   //handledEntities.add(EntityVillager.class);
   //handledEntities.add(EntityIronGolem.class);
   //handledEntities.add(EntityChicken.class);

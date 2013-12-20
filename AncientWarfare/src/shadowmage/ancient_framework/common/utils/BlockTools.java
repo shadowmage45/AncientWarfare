@@ -41,6 +41,38 @@ import net.minecraftforge.common.ForgeDirection;
 public class BlockTools
 {
 
+/**
+ * rotate a float X offset (-1<=x<=1) within a block
+ */
+public static float rotateFloatX(float x, float z, int turns)
+  {
+  float x1, z1;
+  x1 = x;
+  z1 = z;
+  for(int i = 0; i <turns; i++)
+    {
+    z = x1;
+    x = 1-z1;
+    x1 = x;
+    z1 = z;
+    }
+  return x;
+  }
+
+public static float rotateFloatZ(float x, float z, int turns)
+  {
+  float x1, z1;
+  x1 = x;
+  z1 = z;
+  for(int i = 0; i <turns; i++)
+    {
+    z = x1;
+    x = 1-z1;
+    x1 = x;
+    z1 = z;
+    }
+  return z;
+  }
 
 public static int getCardinalFromSide(ForgeDirection theSide)
   {

@@ -31,6 +31,20 @@ import java.util.Scanner;
 public class StringTools
 {
 
+public static String getCSVStringForArray(float... values)
+  {
+  String line = "";
+  for(int i = 0; i < values.length; i++)
+    {
+    if(i >=1 )
+      {
+      line = line + ",";
+      }
+    line = line + values[i];    
+    }
+  return line;
+  }
+
 public static String getCSVStringForArray(byte[] values)
   {
   String line = "";
@@ -147,6 +161,27 @@ public static byte[] parseByteArray(String csv)
   for(int i = 0; i< splits.length; i++)
     {
     array[i]=Byte.parseByte(splits[i].trim());
+    }
+  return array;
+  }
+
+public static float[] safeParseFloatArray(String regex, String test)
+  {
+  String[] splits = test.split(regex);
+  if(splits.length>1)
+    {
+    return parseFloatArray(splits[1].trim());
+    }
+  return new float[1];
+  }
+
+public static float[] parseFloatArray(String csv)
+  {
+  String[] splits = csv.split(",");
+  float[] array = new float[splits.length];
+  for(int i = 0; i< splits.length; i++)
+    {
+    array[i]=Float.parseFloat(splits[i].trim());
     }
   return array;
   }

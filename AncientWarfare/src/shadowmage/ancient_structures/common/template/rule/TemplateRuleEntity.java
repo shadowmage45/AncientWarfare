@@ -26,6 +26,11 @@ import net.minecraft.world.World;
 public abstract class TemplateRuleEntity extends TemplateRule
 {
 
+public TemplateRuleEntity(World world, Entity entity, int turns, int x, int y, int z)
+  {
+  
+  }
+
 public TemplateRuleEntity()
   {
   // TODO Auto-generated constructor stub

@@ -67,7 +67,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     GUIHandler.instance().openGUI(Statics.guiStructureBuilderCreative, player, 0, 0, 0);    
     return true;
     }    
-  return false;
+  return true;
   }
 
 ItemStructureSettings buildSettings = new ItemStructureSettings();

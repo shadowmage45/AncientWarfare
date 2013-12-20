@@ -177,7 +177,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
           break;
           }
         }
-      parseValidation(groupedLines);    
+      validation = parseValidation(groupedLines);    
       groupedLines.clear();
       }
     
@@ -274,9 +274,11 @@ private void parseLayer(List<String> templateLines, int yLayer, int xSize, int y
     }
   }
 
-private Object parseValidation(List<String> lines)
+private StructureValidationSettingsDefault parseValidation(List<String> lines)
   {
-  return null;
+  StructureValidationSettingsDefault validation = new StructureValidationSettingsDefault();
+  validation.parseSettings(lines);
+  return validation;
   }
 
 }

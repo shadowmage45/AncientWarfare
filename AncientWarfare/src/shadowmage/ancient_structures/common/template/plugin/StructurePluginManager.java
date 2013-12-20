@@ -35,6 +35,7 @@ import shadowmage.ancient_structures.common.template.build.StructureValidationSe
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
 public class StructurePluginManager
 {
@@ -147,8 +148,44 @@ public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, in
   return null;
   }
 
-public TemplateRule getRuleForEntity(World world, Entity entity, int turns, int x, int y, int z)
+public TemplateRuleEntity getRuleForEntity(World world, Entity entity, int turns, int x, int y, int z)
   {
+  Class<? extends Entity> entityClass = entity.getClass();
+  if(this.entityRules.containsKey(entityClass))
+    {
+    Class<? extends TemplateRule> entityRuleClass = this.entityRules.get(entityClass);
+    if(entityRuleClass!=null)
+      {
+      try
+        {
+        return (TemplateRuleEntity) entityRuleClass.getConstructor(World.class, Entity.class, int.class, int.class, int.class, int.class).newInstance(world, entity, turns, x, y, z);
+        } 
+      catch (InstantiationException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (IllegalAccessException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (IllegalArgumentException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (InvocationTargetException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (NoSuchMethodException e)
+        {
+        e.printStackTrace();
+        } 
+      catch (SecurityException e)
+        {
+        e.printStackTrace();
+        }
+      }
+    }
   return null;//TODO
   }
 

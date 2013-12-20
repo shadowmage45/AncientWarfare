@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
@@ -34,6 +35,7 @@ import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
 public class TemplateScanner
 {
@@ -79,14 +81,18 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   short[] templateRuleData = new short[xSize*ySize*zSize];
   BlockTools.rotateInArea(key, xSize, zSize, turns);
   
+  List<Entity> entitiesInAABB;
+  
   HashMap<String, List<TemplateRuleBlock>> pluginBlockRuleMap = new HashMap<String, List<TemplateRuleBlock>>();
-    
+  HashMap<String, List<TemplateRuleEntity>> pluginEntityRuleMap = new HashMap<String, List<TemplateRuleEntity>>();  
+  
   List<TemplateRule> currentRulesAll = new ArrayList<TemplateRule>();
   Block scannedBlock;
-  Entity scannedEntity = null;
   TemplateRuleBlock scannedBlockRule = null;
+  TemplateRuleEntity scannedEntityRule = null;
     
   List<TemplateRuleBlock> pluginBlockRules;
+  List<TemplateRuleEntity> pluginEntityRules;
   
   String pluginId;
   int index;
@@ -141,13 +147,56 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
             templateRuleData[index] = (short) scannedBlockRule.ruleNumber;
             }
           }
-        else if(scannedEntity!=null)
+        else
           {
-          /**
-           * TODO
-           */
-          }
-        }
+          
+          entitiesInAABB = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getAABBPool().getAABB(scanX, scanY, scanZ, scanX+1, scanY+1, scanZ+1));          
+          String entityPluginId = null;          
+          Entity toScan = null;
+          for(Entity e : entitiesInAABB)
+            {
+            entityPluginId = AWStructures.instance.pluginManager.getPluginNameForEntity(e.getClass());
+            if(entityPluginId==null){continue;}
+            toScan = e;
+            break;
+            }
+          if(toScan!=null && entityPluginId!=null)
+            {
+            boolean found = false;
+            pluginEntityRules = pluginEntityRuleMap.get(entityPluginId);
+            if(pluginEntityRules==null)
+              {
+              pluginEntityRules = new ArrayList<TemplateRuleEntity>();
+              pluginEntityRuleMap.put(entityPluginId, pluginEntityRules);
+              }
+            for(TemplateRuleEntity rule : pluginEntityRules)
+              {
+              if(rule.shouldReuseRule(world, toScan, scanX, scanY, scanZ))
+                {
+                found = true;
+                scannedEntityRule = rule;
+                break;
+                }
+              }
+            if(!found)
+              {
+              scannedEntityRule = AWStructures.instance.pluginManager.getRuleForEntity(world, toScan, turns, scanX, scanY, scanZ);
+              if(scannedEntityRule!=null)
+                {
+                pluginEntityRules.add((TemplateRuleEntity) scannedEntityRule);
+                currentRulesAll.add(scannedEntityRule);
+                scannedEntityRule.ruleNumber = nextRuleID;
+                nextRuleID++;
+                }
+              }
+            if(scannedEntityRule!=null)
+              {
+              index = StructureTemplate.getIndex(destination.x, destination.y, destination.z, xOutSize, ySize, zOutSize);
+              templateRuleData[index] = (short) scannedEntityRule.ruleNumber;              
+              }            
+            }
+          }//end entity-scan else block
+        }//end scan x-level for
       }
     }  
   TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()+1];
