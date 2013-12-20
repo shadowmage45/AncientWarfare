@@ -177,6 +177,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       AWLog.logError("error parsing template rules, duplicate rule number detected for: "+rule.ruleNumber);
       }
     }
+  zOffset = zSize - 1 - zOffset;//invert offset to normalize for the new top-left oriented template construction
   StructureTemplate template = new StructureTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset);
   template.setRuleArray(rules);
   template.setTemplateData(templateData);
