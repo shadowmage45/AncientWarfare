@@ -76,7 +76,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       }
     return true;
     }
-  return false;
+  return true;
   }
 
 @Override

@@ -130,7 +130,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     if(player.getDistance(key.x+0.5d, key.y, key.z+0.5d) > 10)
       {
       player.addChatMessage("You are too far away to scan that building, move closer to chosen build-key position");
-      return false;
+      return true;
       }
     player.addChatMessage("Initiating Scan (4/4)");
     GUIHandler.instance().openGUI(Statics.guiStructureScannerCreative, player, 0,0,0);    

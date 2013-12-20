@@ -75,7 +75,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   float z1 = BlockTools.rotateFloatZ(xOffset, zOffset, turns);
   float yaw = (rotation + 90.f * turns)%360.f;
   e.setPosition(x+x1, y, z+z1);
-  e.rotationYaw = rotation;
+  e.rotationYaw = yaw;
   world.spawnEntityInWorld(e);
   }
 
