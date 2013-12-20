@@ -25,6 +25,11 @@ import java.util.HashSet;
 import net.minecraft.block.Block;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleInventoried;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleLogic;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaDoors;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaSign;
 
 public class StructurePluginVanillaHandler extends StructureContentPlugin
 {
@@ -40,36 +45,22 @@ public StructurePluginVanillaHandler()
 public void addHandledBlocks(StructurePluginManager manager)
   {  
 
-  /**
-   * rules written
-   */
   specialHandledBlocks.add(Block.doorIron);
   specialHandledBlocks.add(Block.doorWood);
   specialHandledBlocks.add(Block.signPost);
   specialHandledBlocks.add(Block.signWall);
   specialHandledBlocks.add(Block.mobSpawner);
   specialHandledBlocks.add(Block.commandBlock);  
-  
-  /**
-   * no rules written
-   */  
   specialHandledBlocks.add(Block.skull);
-  
-  /**
-   * have potential inventory data + nbt data
-   */
   specialHandledBlocks.add(Block.furnaceBurning);
   specialHandledBlocks.add(Block.brewingStand);
   specialHandledBlocks.add(Block.beacon);
-  /**
-   * no rules written, should only need inventory handling
-   */
-  specialHandledBlocks.add(Block.chest);
-  specialHandledBlocks.add(Block.dropper);
   specialHandledBlocks.add(Block.dispenser);
   specialHandledBlocks.add(Block.furnaceIdle);
+  specialHandledBlocks.add(Block.chest);
+  specialHandledBlocks.add(Block.dropper);
   specialHandledBlocks.add(Block.hopperBlock);
-  
+    
   Block block;
   for(int i = 0; i < 256; i++)
     {
@@ -82,12 +73,20 @@ public void addHandledBlocks(StructurePluginManager manager)
   specialHandledBlocks.clear();
   
   manager.registerBlockHandler("vanillaDoors", Block.doorIron, TemplateRuleVanillaDoors.class);
-  manager.registerBlockHandler("vanillaDoors", Block.doorWood, TemplateRuleVanillaDoors.class);  
-  manager.registerBlockHandler("vanillaSpawners", Block.mobSpawner, TemplateRuleVanillaSpawner.class);
+  manager.registerBlockHandler("vanillaDoors", Block.doorWood, TemplateRuleVanillaDoors.class);
   manager.registerBlockHandler("vanillaSign", Block.signPost, TemplateRuleVanillaSign.class);
   manager.registerBlockHandler("vanillaSign", Block.signWall, TemplateRuleVanillaSign.class);
-  manager.registerBlockHandler("vanillaCommandBlock", Block.commandBlock, TemplateRuleVanillaCommandBlock.class);
-  manager.registerBlockHandler("vanillaBrewingStand", Block.brewingStand, TemplateRuleVanillaBrewingStand.class);
+  manager.registerBlockHandler("vanillaLogic", Block.mobSpawner, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.commandBlock, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.brewingStand, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.beacon, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.skull, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.furnaceBurning, TemplateRuleLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.furnaceIdle, TemplateRuleInventoried.class);
+  manager.registerBlockHandler("vanillaLogic", Block.dispenser, TemplateRuleInventoried.class);
+  manager.registerBlockHandler("vanillaInventory", Block.chest, TemplateRuleInventoried.class);
+  manager.registerBlockHandler("vanillaInventory", Block.dropper, TemplateRuleInventoried.class);
+  manager.registerBlockHandler("vanillaInventory", Block.hopperBlock, TemplateRuleInventoried.class);
   }
 
 

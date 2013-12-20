@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.plugin.default_plugins;
+package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -29,23 +29,22 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
-public class TemplateRuleVanillaBrewingStand extends TemplateRuleVanillaBlocks
+public class TemplateRuleLogic extends TemplateRuleVanillaBlocks
 {
 
 NBTTagCompound tag = new NBTTagCompound();
 
-public TemplateRuleVanillaBrewingStand(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleLogic(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
-  TileEntityBrewingStand te = (TileEntityBrewingStand) world.getBlockTileEntity(x, y, z);
+  TileEntity te = world.getBlockTileEntity(x, y, z);
   te.writeToNBT(tag);  
   }
 
-public TemplateRuleVanillaBrewingStand()
+public TemplateRuleLogic()
   {
   }
 
@@ -56,7 +55,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   tag.setInteger("x", x);
   tag.setInteger("y", y);
   tag.setInteger("z", z);
-  TileEntityBrewingStand te = (TileEntityBrewingStand) world.getBlockTileEntity(x, y, z);
+  TileEntity te = world.getBlockTileEntity(x, y, z);
   te.readFromNBT(tag);
   world.markBlockForUpdate(x, y, z);
   }
@@ -81,7 +80,7 @@ public void writeRuleData(BufferedWriter out) throws IOException
 @Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
-  return super.shouldReuseRule(world, block, meta, turns, te, x, y, z);
+  return false;
   }
 
 @Override
