@@ -30,8 +30,10 @@ import net.minecraft.block.Block;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.TemplateRuleVanillaBlocks;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 
 
 
@@ -56,6 +58,7 @@ specialHandledBlocks.add(Block.furnaceIdle);
 specialHandledBlocks.add(Block.hopperBlock);
 specialHandledBlocks.add(Block.skull);
 specialHandledBlocks.add(Block.brewingStand);
+specialHandledBlocks.add(Block.bed);
 }
 
 public StructureTemplate convertOldTemplate(File file, List<String> templateLines)
@@ -177,6 +180,8 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   StructureTemplate template = new StructureTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset);
   template.setRuleArray(rules);
   template.setTemplateData(templateData);
+  template.setValidationSettings(new StructureValidationSettingsDefault());
+  TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
   return null;
   }
 

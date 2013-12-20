@@ -22,7 +22,6 @@ package shadowmage.ancient_structures.common.item;
 
 import java.util.List;
 
-import buildcraft.builders.GuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -32,7 +31,6 @@ import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
@@ -64,7 +62,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
       player.addChatMessage("block hit is: "+id+" :: "+meta);      
       }
     } 
-  if(!world.isRemote)
+  if(!world.isRemote && !player.isSneaking())
     {
     GUIHandler.instance().openGUI(Statics.guiStructureBuilderCreative, player, 0, 0, 0);    
     return true;
@@ -80,7 +78,6 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     return false;
     }
-  AWLog.logDebug("left click on builder item...");
   buildSettings.getSettingsFor(stack, buildSettings);
   if(buildSettings.hasName())
     {
@@ -120,6 +117,10 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   list.add("Current Structure: "+structure);
   }
 
-
+@Override
+public boolean shouldPassSneakingClickToBlock(World par2World, int par4, int par5, int par6)
+  {
+  return false;
+  }
 
 }

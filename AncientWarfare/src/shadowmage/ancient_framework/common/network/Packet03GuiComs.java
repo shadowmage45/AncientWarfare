@@ -27,8 +27,6 @@ import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import cpw.mods.fml.common.network.FMLNetworkHandler;
-
 public class Packet03GuiComs extends PacketBase
 {
 

@@ -20,16 +20,14 @@
  */
 package shadowmage.ancient_structures.common.template.build;
 
-import java.awt.BorderLayout;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import shadowmage.ancient_framework.common.utils.StringTools;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class StructureValidationSettingsDefault extends StructureValidationSettings
 {

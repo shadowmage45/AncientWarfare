@@ -20,14 +20,6 @@
  */
 package shadowmage.ancient_structures.common.template;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 

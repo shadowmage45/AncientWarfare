@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import shadowmage.ancient_framework.common.config.AWLog;
-
 public class StringTools
 {
 
@@ -49,6 +47,7 @@ public static String getCSVStringForArray(byte[] values)
 
 public static String getCSVStringForArray(int[] values)
   {
+  if(values==null){return "";}
   String line = "";
   for(int i = 0; i < values.length; i++)
     {
@@ -289,6 +288,19 @@ public static byte safeParseByte(String num)
   try
     {
     return Byte.parseByte(num.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    
+    }
+  return 0;
+  }
+
+public static short safeParseShort(String num)
+  {
+  try
+    {
+    return Short.parseShort(num.trim());
     }
   catch(NumberFormatException e)
     {

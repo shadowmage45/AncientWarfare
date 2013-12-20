@@ -34,7 +34,6 @@ import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateParser

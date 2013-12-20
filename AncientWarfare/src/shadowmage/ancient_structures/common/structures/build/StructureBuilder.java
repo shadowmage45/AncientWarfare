@@ -41,7 +41,6 @@ import shadowmage.ancient_framework.common.registry.LootGenerator;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.block.BlockDataManager;
-import shadowmage.ancient_structures.common.structures.StructureManager;
 import shadowmage.ancient_structures.common.structures.data.AWStructure;
 import shadowmage.ancient_structures.common.structures.data.BlockData;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;

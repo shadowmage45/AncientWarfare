@@ -20,11 +20,8 @@
  */
 package shadowmage.ancient_structures.common.item;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,11 +33,6 @@ import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 
 public class ItemStructureScanner extends AWItemClickable

@@ -35,8 +35,6 @@ import net.minecraft.util.EnumArt;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_framework.common.utils.NBTReader;
-import shadowmage.ancient_framework.common.utils.NBTWriter;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.ScannedEntityEntry;
@@ -325,7 +323,7 @@ public static EntityRule parseRule(List<String> ruleLines)
           }
         tagLines.add(line);
         }
-      rule.itemFrameItemTag = NBTReader.readTagFromLines(tagLines);
+//      rule.itemFrameItemTag = NBTReader.readTagFromLines(tagLines);
       }
     }
   if(rule.entityClassName.equals(""))
@@ -357,7 +355,7 @@ public List<String> getRuleLines()
     if(this.itemFrameItemTag!=null)
       {
       lines.add("datas:");
-      lines.addAll(NBTWriter.writeNBTToStrings(itemFrameItemTag));
+//      lines.addAll(NBTTools.writeNBTToStrings(itemFrameItemTag));
       lines.add(":enddatas");
       }
     }
@@ -368,7 +366,7 @@ public List<String> getRuleLines()
     if(this.itemFrameItemTag!=null)//minecart chest NBT datas...
       {
       lines.add("datas:");
-      lines.addAll(NBTWriter.writeNBTToStrings(itemFrameItemTag));
+//      lines.addAll(NBTTools.writeNBTToStrings(itemFrameItemTag));
       lines.add(":enddatas");
       }
     }

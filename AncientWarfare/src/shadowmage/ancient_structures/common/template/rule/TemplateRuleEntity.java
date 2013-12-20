@@ -20,9 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template.rule;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public abstract class TemplateRuleEntity extends TemplateRule

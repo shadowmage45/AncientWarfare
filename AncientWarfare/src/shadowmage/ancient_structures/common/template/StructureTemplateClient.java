@@ -20,8 +20,8 @@
  */
 package shadowmage.ancient_structures.common.template;
 
-import shadowmage.ancient_framework.common.config.AWLog;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.config.AWLog;
 
 public class StructureTemplateClient
 {

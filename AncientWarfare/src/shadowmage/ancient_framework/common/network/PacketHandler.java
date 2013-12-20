@@ -29,7 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import shadowmage.ancient_framework.common.utils.NBTWriter;
+import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -63,35 +63,33 @@ public static void registerPacketType(int id, Class<? extends PacketBase> pktCla
 @Override
 public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
   {
-    ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-    int packetType = data.readInt();      
-    NBTTagCompound tag =  NBTWriter.readTagFromStream(data);      
-    PacketBase realPacket = null;
-	try {
-		realPacket = this.constructPacket(packetType);
-	} catch (InstantiationException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IllegalAccessException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-    if(realPacket==null)
-      {
-      return;
-      }
-    realPacket.packetData = tag;
-    realPacket.player = (EntityPlayer)player;  
-    realPacket.world = realPacket.player.worldObj;    
-    realPacket.readDataStream(data);
-    realPacket.execute();
-//  catch(Exception e)
-//    {    
-//    Exception e1 = new Exception("Extreme error during packet handling, could not instantiate packet instance, improper packetType info\n "+"Exception During Packet Handling, problem reading packet data");
-//    e1.setStackTrace(e.getStackTrace());
-//    e1.printStackTrace();
-//    }
-  
+  ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+  int packetType = data.readInt();      
+  NBTTagCompound tag =  NBTTools.readTagFromStream(data);      
+  PacketBase realPacket = null;
+  try 
+    {
+    realPacket = this.constructPacket(packetType);
+    } 
+  catch (InstantiationException e) 
+    {
+    e.printStackTrace();
+    return;
+    } 
+  catch (IllegalAccessException e)
+    {
+    e.printStackTrace();
+    return;
+    }
+  if(realPacket==null)
+    {
+    return;
+    }
+  realPacket.packetData = tag;
+  realPacket.player = (EntityPlayer)player;  
+  realPacket.world = realPacket.player.worldObj;    
+  realPacket.readDataStream(data);
+  realPacket.execute();  
   }
 
 /**

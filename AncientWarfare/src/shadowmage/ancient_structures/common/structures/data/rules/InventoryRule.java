@@ -26,10 +26,7 @@ import java.util.List;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_framework.common.utils.NBTReader;
-import shadowmage.ancient_framework.common.utils.NBTWriter;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class InventoryRule
@@ -77,11 +74,11 @@ public static InventoryRule parseLines(List<String> ruleLines)
         line = it.next();   
         if(line.toLowerCase().startsWith(":enddata"))
           {
-          NBTTagCompound inventoryData = NBTReader.readTagFromLines(dataLines);
-          if(inventoryData!=null)
-            {
-            rule.items.readFromNBT(inventoryData);
-            }
+//          NBTTagCompound inventoryData = NBTReader.readTagFromLines(dataLines);
+//          if(inventoryData!=null)
+//            {
+//            rule.items.readFromNBT(inventoryData);
+//            }
           break;
           }
         dataLines.add(line);
@@ -127,9 +124,9 @@ public List<String> getRuleLines()
   lines.add("inventory:");
   lines.add("number="+this.ruleNumber);
   lines.add("size="+this.inventorySize);
-  List<String> tagLines = NBTWriter.writeNBTToStrings(this.items.getNBTTag());  
+//  List<String> tagLines = NBTWriter.writeNBTToStrings(this.items.getNBTTag());  
   lines.add("data:");
-  lines.addAll(tagLines);
+//  lines.addAll(tagLines);
   lines.add(":enddata");
   lines.add(":endinventory");
   return lines;

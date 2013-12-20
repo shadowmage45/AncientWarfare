@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_structures.common.structures;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,13 +29,10 @@ import java.util.Map;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.network.Packet01ModData;
 import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import shadowmage.ancient_structures.common.structures.data.StructureClientInfo;
-import shadowmage.ancient_structures.common.world_gen.WorldGenStructureManager;
 
 /**
  * Manages server side processed structures, and their client-side data equivalents

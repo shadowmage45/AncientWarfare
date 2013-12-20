@@ -20,13 +20,6 @@
  */
 package shadowmage.ancient_structures.common.template.plugin;
 
-import java.io.BufferedReader;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public abstract class StructureContentPlugin
 {

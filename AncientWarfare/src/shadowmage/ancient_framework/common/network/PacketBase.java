@@ -28,7 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWFramework;
-import shadowmage.ancient_framework.common.utils.NBTWriter;
+import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
@@ -103,7 +103,7 @@ protected void constructPacket()
   /**
    * write default packet data NBTCompound to the stream
    */  
-  NBTWriter.writeTagToStream(packetData, data);    
+  NBTTools.writeTagToStream(packetData, data);    
   
   /**
    * write custom data to the output stream

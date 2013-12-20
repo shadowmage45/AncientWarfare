@@ -24,7 +24,6 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import net.minecraft.entity.player.EntityPlayer;
-
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.AWLog;

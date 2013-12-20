@@ -20,11 +20,11 @@
  */
 package shadowmage.ancient_structures.common.network;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
 public class Packet05StructureData extends PacketBase
 {

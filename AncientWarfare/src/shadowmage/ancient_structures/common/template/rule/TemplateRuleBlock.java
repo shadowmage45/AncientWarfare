@@ -20,10 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template.rule;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

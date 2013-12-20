@@ -39,21 +39,36 @@ public StructurePluginVanillaHandler()
 @Override
 public void addHandledBlocks(StructurePluginManager manager)
   {  
+
+  /**
+   * rules written
+   */
+  specialHandledBlocks.add(Block.doorIron);
+  specialHandledBlocks.add(Block.doorWood);
+  specialHandledBlocks.add(Block.signPost);
+  specialHandledBlocks.add(Block.signWall);
+  specialHandledBlocks.add(Block.mobSpawner);
+  specialHandledBlocks.add(Block.commandBlock);  
+  
+  /**
+   * no rules written
+   */  
+  specialHandledBlocks.add(Block.skull);
+  
+  /**
+   * have potential inventory data + nbt data
+   */
+  specialHandledBlocks.add(Block.furnaceBurning);
+  specialHandledBlocks.add(Block.brewingStand);
+  specialHandledBlocks.add(Block.beacon);
+  /**
+   * no rules written, should only need inventory handling
+   */
   specialHandledBlocks.add(Block.chest);
   specialHandledBlocks.add(Block.dropper);
   specialHandledBlocks.add(Block.dispenser);
-  specialHandledBlocks.add(Block.enderChest);
-  specialHandledBlocks.add(Block.commandBlock);
-  specialHandledBlocks.add(Block.mobSpawner);
-  specialHandledBlocks.add(Block.signPost);
-  specialHandledBlocks.add(Block.signWall);
-  specialHandledBlocks.add(Block.furnaceBurning);
   specialHandledBlocks.add(Block.furnaceIdle);
   specialHandledBlocks.add(Block.hopperBlock);
-  specialHandledBlocks.add(Block.skull);
-  specialHandledBlocks.add(Block.brewingStand);
-  specialHandledBlocks.add(Block.doorIron);
-  specialHandledBlocks.add(Block.doorWood);
   
   Block block;
   for(int i = 0; i < 256; i++)
@@ -71,8 +86,8 @@ public void addHandledBlocks(StructurePluginManager manager)
   manager.registerBlockHandler("vanillaSpawners", Block.mobSpawner, TemplateRuleVanillaSpawner.class);
   manager.registerBlockHandler("vanillaSign", Block.signPost, TemplateRuleVanillaSign.class);
   manager.registerBlockHandler("vanillaSign", Block.signWall, TemplateRuleVanillaSign.class);
-  
-  
+  manager.registerBlockHandler("vanillaCommandBlock", Block.commandBlock, TemplateRuleVanillaCommandBlock.class);
+  manager.registerBlockHandler("vanillaBrewingStand", Block.brewingStand, TemplateRuleVanillaBrewingStand.class);
   }
 
 
