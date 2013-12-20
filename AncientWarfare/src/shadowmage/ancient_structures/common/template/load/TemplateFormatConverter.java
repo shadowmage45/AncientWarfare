@@ -249,7 +249,7 @@ private TemplateRule parseModBlock(Block block, int number, int buildPass, int m
   {
   /**
    * TODO add default modded block-handling rule (registered last, placed into registry for every block not already filled)
-   * -- it is essentially a straight id/meta handler, ignores tile data (may even remove rule if block has a tile-entity)
+   * -- it is essentially a straight id/meta handler, ignores tile data 
    */
   return null;
   }
