@@ -891,6 +891,10 @@ public void packVehicle()
   if(!this.worldObj.isRemote)
     { 
     worldObj.spawnEntityInWorld(new EntityItem(this.worldObj, posX, posY+0.5d, posZ, this.getItemForVehicle()));
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.ammoInventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.armorInventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.upgradeInventory, posX, posY, posZ);
+    InventoryTools.dropInventoryInWorld(worldObj, inventory.storageInventory, posX, posY, posZ);
     this.setDead();
     }
   }

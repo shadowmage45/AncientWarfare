@@ -97,7 +97,7 @@ public void addLootToTables()
     }
   for(IAmmoType t : Ammo.ammoTypes)
     {
-    if(t==null){continue;}
+    if(t==null || !t.isAvailableAsItem()){continue;}
     addLoot(t.getAmmoStack(1),2,32,3);
     }
   for(IVehicleUpgradeType t : VehicleUpgradeRegistry.instance().getUpgradeList())
@@ -111,6 +111,7 @@ public void addLootToTables()
   addLoot(new ItemStack(Item.ingotGold), 1, 3, 2);
   addLoot(new ItemStack(Item.ingotIron), 1, 3, 3);
   addLoot(new ItemStack(Item.compass), 1, 1, 1);    
+  addLoot(new ItemStack(Item.silk), 3, 1, 3);
 //  for(ICivicType c : Civic.civicList)
 //    {
 //    if(c==null){continue;}
