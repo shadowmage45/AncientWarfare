@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.common.container;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -125,7 +126,7 @@ public List<NBTTagCompound> getInitData()
     initList.add(baseTag);
     return initList;    
     }
-  return null;
+  return Collections.emptyList();
   }
 
 @Override
