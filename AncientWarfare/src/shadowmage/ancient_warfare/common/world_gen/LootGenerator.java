@@ -111,7 +111,7 @@ public void addLootToTables()
   addLoot(new ItemStack(Item.ingotGold), 1, 3, 2);
   addLoot(new ItemStack(Item.ingotIron), 1, 3, 3);
   addLoot(new ItemStack(Item.compass), 1, 1, 1);    
-  addLoot(new ItemStack(Item.silk), 3, 1, 3);
+  addLoot(new ItemStack(Item.silk), 1, 3, 1);
 //  for(ICivicType c : Civic.civicList)
 //    {
 //    if(c==null){continue;}
