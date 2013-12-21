@@ -56,6 +56,7 @@ public static final ItemFood rations = new ItemRation(Config.getItemID("itemSing
 public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 24018, "Research notes"));
 public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 24019, "Backpack"));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 24020, "Research book to save research progress"));
+public static final AWItemBase structureGenerator = new ItemStructureGenerator(Config.getItemID("itemSingle.structureGenerator", 24020, "Generates as per world gen"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
 public static final ItemStack wood2 = new ItemStack(componentItem, 1, 1);
@@ -148,8 +149,9 @@ private void loadItems()
   this.addSubtypeInfoToItem(backpack, 48, "item.backpack.48").addTooltip("item.backpack.48.tooltip", 48).addDisplayStack(new ItemStack(backpack,1,48)).setIconTexture("ancientwarfare:misc/backpack", 48);
     
   this.registerItemSubtyped(researchNotes, "researchNotes");
-  this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook").setIconTexture("ancientwarfare:misc/researchBook", 0);
-      
+  this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook.tooltip").setIconTexture("ancientwarfare:misc/researchBook", 0);
+  this.registerItemSingle(structureGenerator, "item.single.structureGenerator", "item.single.structureGenerator.description", "item.single.structureGenerator.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);    
+  
   /**
    * register main component item (misc random items) 
    */

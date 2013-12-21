@@ -186,29 +186,18 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   ProcessedStructure struct = WorldGenStructureManager.instance().getStructureForBiome(biomeName, maxValue, random, map.getUniqueStructureList());
   if(struct!=null)
     {
-    /**
-     * then check cluster filled percentage
-     */
     float valPercent = (float)foundValue / (float) WorldGenStructureManager.structureGenMaxClusterValue;
     if(random.nextFloat() < valPercent)
       {
       Config.logDebug("Exit for value ratio check");
       return;
-      }        
+      } 
     
-    
-
-    
-    /**
-     * else, place the struct....
-     */
     boolean placed = false;
     
     int y = 0;
-    int face = random.nextInt(4);   
-    
+    int face = random.nextInt(4);
     y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
-    
     WorldGenStructureEntry ent = struct.getWorldGenEntry();
     if(ent!=null)
       {
@@ -424,6 +413,7 @@ public boolean checkBBCollisions(World world, ProcessedStructure struct, BlockPo
     {
     for(int cZ = chunkZ-1; cZ <= chunkZ+1; cZ++)
       {
+      if(cX==chunkX && cZ==chunkZ){continue;}//skip the current target chunk, as we just force-set a structure gen entry there
       GeneratedStructureEntry gen = mp.getEntryFor(cX, cZ);
       if(gen!=null)
         {     
