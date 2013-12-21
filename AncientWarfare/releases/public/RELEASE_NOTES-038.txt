@@ -1,0 +1,11 @@
+Change Log 037 -> 038 (12-21-13)
+
+* FIX--A bit more GUI cleanup regarding render-ordering for tooltips for items.  Items should no longer render on top of the tooltip.
+* FIX--Torches should no longer be placed suspended in mid-air in classic-layout quarries.
+* FIX--Fix one cause of structures not properly obeying intersection test when generating.
+* FIX--Fix root cause of unique structures not being detected properly when selecting new structures to generate.
+* FIX--Fix an issue in structure generation that could cause both BB-intersect test and unique-tests to not work properly.
+* FIX--Research notes now display translated names in the chat message when learning research from the item.
+* FIX--Rewrite vehicle dismount code.  You should now generally get placed on the same ground level as the vehicle, instead of on top of it.
+* ADJUSTED--Greatly decrease the number of vehicles/research found in world-gen structure loot chests.  Also added ammo and a few filler items.
+* FIX--When repacking a vehicle into an item, it will once again eject its inventory into the world.
