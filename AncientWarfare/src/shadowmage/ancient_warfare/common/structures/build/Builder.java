@@ -547,26 +547,22 @@ protected void setBlock(World world, int x, int y, int z, int id, int meta)
     e.printStackTrace();
     return;
     }
-  if(world.blockExists(x, y, z))
+  if(isWorldGen)
     {
-    if(isWorldGen)
-      {
-      try
-        {
-        world.setBlock(x, y, z, id);
-        world.setBlockMetadataWithNotify(x, y, z, meta, 0);
-        }
-      catch(Exception e)
-        {
-        Config.logError("caught exception while attempting to place block: "+x+","+y+","+z+" :: "+id+"-"+meta);
-        }
-      }
-    else
+    try
       {
       world.setBlock(x, y, z, id);
-      world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-//      world.setBlock(x, y, z, id, meta, 3);      
+      world.setBlockMetadataWithNotify(x, y, z, meta, 0);
       }
+    catch(Exception e)
+      {
+      Config.logError("caught exception while attempting to place block: "+x+","+y+","+z+" :: "+id+"-"+meta);
+      }
+    }
+  else
+    {
+    world.setBlock(x, y, z, id);
+    world.setBlockMetadataWithNotify(x, y, z, meta, 3);
     }
   }
 
