@@ -563,7 +563,6 @@ protected void setBlock(World world, int x, int y, int z, int id, int meta)
     {
     world.setBlock(x, y, z, id);
     world.setBlockMetadataWithNotify(x, y, z, meta, 3);
-//    world.setBlock(x, y, z, id, meta, 3);      
     }
   }
 

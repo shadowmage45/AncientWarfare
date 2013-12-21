@@ -86,7 +86,7 @@ public static void resetMap()
   dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
   }
 
-public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
+public boolean validatePlacement(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
   {  
   if(y==-1)
     {
@@ -109,15 +109,11 @@ public boolean attemptPlacementSubsurface(World world, int x, int y, int z, int 
   if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
     {
     return false;
-    }
-  Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
-  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
-  builder.setWorldGen();
-  builder.startConstruction(); 
+    } 
   return true;
   }
 
-public boolean attemptPlacementSurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
+public boolean validatePlacementSurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
   {  
   if(y==-1)
     {
@@ -143,10 +139,7 @@ public boolean attemptPlacementSurface(World world, int x, int y, int z, int fac
     Config.logDebug("site rejected due to structure overlap");
     return false;
     }
-  Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
-  BuilderInstant builder = new BuilderInstant(world, struct, face, hit);
-  builder.setWorldGen();
-  builder.startConstruction();  
+  
   return true;
   }
 
@@ -231,20 +224,24 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     if(struct.underground)
       {
       y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);      
-      placed = this.attemptPlacementSubsurface(world, x, y, z, face, struct, random);
+      placed = this.validatePlacement(world, x, y, z, face, struct, random);
       }
     else
       {
       y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
-      placed = this.attemptPlacementSurface(world, x, y, z, face, struct, random);
+      placed = this.validatePlacementSurface(world, x, y, z, face, struct, random);      
       }    
     if(placed)
       {   
       WorldGenStructureEntry ent = struct.getWorldGenEntry();
       if(ent!=null)
         {
+        Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
         Config.logDebug("generated : "+struct.name + " unique: "+ent.unique + " in biome: "+biomeName + " has exclusions of: "+ent.biomesNot + "  has inclusions of: "+ent.biomesOnly);
-        WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);
+        WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);        
+        BuilderInstant builder = new BuilderInstant(world, struct, face, new BlockPosition(x,y,z));
+        builder.setWorldGen();
+        builder.startConstruction();  
         }      
       }
     else
