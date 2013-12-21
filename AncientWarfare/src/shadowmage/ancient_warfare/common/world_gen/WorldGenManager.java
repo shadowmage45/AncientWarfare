@@ -76,6 +76,14 @@ public void setGeneratedAt(int dim, int worldX, int worldY, int worldZ, int face
   this.dimensionStructures.get(dim).setGeneratedAt(worldX, worldY, worldZ,face , value, name, unique);
   }
 
+public void removeGenEntryFor(int dim, int worldX, int worldY, int worldZ, int face, int value, String name, boolean unique)
+  {
+  if(dimensionStructures.containsKey(dim))
+    {
+    dimensionStructures.get(dim).removeEntry(worldX, worldY, worldZ, face, value, name, unique);
+    }
+  }
+
 public void loadConfig(String pathName)
   {
   WorldGenStructureManager.instance().loadConfig(pathName);
@@ -84,33 +92,6 @@ public void loadConfig(String pathName)
 public static void resetMap()
   {
   dimensionStructures = new HashMap<Integer, WorldGenStructureMap>();
-  }
-
-public boolean validatePlacement(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
-  {  
-  if(y==-1)
-    {
-//    Config.logDebug("underground structure--invalid topBlock");
-    return false;
-    }
-  int size = struct.ySize - (struct.ySize-struct.verticalOffset);
-  if(y-size <=1)
-    {
-    Config.logDebug("site rejected by structure, too low");
-    return false;
-    }
-  BlockPosition hit = new BlockPosition(x,y,z);    
-  hit.y++;
-  if(!struct.canGenerateAtSubSurface(world, hit, face, struct))
-    {
-//    Config.logDebug("underground structure rejected build site");
-    return false;
-    }  
-  if(this.checkBBCollisions(world, struct, hit, face, x/16, z/16))
-    {
-    return false;
-    } 
-  return true;
   }
 
 public boolean validatePlacementSurface(World world, int x, int y, int z, int face, ProcessedStructure struct, Random random)
@@ -214,35 +195,41 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
       Config.logDebug("Exit for value ratio check");
       return;
       }        
+    
+    
+
+    
     /**
      * else, place the struct....
      */
     boolean placed = false;
     
     int y = 0;
-    int face = random.nextInt(4);    
-    if(struct.underground)
+    int face = random.nextInt(4);   
+    
+    y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
+    
+    WorldGenStructureEntry ent = struct.getWorldGenEntry();
+    if(ent!=null)
       {
-      y = getSubsurfaceTarget(world, x, z, struct.undergroundMinLevel, struct.undergroundMaxLevel, struct.minSubmergedDepth, random);      
-      placed = this.validatePlacement(world, x, y, z, face, struct, random);
-      }
+      WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);    
+      } 
     else
       {
-      y = getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
-      placed = this.validatePlacementSurface(world, x, y, z, face, struct, random);      
-      }    
+      return;
+      }
+
+    placed = this.validatePlacementSurface(world, x, y, z, face, struct, random);    
+    WorldGenManager.instance().removeGenEntryFor(dim, x, y, z, face, ent.value, ent.name, ent.unique);
+    
     if(placed)
-      {   
-      WorldGenStructureEntry ent = struct.getWorldGenEntry();
-      if(ent!=null)
-        {
-        Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
-        Config.logDebug("generated : "+struct.name + " unique: "+ent.unique + " in biome: "+biomeName + " has exclusions of: "+ent.biomesNot + "  has inclusions of: "+ent.biomesOnly);
-        WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);        
-        BuilderInstant builder = new BuilderInstant(world, struct, face, new BlockPosition(x,y,z));
-        builder.setWorldGen();
-        builder.startConstruction();  
-        }      
+      {
+      Config.log("Ancient Warfare generating structure at: "+x+","+y+","+z +" :: "+struct.name);
+      Config.logDebug("generated : "+struct.name + " unique: "+ent.unique + " in biome: "+biomeName + " has exclusions of: "+ent.biomesNot + "  has inclusions of: "+ent.biomesOnly);
+      WorldGenManager.instance().setGeneratedAt(dim, x, y, z, face, ent.value, ent.name, ent.unique);        
+      BuilderInstant builder = new BuilderInstant(world, struct, face, new BlockPosition(x,y,z));
+      builder.setWorldGen();
+      builder.startConstruction();
       }
     else
       {

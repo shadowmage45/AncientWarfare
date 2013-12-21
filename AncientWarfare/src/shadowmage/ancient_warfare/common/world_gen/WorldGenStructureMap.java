@@ -176,6 +176,15 @@ public void setGeneratedAt(int x, int y, int z, int face, int value, String name
   this.setEntry(cX, cZ, ent);
   }
 
+public void removeEntry(int x, int y, int z, int face, int value, String name, boolean unique)
+  {
+  if(this.generatedStructures.containsKey(x) && this.generatedStructures.get(x).containsKey(z))
+    {
+    this.generatedStructures.get(x).remove(z);
+    }
+  this.generatedUniques.remove(name);
+  }
+
 //TODO move this to a proper mathtools class....
 public static int getAbsDiff(int a, int b)
   {
