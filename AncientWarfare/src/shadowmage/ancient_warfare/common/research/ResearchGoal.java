@@ -159,7 +159,7 @@ protected boolean enabledForResearch;
 
 public static void load()
   {
-  Description d = ItemLoader.instance().registerItemSubtyped(ItemLoader.researchNotes);
+  Description d = ItemLoader.instance().registerItemSubtyped(ItemLoader.researchNotes, "item.multi.researchNotes");
   boolean enabled;
   for(IResearchGoal goal : researchGoals)
     {

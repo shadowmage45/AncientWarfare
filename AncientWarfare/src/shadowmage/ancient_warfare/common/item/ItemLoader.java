@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -55,6 +56,7 @@ public static final ItemFood rations = new ItemRation(Config.getItemID("itemSing
 public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 24018, "Research notes"));
 public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 24019, "Backpack"));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 24020, "Research book to save research progress"));
+public static final AWItemBase structureGenerator = new ItemStructureGenerator(Config.getItemID("itemSingle.structureGenerator", 24020, "Generates as per world gen"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
 public static final ItemStack wood2 = new ItemStack(componentItem, 1, 1);
@@ -123,37 +125,37 @@ private void loadItems()
   this.registerItemSingle(structureCreativeBuilder, "item.single.structureBuilderInstant", "item.single.structureBuilderInstant.description", "item.single.structureBuilderInstant.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(structureBuilderDirect, "item.single.structureBuilderDirect", "item.single.structureBuilderDirect.description", "item.single.structureBuilderDirect.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
   this.registerItemSingle(structureEditor, "item.single.structureEditor", "item.single.structureEditor.description", "item.single.structureEditor.tooltip").setIconTexture("ancientwarfare:builder/testIcon1", 0);
-  this.registerItemSubtyped(ammoItem);
-  this.registerItemSubtyped(vehicleSpawner);
-  this.registerItemSubtyped(vehicleUpgrade);
-  this.registerItemSubtyped(armorItem);
-  this.registerItemSubtyped(npcSpawner);
-  this.registerItemSubtyped(npcCommandBaton);
+  this.registerItemSubtyped(ammoItem, "ammo");
+  this.registerItemSubtyped(vehicleSpawner, "vehicleSpawner");
+  this.registerItemSubtyped(vehicleUpgrade, "vehicleUpgrade");
+  this.registerItemSubtyped(armorItem, "vehicleArmor");
+  this.registerItemSubtyped(npcSpawner, "npcSpawner");
+  this.registerItemSubtyped(npcCommandBaton, "commandBaton");
   this.addSubtypeInfoToItem(npcCommandBaton, 0, "item.baton.0", "item.baton.0.description","item.baton.0.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
   this.addSubtypeInfoToItem(npcCommandBaton, 1, "item.baton.1", "item.baton.0.description","item.baton.1.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
-  this.registerItemSubtyped(civicPlacer);
+  this.registerItemSubtyped(civicPlacer, "civicItem");
   this.registerItemSingle(civicBuilder, "item.single.civicBuilder", "item.single.civicBuilder.description", "item.single.civicBuilder.tooltip");
-  this.registerItemSubtyped(courierRouteSlip);
+  this.registerItemSubtyped(courierRouteSlip, "routingSlip");
   this.addSubtypeInfoToItem(courierRouteSlip, 0, "item.routingSlip.0","item.routingSlip.0.description","item.routingSlip.0.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
   this.addSubtypeInfoToItem(courierRouteSlip, 1, "item.routingSlip.1","item.routingSlip.1.description","item.routingSlip.1.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
   this.addSubtypeInfoToItem(courierRouteSlip, 2, "item.routingSlip.2","item.routingSlip.2.description","item.routingSlip.2.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,2)).setIconTexture("ancientwarfare:npc/route3", 2);
-  this.registerItemSubtyped(gateSpawner);
+  this.registerItemSubtyped(gateSpawner, "gateSpawner");
   this.registerItemSingle(rations, "item.single.rations", "item.single.rations.description", "item.single.rations.tooltip");
    
-  this.registerItemSubtyped(backpack);
+  this.registerItemSubtyped(backpack, "backpack");
   this.addSubtypeInfoToItem(backpack, 0, "item.backpack.0").addTooltip("item.backpack.0.tooltip", 0).addDisplayStack(new ItemStack(backpack,1,0)).setIconTexture("ancientwarfare:misc/backpack", 0);
   this.addSubtypeInfoToItem(backpack, 16, "item.backpack.16").addTooltip("item.backpack.16.tooltip", 16).addDisplayStack(new ItemStack(backpack,1,16)).setIconTexture("ancientwarfare:misc/backpack", 16);
   this.addSubtypeInfoToItem(backpack, 32, "item.backpack.32").addTooltip("item.backpack.32.tooltip", 32).addDisplayStack(new ItemStack(backpack,1,32)).setIconTexture("ancientwarfare:misc/backpack", 32);
   this.addSubtypeInfoToItem(backpack, 48, "item.backpack.48").addTooltip("item.backpack.48.tooltip", 48).addDisplayStack(new ItemStack(backpack,1,48)).setIconTexture("ancientwarfare:misc/backpack", 48);
     
-  this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook").setIconTexture("ancientwarfare:misc/researchBook", 0);
-    
-  this.registerItemSubtyped(researchNotes);
+  this.registerItemSubtyped(researchNotes, "researchNotes");
+  this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook.tooltip").setIconTexture("ancientwarfare:misc/researchBook", 0);
+  this.registerItemSingle(structureGenerator, "item.single.structureGenerator", "item.single.structureGenerator.description", "item.single.structureGenerator.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);    
   
   /**
    * register main component item (misc random items) 
    */
-  this.registerItemSubtyped(componentItem);
+  this.registerItemSubtyped(componentItem, "componentItem");
   this.addSubtypeInfoToItem(componentItem, 0, "item.component.0").addTooltip("item.component.0.tooltip", 0).addDisplayStack(wood1).setIconTexture("ancientwarfare:misc/materialWood1", 0);
   this.addSubtypeInfoToItem(componentItem, 1, "item.component.1").addTooltip("item.component.1.tooltip", 1).addDisplayStack(wood2).setIconTexture("ancientwarfare:misc/materialWood2", 1);
   this.addSubtypeInfoToItem(componentItem, 2, "item.component.2").addTooltip("item.component.2.tooltip", 2).addDisplayStack(wood3).setIconTexture("ancientwarfare:misc/materialWood3", 2);
@@ -196,9 +198,10 @@ private void loadDebugItems()
   this.registerItemSingle(blockScanner, "item.single.debug.blockScanner", "item.single.debug.blockScanner.description","item.single.debug.blockScanner.tooltip").setIconTexture("ancientwarfare:testIcon1", 0);
   }
 
-public Description registerItemSubtyped(AWItemBase item)
+public Description registerItemSubtyped(AWItemBase item, String baseName)
   {
   Description d = DescriptionRegistry2.instance().registerItem(item, false);
+//  GameRegistry.registerItem(item, baseName);
   return d;
   }
 
@@ -208,6 +211,7 @@ public Description registerItemSingle(Item item, String name, String desc, Strin
   d.setName(name, 0);
   d.setDescription(desc, 0);
   d.addTooltip(tip, 0);  
+//  GameRegistry.registerItem(item, name);
   return d;
   }
 
