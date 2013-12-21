@@ -97,7 +97,7 @@ public void addLootToTables()
     }
   for(IAmmoType t : Ammo.ammoTypes)
     {
-    if(t==null){continue;}
+    if(t==null || !t.isAvailableAsItem()){continue;}
     addLoot(t.getAmmoStack(1),2,32,3);
     }
   for(IVehicleUpgradeType t : VehicleUpgradeRegistry.instance().getUpgradeList())
