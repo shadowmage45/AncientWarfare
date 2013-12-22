@@ -227,7 +227,7 @@ public void registerValidationClass(String pluginName, Class<? extends Structure
   validationClassesByName.put(pluginName, validationClass);
   }
 
-public TemplateRule getRule(List<String> ruleData)
+public TemplateRule getRule(List<String> ruleData, String ruleType)
   {
   Iterator<String> it = ruleData.iterator();
   String name = null;
@@ -237,11 +237,11 @@ public TemplateRule getRule(List<String> ruleData)
   while(it.hasNext())
     {
     line = it.next();
-    if(line.startsWith("rule:"))
+    if(line.startsWith(ruleType+":"))
       {
       continue;
       }
-    if(line.startsWith(":endrule"))
+    if(line.startsWith(":end"+ruleType))
       {
       break;
       }
@@ -268,7 +268,7 @@ public TemplateRule getRule(List<String> ruleData)
     }
   AWLog.logDebug("parsed rule: "+ruleNumber);
   Class<?extends TemplateRule> clz = getRuleByName(name);
-  if(name==null || ruleNumber<=0 || ruleDataPackage.size()==0 || clz==null)
+  if(name==null || ruleNumber<0 || ruleDataPackage.size()==0 || clz==null)
     {
     throw new IllegalArgumentException("Not enough data to create template rule.\n"+
     		"name: "+name+"\n"+

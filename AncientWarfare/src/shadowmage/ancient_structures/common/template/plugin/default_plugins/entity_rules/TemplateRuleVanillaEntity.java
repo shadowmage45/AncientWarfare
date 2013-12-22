@@ -59,12 +59,6 @@ public TemplateRuleVanillaEntity()
   }
 
 @Override
-public boolean shouldReuseRule(World world, Entity entity, int x, int y, int z)
-  {
-  return mobID.equals(EntityList.getEntityString(entity));
-  }
-
-@Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
   Entity e = EntityList.createEntityByName(mobID, world);
@@ -79,6 +73,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
 @Override
 public void parseRuleData(List<String> ruleData)
   {
+  super.parseRuleData(ruleData);
   for(String line : ruleData)
     {
     if(line.toLowerCase().startsWith("mobid="))
@@ -101,6 +96,7 @@ public void parseRuleData(List<String> ruleData)
 @Override
 public void writeRuleData(BufferedWriter out) throws IOException
   {
+  super.writeRuleData(out);
   out.write("mobID="+mobID);
   out.newLine();
   out.write("offset="+StringTools.getCSVStringForArray(xOffset, zOffset));

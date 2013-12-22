@@ -21,10 +21,12 @@
 package shadowmage.ancient_structures.common.template.build;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
 public class StructureBuilder
 {
@@ -112,6 +114,23 @@ public void instantConstruction()
   while(!this.isFinished)
     {
     this.placeCurrentPosition();
+    }
+  this.placeEntities();
+  }
+
+protected void placeEntities()
+  {   
+  TemplateRuleEntity[] rules = template.getEntityRules();
+  for(TemplateRuleEntity rule : rules)
+    {
+	if(rule==null){continue;}
+	AWLog.logDebug("placing entity from rule..."+rule);
+    destination.x = rule.x;
+    destination.y = rule.y;
+    destination.z = rule.z;
+    BlockTools.rotateInArea(destination, destXSize, destZSize, turns);
+    destination.offsetBy(min);
+    rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);
     }
   }
 

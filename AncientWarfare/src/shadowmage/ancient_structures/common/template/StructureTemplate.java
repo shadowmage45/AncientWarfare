@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.template;
 
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
 
 public class StructureTemplate
@@ -38,6 +39,7 @@ public final int xOffset, yOffset, zOffset;
  * stored template data
  */
 private TemplateRule[] templateRules;
+private TemplateRuleEntity[] entityRules;
 private short[] templateData;
 
 /**
@@ -55,6 +57,11 @@ public StructureTemplate(String name, int xSize, int ySize, int zSize, int xOffs
   this.xOffset = xOffset;
   this.yOffset = yOffset;
   this.zOffset = zOffset;  
+  }
+
+public TemplateRuleEntity[] getEntityRules()
+  {
+  return entityRules;
   }
 
 public TemplateRule[] getTemplateRules()
@@ -75,6 +82,11 @@ public StructureValidationSettingsDefault getValidationSettings()
 public void setRuleArray(TemplateRule[] rules)
   {
   this.templateRules = rules;
+  }
+
+public void setEntityRules(TemplateRuleEntity[] rules)
+  {
+  this.entityRules = rules;
   }
 
 public void setTemplateData(short[] datas)

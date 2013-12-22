@@ -80,21 +80,12 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   key.z = key.z - min.z; 
     
   short[] templateRuleData = new short[xSize*ySize*zSize];
-  BlockTools.rotateInArea(key, xSize, zSize, turns);
-  
-  List<Entity> entitiesInAABB;
-  
-  HashMap<String, List<TemplateRuleBlock>> pluginBlockRuleMap = new HashMap<String, List<TemplateRuleBlock>>();
-  HashMap<String, List<TemplateRuleEntity>> pluginEntityRuleMap = new HashMap<String, List<TemplateRuleEntity>>();  
-  
+  BlockTools.rotateInArea(key, xSize, zSize, turns);      
+  HashMap<String, List<TemplateRuleBlock>> pluginBlockRuleMap = new HashMap<String, List<TemplateRuleBlock>>();  
   List<TemplateRule> currentRulesAll = new ArrayList<TemplateRule>();
   Block scannedBlock;
-  TemplateRuleBlock scannedBlockRule = null;
-  TemplateRuleEntity scannedEntityRule = null;
-    
-  List<TemplateRuleBlock> pluginBlockRules;
-  List<TemplateRuleEntity> pluginEntityRules;
-  
+  TemplateRuleBlock scannedBlockRule = null;    
+  List<TemplateRuleBlock> pluginBlockRules;  
   String pluginId;
   int index;
   int meta;
@@ -102,7 +93,6 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   int scanX, scanZ, scanY;
   BlockPosition destination = new BlockPosition();
   int nextRuleID = 1;
-  int ex, ey, ez;
   for(scanY = min.y; scanY<=max.y; scanY++)  
     {
     for(scanZ = min.z; scanZ<=max.z; scanZ++)
@@ -150,73 +140,58 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
             }
           }
         else
-          {          
-          entitiesInAABB = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getAABBPool().getAABB(scanX, scanY, scanZ, scanX+1, scanY+1, scanZ+1));          
-          String entityPluginId = null;          
-          Entity toScan = null;
-          
-          for(Entity e : entitiesInAABB)
-            {
-            ex = MathHelper.floor_double(e.posX);
-            ey = MathHelper.floor_double(e.posY);
-            ez = MathHelper.floor_double(e.posZ);
-            if(ex==scanX && ey==scanY && ez==scanZ)
-              {
-              entityPluginId = AWStructures.instance.pluginManager.getPluginNameForEntity(e.getClass());
-              if(entityPluginId==null){continue;}
-              toScan = e;
-              break;
-              }
-            }
-          if(toScan!=null && entityPluginId!=null)
-            {
-            boolean found = false;
-            pluginEntityRules = pluginEntityRuleMap.get(entityPluginId);
-            if(pluginEntityRules==null)
-              {
-              pluginEntityRules = new ArrayList<TemplateRuleEntity>();
-              pluginEntityRuleMap.put(entityPluginId, pluginEntityRules);
-              }
-            for(TemplateRuleEntity rule : pluginEntityRules)
-              {
-              if(rule.shouldReuseRule(world, toScan, scanX, scanY, scanZ))
-                {
-                found = true;
-                scannedEntityRule = rule;
-                break;
-                }
-              }
-            if(!found)
-              {
-              scannedEntityRule = AWStructures.instance.pluginManager.getRuleForEntity(world, toScan, turns, scanX, scanY, scanZ);
-              if(scannedEntityRule!=null)
-                {
-                pluginEntityRules.add((TemplateRuleEntity) scannedEntityRule);
-                currentRulesAll.add(scannedEntityRule);
-                scannedEntityRule.ruleNumber = nextRuleID;
-                nextRuleID++;
-                }
-              }
-            if(scannedEntityRule!=null)
-              {
-              index = StructureTemplate.getIndex(destination.x, destination.y, destination.z, xOutSize, ySize, zOutSize);
-              templateRuleData[index] = (short) scannedEntityRule.ruleNumber;              
-              }            
-            }
+          {
           }//end entity-scan else block
         }//end scan x-level for
       }
     }  
+  
+
+  TemplateRuleEntity scannedEntityRule;
+  List<TemplateRuleEntity> scannedEntityRules = new ArrayList<TemplateRuleEntity>();
+  int ex, ey, ez; 
+  List<Entity> entitiesInAABB = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x+1, max.y+1, max.z+1));          
+  String entityPluginId = null; 
+  nextRuleID = 0;
+  for(Entity e : entitiesInAABB)
+    {
+    ex = MathHelper.floor_double(e.posX);
+    ey = MathHelper.floor_double(e.posY);
+    ez = MathHelper.floor_double(e.posZ);
+    entityPluginId = AWStructures.instance.pluginManager.getPluginNameForEntity(e.getClass());
+    if(entityPluginId==null){continue;}
+    scannedEntityRule = AWStructures.instance.pluginManager.getRuleForEntity(world, e, turns, ex, ey, ez);
+    if(scannedEntityRule!=null)
+      {
+      destination.x = ex - min.x;
+      destination.y = ey - min.y; 
+      destination.z = ez - min.z;
+      BlockTools.rotateInArea(destination, xSize, zSize, turns);
+      scannedEntityRule.ruleNumber = nextRuleID;
+      scannedEntityRule.x = destination.x;
+      scannedEntityRule.y = destination.y;
+      scannedEntityRule.z = destination.z;  
+      scannedEntityRules.add(scannedEntityRule);          
+      nextRuleID++;
+      }
+    }
+  
   TemplateRule[] templateRules = new TemplateRule[currentRulesAll.size()+1];
-  TemplateRule copyRule;
   for(int i = 0; i < currentRulesAll.size(); i++)//offset by 1 -- we want a null rule for 0==air
     {
-    copyRule = currentRulesAll.get(i);
-    templateRules[i+1] = copyRule;
+    templateRules[i+1] = currentRulesAll.get(i);
     }
+  
+  TemplateRuleEntity[] entityRules = new TemplateRuleEntity[scannedEntityRules.size()];
+  for(int i = 0; i < scannedEntityRules.size(); i++)
+    {
+    entityRules[i] = scannedEntityRules.get(i);
+    }
+    
   StructureTemplate template = new StructureTemplate(name, xOutSize, ySize, zOutSize, key.x, key.y, key.z);
   template.setTemplateData(templateRuleData);
   template.setRuleArray(templateRules);  
+  template.setEntityRules(entityRules);
   return template;
   }
 

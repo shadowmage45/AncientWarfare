@@ -67,8 +67,15 @@ public static void exportTo(StructureTemplate template, File directory)
     TemplateRule[] templateRules = template.getTemplateRules();
     for(TemplateRule rule : templateRules)
       {
-      writeRuleLines(rule, writer);
-      }
+      writeRuleLines(rule, writer, "rule");
+      }    
+    writer.write("#### ENTITIES ####");
+    writer.newLine();
+    templateRules = template.getEntityRules();
+    for(TemplateRule rule : templateRules)
+      {
+      writeRuleLines(rule, writer, "entity");
+      }    
     } 
   catch (IOException e)
     {
@@ -156,7 +163,7 @@ private static void writeLayers(StructureTemplate template, BufferedWriter write
   writer.newLine();
   }
 
-public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) throws IOException
+public final static void writeRuleLines(TemplateRule rule, BufferedWriter out, String ruleType) throws IOException
   {
   if(rule==null)
     {
@@ -167,7 +174,7 @@ public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) t
     {
     return;
     }
-  out.write("rule:");
+  out.write(ruleType+":");
   out.newLine();
   out.write("plugin="+id);
   out.newLine();
@@ -178,10 +185,12 @@ public final static void writeRuleLines(TemplateRule rule, BufferedWriter out) t
   rule.writeRuleData(out);
   out.write(":enddata");
   out.newLine();
-  out.write(":endrule");
+  out.write(":end"+ruleType);
   out.newLine();
   out.newLine();
   }
+
+
 
 
 }

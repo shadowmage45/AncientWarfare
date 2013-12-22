@@ -20,23 +20,53 @@
  */
 package shadowmage.ancient_structures.common.template.rule;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.List;
+
+import shadowmage.ancient_framework.common.utils.StringTools;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
 public abstract class TemplateRuleEntity extends TemplateRule
 {
 
+public int x, y, z;
+
 public TemplateRuleEntity(World world, Entity entity, int turns, int x, int y, int z)
   {
-  
+
   }
 
 public TemplateRuleEntity()
   {
-  // TODO Auto-generated constructor stub
+  
   }
 
-public abstract boolean shouldReuseRule(World world, Entity entity, int x, int y, int z);
+@Override
+public void parseRuleData(List<String> ruleData)
+  {
+  for(String line : ruleData)
+    {
+    if(line.toLowerCase().startsWith("position="))
+      {
+      int[] pos = StringTools.safeParseIntArray("=", line);
+      x = pos[0];
+      y = pos[1];
+      z = pos[2];
+      break;
+      }
+    }
+  }
+
+@Override
+public void writeRuleData(BufferedWriter out) throws IOException
+  {
+  out.write("position="+StringTools.getCSVStringForArray(new int[]{x,y,z}));
+  out.newLine();
+  }
+
 
 
 }

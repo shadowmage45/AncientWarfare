@@ -33,6 +33,7 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 
 
@@ -180,6 +181,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   zOffset = zSize - 1 - zOffset;//invert offset to normalize for the new top-left oriented template construction
   StructureTemplate template = new StructureTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset);
   template.setRuleArray(rules);
+  template.setEntityRules(new TemplateRuleEntity[]{});
   template.setTemplateData(templateData);
   template.setValidationSettings(new StructureValidationSettingsDefault());
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));

@@ -35,6 +35,7 @@ import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
 public class TemplateParser
 {
@@ -93,7 +94,9 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   String line;
  
   List<TemplateRule> parsedRules = new ArrayList<TemplateRule>();  
+  List<TemplateRuleEntity> parsedEntities = new ArrayList<TemplateRuleEntity>();
   TemplateRule[] ruleArray = null;
+  TemplateRuleEntity[] entityRuleArray = null;
   StructureValidationSettingsDefault validation = null;  
   List<String> groupedLines = new ArrayList<String>();
   
@@ -196,13 +199,36 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
           break;
           }
         }
-      TemplateRule rule = parseRule(groupedLines);
+      TemplateRule rule = parseRule(groupedLines, "rule");
       if(rule!=null)
         {
         parsedRules.add(rule);
         }
       groupedLines.clear();
-      }    
+      } 
+    
+    /**
+     * parse out rule data
+     */
+    if(line.startsWith("entity:"))
+      {
+      groupedLines.add(line);
+      while(it.hasNext())
+        {
+        line = it.next();
+        groupedLines.add(line);
+        if(line.startsWith(":endentity"))
+          {          
+          break;
+          }
+        }
+      TemplateRuleEntity rule = (TemplateRuleEntity) parseRule(groupedLines, "entity");
+      if(rule!=null)
+        {
+        parsedEntities.add(rule);
+        }
+      groupedLines.clear();
+      } 
     
     /**
      * parse out layer data
@@ -236,20 +262,29 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   	  ruleArray[rule.ruleNumber] = rule;
   	  }    
     }
-  return constructTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset, templateData, ruleArray, validation);  
+  
+  entityRuleArray = new TemplateRuleEntity[parsedEntities.size()];
+  for(TemplateRuleEntity rule : parsedEntities)
+    {
+    entityRuleArray[rule.ruleNumber] = rule;
+    AWLog.logDebug("parsed entity rule of......."+rule);
+    }
+  
+  return constructTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset, templateData, ruleArray, entityRuleArray, validation);  
   }
 
-private TemplateRule parseRule(List<String> templateLines)
+private TemplateRule parseRule(List<String> templateLines, String ruleType)
   {
-  return AWStructures.instance.pluginManager.getRule(templateLines);
+  return AWStructures.instance.pluginManager.getRule(templateLines, ruleType);
   }
 
-private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, StructureValidationSettingsDefault validation)
+private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, TemplateRuleEntity[] entityRules, StructureValidationSettingsDefault validation)
   {
   StructureTemplate template = new StructureTemplate(name, x, y, z, xo, yo, zo);
   template.setRuleArray(rules);
+  template.setEntityRules(entityRules);
   template.setTemplateData(templateData);
-  template.setValidationSettings(validation);
+  template.setValidationSettings(validation);  
   return template;
   }
 
