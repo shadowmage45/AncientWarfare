@@ -44,26 +44,28 @@ public TemplateRuleEntityLogic(World world, Entity entity, int turns, int x, int
   {
   super(world, entity, turns, x, y, z);
   entity.writeToNBT(tag);
+  tag.removeTag("UUIDMost");
+  tag.removeTag("UUIDLeast");
   }
 
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
   Entity e = EntityList.createEntityByName(mobID, world);
-  float xo = BlockTools.rotateFloatX(xOffset, zOffset, turns);
-  float zo = BlockTools.rotateFloatZ(xOffset, zOffset, turns);
   NBTTagList list = tag.getTagList("Pos");
   if(list.tagCount()>=3)
     {
-    ((NBTTagDouble)list.tagAt(0)).data = x + xo;
+    ((NBTTagDouble)list.tagAt(0)).data = x + BlockTools.rotateFloatX(xOffset, zOffset, turns);
     ((NBTTagDouble)list.tagAt(1)).data = y;
-    ((NBTTagDouble)list.tagAt(2)).data = z + zo;
+    ((NBTTagDouble)list.tagAt(2)).data = z + BlockTools.rotateFloatZ(xOffset, zOffset, turns);
     e.readFromNBT(tag);
     }
   else
     {
     e.setPosition(x+0.5d, y, z+0.5d);
     }
+  float yaw = (rotation + 90.f * turns)%360.f;
+  e.rotationYaw = yaw;
   world.spawnEntityInWorld(e);
   }
 

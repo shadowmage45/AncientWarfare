@@ -49,6 +49,8 @@ public TemplateRuleEntityHanging(World world, Entity entity, int turns, int x, i
   EntityHanging hanging = (EntityHanging)entity;  
   entity.writeToNBT(tag);
   this.direction = (hanging.hangingDirection + turns)%4;
+  tag.removeTag("UUIDMost");
+  tag.removeTag("UUIDLeast");
   }
 
 public TemplateRuleEntityHanging()
@@ -69,12 +71,6 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   tag.setInteger("TileZ", hangTarget.z);
   e.readFromNBT(tag);  
   world.spawnEntityInWorld(e);
-  }
-
-@Override
-public boolean shouldReuseRule(World world, Entity entity, int x, int y, int z)
-  {
-  return super.shouldReuseRule(world, entity, x, y, z);
   }
 
 @Override
@@ -99,6 +95,5 @@ public void writeRuleData(BufferedWriter out) throws IOException
   out.newLine();
   writeTag(out, tag);
   }
-
 
 }

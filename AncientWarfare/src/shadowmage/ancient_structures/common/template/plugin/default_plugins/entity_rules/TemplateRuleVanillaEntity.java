@@ -47,10 +47,10 @@ public TemplateRuleVanillaEntity(World world, Entity entity, int turns, int x, i
   float x1, z1;
   x1 = (float) (entity.posX%1.d);
   z1 = (float) (entity.posZ%1.d);
+  if(x1<0){x1++;}
+  if(z1<0){z1++;}
   xOffset = BlockTools.rotateFloatX(x1, z1, turns);
   zOffset = BlockTools.rotateFloatZ(x1, z1, turns);
-  xOffset = x1;
-  zOffset = z1;
   }
 
 public TemplateRuleVanillaEntity()

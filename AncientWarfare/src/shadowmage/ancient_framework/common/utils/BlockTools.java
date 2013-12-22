@@ -52,7 +52,7 @@ public static float rotateFloatX(float x, float z, int turns)
   for(int i = 0; i <turns; i++)
     {
     z = x1;
-    x = 1-z1;
+    x = 1.f-z1;
     x1 = x;
     z1 = z;
     }
@@ -67,7 +67,7 @@ public static float rotateFloatZ(float x, float z, int turns)
   for(int i = 0; i <turns; i++)
     {
     z = x1;
-    x = 1-z1;
+    x = 1.f-z1;
     x1 = x;
     z1 = z;
     }

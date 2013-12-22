@@ -112,6 +112,9 @@ public void init(FMLInitializationEvent evt)
    * listen for plugin registration
    * TODO 
    */
+  double d1 = 1.75d % 1.d;
+  double d2 = -1.75d % 1.d;
+  AWLog.logDebug("d1, d2: "+d1+","+d2);
   config.log("Ancient Warfare Structures Init completed.");
   }
 
