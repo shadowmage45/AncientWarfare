@@ -35,7 +35,6 @@ public class ContainerBackpack extends ContainerBase
 {
 
 AWInventoryBasic inventory = null;
-
 /**
  * @param openingPlayer
  * @param synch
@@ -53,14 +52,7 @@ public ContainerBackpack(EntityPlayer openingPlayer)
     slotNum = x;
     xPos = 8 + x * 18;
     yPos = 162 + 3*18; 
-    if(x==player.inventory.currentItem)
-      {
-      this.addSlotToContainer(new SlotNoPull(openingPlayer.inventory, x, xPos, yPos));
-      }
-    else
-      {
-      this.addSlotToContainer(new SlotExcludeOnly(openingPlayer.inventory, x, xPos, yPos, filter));      
-      }
+    this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));      
     }
   for (y = 0; y < 3; ++y)
     {
@@ -69,7 +61,7 @@ public ContainerBackpack(EntityPlayer openingPlayer)
       slotNum = y*9 + x + 9;// +9 is to increment past hotbar slots
       xPos = 8 + x * 18;
       yPos = 158 + y * 18;
-      this.addSlotToContainer(new SlotExcludeOnly(openingPlayer.inventory, slotNum, xPos, yPos, filter));
+      this.addSlotToContainer(new Slot(openingPlayer.inventory, slotNum, xPos, yPos));
       }
     }  
 
@@ -84,7 +76,7 @@ public ContainerBackpack(EntityPlayer openingPlayer)
         {
         xPos = 8 + x * 18;
         yPos = y * 18 + 15;       
-        Slot slot = new Slot(te, slotNum, xPos, yPos);
+        Slot slot = new SlotExcludeBackpack(te, slotNum, xPos, yPos);
         this.addSlotToContainer(slot);        
         }
       }
@@ -101,8 +93,8 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
     ItemStack slotStack = theSlot.getStack();
     slotStackCopy = slotStack.copy();
     int invIndex = theSlot.getSlotIndex();    
-    int storageSlots = inventory.getSizeInventory();    
-    if (slotClickedIndex < 36)//player slots...
+    int storageSlots = inventory.getSizeInventory();   
+    if(slotClickedIndex < 36)//player slots...
       {      
       if (!this.mergeItemStack(slotStack, 36, 36+storageSlots, false))//merge into storage inventory
         {
