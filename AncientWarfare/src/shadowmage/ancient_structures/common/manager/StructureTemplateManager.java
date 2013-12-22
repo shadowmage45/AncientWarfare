@@ -103,6 +103,11 @@ public Collection<StructureTemplateClient> getClientStructures()
   return clientTemplates.values();
   }
 
+public StructureTemplateClient getClientTemplate(String name)
+  {
+  return clientTemplates.get(name);
+  }
+
 public StructureTemplate getTemplate(String name)
   {
   return this.loadedTemplates.get(name);

@@ -31,13 +31,7 @@ public class AWTextureManager
 
 private static HashMap<String, ResourceLocation> textures = new HashMap<String, ResourceLocation>();
 
-/**
- * 
- */
-public AWTextureManager()
-  {
-  // TODO Auto-generated constructor stub
-  }
+private AWTextureManager(){}
 
 public static void bindTexture(String texture)
   {

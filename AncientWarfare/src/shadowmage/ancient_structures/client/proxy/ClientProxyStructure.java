@@ -20,12 +20,14 @@
  */
 package shadowmage.ancient_structures.client.proxy;
 
+import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_structures.client.gui.structure.GuiCSB;
 import shadowmage.ancient_structures.client.gui.structure.GuiSpawnerPlacer;
 import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
+import shadowmage.ancient_structures.client.render.StructureBoundingBoxRenderer;
 
 public class ClientProxyStructure extends ClientProxyBase
 {
@@ -40,6 +42,8 @@ public void registerClientData()
   GUIHandler.instance().registerGui(Statics.guiStructureBuilderCreative, GuiCSB.class);
   GUIHandler.instance().registerGui(Statics.guiStructureScannerCreative, GuiStructureScanner.class);
   GUIHandler.instance().registerGui(Statics.guiSpawnerPlacer, GuiSpawnerPlacer.class);
+  
+  MinecraftForge.EVENT_BUS.register(StructureBoundingBoxRenderer.instance());
   }
 
 }

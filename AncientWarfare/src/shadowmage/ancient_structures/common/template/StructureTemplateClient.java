@@ -27,7 +27,7 @@ public class StructureTemplateClient
 {
 
 public final String name;
-private final int xSize, ySize, zSize, xOffset, yOffset, zOffset;
+public final int xSize, ySize, zSize, xOffset, yOffset, zOffset;
 
 public StructureTemplateClient(StructureTemplate template)
   {

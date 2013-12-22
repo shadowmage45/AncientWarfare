@@ -178,20 +178,6 @@ public BlockPosition offsetForWorldRender(BlockPosition hit, int face)
   return hit;
   }
 
-/**
- * @param bb
- * @param player
- * @param partialTick
- * @return
- */
-public static AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)
-  {
-  double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
-  double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
-  double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;  
-  return bb.offset(-x, -y, -z);
-  }
-
 @ForgeSubscribe
 public void handleRenderLastEvent(RenderWorldLastEvent evt)
   {

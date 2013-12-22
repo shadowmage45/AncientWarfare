@@ -27,6 +27,8 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Icon;
 
 import org.lwjgl.opengl.GL11;
@@ -35,6 +37,63 @@ public class RenderTools
 {
 
 static float zLevel = 0;
+
+
+/**
+ * draw a player-position-normalized bounding box (can only be called during worldRender)
+ * @param bb
+ */
+public static void drawOutlinedBoundingBox(AxisAlignedBB bb, float r, float g, float b)
+  {
+  GL11.glEnable(GL11.GL_BLEND);
+  GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+  GL11.glColor4f(r, g, b, 0.4F);
+  GL11.glLineWidth(8.0F);
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  GL11.glDepthMask(false);
+  Tessellator tess = Tessellator.instance;
+  tess.startDrawing(3);
+  tess.addVertex(bb.minX, bb.minY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.minY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.minY, bb.maxZ);
+  tess.addVertex(bb.minX, bb.minY, bb.maxZ);
+  tess.addVertex(bb.minX, bb.minY, bb.minZ);
+  tess.draw();
+  tess.startDrawing(3);
+  tess.addVertex(bb.minX, bb.maxY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.maxY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+  tess.addVertex(bb.minX, bb.maxY, bb.maxZ);
+  tess.addVertex(bb.minX, bb.maxY, bb.minZ);
+  tess.draw();
+  tess.startDrawing(1);
+  tess.addVertex(bb.minX, bb.minY, bb.minZ);
+  tess.addVertex(bb.minX, bb.maxY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.minY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.maxY, bb.minZ);
+  tess.addVertex(bb.maxX, bb.minY, bb.maxZ);
+  tess.addVertex(bb.maxX, bb.maxY, bb.maxZ);
+  tess.addVertex(bb.minX, bb.minY, bb.maxZ);
+  tess.addVertex(bb.minX, bb.maxY, bb.maxZ);
+  tess.draw();
+  GL11.glDepthMask(true);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  GL11.glDisable(GL11.GL_BLEND);
+  }
+
+/**
+ * @param bb
+ * @param player
+ * @param partialTick
+ * @return
+ */
+public static AxisAlignedBB adjustBBForPlayerPos(AxisAlignedBB bb, EntityPlayer player, float partialTick)
+  {
+  double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTick;
+  double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTick;
+  double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTick;  
+  return bb.offset(-x, -y, -z);
+  }
 
 /**
  * renders the given icon texture, of given size, at the current render coordinates

@@ -31,6 +31,11 @@ public BlockPosition pos2;
 
 public StructureBB(int x, int y, int z, int face, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
+  this.setFromStructure(x, y, z, face, xSize, ySize, zSize, xOffset, yOffset, zOffset);     
+  }
+
+public final StructureBB setFromStructure(int x, int y, int z, int face, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
+  {
   int destXSize = xSize;
   int destYSize = ySize;
   int destZSize = zSize;
@@ -80,7 +85,8 @@ public StructureBB(int x, int y, int z, int face, int xSize, int ySize, int zSiz
    * calculate structure bounding box min/max from destination 1 and destination 2
    */
   this.pos1 = BlockTools.getMin(destination1, destination2);
-  this.pos2 = BlockTools.getMax(destination1, destination2);     
+  this.pos2 = BlockTools.getMax(destination1, destination2);
+  return this;
   }
 
 public StructureBB(BlockPosition pos1, BlockPosition pos2)
