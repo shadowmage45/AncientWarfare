@@ -28,6 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
@@ -101,6 +102,7 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
   int scanX, scanZ, scanY;
   BlockPosition destination = new BlockPosition();
   int nextRuleID = 1;
+  int ex, ey, ez;
   for(scanY = min.y; scanY<=max.y; scanY++)  
     {
     for(scanZ = min.z; scanZ<=max.z; scanZ++)
@@ -148,17 +150,23 @@ public StructureTemplate scan(World world, BlockPosition min, BlockPosition max,
             }
           }
         else
-          {
-          
+          {          
           entitiesInAABB = world.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getAABBPool().getAABB(scanX, scanY, scanZ, scanX+1, scanY+1, scanZ+1));          
           String entityPluginId = null;          
           Entity toScan = null;
+          
           for(Entity e : entitiesInAABB)
             {
-            entityPluginId = AWStructures.instance.pluginManager.getPluginNameForEntity(e.getClass());
-            if(entityPluginId==null){continue;}
-            toScan = e;
-            break;
+            ex = MathHelper.floor_double(e.posX);
+            ey = MathHelper.floor_double(e.posY);
+            ez = MathHelper.floor_double(e.posZ);
+            if(ex==scanX && ey==scanY && ez==scanZ)
+              {
+              entityPluginId = AWStructures.instance.pluginManager.getPluginNameForEntity(e.getClass());
+              if(entityPluginId==null){continue;}
+              toScan = e;
+              break;
+              }
             }
           if(toScan!=null && entityPluginId!=null)
             {

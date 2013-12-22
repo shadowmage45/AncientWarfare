@@ -30,13 +30,13 @@ import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
-public class TemplateRuleVanillaSign extends TemplateRuleVanillaBlocks
+public class TemplateRuleBlockSign extends TemplateRuleVanillaBlocks
 {
 
 String signContents[];
 boolean wall = true;
 
-public TemplateRuleVanillaSign(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleBlockSign(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
   TileEntitySign te = (TileEntitySign) world.getBlockTileEntity(x, y, z);
@@ -52,7 +52,7 @@ public TemplateRuleVanillaSign(World world, int x, int y, int z, Block block, in
     } 
   }
 
-public TemplateRuleVanillaSign()
+public TemplateRuleBlockSign()
   {
   }
 

@@ -23,22 +23,34 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 import java.util.HashSet;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.entity.item.EntityMinecartEmpty;
+import net.minecraft.entity.item.EntityMinecartFurnace;
+import net.minecraft.entity.item.EntityMinecartTNT;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleInventoried;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleLogic;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockDoors;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockInventory;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockSign;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaDoors;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaSign;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityHanging;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityLogic;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleVanillaEntity;
 
 public class StructurePluginVanillaHandler extends StructureContentPlugin
@@ -54,7 +66,6 @@ public StructurePluginVanillaHandler()
 @Override
 public void addHandledBlocks(StructurePluginManager manager)
   {  
-
   specialHandledBlocks.add(Block.doorIron);
   specialHandledBlocks.add(Block.doorWood);
   specialHandledBlocks.add(Block.signPost);
@@ -82,21 +93,21 @@ public void addHandledBlocks(StructurePluginManager manager)
     } 
   specialHandledBlocks.clear();
   
-  manager.registerBlockHandler("vanillaDoors", Block.doorIron, TemplateRuleVanillaDoors.class);
-  manager.registerBlockHandler("vanillaDoors", Block.doorWood, TemplateRuleVanillaDoors.class);
-  manager.registerBlockHandler("vanillaSign", Block.signPost, TemplateRuleVanillaSign.class);
-  manager.registerBlockHandler("vanillaSign", Block.signWall, TemplateRuleVanillaSign.class);
-  manager.registerBlockHandler("vanillaLogic", Block.mobSpawner, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.commandBlock, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.brewingStand, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.beacon, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.skull, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.furnaceBurning, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaLogic", Block.furnaceIdle, TemplateRuleLogic.class);
-  manager.registerBlockHandler("vanillaInventory", Block.dispenser, TemplateRuleInventoried.class);
-  manager.registerBlockHandler("vanillaInventory", Block.chest, TemplateRuleInventoried.class);
-  manager.registerBlockHandler("vanillaInventory", Block.dropper, TemplateRuleInventoried.class);
-  manager.registerBlockHandler("vanillaInventory", Block.hopperBlock, TemplateRuleInventoried.class);
+  manager.registerBlockHandler("vanillaDoors", Block.doorIron, TemplateRuleBlockDoors.class);
+  manager.registerBlockHandler("vanillaDoors", Block.doorWood, TemplateRuleBlockDoors.class);
+  manager.registerBlockHandler("vanillaSign", Block.signPost, TemplateRuleBlockSign.class);
+  manager.registerBlockHandler("vanillaSign", Block.signWall, TemplateRuleBlockSign.class);
+  manager.registerBlockHandler("vanillaLogic", Block.mobSpawner, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.commandBlock, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.brewingStand, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.beacon, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.skull, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.furnaceBurning, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.furnaceIdle, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaInventory", Block.dispenser, TemplateRuleBlockInventory.class);
+  manager.registerBlockHandler("vanillaInventory", Block.chest, TemplateRuleBlockInventory.class);
+  manager.registerBlockHandler("vanillaInventory", Block.dropper, TemplateRuleBlockInventory.class);
+  manager.registerBlockHandler("vanillaInventory", Block.hopperBlock, TemplateRuleBlockInventory.class);
   }
 
 
@@ -109,24 +120,21 @@ public void addHandledEntities(StructurePluginManager manager)
   manager.registerEntityHandler("vanillaEntities", EntityChicken.class, TemplateRuleVanillaEntity.class);
   manager.registerEntityHandler("vanillaEntities", EntityBoat.class, TemplateRuleVanillaEntity.class);
   manager.registerEntityHandler("vanillaEntities", EntityIronGolem.class, TemplateRuleVanillaEntity.class);
+  manager.registerEntityHandler("vanillaEntities", EntityWolf.class, TemplateRuleVanillaEntity.class);
+  manager.registerEntityHandler("vanillaEntities", EntityOcelot.class, TemplateRuleVanillaEntity.class);
+  manager.registerEntityHandler("vanillaEntities", EntityWither.class, TemplateRuleVanillaEntity.class);
+  manager.registerEntityHandler("vanillaEntities", EntitySnowman.class, TemplateRuleVanillaEntity.class);
   
   manager.registerEntityHandler("vanillaHangingEntity", EntityPainting.class, TemplateRuleEntityHanging.class);
   manager.registerEntityHandler("vanillaHangingEntity", EntityItemFrame.class, TemplateRuleEntityHanging.class);
-  //handledEntities.add(EntityVillager.class);
-  //handledEntities.add(EntityIronGolem.class);
-  //handledEntities.add(EntityChicken.class);
-  //handledEntities.add(EntityCow.class);
-  //handledEntities.add(EntityPig.class);
-  //handledEntities.add(EntitySheep.class);
-  //
-  //handledEntities.add(EntityHorse.class);  
-  //handledEntities.add(EntityWolf.class);
-  //
-  //handledEntities.add(EntityMinecart.class);
-  //handledEntities.add(EntityBoat.class);
-  //
-  //handledEntities.add(EntityPainting.class);
-  //handledEntities.add(EntityItemFrame.class); 
+  
+  manager.registerEntityHandler("vanillaLogicEntity", EntityHorse.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityVillager.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecart.class, TemplateRuleEntityLogic.class); 
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartContainer.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartEmpty.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartFurnace.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartTNT.class, TemplateRuleEntityLogic.class);
   }
 
 }

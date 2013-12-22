@@ -22,59 +22,49 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins.ent
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import shadowmage.ancient_framework.common.utils.BlockTools;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_framework.common.utils.NBTTools;
-import shadowmage.ancient_framework.common.utils.StringTools;
 
-public class TemplateRuleEntityHanging extends TemplateRuleVanillaEntity
+public class TemplateRuleEntityLogic extends TemplateRuleVanillaEntity
 {
 
 NBTTagCompound tag = new NBTTagCompound();
-int direction;
 
-BlockPosition hangTarget = new BlockPosition();//cached location for use during placement
+public TemplateRuleEntityLogic(){}
 
-public TemplateRuleEntityHanging(World world, Entity entity, int turns, int x, int y, int z)
+public TemplateRuleEntityLogic(World world, Entity entity, int turns, int x, int y, int z)
   {
   super(world, entity, turns, x, y, z);
-  EntityHanging hanging = (EntityHanging)entity;  
   entity.writeToNBT(tag);
-  this.direction = (hanging.hangingDirection + turns)%4;
-  }
-
-public TemplateRuleEntityHanging()
-  {
-  
   }
 
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  int direction = (this.direction+turns)%4;
-  hangTarget.reassign(x, y, z);
-  hangTarget.offsetForHorizontalDirection((direction+2)%4);
   Entity e = EntityList.createEntityByName(mobID, world);
-  tag.setByte("Direction", (byte)direction);
-  tag.setInteger("TileX", hangTarget.x);
-  tag.setInteger("TileY", hangTarget.y);
-  tag.setInteger("TileZ", hangTarget.z);
-  e.readFromNBT(tag);  
+  float xo = BlockTools.rotateFloatX(xOffset, zOffset, turns);
+  float zo = BlockTools.rotateFloatZ(xOffset, zOffset, turns);
+  NBTTagList list = tag.getTagList("Pos");
+  if(list.tagCount()>=3)
+    {
+    ((NBTTagDouble)list.tagAt(0)).data = x + xo;
+    ((NBTTagDouble)list.tagAt(1)).data = y;
+    ((NBTTagDouble)list.tagAt(2)).data = z + zo;
+    e.readFromNBT(tag);
+    }
+  else
+    {
+    e.setPosition(x+0.5d, y, z+0.5d);
+    }
   world.spawnEntityInWorld(e);
-  }
-
-@Override
-public boolean shouldReuseRule(World world, Entity entity, int x, int y, int z)
-  {
-  return super.shouldReuseRule(world, entity, x, y, z);
   }
 
 @Override
@@ -82,23 +72,15 @@ public void parseRuleData(List<String> ruleData)
   {
   super.parseRuleData(ruleData);
   tag = readTag(ruleData);
-  for(String line : ruleData)
-    {
-    if(line.toLowerCase().startsWith("direction="))
-      {
-      this.direction = StringTools.safeParseInt("=", line);
-      }
-    }  
   }
 
 @Override
 public void writeRuleData(BufferedWriter out) throws IOException
   {
   super.writeRuleData(out);
-  out.write("direction="+direction);
-  out.newLine();
   writeTag(out, tag);
   }
+
 
 
 }

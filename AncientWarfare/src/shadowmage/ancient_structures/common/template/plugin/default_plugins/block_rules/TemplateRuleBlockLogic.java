@@ -32,19 +32,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
-public class TemplateRuleLogic extends TemplateRuleVanillaBlocks
+public class TemplateRuleBlockLogic extends TemplateRuleVanillaBlocks
 {
 
 NBTTagCompound tag = new NBTTagCompound();
 
-public TemplateRuleLogic(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleBlockLogic(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
   TileEntity te = world.getBlockTileEntity(x, y, z);
   te.writeToNBT(tag);  
   }
 
-public TemplateRuleLogic()
+public TemplateRuleBlockLogic()
   {
   }
 
@@ -64,17 +64,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
 public void writeRuleData(BufferedWriter out) throws IOException
   {
   super.writeRuleData(out);
-  out.write("tag:");
-  out.newLine();
-  List<String> tagData = new ArrayList<String>();
-  NBTTools.writeNBTToLines(tag, tagData);
-  for(String line : tagData)
-    {
-    out.write(line);
-    out.newLine();
-    }
-  out.write(":endtag");
-  out.newLine();
+  writeTag(out, tag);
   }
 
 @Override
@@ -87,24 +77,7 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
 public void parseRuleData(List<String> ruleData)
   {
   super.parseRuleData(ruleData);
-  List<String> tagLines = new ArrayList<String>();
-  Iterator<String> it = ruleData.iterator();
-  String line;
-  while(it.hasNext() && (line=it.next())!=null)
-    {
-    if(line.startsWith("tag:"))
-      {
-      while(it.hasNext() && (line=it.next())!=null)
-        {
-        tagLines.add(line);
-        if(line.startsWith(":endtag"))
-          {
-          break;
-          }
-        }
-      }
-    }
-  tag = NBTTools.readNBTFrom(tagLines);
+  tag = readTag(ruleData);
   }
 
 

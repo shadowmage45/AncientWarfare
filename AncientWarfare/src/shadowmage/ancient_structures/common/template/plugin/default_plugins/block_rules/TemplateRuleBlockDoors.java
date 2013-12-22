@@ -24,15 +24,15 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
-public class TemplateRuleVanillaDoors extends TemplateRuleVanillaBlocks
+public class TemplateRuleBlockDoors extends TemplateRuleVanillaBlocks
 {
 
-public TemplateRuleVanillaDoors(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleBlockDoors(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
   }
 
-public TemplateRuleVanillaDoors()
+public TemplateRuleBlockDoors()
   {
   }
 

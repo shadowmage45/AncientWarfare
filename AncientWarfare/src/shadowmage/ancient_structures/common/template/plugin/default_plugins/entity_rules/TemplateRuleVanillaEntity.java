@@ -53,9 +53,6 @@ public TemplateRuleVanillaEntity(World world, Entity entity, int turns, int x, i
   zOffset = z1;
   }
 
-/**
- * 
- */
 public TemplateRuleVanillaEntity()
   {
   
@@ -113,15 +110,15 @@ public void writeRuleData(BufferedWriter out) throws IOException
   }
 
 @Override
-public void addResources(List<ItemStack> resources)
-  {
-
-  }
-
-@Override
 public boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass)
   {
   return buildPass==3;
+  }
+
+@Override
+public void addResources(List<ItemStack> resources)
+  {
+  
   }
 
 }

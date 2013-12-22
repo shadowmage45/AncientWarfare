@@ -22,9 +22,14 @@ package shadowmage.ancient_structures.common.template.rule;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import shadowmage.ancient_framework.common.utils.NBTTools;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /**
@@ -64,4 +69,42 @@ public abstract void addResources(List<ItemStack> resources);
 
 public abstract boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass);
 
+public void writeTag(BufferedWriter out, NBTTagCompound tag) throws IOException
+  {
+  out.write("tag:");
+  out.newLine();
+  List<String> tagData = new ArrayList<String>();
+  NBTTools.writeNBTToLines(tag, tagData);
+  for(String line : tagData)
+    {
+    out.write(line);
+    out.newLine();
+    }
+  out.write(":endtag");
+  out.newLine();
+  }
+
+public NBTTagCompound readTag(List<String> ruleData)
+  {
+  List<String> tagLines = new ArrayList<String>();  
+  String line;
+  Iterator<String> it = ruleData.iterator();
+  while(it.hasNext() && (line=it.next())!=null)
+    {
+    if(line.startsWith("tag:"))
+      {
+      it.remove();
+      while(it.hasNext() && (line=it.next())!=null)
+        {
+        it.remove();
+        if(line.startsWith(":endtag"))
+          {
+          break;
+          }
+        tagLines.add(line);       
+        }
+      }
+    }
+  return NBTTools.readNBTFrom(tagLines);
+  }
 }

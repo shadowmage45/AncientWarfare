@@ -37,13 +37,13 @@ import shadowmage.ancient_framework.common.registry.LootGenerator;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
-public class TemplateRuleInventoried extends TemplateRuleVanillaBlocks
+public class TemplateRuleBlockInventory extends TemplateRuleVanillaBlocks
 {
 
 int randomLootLevel = 0;
 NBTTagCompound tag = new NBTTagCompound();
 
-public TemplateRuleInventoried(World world, int x, int y, int z, Block block, int meta, int turns)
+public TemplateRuleBlockInventory(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
   TileEntity te = world.getBlockTileEntity(x, y, z);
@@ -71,7 +71,7 @@ public TemplateRuleInventoried(World world, int x, int y, int z, Block block, in
     }  
   }
 
-public TemplateRuleInventoried()
+public TemplateRuleBlockInventory()
   {
   
   }
@@ -102,17 +102,7 @@ public void writeRuleData(BufferedWriter out) throws IOException
   super.writeRuleData(out);
   out.write("randomLootLevel="+randomLootLevel);
   out.newLine();
-  out.write("tag:");
-  out.newLine();
-  List<String> tagData = new ArrayList<String>();
-  NBTTools.writeNBTToLines(tag, tagData);
-  for(String line : tagData)
-    {
-    out.write(line);
-    out.newLine();
-    }
-  out.write(":endtag");
-  out.newLine();
+  writeTag(out, tag);
   }
 
 @Override
@@ -125,28 +115,14 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
 public void parseRuleData(List<String> ruleData)
   {
   super.parseRuleData(ruleData);
-  List<String> tagLines = new ArrayList<String>();
-  Iterator<String> it = ruleData.iterator();
-  String line;
-  while(it.hasNext() && (line=it.next())!=null)
+  tag = readTag(ruleData);
+  for(String line : ruleData)
     {
-    if(line.startsWith("tag:"))
-      {
-      while(it.hasNext() && (line=it.next())!=null)
-        {
-        tagLines.add(line);
-        if(line.startsWith(":endtag"))
-          {
-          break;
-          }
-        }
-      }
-    else if(line.toLowerCase().startsWith("randomlootlevel="))
+    if(line.toLowerCase().startsWith("randomlootlevel="))
       {
       this.randomLootLevel = StringTools.safeParseInt("=", line);
       }
-    }
-  tag = NBTTools.readNBTFrom(tagLines);
+    }  
   }
 
 }

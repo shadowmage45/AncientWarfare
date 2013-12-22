@@ -25,68 +25,62 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
-public class TemplateRuleVanillaCommandBlock extends TemplateRuleVanillaBlocks
+public class TemplateRuleBlockSpawner extends TemplateRuleVanillaBlocks
 {
 
-String userName;
-String command;
-int commandCount;
+String mobID;
 
-public TemplateRuleVanillaCommandBlock(World world, int x, int y, int z, Block block, int meta, int turns)
+/**
+ * @param world
+ * @param x
+ * @param y
+ * @param z
+ * @param block
+ * @param meta
+ */
+public TemplateRuleBlockSpawner(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
-  TileEntityCommandBlock te = (TileEntityCommandBlock) world.getBlockTileEntity(x, y, z);
-  
-  this.userName = te.getCommandSenderName();
-  this.command = te.getCommand();
-  this.commandCount = te.getSignalStrength();  
+  TileEntityMobSpawner te = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);
+  mobID = te.getSpawnerLogic().getEntityNameToSpawn();  
   }
 
-public TemplateRuleVanillaCommandBlock()
+public TemplateRuleBlockSpawner()
   {
-  
   }
 
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  super.handlePlacement(world, turns, x, y, z);
-  TileEntityCommandBlock te = (TileEntityCommandBlock) world.getBlockTileEntity(x, y, z);
-  te.setCommand(command);
-  te.setCommandSenderName(userName);
-  te.setSignalStrength(commandCount);
+  world.setBlock(x, y, z, Block.mobSpawner.blockID, meta, 2);
+  TileEntityMobSpawner te = (TileEntityMobSpawner) world.getBlockTileEntity(x, y, z);
+  te.getSpawnerLogic().setMobID(mobID);
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
-  {
-  super.parseRuleData(ruleData);
-  for(String line : ruleData)
-    {
-    if(line.toLowerCase().startsWith("command=")){command = StringTools.safeParseString("=", line);}
-    else if(line.toLowerCase().startsWith("username=")){userName = StringTools.safeParseString("=", line);}
-    else if(line.toLowerCase().startsWith("commandcount=")){commandCount = StringTools.safeParseInt("=", line);}    
-    }
+public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
+  {  
+  return te instanceof TileEntityMobSpawner && mobID.equals(((TileEntityMobSpawner)te).getSpawnerLogic().getEntityNameToSpawn());
   }
 
 @Override
 public void writeRuleData(BufferedWriter out) throws IOException
   {
   super.writeRuleData(out);
-  out.write("command="+command);
-  out.newLine();
-  out.write("userName="+userName);
-  out.newLine();
-  out.write("commandCount="+commandCount);
+  out.write("mobID="+mobID);
   out.newLine();
   }
 
-
-
-
+@Override
+public void parseRuleData(List<String> ruleData)
+  {
+  super.parseRuleData(ruleData);
+  this.mobID = StringTools.safeParseString("=", ruleData.get(2));
+  }
 
 }
