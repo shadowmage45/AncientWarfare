@@ -26,7 +26,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import shadowmage.ancient_structures.common.structures.data.BlockInfo;
+import shadowmage.ancient_structures.common.utils.BlockInfo;
 
 public class BlockDataManager
 {

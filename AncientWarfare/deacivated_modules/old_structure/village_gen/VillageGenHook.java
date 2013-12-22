@@ -27,7 +27,6 @@ import net.minecraft.world.gen.structure.ComponentVillageStartPiece;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieceWeight;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
 import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 
 public class VillageGenHook implements IVillageCreationHandler

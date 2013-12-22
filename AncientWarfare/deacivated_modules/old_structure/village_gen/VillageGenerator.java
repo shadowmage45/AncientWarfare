@@ -29,10 +29,6 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
-import shadowmage.ancient_structures.common.structures.StructureManager;
-import shadowmage.ancient_structures.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_structures.common.world_gen.village.AWVCFortress;
-import shadowmage.ancient_structures.common.world_gen.village.AWVCLogCabin;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 
 public class VillageGenerator
