@@ -28,7 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.block.BlockDataManager;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
 public class TemplateRuleVanillaSign extends TemplateRuleVanillaBlocks
 {

@@ -22,7 +22,7 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins.blo
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.block.BlockDataManager;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
 public class TemplateRuleVanillaDoors extends TemplateRuleVanillaBlocks
 {
