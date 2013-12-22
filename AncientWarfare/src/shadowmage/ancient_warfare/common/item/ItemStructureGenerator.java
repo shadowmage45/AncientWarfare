@@ -62,7 +62,7 @@ public boolean attemptConstruction(World world, ProcessedStructure struct,   Blo
     int dim = world.provider.dimensionId;
     int face = world.rand.nextInt(4);
     String biomeName = world.getBiomeGenForCoords(x, z).biomeName;
-    y = WorldGenManager.instance().getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks);
+    y = WorldGenManager.instance().getTopBlockHeight(world, x, z, struct.maxWaterDepth, struct.maxLavaDepth, struct.validTargetBlocks)+1;
     WorldGenStructureEntry ent = struct.getWorldGenEntry();
     if(ent!=null)
       {
@@ -102,58 +102,57 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     return true;
     }
-  if(player.capabilities.isCreativeMode && !isShiftClick(player))
+  if(player.capabilities.isCreativeMode && isShiftClick(player))
     {
     openGUI(player);
+    return true;
     }
   if(hit==null)
     {
     hit = new BlockPosition(player.posX, player.posY, player.posZ);
     }
-  if(isShiftClick(player))
+//  hit = BlockTools.offsetForSide(hit, side);   
+  NBTTagCompound tag;
+  if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
     {
-    hit = BlockTools.offsetForSide(hit, side);   
-    NBTTagCompound tag;
-    if(stack.hasTagCompound() && stack.getTagCompound().hasKey("structData"))
+    tag = stack.getTagCompound().getCompoundTag("structData");
+    }
+  else
+    {
+    tag = new NBTTagCompound();
+    }
+  if(tag.hasKey("name") && hit !=null)
+    {    
+    StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
+    ProcessedStructure struct = StructureManager.instance().getStructureServer(tag.getString("name"));
+    if(struct==null)
       {
-      tag = stack.getTagCompound().getCompoundTag("structData");
+      Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
+      tag = new NBTTagCompound();
+      stack.setTagInfo("structData", tag);
+      return true;
+      }
+    if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), settings))
+      {
+      player.addChatMessage("Structure is currently locked for editing!!");
       }
     else
       {
-      tag = new NBTTagCompound();
-      }
-    if(tag.hasKey("name") && hit !=null)
-      {    
-      StructureBuildSettings settings = StructureBuildSettings.constructFromNBT(tag);
-      ProcessedStructure struct = StructureManager.instance().getStructureServer(tag.getString("name"));
-      if(struct==null)
+      if(!player.capabilities.isCreativeMode)
         {
-        Config.logError("Structure Manager returned NULL structure to build for name : "+tag.getString("name"));      
-        tag = new NBTTagCompound();
-        stack.setTagInfo("structData", tag);
-        return true;
-        }
-      if(!this.attemptConstruction(world, struct, hit, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), settings))
-        {
-        player.addChatMessage("Structure is currently locked for editing!!");
-        }
-      else
-        {
-        if(!player.capabilities.isCreativeMode)
+        ItemStack item = player.getHeldItem();
+        if(item!=null)
           {
-          ItemStack item = player.getHeldItem();
-          if(item!=null)
-            {
-            item.stackSize--;
-            if(item.stackSize<=0)
-              {          
-              player.setCurrentItemOrArmor(0, null);
-              }
+          item.stackSize--;
+          if(item.stackSize<=0)
+            {          
+            player.setCurrentItemOrArmor(0, null);
             }
           }
         }
       }
     }
+
   return true;
   }
 
