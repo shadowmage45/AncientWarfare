@@ -87,8 +87,8 @@ public Collection<StructureEntry> getEntriesNear(World world, int worldX, int wo
 
 public void setGeneratedAt(World world, int worldX, int worldY, int worldZ, int face, StructureTemplate structure)
   {
-  int cx = worldX/16;
-  int cz = worldZ/16;
+  int cx = worldX << 4;
+  int cz = worldZ << 4;
   StructureEntry entry = new StructureEntry(worldX, worldY, worldZ, face, structure);  
   map.setGeneratedAt(world.provider.dimensionId, cx, cz, entry, structure.getValidationSettings().isUnique());
   this.markDirty();

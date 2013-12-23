@@ -39,6 +39,7 @@ import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.network.Packet05StructureData;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
@@ -124,11 +125,10 @@ public void init(FMLInitializationEvent evt)
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-  config.log("Ancient Warfare Structures Post-Init started");
+  config.log("Ancient Warfare Structures Post-Init started");  
   pluginManager.loadPlugins();
-  /**
-   * TODO
-   */
+
+  WorldGenStructureManager.instance().loadBiomeList();
   TemplateLoader.instance().loadTemplates();
   config.saveConfig();
   config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 

@@ -22,8 +22,10 @@ package shadowmage.ancient_structures.common.template.build;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -89,7 +91,7 @@ boolean doBorderFill;
 boolean preserveBlocks;
 
 boolean biomeWhiteList;//should treat biome list as white or blacklist?
-String[] biomeList;//list of biomes for white/black list.  treated as white/black list from whitelist toggle
+Set<String> biomeList;//list of biomes for white/black list.  treated as white/black list from whitelist toggle
 
 boolean dimensionWhiteList;//should treat dimension list as white or blacklist?
 int[] acceptedDimensions;//list of accepted dimensions treated as white/black list from whitelist toggle
@@ -115,7 +117,7 @@ ItemStack[] resourceStacks;
 
 public StructureValidationSettingsDefault()
   {
-    
+  biomeList = new HashSet<String>();
   }
 
 public StructureValidationSettingsDefault setToggles(boolean world, boolean unique, boolean survival, boolean leveling, boolean fill, boolean borderLevel, boolean borderFill, boolean preserveBlocks)
@@ -154,7 +156,7 @@ public StructureValidationSettingsDefault setValidDimensions(int[] dimensions, b
   return this;
   }
 
-public StructureValidationSettingsDefault setValidBiomes(String[] biomes, boolean white)
+public StructureValidationSettingsDefault setValidBiomes(Set<String> biomes, boolean white)
   {
   this.biomeList = biomes;
   this.biomeWhiteList = white;
@@ -177,6 +179,111 @@ public int getClusterValue()
 public boolean isUnique()
   {
   return isUnique;
+  }
+
+public Set<String> getBiomeList()
+  {
+  return biomeList;
+  }
+
+public int getMaxLeveling()
+  {
+  return maxLeveling;
+  }
+
+public boolean isDoLeveling()
+  {
+  return doLeveling;
+  }
+
+public int getMaxMissingEdgeDepth()
+  {
+  return maxMissingEdgeDepth;
+  }
+
+public boolean isDoFillBelow()
+  {
+  return doFillBelow;
+  }
+
+public int getBorderSize()
+  {
+  return borderSize;
+  }
+
+public int getBorderMaxLeveling()
+  {
+  return borderMaxLeveling;
+  }
+
+public boolean isDoBorderLeveling()
+  {
+  return doBorderLeveling;
+  }
+
+public int getBorderMissingEdgeDepth()
+  {
+  return borderMissingEdgeDepth;
+  }
+
+public boolean isDoBorderFill()
+  {
+  return doBorderFill;
+  }
+
+public boolean isPreserveBlocks()
+  {
+  return preserveBlocks;
+  }
+
+public boolean isBiomeWhiteList()
+  {
+  return biomeWhiteList;
+  }
+
+public boolean isDimensionWhiteList()
+  {
+  return dimensionWhiteList;
+  }
+
+public int[] getAcceptedDimensions()
+  {
+  return acceptedDimensions;
+  }
+
+public Block[] getAcceptedTargetBlocks()
+  {
+  return acceptedTargetBlocks;
+  }
+
+public Block[] getAcceptedClearBlocks()
+  {
+  return acceptedClearBlocks;
+  }
+
+public boolean isWorldGenEnabled()
+  {
+  return worldGenEnabled;
+  }
+
+public int getSelectionWeight()
+  {
+  return selectionWeight;
+  }
+
+public int getMinDuplicateDistance()
+  {
+  return minDuplicateDistance;
+  }
+
+public boolean isSurvivalEnabled()
+  {
+  return survivalEnabled;
+  }
+
+public ItemStack[] getResourceStacks()
+  {
+  return resourceStacks;
   }
 
 @Override

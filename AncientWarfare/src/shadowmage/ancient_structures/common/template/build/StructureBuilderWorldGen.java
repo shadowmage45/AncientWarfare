@@ -18,45 +18,25 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.config;
+package shadowmage.ancient_structures.common.template.build;
 
-import java.io.File;
-import java.util.logging.Logger;
+import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
 
-import shadowmage.ancient_framework.common.config.ModConfiguration;
-
-public class AWStructureStatics extends ModConfiguration
+public class StructureBuilderWorldGen extends StructureBuilder
 {
 
-public static String templateExtension = "aws";
-public static boolean enableVillageGen;
-public static int chunkSearchRadius = 16;
-public static int maxClusterValue = 500;
-public static int randomChance = 75;
-public static int randomRange = 1000;
-public static int spawnProtectionRange = 12;
-
-
-/**
- * @param configFile
- * @param log
- * @param version
- */
-public AWStructureStatics(File configFile, Logger log, String version)
+public StructureBuilderWorldGen(World world, StructureTemplate template, int face, int x, int y, int z)
   {
-  super(configFile, log, version);
+  super(world, template, face, x, y, z);
   }
 
 @Override
-public void initializeCategories()
+public void instantConstruction()
   {
-
+  /**
+   * TODO clearing / fill
+   */
+  super.instantConstruction();
   }
-
-@Override
-public void initializeValues()
-  {
- 
-  }
-
 }

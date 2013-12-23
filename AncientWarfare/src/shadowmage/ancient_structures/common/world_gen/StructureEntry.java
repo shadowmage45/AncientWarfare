@@ -66,4 +66,21 @@ public void readFromNBT(NBTTagCompound tag)
     bb.pos2.z = datas[5]; 
     }
   }
+
+public String getName()
+  {
+  return name;
+  }
+
+public int getValue()
+  {
+  return value;
+  }
+
+public StructureBB getBB()
+  {
+  return bb;
+  }
+
+
 }
