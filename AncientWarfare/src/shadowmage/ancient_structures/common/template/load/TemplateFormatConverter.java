@@ -94,6 +94,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
    * parsed-out data, to be used to construct new template
    */
   List<TemplateRule> parsedRules = new ArrayList<TemplateRule>();
+  List<TemplateRuleEntity> parsedEntityRules = new ArrayList<TemplateRuleEntity>();
   short[] templateData = null;
   int xSize = 0, ySize = 0, zSize = 0;
   int xOffset = 0, yOffset = 0, zOffset = 0;
@@ -111,6 +112,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   int parsedLayers = 0;
   int readSizeParams = 0;
   int highestRuleNumber = 0;
+  int highestEntityRuleNumber =0;
   while(it.hasNext() && (line = it.next())!=null)
     {    
     if(line.toLowerCase().startsWith("xsize="))
@@ -154,14 +156,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       }
     else if(line.toLowerCase().startsWith("rule:"))
       {
-      while(it.hasNext() && (line = it.next())!=null)
-        {
-        if(line.toLowerCase().startsWith(":endrule"))
-          {
-          break;
-          }
-        groupedLines.add(line);
-        } 
+      parseTag("rule", it, groupedLines);
       TemplateRule rule = parseOldBlockRule(groupedLines);
       if(rule!=null)
         {
@@ -175,40 +170,69 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       }
     else if(line.toLowerCase().startsWith("entity:"))
       {
-      while(it.hasNext() && (line = it.next())!=null)
-        {
-        if(line.toLowerCase().startsWith(":endentity"))
-          {
-          break;
-          }
-        groupedLines.add(line);
-        } 
-      TemplateRule rule = parseOldEntityRule(groupedLines);
+      parseTag("entity", it, groupedLines);
+      TemplateRuleEntity rule = parseOldEntityRule(groupedLines);
       if(rule!=null)
         {
-        if(rule.ruleNumber>highestRuleNumber)
+        if(rule.ruleNumber>highestEntityRuleNumber)
           {
-          highestRuleNumber = rule.ruleNumber;
+          highestEntityRuleNumber = rule.ruleNumber;
           }        
-        parsedRules.add(rule);
+        parsedEntityRules.add(rule);
         }
       groupedLines.clear();
       }
     else if(line.toLowerCase().startsWith("layer:"))
       {
-      while(it.hasNext() && (line = it.next())!=null)
-        {
-        if(line.toLowerCase().startsWith(":endlayer"))
-          {
-          break;
-          }
-        groupedLines.add(line);
-        }
+      parseTag("layer", it, groupedLines);
       parseLayer(groupedLines, templateData, parsedLayers, xSize, ySize, zSize);
       parsedLayers++;
       groupedLines.clear();
-      }    
+      } 
+    else if(line.toLowerCase().startsWith("npc:"))
+      {
+      parseTag("npc", it, groupedLines);
+      TemplateRuleEntity rule = parseNpcRule(groupedLines);
+      if(rule!=null)
+        {
+        if(rule.ruleNumber>highestEntityRuleNumber)
+          {
+          highestEntityRuleNumber = rule.ruleNumber;
+          }        
+        parsedEntityRules.add(rule);
+        }
+      groupedLines.clear();
+      }
+    else if(line.toLowerCase().startsWith("gate:"))
+      {
+      parseTag("gate", it, groupedLines);
+      TemplateRuleEntity rule = parseGateRule(groupedLines);
+      if(rule!=null)
+        {
+        if(rule.ruleNumber>highestEntityRuleNumber)
+          {
+          highestEntityRuleNumber = rule.ruleNumber;
+          }        
+        parsedEntityRules.add(rule);
+        }
+      groupedLines.clear();
+      }
+    else if(line.toLowerCase().startsWith("vehicle:"))
+      {
+      parseTag("vehicle", it, groupedLines);
+      TemplateRuleEntity rule = parseVehicleRule(groupedLines);
+      if(rule!=null)
+        {
+        if(rule.ruleNumber>highestEntityRuleNumber)
+          {
+          highestEntityRuleNumber = rule.ruleNumber;
+          }        
+        parsedEntityRules.add(rule);
+        }
+      groupedLines.clear();
+      }
     }  
+  
   TemplateRule[] rules = new TemplateRule[highestRuleNumber+1];
   TemplateRule rule;
   for(int i = 0; i < parsedRules.size(); i++)
@@ -223,19 +247,49 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       AWLog.logError("error parsing template rules, duplicate rule number detected for: "+rule.ruleNumber);
       }
     }
+  
+  TemplateRuleEntity entityRule;
+  TemplateRuleEntity[] entityRules = new TemplateRuleEntity[highestEntityRuleNumber+1];
+  for(int i = 0; i < parsedEntityRules.size(); i++)
+    {
+    entityRule = parsedEntityRules.get(i);
+    if(entityRules[entityRule.ruleNumber]==null)
+      {
+      entityRules[entityRule.ruleNumber] = entityRule;
+      }
+    else
+      {
+      AWLog.logError("error parsing template rules, duplicate entity rule number detected for: "+entityRule.ruleNumber);
+      }
+    }
+  
   zOffset = zSize - 1 - zOffset;//invert offset to normalize for the new top-left oriented template construction
   StructureTemplate template = new StructureTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset);
   template.setRuleArray(rules);
-  template.setEntityRules(new TemplateRuleEntity[]{});
+  template.setEntityRules(entityRules);
   template.setTemplateData(templateData);
   template.setValidationSettings(new StructureValidationSettingsDefault());
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
   return null;//TODO
   }
 
-private TemplateRule parseOldEntityRule(List<String> lines)
+private List<String> parseTag(String tag, Iterator<String> it, List<String> output)
   {
-  TemplateRule rule = null;
+  String line;
+  while(it.hasNext() && (line = it.next())!=null)
+    {
+    if(line.toLowerCase().startsWith(":end"+tag))
+      {
+      break;
+      }
+    output.add(line);
+    }
+  return output;
+  }
+
+private TemplateRuleEntity parseOldEntityRule(List<String> lines)
+  {
+  TemplateRuleEntity rule = null;
   /**
    * TODO
    */
@@ -251,27 +305,27 @@ private TemplateRule parseCivicRule(List<String> lines)
   return rule;
   }
 
-private TemplateRule parseGateRule(List<String> lines)
+private TemplateRuleEntity parseGateRule(List<String> lines)
   {
-  TemplateRule rule = null;
+  TemplateRuleEntity rule = null;
   /**
    * TODO
    */
   return rule;
   }
 
-private TemplateRule parseVehicleRule(List<String> lines)
+private TemplateRuleEntity parseVehicleRule(List<String> lines)
   {
-  TemplateRule rule = null;
+  TemplateRuleEntity rule = null;
   /**
    * TODO
    */
   return rule;
   }
 
-private TemplateRule parseNpcRule(List<String> lines)
+private TemplateRuleEntity parseNpcRule(List<String> lines)
   {
-  TemplateRule rule = null;
+  TemplateRuleEntity rule = null;
   /**
    * TODO
    */
