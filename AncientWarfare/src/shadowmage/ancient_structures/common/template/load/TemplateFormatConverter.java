@@ -27,10 +27,23 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityBrewingStand;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityCommandBlock;
+import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.tileentity.TileEntityDropper;
+import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.tileentity.TileEntityHopper;
+import net.minecraft.tileentity.TileEntitySkull;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockDoors;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockInventory;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockSign;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -42,25 +55,35 @@ public class TemplateFormatConverter
 {
 
 private static HashSet<Block> specialHandledBlocks = new HashSet<Block>();//just a temp cache to keep track of what blocks to not register with blanket block rule
+
+
 static
 {
-specialHandledBlocks.add(Block.mobSpawner);
-specialHandledBlocks.add(Block.signPost);
-specialHandledBlocks.add(Block.signWall);
-specialHandledBlocks.add(Block.doorIron);
-specialHandledBlocks.add(Block.doorWood);
+specialHandledBlocks.add(Block.signPost);//
+specialHandledBlocks.add(Block.signWall);//
+specialHandledBlocks.add(Block.doorIron);//
+specialHandledBlocks.add(Block.doorWood);//
+specialHandledBlocks.add(Block.commandBlock);//
+specialHandledBlocks.add(Block.mobSpawner);//noop
+specialHandledBlocks.add(Block.furnaceBurning);//
+specialHandledBlocks.add(Block.furnaceIdle);//
+specialHandledBlocks.add(Block.skull);//
+specialHandledBlocks.add(Block.brewingStand);//
 specialHandledBlocks.add(Block.chest);
 specialHandledBlocks.add(Block.dropper);
 specialHandledBlocks.add(Block.dispenser);
-specialHandledBlocks.add(Block.enderChest);
-specialHandledBlocks.add(Block.commandBlock);
-specialHandledBlocks.add(Block.furnaceBurning);
-specialHandledBlocks.add(Block.furnaceIdle);
 specialHandledBlocks.add(Block.hopperBlock);
-specialHandledBlocks.add(Block.skull);
-specialHandledBlocks.add(Block.brewingStand);
-specialHandledBlocks.add(Block.bed);
 }
+
+
+TileEntityCommandBlock teCommand = new TileEntityCommandBlock();
+TileEntitySkull teSkull = new TileEntitySkull();
+TileEntityDropper teDropper = new TileEntityDropper();
+TileEntityDispenser teDispenser = new TileEntityDispenser();
+TileEntityFurnace teFurnace = new TileEntityFurnace();
+TileEntityHopper teHopper = new TileEntityHopper();
+TileEntityBrewingStand teBrewingStand = new TileEntityBrewingStand();
+TileEntityChest teChest = new TileEntityChest();
 
 public StructureTemplate convertOldTemplate(File file, List<String> templateLines)
   {
@@ -215,12 +238,11 @@ private TemplateRule parseOldBlockRule(List<String> lines)
     }  
   else if(id>256)
     {
-    return parseModBlock(block, number, buildPass, meta);
-    
+    return parseModBlock(block, number, buildPass, meta);    
     }
   else if(specialHandledBlocks.contains(block))
     {
-    return parseSpecialBlockRule(block, number, buildPass, meta);
+    return parseSpecialBlockRule(block, number, buildPass, meta, lines);
     }
   else
     {
@@ -233,17 +255,121 @@ private TemplateRule parseOldBlockRule(List<String> lines)
     }
   }
 
-private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPass, int meta)
+private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPass, int meta, List<String> lines)
   {
-  TemplateRule rule = null;
-  if(block==Block.doorWood || block==Block.doorIron){}//vanilla door rule
-  else if(block==Block.mobSpawner){}//vanilla spawner rule
-  else if(block==Block.signPost || block==Block.signWall){}//vanilla sign rule
-  else if(block==Block.skull){}
-  else if(block==Block.commandBlock){}
-  else if(block==Block.furnaceBurning){}
-  else if(block==Block.brewingStand){}
-  else {}//else it is just an inventory carrying block, handle with appropriate inventory rule
+  TemplateRuleVanillaBlocks rule = null;
+  if(block==Block.doorWood || block==Block.doorIron)
+    {
+    rule = new TemplateRuleBlockDoors();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    }//vanilla door rule
+  else if(block==Block.signPost || block==Block.signWall)
+    {
+    rule = new TemplateRuleBlockSign();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockSign)rule).wall = block == Block.signWall;
+    ((TemplateRuleBlockSign)rule).signContents = new String[]{"","","",""};        
+    }//vanilla sign rule
+  else if(block==Block.commandBlock)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teCommand.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockLogic();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockLogic)rule).tag = tag;
+    }
+  else if(block==Block.mobSpawner)
+    {
+    //NOOP -- no previous spawner-block handling
+    }//vanilla spawner rule
+  else if(block==Block.furnaceBurning || block==Block.furnaceIdle)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teFurnace.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockLogic();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockLogic)rule).tag = tag;
+    }
+  else if(block==Block.skull)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teSkull.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockLogic();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockLogic)rule).tag = tag;
+    }    
+  else if(block==Block.brewingStand)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teBrewingStand.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockLogic();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockLogic)rule).tag = tag;
+    }
+  else if(block==Block.chest)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teChest.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockInventory();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockInventory)rule).tag = tag;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    }//vanilla chests
+  else if(block==Block.dispenser)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teDispenser.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockInventory();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockInventory)rule).tag = tag;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    }
+  else if(block==Block.dropper)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teDropper.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockInventory();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockInventory)rule).tag = tag;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    }
+  else if(block==Block.hopperBlock)
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    teHopper.writeToNBT(tag); 
+
+    rule = new TemplateRuleBlockInventory();
+    rule.blockName = block.getUnlocalizedName();
+    rule.meta = meta;
+    rule.buildPass = buildPass;
+    ((TemplateRuleBlockInventory)rule).tag = tag;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    }
   return rule;
   }
 

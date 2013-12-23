@@ -78,11 +78,11 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
     }
   }
 
-public Collection<StructureEntry> getEntriesNear(World world, int worldX, int worldZ, int chunkRadius)
+public Collection<StructureEntry> getEntriesNear(World world, int worldX, int worldZ, int chunkRadius, Collection<StructureEntry> list)
   {
   int cx = worldX/16;
   int cz = worldZ/16;
-  return map.getEntriesNear(world.provider.dimensionId, cx, cz, chunkRadius);
+  return map.getEntriesNear(world.provider.dimensionId, cx, cz, chunkRadius, list);
   }
 
 public void setGeneratedAt(World world, int worldX, int worldY, int worldZ, int face, StructureTemplate structure)
@@ -99,11 +99,11 @@ private class StructureDimensionMap
 private HashMap<Integer, StructureWorldMap> mapsByDimension = new HashMap<Integer, StructureWorldMap>();
 Set<String> generatedUniques = new HashSet<String>();
 
-public Collection<StructureEntry> getEntriesNear(int dimension, int chunkX, int chunkZ, int chunkRadius)
+public Collection<StructureEntry> getEntriesNear(int dimension, int chunkX, int chunkZ, int chunkRadius, Collection<StructureEntry> list)
   {
   if(mapsByDimension.containsKey(dimension))
     {
-    return mapsByDimension.get(dimension).getEntriesNear(chunkX, chunkZ, chunkRadius);
+    return mapsByDimension.get(dimension).getEntriesNear(chunkX, chunkZ, chunkRadius, list);
     }
   return Collections.emptyList();
   }
@@ -177,11 +177,9 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
 private class StructureWorldMap
 {
 private HashMap<Integer, HashMap<Integer, StructureEntry>> worldMap = new HashMap<Integer, HashMap<Integer, StructureEntry>>();
-List<StructureEntry> searchCache = new ArrayList<StructureEntry>();
 
-public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chunkRadius)
+public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chunkRadius, Collection<StructureEntry> list)
   {
-  searchCache.clear();
   StructureEntry entry;
   for(int x = chunkX-chunkRadius; x<=chunkX+chunkRadius; x++)
     {
@@ -192,12 +190,12 @@ public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chu
         entry = worldMap.get(x).get(z);
         if(entry!=null)
           {
-          searchCache.add(entry);
+          list.add(entry);
           }
         }
       }
     }
-  return searchCache;
+  return list;
   }
 
 public void setGeneratedAt(int chunkX, int chunkZ, StructureEntry entry)

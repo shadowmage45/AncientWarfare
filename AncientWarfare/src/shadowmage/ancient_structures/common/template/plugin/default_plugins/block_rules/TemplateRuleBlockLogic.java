@@ -35,7 +35,7 @@ import shadowmage.ancient_framework.common.utils.NBTTools;
 public class TemplateRuleBlockLogic extends TemplateRuleVanillaBlocks
 {
 
-NBTTagCompound tag = new NBTTagCompound();
+public NBTTagCompound tag = new NBTTagCompound();
 
 public TemplateRuleBlockLogic(World world, int x, int y, int z, Block block, int meta, int turns)
   {

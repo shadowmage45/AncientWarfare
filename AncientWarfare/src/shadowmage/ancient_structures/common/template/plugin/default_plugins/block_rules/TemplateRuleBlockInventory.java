@@ -40,8 +40,8 @@ import shadowmage.ancient_framework.common.utils.StringTools;
 public class TemplateRuleBlockInventory extends TemplateRuleVanillaBlocks
 {
 
-int randomLootLevel = 0;
-NBTTagCompound tag = new NBTTagCompound();
+public int randomLootLevel = 0;
+public NBTTagCompound tag = new NBTTagCompound();
 
 public TemplateRuleBlockInventory(World world, int x, int y, int z, Block block, int meta, int turns)
   {

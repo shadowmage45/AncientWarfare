@@ -33,8 +33,8 @@ import shadowmage.ancient_structures.common.manager.BlockDataManager;
 public class TemplateRuleBlockSign extends TemplateRuleVanillaBlocks
 {
 
-String signContents[];
-boolean wall = true;
+public String signContents[];
+public boolean wall = true;
 
 public TemplateRuleBlockSign(World world, int x, int y, int z, Block block, int meta, int turns)
   {
