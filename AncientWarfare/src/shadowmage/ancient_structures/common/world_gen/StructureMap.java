@@ -78,11 +78,11 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
     }
   }
 
-public Collection<StructureEntry> getEntriesNear(World world, int worldX, int worldZ, int chunkRadius, Collection<StructureEntry> list)
+public Collection<StructureEntry> getEntriesNear(World world, int worldX, int worldZ, int chunkRadius, boolean expandBySize, Collection<StructureEntry> list)
   {
   int cx = worldX/16;
   int cz = worldZ/16;
-  return map.getEntriesNear(world.provider.dimensionId, cx, cz, chunkRadius, list);
+  return map.getEntriesNear(world.provider.dimensionId, cx, cz, chunkRadius, expandBySize, list);
   }
 
 public void setGeneratedAt(World world, int worldX, int worldY, int worldZ, int face, StructureTemplate structure)
@@ -94,16 +94,21 @@ public void setGeneratedAt(World world, int worldX, int worldY, int worldZ, int 
   this.markDirty();
   }
 
+public Collection<String> getGeneratedUniques()
+  {
+  return this.map.generatedUniques;  
+  }
+
 private class StructureDimensionMap
 {
 private HashMap<Integer, StructureWorldMap> mapsByDimension = new HashMap<Integer, StructureWorldMap>();
 Set<String> generatedUniques = new HashSet<String>();
 
-public Collection<StructureEntry> getEntriesNear(int dimension, int chunkX, int chunkZ, int chunkRadius, Collection<StructureEntry> list)
+public Collection<StructureEntry> getEntriesNear(int dimension, int chunkX, int chunkZ, int chunkRadius, boolean expandBySize, Collection<StructureEntry> list)
   {
   if(mapsByDimension.containsKey(dimension))
     {
-    return mapsByDimension.get(dimension).getEntriesNear(chunkX, chunkZ, chunkRadius, list);
+    return mapsByDimension.get(dimension).getEntriesNear(chunkX, chunkZ, chunkRadius, expandBySize, list);
     }
   return Collections.emptyList();
   }
@@ -172,20 +177,28 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
   }
 }//end structure dimension map
 
-
-
 private class StructureWorldMap
 {
-private HashMap<Integer, HashMap<Integer, StructureEntry>> worldMap = new HashMap<Integer, HashMap<Integer, StructureEntry>>();
 
-public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chunkRadius, Collection<StructureEntry> list)
+private HashMap<Integer, HashMap<Integer, StructureEntry>> worldMap = new HashMap<Integer, HashMap<Integer, StructureEntry>>();
+private int largestGeneratedX;
+private int largestGeneratedZ;
+
+public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chunkRadius, boolean expandBySize, Collection<StructureEntry> list)
   {
   StructureEntry entry;
-  for(int x = chunkX-chunkRadius; x<=chunkX+chunkRadius; x++)
+  int crx = chunkRadius;
+  int crz = chunkRadius;
+  if(expandBySize)
+    {
+    crx+=largestGeneratedX/16;
+    crz+=largestGeneratedZ/16;
+    }
+  for(int x = chunkX-crx; x<=chunkX+crx; x++)
     {
     if(worldMap.containsKey(x))
       {
-      for(int z = chunkZ-chunkRadius; z<=chunkZ+chunkRadius; z++)
+      for(int z = chunkZ-crz; z<=chunkZ+crz; z++)
         {
         entry = worldMap.get(x).get(z);
         if(entry!=null)
@@ -205,6 +218,10 @@ public void setGeneratedAt(int chunkX, int chunkZ, StructureEntry entry)
     this.worldMap.put(chunkX, new HashMap<Integer, StructureEntry>());
     }
   this.worldMap.get(chunkX).put(chunkZ, entry);
+  int x = entry.bb.pos2.x - entry.bb.pos1.x;
+  int z = entry.bb.pos2.z - entry.bb.pos1.z;
+  if(x>largestGeneratedX){largestGeneratedX = x;}
+  if(z>largestGeneratedZ){largestGeneratedZ = z;}
   }
 
 public void readFromNBT(NBTTagCompound nbttagcompound)
@@ -226,6 +243,8 @@ public void readFromNBT(NBTTagCompound nbttagcompound)
       }
     this.worldMap.get(x).put(z, entry);
     }
+  this.largestGeneratedX = nbttagcompound.getInteger("largestX");
+  this.largestGeneratedZ = nbttagcompound.getInteger("largestZ");
   }
 
 public void writeToNBT(NBTTagCompound nbttagcompound)
@@ -243,6 +262,8 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
       entryList.appendTag(entryTag);
       }
     }
+  nbttagcompound.setInteger("largestX", largestGeneratedX);
+  nbttagcompound.setInteger("largestZ", largestGeneratedZ);
   nbttagcompound.setTag("entries", entryList);
   }
 }//end structure X Map

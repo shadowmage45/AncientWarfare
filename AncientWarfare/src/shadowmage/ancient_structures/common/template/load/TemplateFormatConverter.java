@@ -44,6 +44,7 @@ import shadowmage.ancient_structures.common.template.plugin.default_plugins.bloc
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockInventory;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockSign;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -208,7 +209,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   template.setTemplateData(templateData);
   template.setValidationSettings(new StructureValidationSettingsDefault());
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
-  return null;
+  return null;//TODO
   }
 
 private TemplateRule parseOldBlockRule(List<String> lines)
@@ -232,7 +233,7 @@ private TemplateRule parseOldBlockRule(List<String> lines)
   
   Block block = Block.blocksList[id];
   
-  if(block==null)//skip any add modded blocks and air block rule (0/null)
+  if(block==null)//skip air block rule (0/null), or non-present blocks
     {    
     return null;
     }  
@@ -375,11 +376,10 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
 
 private TemplateRule parseModBlock(Block block, int number, int buildPass, int meta)
   {
-  /**
-   * TODO add default modded block-handling rule (registered last, placed into registry for every block not already filled)
-   * -- it is essentially a straight id/meta handler, ignores tile data 
-   */
-  return null;
+  TemplateRuleModBlocks rule = new TemplateRuleModBlocks();
+  rule.blockName = block.getUnlocalizedName();
+  rule.meta = meta;
+  return rule;
   }
 
 private void parseLayer(List<String> lines, short[] templateData, int yLayer, int xSize, int ySize, int zSize)
