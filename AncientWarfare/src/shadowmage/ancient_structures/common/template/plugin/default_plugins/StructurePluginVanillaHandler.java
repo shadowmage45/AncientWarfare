@@ -26,10 +26,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.entity.item.EntityMinecartEmpty;
 import net.minecraft.entity.item.EntityMinecartFurnace;
+import net.minecraft.entity.item.EntityMinecartHopper;
 import net.minecraft.entity.item.EntityMinecartTNT;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.entity.monster.EntityIronGolem;
@@ -129,9 +129,9 @@ public void addHandledEntities(StructurePluginManager manager)
   manager.registerEntityHandler("vanillaHangingEntity", EntityItemFrame.class, TemplateRuleEntityHanging.class);
   
   manager.registerEntityHandler("vanillaLogicEntity", EntityHorse.class, TemplateRuleEntityLogic.class);
-  manager.registerEntityHandler("vanillaLogicEntity", EntityVillager.class, TemplateRuleEntityLogic.class);
-  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecart.class, TemplateRuleEntityLogic.class); 
-  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartContainer.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityVillager.class, TemplateRuleEntityLogic.class);  
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartHopper.class, TemplateRuleEntityLogic.class);
+  manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartChest.class, TemplateRuleEntityLogic.class);
   manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartEmpty.class, TemplateRuleEntityLogic.class);
   manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartFurnace.class, TemplateRuleEntityLogic.class);
   manager.registerEntityHandler("vanillaLogicEntity", EntityMinecartTNT.class, TemplateRuleEntityLogic.class);

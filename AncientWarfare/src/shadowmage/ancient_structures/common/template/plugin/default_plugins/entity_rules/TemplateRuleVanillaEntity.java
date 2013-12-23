@@ -35,10 +35,10 @@ import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 public class TemplateRuleVanillaEntity extends TemplateRuleEntity
 {
 
-String mobID;
-float xOffset;
-float zOffset;
-float rotation;
+public String mobID;
+public float xOffset;
+public float zOffset;
+public float rotation;
 
 public TemplateRuleVanillaEntity(World world, Entity entity, int turns, int x, int y, int z)
   {

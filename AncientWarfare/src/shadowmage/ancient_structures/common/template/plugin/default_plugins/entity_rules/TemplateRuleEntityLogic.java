@@ -36,7 +36,7 @@ import net.minecraft.world.World;
 public class TemplateRuleEntityLogic extends TemplateRuleVanillaEntity
 {
 
-NBTTagCompound tag = new NBTTagCompound();
+public NBTTagCompound tag = new NBTTagCompound();
 
 public TemplateRuleEntityLogic(){}
 

@@ -20,35 +20,42 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
-import net.minecraft.block.Block;
+import java.util.List;
+
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
-public class StructurePluginModDefault extends StructureContentPlugin
+public class StructurePluginVehicles extends StructureContentPlugin
 {
 
-public StructurePluginModDefault()
+/**
+ * 
+ */
+public StructurePluginVehicles()
   {
-  
+  // TODO Auto-generated constructor stub
   }
 
 @Override
 public void addHandledBlocks(StructurePluginManager manager)
   {
-  Block block;
-  for(int i = 256; i < 4096; i++)
-    {
-    block = Block.blocksList[i];
-    if(block==null){continue;}
-    manager.registerBlockHandler("modBlockDefault", block, TemplateRuleModBlocks.class);
-    }
+  // TODO Auto-generated method stub
+
   }
 
 @Override
 public void addHandledEntities(StructurePluginManager manager)
   {
-  
+  // TODO Auto-generated method stub
+
   }
 
+public static void load()
+  {
+  AWStructures.instance.pluginManager.addPlugin(new StructurePluginVehicles());
+  }
+
+public static TemplateRuleEntity parseVehicleRule(List<String> lines){return null;}
 }

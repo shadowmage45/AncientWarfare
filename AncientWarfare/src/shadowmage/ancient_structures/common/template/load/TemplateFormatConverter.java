@@ -22,11 +22,33 @@ package shadowmage.ancient_structures.common.template.load;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.item.EntityBoat;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecartChest;
+import net.minecraft.entity.item.EntityMinecartEmpty;
+import net.minecraft.entity.item.EntityMinecartFurnace;
+import net.minecraft.entity.item.EntityMinecartHopper;
+import net.minecraft.entity.item.EntityMinecartTNT;
+import net.minecraft.entity.item.EntityPainting;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntitySnowman;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
@@ -36,16 +58,24 @@ import net.minecraft.tileentity.TileEntityDropper;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySkull;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginAutomation;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockDoors;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockInventory;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockSign;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityHanging;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityLogic;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleVanillaEntity;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
@@ -55,8 +85,28 @@ import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 public class TemplateFormatConverter
 {
 
-private static HashSet<Block> specialHandledBlocks = new HashSet<Block>();//just a temp cache to keep track of what blocks to not register with blanket block rule
+/**
+ * cached TE instances to use for writing out of basic NBT data into tag to use for
+ * converted rule
+ */
+private static TileEntityCommandBlock teCommand = new TileEntityCommandBlock();
+private static TileEntitySkull teSkull = new TileEntitySkull();
+private static TileEntityDropper teDropper = new TileEntityDropper();
+private static TileEntityDispenser teDispenser = new TileEntityDispenser();
+private static TileEntityFurnace teFurnace = new TileEntityFurnace();
+private static TileEntityHopper teHopper = new TileEntityHopper();
+private static TileEntityBrewingStand teBrewingStand = new TileEntityBrewingStand();
+private static TileEntityChest teChest = new TileEntityChest();
 
+private static HashSet<Block> specialHandledBlocks = new HashSet<Block>();//just a temp cache to keep track of what blocks to not register with blanket block rule
+private static HashSet<Class <?extends Entity>> normalHandledEntities = new HashSet<Class <?extends Entity>>();
+private static HashSet<Class <?extends Entity>> hangingEntities = new HashSet<Class <?extends Entity>>();
+private static HashSet<Class <?extends Entity>> nbtEntities = new HashSet<Class <?extends Entity>>();
+/**
+ * pre-built nbt-tags for different entity types for use during conversion
+ * map is keyed by mobID from EntityList
+ */
+private static HashMap<String, NBTTagCompound> entityDefaultTags = new HashMap<String, NBTTagCompound>();
 
 static
 {
@@ -70,21 +120,370 @@ specialHandledBlocks.add(Block.furnaceBurning);//
 specialHandledBlocks.add(Block.furnaceIdle);//
 specialHandledBlocks.add(Block.skull);//
 specialHandledBlocks.add(Block.brewingStand);//
-specialHandledBlocks.add(Block.chest);
-specialHandledBlocks.add(Block.dropper);
-specialHandledBlocks.add(Block.dispenser);
-specialHandledBlocks.add(Block.hopperBlock);
+specialHandledBlocks.add(Block.chest);//
+specialHandledBlocks.add(Block.dropper);//
+specialHandledBlocks.add(Block.dispenser);//
+specialHandledBlocks.add(Block.hopperBlock);//
+
+normalHandledEntities.add(EntityPig.class);//
+normalHandledEntities.add(EntitySheep.class);//
+normalHandledEntities.add(EntityCow.class);//
+normalHandledEntities.add(EntityChicken.class);//
+normalHandledEntities.add(EntityBoat.class);//
+normalHandledEntities.add(EntityIronGolem.class);//
+normalHandledEntities.add(EntityWolf.class);//
+normalHandledEntities.add(EntityOcelot.class);//
+normalHandledEntities.add(EntityWither.class);//
+normalHandledEntities.add(EntitySnowman.class);//
+
+hangingEntities.add(EntityPainting.class);/**TODO**/
+hangingEntities.add(EntityItemFrame.class);/**TODO**/
+
+nbtEntities.add(EntityHorse.class);//TECHNICALLY NOOP, BUT HANDLED ANYWAY
+nbtEntities.add(EntityVillager.class);//
+nbtEntities.add(EntityMinecartChest.class);/**TODO**/
+nbtEntities.add(EntityMinecartHopper.class);/**TODO**/
+nbtEntities.add(EntityMinecartEmpty.class);//
+nbtEntities.add(EntityMinecartFurnace.class);//
+nbtEntities.add(EntityMinecartTNT.class);//
+
+/**
+ * TODO add conversion tags to conversion-tag map
+ */
+NBTTagCompound tag;
+List<String> lines = new ArrayList<String>();
+
+lines.add("TAG=10={");
+lines.add("TAG=9=Items{");
+lines.add("}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={380.5}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={-1004.5099999904633}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={-0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={90.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("}");
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecartChest.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=9=Items{");
+lines.add("}");
+lines.add("TAG=3=TransferCooldown{0}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={-0.0}");
+lines.add("TAG=6={0.04088106621525384}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={380.5}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={-1002.7069389818918}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={90.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("}");
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecartHopper.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=9=DropChances{");
+lines.add("TAG=5=0{0.085}");
+lines.add("TAG=5=1{0.085}");
+lines.add("TAG=5=2{0.085}");
+lines.add("TAG=5=3{0.085}");
+lines.add("TAG=5=4{0.085}");
+lines.add("}");
+lines.add("TAG=3=Age{0}");
+lines.add("TAG=9=Attributes{");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.maxHealth}");
+lines.add("TAG=6=Base{20.0}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.knockbackResistance}");
+lines.add("TAG=6=Base{0.0}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.movementSpeed}");
+lines.add("TAG=6=Base{0.5}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.followRange}");
+lines.add("TAG=6=Base{16.0}");
+lines.add("TAG=9=Modifiers{");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{Random spawn bonus}");
+lines.add("TAG=4=UUIDLeast{-5775864776407555021}");
+lines.add("TAG=3=Operation{1}");
+lines.add("TAG=6=Amount{-0.0491561135329342}");
+lines.add("TAG=4=UUIDMost{-3773800893355899517}");
+lines.add("}");
+lines.add("}");
+lines.add("}");
+lines.add("}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={-0.0784000015258789}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=8=CustomName{}");
+lines.add("TAG=2=Health{20}");
+lines.add("TAG=5=HealF{20.0}");
+lines.add("TAG=1=CustomNameVisible{0}");
+lines.add("TAG=3=Riches{0}");
+lines.add("TAG=2=AttackTime{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("TAG=2=DeathTime{0}");
+lines.add("TAG=5=AbsorptionAmount{0.0}");
+lines.add("TAG=9=Equipment{");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("}");
+lines.add("TAG=1=OnGround{1}");
+lines.add("TAG=2=HurtTime{0}");
+lines.add("TAG=3=Profession{3}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={382.11279494825624}");
+lines.add("TAG=6={4.0}");
+lines.add("TAG=6={-999.4431747913983}");
+lines.add("}");
+lines.add("TAG=1=CanPickUpLoot{0}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=1=PersistenceRequired{0}");
+lines.add("TAG=1=Leashed{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={-445.0739}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("}");
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityVillager.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=3=Temper{0}");
+lines.add("TAG=9=DropChances{");
+lines.add("TAG=5=0{0.085}");
+lines.add("TAG=5=1{0.085}");
+lines.add("TAG=5=2{0.085}");
+lines.add("TAG=5=3{0.085}");
+lines.add("TAG=5=4{0.085}");
+lines.add("}");
+lines.add("TAG=3=Age{0}");
+lines.add("TAG=9=Attributes{");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.maxHealth}");
+lines.add("TAG=6=Base{20.0}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.knockbackResistance}");
+lines.add("TAG=6=Base{0.0}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.movementSpeed}");
+lines.add("TAG=6=Base{0.2975187803390599}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{generic.followRange}");
+lines.add("TAG=6=Base{16.0}");
+lines.add("TAG=9=Modifiers{");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{Random spawn bonus}");
+lines.add("TAG=4=UUIDLeast{-8033270966726406722}");
+lines.add("TAG=3=Operation{1}");
+lines.add("TAG=6=Amount{0.049372350241752114}");
+lines.add("TAG=4=UUIDMost{111513669306630993}");
+lines.add("}");
+lines.add("}");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("TAG=8=Name{horse.jumpStrength}");
+lines.add("TAG=6=Base{0.5816810733145679}");
+lines.add("}");
+lines.add("}");
+lines.add("TAG=1=HasReproduced{0}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={-0.002262490133446357}");
+lines.add("TAG=6={-0.0784000015258789}");
+lines.add("TAG=6={0.012293541012387513}");
+lines.add("}");
+lines.add("TAG=8=CustomName{}");
+lines.add("TAG=3=Type{0}");
+lines.add("TAG=2=Health{20}");
+lines.add("TAG=1=Bred{0}");
+lines.add("TAG=5=HealF{20.0}");
+lines.add("TAG=1=CustomNameVisible{0}");
+lines.add("TAG=2=AttackTime{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=1=ChestedHorse{0}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("TAG=2=DeathTime{0}");
+lines.add("TAG=8=OwnerName{}");
+lines.add("TAG=1=Tame{0}");
+lines.add("TAG=5=AbsorptionAmount{0.0}");
+lines.add("TAG=9=Equipment{");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("TAG=10={");
+lines.add("}");
+lines.add("}");
+lines.add("TAG=3=InLove{0}");
+lines.add("TAG=1=OnGround{1}");
+lines.add("TAG=2=HurtTime{0}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={380.349088078742}");
+lines.add("TAG=6={4.0}");
+lines.add("TAG=6={-999.6999999880791}");
+lines.add("}");
+lines.add("TAG=1=CanPickUpLoot{0}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=1=PersistenceRequired{0}");
+lines.add("TAG=1=Leashed{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=3=Variant{259}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={80.99795}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=EatingHaystack{0}");
+lines.add("}");
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityHorse.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={380.5}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={-1003.5}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={-0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={0.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("}");
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecartEmpty.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={-0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=6=PushZ{0.0}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={380.5}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={-1002.5}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=6=PushX{0.0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={0.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("TAG=2=Fuel{0}");
+lines.add("}");
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecartFurnace.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={380.5}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={-1001.5}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=3=TNTFuse{-1}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={-0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=2=Fire{-1}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={0.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("}");
+
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecartTNT.class), tag);
+lines.clear();
 }
-
-
-TileEntityCommandBlock teCommand = new TileEntityCommandBlock();
-TileEntitySkull teSkull = new TileEntitySkull();
-TileEntityDropper teDropper = new TileEntityDropper();
-TileEntityDispenser teDispenser = new TileEntityDispenser();
-TileEntityFurnace teFurnace = new TileEntityFurnace();
-TileEntityHopper teHopper = new TileEntityHopper();
-TileEntityBrewingStand teBrewingStand = new TileEntityBrewingStand();
-TileEntityChest teChest = new TileEntityChest();
 
 public StructureTemplate convertOldTemplate(File file, List<String> templateLines)
   {
@@ -238,7 +637,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   for(int i = 0; i < parsedRules.size(); i++)
     {
     rule = parsedRules.get(i);
-    if(rules[rule.ruleNumber]==null)
+    if(rule.ruleNumber>=1 && rules[rule.ruleNumber]==null)
       {
       rules[rule.ruleNumber] = rule;
       }
@@ -289,11 +688,11 @@ private List<String> parseTag(String tag, Iterator<String> it, List<String> outp
 
 private TemplateRuleEntity parseOldEntityRule(List<String> lines)
   {
-  TemplateRuleEntity rule = null;
-  int x, y, z;
-  float ox, oy, oz;
-  float rotation;
-  String mobID;
+  int x = 0, y = 0, z = 0, dir = 0;
+  float ox = 0.f, oy = 0.f, oz = 0.f;
+  float rotation = 0.f;
+  String mobID = "";
+  TemplateRuleVanillaEntity rule = null;
   for(String line : lines)
     {
     if(line.toLowerCase().startsWith("entityname=")){mobID = StringTools.safeParseString("=", line);}
@@ -304,17 +703,45 @@ private TemplateRuleEntity parseOldEntityRule(List<String> lines)
     else if(line.toLowerCase().startsWith("oy=")){oy = StringTools.safeParseFloat("=", line);}
     else if(line.toLowerCase().startsWith("oz=")){oz = StringTools.safeParseFloat("=", line);}
     else if(line.toLowerCase().startsWith("rotation=")){rotation = StringTools.safeParseFloat("=", line);}
+    else if(line.toLowerCase().startsWith("hangdir=")){dir = StringTools.safeParseInt("=", line);}
+    }
+  Class clz = (Class) EntityList.stringToClassMapping.get(mobID);  
+  if(nbtEntities.contains(clz))
+    {    
+    NBTTagCompound tag = entityDefaultTags.get(mobID);
+    rule = new TemplateRuleEntityLogic();    
+    ((TemplateRuleEntityLogic)rule).tag = tag;  
+    }
+  else if(hangingEntities.contains(clz))
+    {
+    NBTTagCompound tag = entityDefaultTags.get(mobID);
+    rule = new TemplateRuleEntityHanging();   
+    ((TemplateRuleEntityHanging)rule).tag = tag;
+    ((TemplateRuleEntityHanging)rule).direction = dir;
+    }
+  else if(normalHandledEntities.contains(clz))
+    {
+    rule = new TemplateRuleVanillaEntity();
+    } 
+  if(rule!=null)
+    {
+    rule.x = x;
+    rule.y = y;
+    rule.z = z;
+    rule.xOffset = ox;
+    rule.zOffset = oz;
+    rule.mobID = mobID;    
     }
   return rule;
   }
 
 private TemplateRule parseCivicRule(List<String> lines)
   {
-  TemplateRule rule = null;
-  /**
-   * TODO
-   */
-  return rule;
+  if(AWFramework.loadedAutomation)
+    {
+    return StructurePluginAutomation.parseAutomationRule(lines);
+    }
+  return null;
   }
 
 private TemplateRuleEntity parseGateRule(List<String> lines)
@@ -328,20 +755,20 @@ private TemplateRuleEntity parseGateRule(List<String> lines)
 
 private TemplateRuleEntity parseVehicleRule(List<String> lines)
   {
-  TemplateRuleEntity rule = null;
-  /**
-   * TODO
-   */
-  return rule;
+  if(AWFramework.loadedVehicles)
+    {
+    return StructurePluginVehicles.parseVehicleRule(lines);
+    }
+  return null;
   }
 
 private TemplateRuleEntity parseNpcRule(List<String> lines)
   {
-  TemplateRuleEntity rule = null;
-  /**
-   * TODO
-   */
-  return rule;
+   if(AWFramework.loadedVehicles)
+    {
+    return StructurePluginNpcs.parseNpcRule(lines);
+    }
+  return null;
   }
 
 private TemplateRule parseOldBlockRule(List<String> lines)
@@ -394,6 +821,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
   if(block==Block.doorWood || block==Block.doorIron)
     {
     rule = new TemplateRuleBlockDoors();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -401,6 +829,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
   else if(block==Block.signPost || block==Block.signWall)
     {
     rule = new TemplateRuleBlockSign();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -413,6 +842,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teCommand.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockLogic();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -428,6 +858,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teFurnace.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockLogic();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -439,6 +870,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teSkull.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockLogic();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -450,6 +882,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teBrewingStand.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockLogic();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -461,6 +894,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teChest.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockInventory();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -473,6 +907,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teDispenser.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockInventory();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -485,6 +920,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teDropper.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockInventory();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -497,6 +933,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     teHopper.writeToNBT(tag); 
 
     rule = new TemplateRuleBlockInventory();
+    rule.ruleNumber = number;
     rule.blockName = block.getUnlocalizedName();
     rule.meta = meta;
     rule.buildPass = buildPass;
@@ -509,6 +946,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
 private TemplateRule parseModBlock(Block block, int number, int buildPass, int meta)
   {
   TemplateRuleModBlocks rule = new TemplateRuleModBlocks();
+  rule.ruleNumber = number;
   rule.blockName = block.getUnlocalizedName();
   rule.meta = meta;
   return rule;

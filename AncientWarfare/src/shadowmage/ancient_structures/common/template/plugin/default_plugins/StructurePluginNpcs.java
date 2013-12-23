@@ -20,15 +20,17 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
-import net.minecraft.block.Block;
+import java.util.List;
+
+import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
-public class StructurePluginModDefault extends StructureContentPlugin
+public class StructurePluginNpcs extends StructureContentPlugin
 {
 
-public StructurePluginModDefault()
+public StructurePluginNpcs()
   {
   
   }
@@ -36,19 +38,20 @@ public StructurePluginModDefault()
 @Override
 public void addHandledBlocks(StructurePluginManager manager)
   {
-  Block block;
-  for(int i = 256; i < 4096; i++)
-    {
-    block = Block.blocksList[i];
-    if(block==null){continue;}
-    manager.registerBlockHandler("modBlockDefault", block, TemplateRuleModBlocks.class);
-    }
+
   }
 
 @Override
 public void addHandledEntities(StructurePluginManager manager)
   {
-  
+
   }
+
+public static void load()
+  {
+  AWStructures.instance.pluginManager.addPlugin(new StructurePluginNpcs());
+  }
+
+public static TemplateRuleEntity parseNpcRule(List<String> lines){return null;}
 
 }

@@ -45,9 +45,12 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
   String biomeName = world.getBiomeGenForCoordsBody(x, z).biomeName;
   AWLog.logDebug("found possible gen pos: "+x+","+y+","+z+" biome name: "+biomeName);
   StructureTemplate template = StructureTemplateManager.instance().getTemplate("wgt1");
-  StructureMap generatedStructures = AWGameData.get(world, "AWStructureMap", StructureMap.class);
-  generatedStructures.setGeneratedAt(world, x, y, z, face, template);
-  generatedStructures.markDirty();
+  if(template!=null)
+    {
+    StructureMap generatedStructures = AWGameData.get(world, "AWStructureMap", StructureMap.class);
+    generatedStructures.setGeneratedAt(world, x, y, z, face, template);
+    generatedStructures.markDirty();    
+    }
   }
 
 

@@ -38,8 +38,8 @@ import shadowmage.ancient_framework.common.utils.StringTools;
 public class TemplateRuleEntityHanging extends TemplateRuleVanillaEntity
 {
 
-NBTTagCompound tag = new NBTTagCompound();
-int direction;
+public NBTTagCompound tag = new NBTTagCompound();
+public int direction;
 
 BlockPosition hangTarget = new BlockPosition();//cached location for use during placement
 

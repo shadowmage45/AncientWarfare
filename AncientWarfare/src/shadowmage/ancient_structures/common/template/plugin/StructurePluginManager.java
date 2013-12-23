@@ -29,10 +29,14 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginAutomation;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -55,15 +59,15 @@ private HashMap<Class<? extends Entity>, String> pluginByEntity = new HashMap<Cl
 
 private StructurePluginVanillaHandler vanillaPlugin;
 
-/**
- * should be called during pre-init to load default included block and entity handlers
- * needs to be called prior to loading templates, as the plugin-provided rules are needed by the
- * structure templates
- */
+
 public void loadPlugins()
   {
   vanillaPlugin = new StructurePluginVanillaHandler();
   this.addPlugin(vanillaPlugin);
+  
+  if(AWFramework.loadedAutomation){StructurePluginAutomation.load();}
+  if(AWFramework.loadedNpcs){StructurePluginNpcs.load();}
+  if(AWFramework.loadedVehicles){StructurePluginVehicles.load();}
   
   for(StructureContentPlugin plugin : this.loadedContentPlugins)
     {
