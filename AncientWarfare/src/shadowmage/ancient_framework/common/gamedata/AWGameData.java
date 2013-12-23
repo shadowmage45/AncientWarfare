@@ -22,6 +22,8 @@ package shadowmage.ancient_framework.common.gamedata;
 
 import java.util.HashMap;
 
+import shadowmage.ancient_framework.common.config.AWLog;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
@@ -46,14 +48,14 @@ public static <T>T get(World world, String name, Class <T> saveDataClass)
       {
       data = (T) saveDataClass.newInstance();
       world.mapStorage.setData(name, (WorldSavedData)data);
-      gameDatas.put(name, (WorldSavedData)data);
       } 
     catch (Exception e)
       {
       e.printStackTrace();
       }
     }
-  return null;
+  gameDatas.put(name, (WorldSavedData)data);
+  return data;
   }
 
 public static void markDirty(String name)
@@ -72,13 +74,17 @@ public static void markDirty(WorldSavedData data)
 
 public static void handleWorldLoad(World world)
   {
+  AWLog.logDebug("loading world-saved data set");
   WorldSavedData data;
   for(String name : datasToLoad.keySet())
     {
+    AWLog.logDebug("loading data set for: "+name);
     data = gameDatas.get(name);
     if(data==null)
       {
       data = get(world, name, datasToLoad.get(name));
+      gameDatas.put(name, data);   
+      AWLog.logDebug("loaded new data set for: "+name+" :: "+data);   
       }
     }
   }

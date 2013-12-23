@@ -28,6 +28,7 @@ import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
@@ -41,6 +42,8 @@ import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.network.Packet05StructureData;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import shadowmage.ancient_structures.common.world_gen.StructureMap;
+import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -100,6 +103,8 @@ public void preInit(FMLPreInitializationEvent evt)
   GUIHandler.instance().registerContainer(Statics.guiStructureBuilderCreative, ContainerCSB.class);
   GUIHandler.instance().registerContainer(Statics.guiStructureScannerCreative, ContainerStructureScanner.class);
   GUIHandler.instance().registerContainer(Statics.guiSpawnerPlacer, ContainerSpawnerPlacer.class);
+  GameRegistry.registerWorldGenerator(new WorldStructureGenerator());
+  AWGameData.addDataClass("AWStructureMap", StructureMap.class);
   proxy.registerClientData();
   config.log("Ancient Warfare Structures Pre-Init finished.");
   }
@@ -112,9 +117,6 @@ public void init(FMLInitializationEvent evt)
    * listen for plugin registration
    * TODO 
    */
-  double d1 = 1.75d % 1.d;
-  double d2 = -1.75d % 1.d;
-  AWLog.logDebug("d1, d2: "+d1+","+d2);
   config.log("Ancient Warfare Structures Init completed.");
   }
 

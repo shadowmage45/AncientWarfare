@@ -108,7 +108,7 @@ int clusterValue;
 int minDuplicateDistance;
 
 /**
- * survival mode generation settings
+ * survival mode availability settings
  */
 boolean survivalEnabled;
 ItemStack[] resourceStacks;
@@ -167,6 +167,16 @@ public StructureValidationSettingsDefault setGenerationValues(int weight, int va
   this.clusterValue = value;
   this.minDuplicateDistance = dupeDistance;
   return this;
+  }
+
+public int getClusterValue()
+  {
+  return clusterValue;
+  }
+
+public boolean isUnique()
+  {
+  return isUnique;
   }
 
 @Override

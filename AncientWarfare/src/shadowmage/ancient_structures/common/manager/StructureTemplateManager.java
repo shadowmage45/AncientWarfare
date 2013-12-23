@@ -74,7 +74,6 @@ public void onPlayerConnect(EntityPlayer player)
 
 public void onTemplateData(NBTTagCompound tag)
   {
-  AWLog.logDebug("receiving structure data from server");
   if(tag.hasKey("singleStructure"))
     {
     NBTTagCompound structureTag = tag.getCompoundTag("singleStructure");
