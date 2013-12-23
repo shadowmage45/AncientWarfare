@@ -290,9 +290,21 @@ private List<String> parseTag(String tag, Iterator<String> it, List<String> outp
 private TemplateRuleEntity parseOldEntityRule(List<String> lines)
   {
   TemplateRuleEntity rule = null;
-  /**
-   * TODO
-   */
+  int x, y, z;
+  float ox, oy, oz;
+  float rotation;
+  String mobID;
+  for(String line : lines)
+    {
+    if(line.toLowerCase().startsWith("entityname=")){mobID = StringTools.safeParseString("=", line);}
+    else if(line.toLowerCase().startsWith("bx=")){x = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("by=")){y = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("bz=")){z = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("ox=")){ox = StringTools.safeParseFloat("=", line);}
+    else if(line.toLowerCase().startsWith("oy=")){oy = StringTools.safeParseFloat("=", line);}
+    else if(line.toLowerCase().startsWith("oz=")){oz = StringTools.safeParseFloat("=", line);}
+    else if(line.toLowerCase().startsWith("rotation=")){rotation = StringTools.safeParseFloat("=", line);}
+    }
   return rule;
   }
 
