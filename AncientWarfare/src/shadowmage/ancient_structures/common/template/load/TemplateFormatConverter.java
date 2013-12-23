@@ -173,6 +173,27 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
         }
       groupedLines.clear();
       }
+    else if(line.toLowerCase().startsWith("entity:"))
+      {
+      while(it.hasNext() && (line = it.next())!=null)
+        {
+        if(line.toLowerCase().startsWith(":endentity"))
+          {
+          break;
+          }
+        groupedLines.add(line);
+        } 
+      TemplateRule rule = parseOldEntityRule(groupedLines);
+      if(rule!=null)
+        {
+        if(rule.ruleNumber>highestRuleNumber)
+          {
+          highestRuleNumber = rule.ruleNumber;
+          }        
+        parsedRules.add(rule);
+        }
+      groupedLines.clear();
+      }
     else if(line.toLowerCase().startsWith("layer:"))
       {
       while(it.hasNext() && (line = it.next())!=null)
@@ -210,6 +231,51 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   template.setValidationSettings(new StructureValidationSettingsDefault());
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
   return null;//TODO
+  }
+
+private TemplateRule parseOldEntityRule(List<String> lines)
+  {
+  TemplateRule rule = null;
+  /**
+   * TODO
+   */
+  return rule;
+  }
+
+private TemplateRule parseCivicRule(List<String> lines)
+  {
+  TemplateRule rule = null;
+  /**
+   * TODO
+   */
+  return rule;
+  }
+
+private TemplateRule parseGateRule(List<String> lines)
+  {
+  TemplateRule rule = null;
+  /**
+   * TODO
+   */
+  return rule;
+  }
+
+private TemplateRule parseVehicleRule(List<String> lines)
+  {
+  TemplateRule rule = null;
+  /**
+   * TODO
+   */
+  return rule;
+  }
+
+private TemplateRule parseNpcRule(List<String> lines)
+  {
+  TemplateRule rule = null;
+  /**
+   * TODO
+   */
+  return rule;
   }
 
 private TemplateRule parseOldBlockRule(List<String> lines)
@@ -345,7 +411,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     rule.meta = meta;
     rule.buildPass = buildPass;
     ((TemplateRuleBlockInventory)rule).tag = tag;
-    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 0;
     }
   else if(block==Block.dropper)
     {
@@ -357,7 +423,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     rule.meta = meta;
     rule.buildPass = buildPass;
     ((TemplateRuleBlockInventory)rule).tag = tag;
-    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 0;
     }
   else if(block==Block.hopperBlock)
     {
@@ -369,7 +435,7 @@ private TemplateRule parseSpecialBlockRule(Block block, int number, int buildPas
     rule.meta = meta;
     rule.buildPass = buildPass;
     ((TemplateRuleBlockInventory)rule).tag = tag;
-    ((TemplateRuleBlockInventory)rule).randomLootLevel = 1;
+    ((TemplateRuleBlockInventory)rule).randomLootLevel = 0;
     }
   return rule;
   }
