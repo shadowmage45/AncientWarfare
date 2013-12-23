@@ -158,8 +158,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
     {
     totalWeight += t.getValidationSettings().getSelectionWeight();
     }
-  
-  totalWeight -= rng.nextInt(totalWeight);
+  totalWeight -= totalWeight > 0 ? rng.nextInt(totalWeight) : 0;
   StructureTemplate toReturn = null;
   for(StructureTemplate t : trimmedPotentialStructures)
     {

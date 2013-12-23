@@ -560,6 +560,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       TemplateRule rule = parseOldBlockRule(groupedLines);
       if(rule!=null)
         {
+    	AWLog.logDebug("parsed old rule: "+rule);
         if(rule.ruleNumber>highestRuleNumber)
           {
           highestRuleNumber = rule.ruleNumber;
@@ -790,7 +791,7 @@ private TemplateRule parseOldBlockRule(List<String> lines)
     }
   
   Block block = Block.blocksList[id];
-  
+  AWLog.logDebug("parsing old block rule...rule: "+number+ " id: "+id +" meta: "+meta +" order: "+buildPass + " foundBlock: "+block);
   if(block==null)//skip air block rule (0/null), or non-present blocks
     {    
     return null;
@@ -964,7 +965,7 @@ private void parseLayer(List<String> lines, short[] templateData, int yLayer, in
     short[] data = StringTools.parseShortArray(st);
     for(int x = 0; x < xSize && x < data.length; x++)
       {
-      templateData[StructureTemplate.getIndex(x, yLayer, z, xSize, ySize, zSize)] = (short) (data[x]==0? 0 : data[x]-1);
+      templateData[StructureTemplate.getIndex(x, yLayer, z, xSize, ySize, zSize)] = data[x];
       }
     z++;
     }  

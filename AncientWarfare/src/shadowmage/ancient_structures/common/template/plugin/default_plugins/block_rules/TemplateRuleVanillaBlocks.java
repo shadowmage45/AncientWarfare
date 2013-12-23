@@ -121,4 +121,10 @@ public boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int 
   return buildPass == this.buildPass;
   }
 
+@Override
+public String toString()
+  {
+  return String.format("Vanilla Block Rule id: %s meta: %s buildPass: %s", blockName, meta, buildPass);
+  }
+
 }
