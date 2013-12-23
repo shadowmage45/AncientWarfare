@@ -42,6 +42,15 @@ private HashMap<String,StructureTemplateClient> clientTemplates = new HashMap<St
 
 public void addTemplate(StructureTemplate template)
   {
+  if(template.getValidationSettings()==null)
+    {
+    AWLog.logError("could not load template for: " + template.name + " no validation settings present.");
+    return;
+    }
+  if(template.getValidationSettings().isWorldGenEnabled())
+    {
+    WorldGenStructureManager.instance().registerWorldGenStructure(template);    
+    }
   loadedTemplates.put(template.name, template);
   StructureTemplateClient cl = new StructureTemplateClient(template);
   addTemplate(cl);

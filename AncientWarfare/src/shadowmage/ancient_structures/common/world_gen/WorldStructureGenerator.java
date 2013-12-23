@@ -31,6 +31,8 @@ import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureBuilder;
+import shadowmage.ancient_structures.common.template.build.StructureBuilderWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldStructureGenerator implements IWorldGenerator
@@ -114,10 +116,8 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
 
 private void generateStructureAt(World world, int x, int y, int z, int face, StructureTemplate template)
   {
-  /**
-   * TODO instantiate builder, build. do world gen clearing and fill during build
-   */
-
+  StructureBuilderWorldGen builder = new StructureBuilderWorldGen(world, template, face, x, y, z);
+  builder.instantConstruction();
   }
 
 private class DelayedGenerationEntry

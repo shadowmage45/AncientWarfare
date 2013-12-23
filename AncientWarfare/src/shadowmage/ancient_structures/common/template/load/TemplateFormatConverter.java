@@ -485,6 +485,7 @@ entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecar
 lines.clear();
 }
 
+
 public StructureTemplate convertOldTemplate(File file, List<String> templateLines)
   {
   AWLog.logDebug("should read old template format...");
@@ -498,7 +499,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   int xSize = 0, ySize = 0, zSize = 0;
   int xOffset = 0, yOffset = 0, zOffset = 0;
   boolean preserveBlocks;
-   
+  int ruleNumber = 0;  
   
   String name = file.getName();
   if(name.length()>=4)
@@ -648,18 +649,12 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
     }
   
   TemplateRuleEntity entityRule;
-  TemplateRuleEntity[] entityRules = new TemplateRuleEntity[highestEntityRuleNumber+1];
+  TemplateRuleEntity[] entityRules = new TemplateRuleEntity[parsedEntityRules.size()];
   for(int i = 0; i < parsedEntityRules.size(); i++)
     {
-    entityRule = parsedEntityRules.get(i);
-    if(entityRules[entityRule.ruleNumber]==null)
-      {
-      entityRules[entityRule.ruleNumber] = entityRule;
-      }
-    else
-      {
-      AWLog.logError("error parsing template rules, duplicate entity rule number detected for: "+entityRule.ruleNumber);
-      }
+	entityRule = parsedEntityRules.get(i);
+	entityRule.ruleNumber = i;
+	entityRules[i] = entityRule;    
     }
   
   zOffset = zSize - 1 - zOffset;//invert offset to normalize for the new top-left oriented template construction
@@ -669,7 +664,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   template.setTemplateData(templateData);
   template.setValidationSettings(new StructureValidationSettingsDefault());
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
-  return null;//TODO
+  return template;
   }
 
 private List<String> parseTag(String tag, Iterator<String> it, List<String> output)
@@ -732,8 +727,12 @@ private TemplateRuleEntity parseOldEntityRule(List<String> lines)
     rule.zOffset = oz;
     rule.mobID = mobID;    
     }
+  rule.ruleNumber = nextEntityID;
+  nextEntityID++;
   return rule;
   }
+
+int nextEntityID = 0;
 
 private TemplateRule parseCivicRule(List<String> lines)
   {
