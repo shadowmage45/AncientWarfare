@@ -560,7 +560,6 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       TemplateRule rule = parseOldBlockRule(groupedLines);
       if(rule!=null)
         {
-    	AWLog.logDebug("parsed old rule: "+rule);
         if(rule.ruleNumber>highestRuleNumber)
           {
           highestRuleNumber = rule.ruleNumber;
@@ -791,7 +790,6 @@ private TemplateRule parseOldBlockRule(List<String> lines)
     }
   
   Block block = Block.blocksList[id];
-  AWLog.logDebug("parsing old block rule...rule: "+number+ " id: "+id +" meta: "+meta +" order: "+buildPass + " foundBlock: "+block);
   if(block==null)//skip air block rule (0/null), or non-present blocks
     {    
     return null;
