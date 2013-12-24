@@ -102,7 +102,7 @@ public static int[] safeParseIntArray(String regex, String test)
     {
     return parseIntArray(splits[1]);
     }
-  return new int[1];
+  return new int[0];
   }
 
 public static int[] parseIntArray(String csv)
@@ -123,7 +123,7 @@ public static short[] safeParseShortArray(String regex, String test)
     {
     return parseShortArray(splits[1]);
     }
-  return new short[1];
+  return new short[0];
   }
 
 public static short[] parseShortArray(String csv)
@@ -151,7 +151,7 @@ public static byte[] safeParseByteArray(String regex, String test)
     {
     return parseByteArray(splits[1].trim());
     }
-  return new byte[1];
+  return new byte[0];
   }
 
 public static byte[] parseByteArray(String csv)
@@ -172,7 +172,7 @@ public static float[] safeParseFloatArray(String regex, String test)
     {
     return parseFloatArray(splits[1].trim());
     }
-  return new float[1];
+  return new float[0];
   }
 
 public static float[] parseFloatArray(String csv)
@@ -193,8 +193,7 @@ public static String[] safeParseStringArray(String regex, String test)
     {
     return parseStringArray(splits[1]);
     }  
-  splits = new String[1];
-  splits[0]="";
+  splits = new String[0];
   return splits;
   }
 

@@ -121,7 +121,6 @@ public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, in
     try
       {
       rule = clz.getConstructor(World.class, int.class, int.class, int.class, Block.class, int.class, int.class).newInstance(world, x, y, z, block, meta, turns);
-      AWLog.logDebug("getting block rule for block during scan: "+rule);
       return (TemplateRuleBlock) rule;
       } 
     catch (InstantiationException e)
@@ -270,7 +269,6 @@ public TemplateRule getRule(List<String> ruleData, String ruleType)
         }
       }
     }
-  AWLog.logDebug("parsed rule: "+ruleNumber);
   Class<?extends TemplateRule> clz = getRuleByName(name);
   if(name==null || ruleNumber<0 || ruleDataPackage.size()==0 || clz==null)
     {
@@ -284,7 +282,6 @@ public TemplateRule getRule(List<String> ruleData, String ruleType)
   try
     {    
     TemplateRule rule = clz.getConstructor().newInstance();
-    AWLog.logDebug("parsed rule of type: "+clz + "  for name: "+name);
     rule.ruleNumber = ruleNumber;
     rule.parseRuleData(ruleDataPackage);
     return rule;

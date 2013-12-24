@@ -132,15 +132,11 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
   settings.setBorderMissingEdgeDepth(tag.getInteger("borderFill"));
   settings.setSelectionWeight(tag.getInteger("weight"));
   settings.setClusterValue(tag.getInteger("value"));
-  settings.setMinDuplicateDistance(tag.getInteger("dupe"));
-  
-  settings.setAcceptedDimensions(tag.getIntArray("acceptedDimensions"));
-  
+  settings.setMinDuplicateDistance(tag.getInteger("dupe"));  
+  settings.setAcceptedDimensions(tag.getIntArray("acceptedDimensions"));  
   if(tag.hasKey("biomeList")){}//TODO
   if(tag.hasKey("targetBlocksList")){}//TODO
-  settings.setAcceptedTargetBlocks(settings.defaultTargetBlocks);
   if(tag.hasKey("clearBlocksList")){}//TODO
-  settings.setAcceptedClearBlocks(settings.defaultTargetBlocks);  
   template.setValidationSettings(settings);  
   if(include)
     {

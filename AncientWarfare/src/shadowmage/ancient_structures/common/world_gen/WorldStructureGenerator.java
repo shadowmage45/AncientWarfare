@@ -27,6 +27,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import shadowmage.ancient_framework.common.config.AWLog;
@@ -43,6 +44,11 @@ import cpw.mods.fml.common.IWorldGenerator;
 public class WorldStructureGenerator implements IWorldGenerator
 {
 
+private static WorldStructureGenerator instance = new WorldStructureGenerator();
+private WorldStructureGenerator(){}
+public static WorldStructureGenerator instance(){return instance;}
+
+
 private boolean isGenerating = false;
 private LinkedList<DelayedGenerationEntry> delayedChunks = new LinkedList<DelayedGenerationEntry>();
 private Random rng = new Random();
@@ -50,25 +56,26 @@ private Random rng = new Random();
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
+//  if(true){return;}
   if(isGenerating)
     {
-    AWLog.logDebug("delaying generation for chunk: "+chunkX+", "+chunkZ);
+//    AWLog.logDebug("delaying generation for chunk: "+chunkX+", "+chunkZ);
     delayedChunks.add(new DelayedGenerationEntry(chunkX, chunkZ, world, chunkGenerator, chunkProvider));
     return;
     }
   else
     {
     isGenerating = true;
-    AWLog.logDebug("checking structure generation for chunk: "+chunkX+", "+chunkZ);
+//    AWLog.logDebug("checking structure generation for chunk: "+chunkX+", "+chunkZ);
     generateAt(chunkX, chunkZ, world, chunkGenerator, chunkProvider);
     }
-  isGenerating = false;
   while(!delayedChunks.isEmpty())
     {    
     DelayedGenerationEntry entry = delayedChunks.poll();
-    AWLog.logDebug("generating delayed chunk: "+entry.chunkX+", "+entry.chunkZ);
+//    AWLog.logDebug("generating delayed chunk: "+entry.chunkX+", "+entry.chunkZ);
     generateAt(entry.chunkX, entry.chunkZ, entry.world, entry.generator, entry.provider);
     }
+  isGenerating = false;
   }
 
 private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
@@ -76,18 +83,40 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   long t1 = System.currentTimeMillis();
   long seed = (((long)chunkX)<< 32) | (((long)chunkZ) & 0xffffffffl);
   rng.setSeed(seed);
-  int x = chunkX*16 + rng.nextInt(16);
-  int y = world.getTopSolidOrLiquidBlock(chunkX, chunkZ)+1;
-  int z = chunkZ*16 + rng.nextInt(16);
+  int x = chunkX*16 + rng.nextInt(16);  
+  int z = chunkZ*16 + rng.nextInt(16);  
   int face = rng.nextInt(4);
-  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, AWStructureStatics.chunkSearchRadius);
+  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, z, AWStructureStatics.chunkSearchRadius);
   if(template==null){return;}
+  int y = getTargetY(world, x, z)+1;
+  if(y<=0){return;}
   StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
-  long t2 = System.currentTimeMillis() - t1;
   if(attemptStructureGenerationAt(world, x, y, z, face, template, map))
     {
+    long t2 = System.currentTimeMillis() - t1;
     AWLog.log(String.format("Generated structure: %s at %s, %s, %s  generation took: %sms", template.name, x, y, z, t2));
     }   
+  else
+    {
+    long t2 = System.currentTimeMillis() - t1;
+    AWLog.log(String.format("failed generation of structure: %s at %s, %s, %s  generation took: %sms", template.name, x, y, z, t2));
+    }
+  }
+
+public static int getTargetY(World world, int x, int z)
+  {
+  int id;
+  Block block;
+  for(int y = world.provider.getActualHeight(); y>1; y--)
+    {
+    id = world.getBlockId(x, y, z);
+    if(id==0){continue;}
+    block = Block.blocksList[id];
+    if(block==null || block.isAirBlock(world, x, y, z) || block.blockMaterial==Material.leaves || block.blockMaterial==Material.snow || block.blockMaterial==Material.plants){continue;}
+    if(block==Block.tallGrass || block==Block.plantYellow || block==Block.deadBush || block==Block.cactus || block==Block.plantRed){continue;}    
+    return y;
+    }
+  return -1;
   }
 
 /**
@@ -104,14 +133,16 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
   {
   if(validateStructurePlacement(world, x, y, z, face, template, map))
     {   
-    return false;
+    generateStructureAt(world, x, y, z, face, template, map);  
+    return true;
     }
-  generateStructureAt(world, x, y, z, face, template, map);  return true;
+  return false;
   }
 
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {  
   StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
+  AWLog.logDebug("testing structureBB of: "+bb);
   StructureValidationSettingsDefault settings = template.getValidationSettings();
   /**
    * check for colliding bounding boxes
@@ -137,26 +168,28 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   int topEmptyBlockY;
   int id;
   Block targetBlock;
-  int maxLeveling = settings.getBorderMaxLeveling();
-  int maxFill = settings.getBorderMissingEdgeDepth();
+  int maxLeveling = settings.getMaxLeveling();
+  int maxFill = settings.getMaxFill();
   Set<Block> targetBlocks = settings.getAcceptedTargetBlocks();
   Set<Block> clearBlocks = settings.getAcceptedClearBlocks();
   for(bx = bb.pos1.x; bx <= bb.pos2.x ; bx++)
     {
-    for(bz = bb.pos1.z; bx <= bb.pos2.z ; bz++)
+    for(bz = bb.pos1.z; bz <= bb.pos2.z ; bz++)
       {
       /**
        * check for leveling and fill depth
        */
-      topEmptyBlockY = world.getTopSolidOrLiquidBlock(bx, bz)+1;
+      topEmptyBlockY = getTargetY(world, bx, bz)+1;
       if(topEmptyBlockY<=0){return false;}//fail due to...wtf? no block?
-      if(maxFill>=0 && (bx==bb.pos1.x || bx ==bb.pos2.x || bz == bb.pos1.z || bz== bb.pos2.z))//missing edge depth test
+      if(maxFill >= 0 && (bx==bb.pos1.x || bx==bb.pos2.x || bz == bb.pos1.z || bz== bb.pos2.z))//missing edge depth test
         {
-        if(bb.pos1.y-topEmptyBlockY > maxFill)
+        
+        if(bb.pos1.y - topEmptyBlockY > maxFill)
           {
-          AWLog.logDebug("structure failed validation for missing edge depth test");
+          AWLog.logDebug("structure failed validation for fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
           return false;//fail missing edge depth test
           }
+//        AWLog.logDebug("structure fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
         id = world.getBlockId(bx, topEmptyBlockY-1, bz);
         targetBlock = Block.blocksList[id];
         if(topEmptyBlockY<bb.pos1.y && !targetBlocks.contains(targetBlock))
@@ -165,9 +198,9 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
           return false;//fail for block to be filled on top of is invalid target block
           }
         }      
-      if(maxLeveling>=0 && topEmptyBlockY-bb.pos1.y-template.yOffset > maxLeveling)
+      if(maxLeveling>=0 && topEmptyBlockY-bb.pos1.y+template.yOffset > maxLeveling)
         {
-        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-bb.pos2.y-template.yOffset));
+        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-bb.pos1.y-template.yOffset));
         return false;//fail for leveling too high
         }
      
@@ -191,7 +224,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
           {       
           id = world.getBlockId(bx, cy, bz);
           targetBlock = Block.blocksList[id];
-          if(targetBlock!=null && !clearBlocks.contains(targetBlock))
+          if(targetBlock!=null && targetBlock.blockMaterial != Material.plants && !clearBlocks.contains(targetBlock))
             {
             AWLog.logDebug("structure failed validation for invalid clearing block: "+targetBlock.getUnlocalizedName());
             return false;//fail for block clear check

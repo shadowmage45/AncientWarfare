@@ -31,6 +31,7 @@ import java.util.Set;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
@@ -54,7 +55,7 @@ public void loadBiomeList()
     {
     biome = BiomeGenBase.biomeList[i];
     if(biome==null){continue;}
-    templatesByBiome.put(biome.biomeName, new HashSet<StructureTemplate>());
+    templatesByBiome.put(biome.biomeName.toLowerCase(), new HashSet<StructureTemplate>());
     }
   }
 
@@ -66,9 +67,9 @@ public void registerWorldGenStructure(StructureTemplate template)
     {    
     for(String biome : biomes)
       {
-      if(templatesByBiome.containsKey(biome))
+      if(templatesByBiome.containsKey(biome.toLowerCase()))
         {
-        templatesByBiome.get(biome).add(template);
+        templatesByBiome.get(biome.toLowerCase()).add(template);
         }      
       }
     }
@@ -76,7 +77,8 @@ public void registerWorldGenStructure(StructureTemplate template)
     {
     for(String biome : templatesByBiome.keySet())
       {
-      if(biomes.contains(biome)){continue;}
+      if(!biomes.isEmpty() && biomes.contains(biome.toLowerCase())){continue;}
+      AWLog.logDebug("adding template to biome: "+biome.toLowerCase()+", "+template);
       templatesByBiome.get(biome).add(template);
       }
     }
@@ -89,7 +91,7 @@ List<StructureEntry> searchCache = new ArrayList<StructureEntry>();
 List<StructureTemplate> trimmedPotentialStructures = new ArrayList<StructureTemplate>();
 HashMap<String, Integer> distancesFound = new HashMap<String, Integer>();
 
-public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int y, int z, int chunkSearchRange)
+public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int z, int chunkSearchRange)
   {
   StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
   if(map==null){return null;}
@@ -97,8 +99,10 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   float foundDistance, mx, mz;
   cx = x << 4;
   cz = z << 4;
-  String biomeName = world.getBiomeGenForCoords(x, z).biomeName;
+  String biomeName = world.getBiomeGenForCoords(x, z).biomeName.toLowerCase();
   Collection<StructureEntry> genEntries = map.getEntriesNear(world, x, z, chunkSearchRange, false, searchCache);
+  
+//  AWLog.logDebug("selecting structure for" +x+", "+z + " biome: "+biomeName+"." + " found: "+genEntries.size()+ " nearby structures.");
   
   foundValue = 0;
   for(StructureEntry entry : genEntries)
@@ -124,34 +128,51 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   int remainingValue = AWStructureStatics.maxClusterValue - foundValue;
   Collection<String> generatedUniques = map.getGeneratedUniques();
   Set<StructureTemplate> potentialStructures = templatesByBiome.get(biomeName);
+  if(potentialStructures==null || potentialStructures.isEmpty()){return null;}
+//  AWLog.logDebug("found : "+potentialStructures.size()+ " potential structures.");
   StructureValidationSettingsDefault settings;
   int dim = world.provider.dimensionId;
   for(StructureTemplate template : potentialStructures)//loop through initial structures, only adding to 2nd list those which meet biome, unique, value, and minDuplicate distance settings
     {
     settings = template.getValidationSettings();
     boolean dimensionFound = false;
+    boolean dimensionMatch = !settings.isDimensionWhiteList();
     for(int i = 0; i < settings.getAcceptedDimensions().length; i++)
       {
       int dimTest = settings.getAcceptedDimensions()[i];
       if(dimTest == dim)
         {
-        dimensionFound = true; 
+        dimensionMatch = !dimensionMatch;        
         break;
         }      
       }
-    if(!dimensionFound || (dimensionFound && !settings.isDimensionWhiteList()))//skip if dimension is blacklisted, or not present on whitelist
+    if(!dimensionMatch)//skip if dimension is blacklisted, or not present on whitelist
       {
+//      AWLog.logDebug("excluding template from selection for dimension not eligible: " + dim + " :: "+settings.getAcceptedDimensions());
       continue;
       }
-    if(generatedUniques.contains(template.name)){continue;}//skip already generated uniques
-    if(settings.getClusterValue()>remainingValue){continue;}//skip if cluster value is to high to place in given area
+    if(generatedUniques.contains(template.name))
+      {
+//      AWLog.logDebug("excluding template from selection for unique status..already present in generated list");
+      continue;
+      }//skip already generated uniques
+    if(settings.getClusterValue()>remainingValue)
+      {
+//      AWLog.logDebug("excluding template from selection for remaining value check: "+template.name +" val: "+settings.getClusterValue()+ " remVal: "+remainingValue);
+      continue;
+      }//skip if cluster value is to high to place in given area
     if(distancesFound.containsKey(template.name))
       {
       int dist = distancesFound.get(template.name);
-      if(dist<settings.getMinDuplicateDistance()){continue;}//skip if minDuplicate distance is not met
+      if(dist<settings.getMinDuplicateDistance())
+        {
+//        AWLog.logDebug("excluding template from selection for min dupe distance check: "+template.name);
+        continue;
+        }//skip if minDuplicate distance is not met
       }
     trimmedPotentialStructures.add(template);
     }  
+//  AWLog.logDebug("after trimming for dimension and value, "+trimmedPotentialStructures.size()+" potential structures remain.");
   
   int totalWeight = 0;
   for(StructureTemplate t : trimmedPotentialStructures)
@@ -171,6 +192,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
     }
   distancesFound.clear();
   trimmedPotentialStructures.clear();
+//  AWLog.logDebug("after examining for weight, "+toReturn+" was selected.");
   return toReturn;
   }
 

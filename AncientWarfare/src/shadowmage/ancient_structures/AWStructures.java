@@ -104,7 +104,7 @@ public void preInit(FMLPreInitializationEvent evt)
   GUIHandler.instance().registerContainer(Statics.guiStructureBuilderCreative, ContainerCSB.class);
   GUIHandler.instance().registerContainer(Statics.guiStructureScannerCreative, ContainerStructureScanner.class);
   GUIHandler.instance().registerContainer(Statics.guiSpawnerPlacer, ContainerSpawnerPlacer.class);
-  GameRegistry.registerWorldGenerator(new WorldStructureGenerator());
+  GameRegistry.registerWorldGenerator(WorldStructureGenerator.instance());
   AWGameData.addDataClass("AWStructureMap", StructureMap.class);
   proxy.registerClientData();
   config.log("Ancient Warfare Structures Pre-Init finished.");

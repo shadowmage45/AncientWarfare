@@ -123,7 +123,6 @@ public void initializeAndExportDefaults(String path)
 public void loadTemplates()
   {
   this.locateStructureFiles();
-  AWLog.logDebug("Located "+probableStructureFiles.size()+" probable structure files");
   StructureTemplate template;
   int loadedCount = 0;
   for(File f : this.probableStructureFiles)

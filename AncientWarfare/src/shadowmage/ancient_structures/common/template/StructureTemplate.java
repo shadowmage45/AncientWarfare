@@ -118,25 +118,25 @@ public String toString()
   int index;
   b.append("name: ").append(name).append("\n");
   b.append("size: ").append(xSize).append(", ").append(ySize).append(", ").append(zSize).append("\n");
-  b.append("buildKey: ").append(xOffset).append(", ").append(yOffset).append(", ").append(zOffset).append("\n");
-  b.append("levels:");
-  for(int y = 0; y < ySize; y++)
-    {
-    b.append("\n\nlevel: ").append(y).append("\n");
-    for(int z = 0; z < zSize; z++)
-      {
-      for(int x = 0; x < xSize; x++)
-        {
-        index = getIndex( x, y, z, xSize, ySize, zSize);
-        b.append(templateData[index]);
-        if(x<xSize-1)
-          {
-          b.append(",");
-          }
-        }
-      b.append("\n");
-      }
-    }
+  b.append("buildKey: ").append(xOffset).append(", ").append(yOffset).append(", ").append(zOffset);//.append("\n");
+//  b.append("levels:");
+//  for(int y = 0; y < ySize; y++)
+//    {
+//    b.append("\n\nlevel: ").append(y).append("\n");
+//    for(int z = 0; z < zSize; z++)
+//      {
+//      for(int x = 0; x < xSize; x++)
+//        {
+//        index = getIndex( x, y, z, xSize, ySize, zSize);
+//        b.append(templateData[index]);
+//        if(x<xSize-1)
+//          {
+//          b.append(",");
+//          }
+//        }
+//      b.append("\n");
+//      }
+//    }
   return b.toString();
   }
 

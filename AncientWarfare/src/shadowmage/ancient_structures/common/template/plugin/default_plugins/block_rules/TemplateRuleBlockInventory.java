@@ -82,11 +82,11 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   super.handlePlacement(world, turns, x, y, z);
   TileEntity te = world.getBlockTileEntity(x, y, z);
   IInventory inventory = (IInventory)te;
-  if(randomLootLevel>0)
+  if(inventory!=null && randomLootLevel>0)
     {
     LootGenerator.instance().generateLootFor(inventory, inventory.getSizeInventory(), randomLootLevel-1, world.rand);
     }
-  else
+  else if(te!=null)
     {
     tag.setInteger("x", x);
     tag.setInteger("y", y);

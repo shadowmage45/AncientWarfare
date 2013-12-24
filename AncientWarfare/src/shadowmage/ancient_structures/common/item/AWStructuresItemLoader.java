@@ -53,12 +53,15 @@ public String getTranslatedTabLabel()
 public static AWItemBase structureScanner = registry.createItem("item.structurescanner", ItemStructureScanner.class);
 public static AWItemBase structureBuilderCreative = registry.createItem("item.structurebuilder", ItemBuilderCreative.class);
 public static AWItemBase spawnerPlacer = registry.createItem("item.spawnerplacer", ItemSpawnerPlacer.class);
+public static AWItemBase structureGenerator = registry.createItem("item.structuregenerator", ItemStructureGenerator.class);
+
 
 public void registerItems()
   {
   addDescription(structureScanner, "item.structurescanner",  0, "item.structurescanner.tooltip", "ancientwarfare:builder/structureScanner1");
   addDescription(structureBuilderCreative, "item.structurebuilder", 0, "item.structurebuilder.tooltip", "ancientwarfare:builder/structureBuilder1");
   addDescription(spawnerPlacer, "item.spawnerplacer", 0, "item.spawnerplacer.tooltip", "ancientwarfare:builder/structureBuilder1");
+  addDescription(structureGenerator, "item.structuregenerator", 0, "item.structuregenerator.tooltip", "ancientwarfare:builder/structureBuilder1");
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)

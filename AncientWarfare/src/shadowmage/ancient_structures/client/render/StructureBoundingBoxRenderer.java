@@ -63,7 +63,7 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     return;
     }
-  if(item==AWStructuresItemLoader.structureBuilderCreative)
+  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator)
     {
     renderBuildBoundingBox(player, stack, evt.partialTicks);
     }
@@ -112,7 +112,7 @@ private void renderBuildBoundingBox(EntityPlayer player, ItemStack stack, float 
   String name = settings.name();
   StructureTemplateClient structure = StructureTemplateManager.instance().getClientTemplate(name);
   if(structure==null){return;}
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, player.isSneaking());
+  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   if(hit==null){return;}
   bb.setFromStructure(hit.x, hit.y, hit.z, face, structure.xSize, structure.ySize, structure.zSize, structure.xOffset, structure.yOffset, structure.zOffset);

@@ -162,7 +162,6 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
     
     if(!newVersion)
       {
-      AWLog.logDebug("found a possible old format file...offering for conversion");
       return converter.convertOldTemplate(file, lines);
       }
     /**

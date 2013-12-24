@@ -51,7 +51,7 @@ public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();
-  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative)
+  if(builderItem==null || builderItem.getItem()==null || (builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative && builderItem.getItem()!=AWStructuresItemLoader.structureGenerator))
     {
     return;
     } 
@@ -82,7 +82,7 @@ public void handleInitData(NBTTagCompound tag)
 public List<NBTTagCompound> getInitData()
   {  
   ItemStack builderItem = player.inventory.getCurrentItem();  
-  if(builderItem!=null && builderItem.getItem() == AWStructuresItemLoader.structureBuilderCreative && builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData") && builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
+  if(builderItem!=null && (builderItem.getItem() == AWStructuresItemLoader.structureBuilderCreative || builderItem.getItem()==AWStructuresItemLoader.structureGenerator) && builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData") && builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
     {
     NBTTagCompound tag = new NBTTagCompound();
     tag.setString("name", builderItem.getTagCompound().getCompoundTag("structData").getString("name"));    
@@ -102,7 +102,7 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();  
-  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative)
+  if(builderItem==null || builderItem.getItem()==null || (builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative &&builderItem.getItem()!=AWStructuresItemLoader.structureGenerator))
     {
     return;
     }

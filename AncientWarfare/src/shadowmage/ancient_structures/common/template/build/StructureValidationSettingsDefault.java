@@ -75,7 +75,7 @@ boolean doLeveling;
  * 
  * negative values imply to skip edge-depth checking
  */
-int maxMissingEdgeDepth;
+int maxFill;
 
 /**
  * if true, will fill _directly_ below the structure down to the specified number of blocks from maxMissingEdgeDepth
@@ -140,6 +140,8 @@ public StructureValidationSettingsDefault()
   acceptedClearBlocks = new HashSet<Block>();
   acceptedTargetBlocks = new HashSet<Block>();
   acceptedDimensions = new int[]{};
+  acceptedClearBlocks.addAll(defaultTargetBlocks);
+  acceptedTargetBlocks.addAll(defaultTargetBlocks);
   }
 
 public void setMaxLeveling(int maxLeveling)
@@ -154,7 +156,7 @@ public void setDoLeveling(boolean doLeveling)
 
 public void setMaxMissingEdgeDepth(int maxMissingEdgeDepth)
   {
-  this.maxMissingEdgeDepth = maxMissingEdgeDepth;
+  this.maxFill = maxMissingEdgeDepth;
   }
 
 public void setDoFillBelow(boolean doFillBelow)
@@ -229,11 +231,13 @@ public void setAcceptedDimensions(int[] acceptedDimensions)
 
 public void setAcceptedTargetBlocks(Collection<Block> acceptedTargetBlocks)
   {
+  this.acceptedTargetBlocks.clear();
   this.acceptedTargetBlocks.addAll(acceptedTargetBlocks);
   }
 
 public void setAcceptedClearBlocks(Collection<Block> acceptedClearBlocks)
   {
+  this.acceptedClearBlocks.clear();
   this.acceptedClearBlocks.addAll(acceptedClearBlocks);
   }
 
@@ -297,9 +301,9 @@ public boolean isDoLeveling()
   return doLeveling;
   }
 
-public int getMaxMissingEdgeDepth()
+public int getMaxFill()
   {
-  return maxMissingEdgeDepth;
+  return maxFill;
   }
 
 public boolean isDoFillBelow()
@@ -411,7 +415,7 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("clustervalue=")){clusterValue = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("minduplicatedistance=")){minDuplicateDistance = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("fill=")){maxMissingEdgeDepth = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("borderleveling=")){borderMaxLeveling = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("borderfill=")){borderMissingEdgeDepth = StringTools.safeParseInt("=", line);}
@@ -454,7 +458,7 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.newLine();
   writer.write("leveling="+maxLeveling);
   writer.newLine();
-  writer.write("fill="+maxMissingEdgeDepth);
+  writer.write("fill="+maxFill);
   writer.newLine();
   writer.write("border="+borderSize);
   writer.newLine();
