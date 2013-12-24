@@ -31,6 +31,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
@@ -107,7 +108,7 @@ boolean doBorderLeveling;
  * how irregular can the border surrounding the structure be in the -Y direction?
  * negative values imply to skip border depth tests
  */
-int borderMissingEdgeDepth;
+int borderMaxFill;
 boolean doBorderFill;
 
 boolean gradientBorder;
@@ -188,7 +189,7 @@ public void setDoBorderLeveling(boolean doBorderLeveling)
 
 public void setBorderMissingEdgeDepth(int borderMissingEdgeDepth)
   {
-  this.borderMissingEdgeDepth = borderMissingEdgeDepth;
+  this.borderMaxFill = borderMissingEdgeDepth;
   }
 
 public void setDoBorderFill(boolean doBorderFill)
@@ -333,9 +334,9 @@ public boolean isDoBorderLeveling()
   return doBorderLeveling;
   }
 
-public int getBorderMissingEdgeDepth()
+public int getBorderMaxFill()
   {
-  return borderMissingEdgeDepth;
+  return borderMaxFill;
   }
 
 public boolean isDoBorderFill()
@@ -425,17 +426,18 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("borderleveling=")){borderMaxLeveling = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("borderfill=")){borderMissingEdgeDepth = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("borderfill=")){borderMaxFill = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("doleveling=")){doLeveling = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("dofill=")){doFillBelow = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("doborderleveling=")){doBorderLeveling = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("gradientBorder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("gradientborder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("accepteddimensions=")){acceptedDimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimensionWhiteList = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("acceptedbiomes=")){biomeList = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
+    
     /**
      * TODO survival resource-list
      */
@@ -471,7 +473,7 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.newLine();
   writer.write("borderLeveling="+borderMaxLeveling);
   writer.newLine();
-  writer.write("borderFill="+borderMissingEdgeDepth);
+  writer.write("borderFill="+borderMaxFill);
   writer.newLine();
   writer.write("doLeveling="+doLeveling);
   writer.newLine();

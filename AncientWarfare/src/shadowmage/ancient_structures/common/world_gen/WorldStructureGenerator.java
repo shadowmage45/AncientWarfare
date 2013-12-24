@@ -142,7 +142,7 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {  
   StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
-//  AWLog.logDebug("testing structureBB of: "+bb);
+  AWLog.logDebug("testing structureBB of: "+bb);
   StructureValidationSettingsDefault settings = template.getValidationSettings();
   /**
    * check for colliding bounding boxes
@@ -156,7 +156,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
 //    AWLog.logDebug("testing vs existing bb: "+entry.getBB() + "  this:  "+bb);
     if(bb.collidesWith(entry.bb))
       {
-      AWLog.logDebug("structure failed placement for bb intersect with: "+entry.name);
+//      AWLog.logDebug("structure failed placement for bb intersect with: "+entry.name);
       return false;
       }
     }
@@ -241,47 +241,47 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
    */
   int borderSize = settings.getBorderSize();
   maxLeveling = settings.getBorderMaxLeveling();
-  maxFill = settings.getBorderMissingEdgeDepth();
-  boolean gradient = settings.isGradientBorder();
-  
-  int checkHeight = 0;  
-  int heightDiff = 0;
+  maxFill = settings.getBorderMaxFill();  
   if(borderSize>0)
     {
+    AWLog.logDebug("checking along x-axis. min " +(bb.pos1.x-borderSize)+ " max: "+(bb.pos2.x+borderSize));
+    AWLog.logDebug("z-s to check: "+(bb.pos1.z-borderSize)+" to: "+(bb.pos1.z) + "  and   " + (bb.pos2.z) + " to " +(bb.pos2.z+borderSize));
     //check min and max Z along X axis, and corners
-    for(bx = bb.pos1.x-borderSize; bx <= bb.pos2.x+borderSize; bx++)
-      {      
-      for(bz = bb.pos1.z, checkHeight = 0; bz >= bb.pos1.z - borderSize; bz--, checkHeight++)
+    for(bx = bb.pos1.x - borderSize; bx <= bb.pos2.x + borderSize; bx++)
+      {   
+      
+      for(bz = bb.pos1.z-1; bz >= bb.pos1.z - borderSize; bz--)
         {
-        if(!checkBorderBlockValidity(world, bx, y, bz, checkHeight, maxLeveling, maxFill, gradient, clearBlocks))
+        if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
           AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test        
         }      
-      for(bz = bb.pos2.z, checkHeight = 0; bz <= bb.pos2.z + borderSize; bz--, checkHeight++)
+      for(bz = bb.pos2.z+1; bz <= bb.pos2.z + borderSize; bz++)
         {
-        if(!checkBorderBlockValidity(world, bx, y, bz, checkHeight, maxLeveling, maxFill, gradient, clearBlocks))
+        if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
           AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test
         }
       }
+    AWLog.logDebug("checking along z-axis");
     //check min+1 and max-1 X along Z axis (already checked corners in previous test)
-    for(bz = bb.pos1.z+1; bz<=bb.pos2.z-1; bz++)
+    for(bz = bb.pos1.z; bz<=bb.pos2.z; bz++)
       {
-      for(bx = bb.pos1.x, checkHeight = 0; bx >= bb.pos1.x - borderSize; bx--, checkHeight++)
+      for(bx = bb.pos1.x-1; bx >= bb.pos1.x - borderSize; bx--)
         {
-        if(!checkBorderBlockValidity(world, bx, y, bz, checkHeight, maxLeveling, maxFill, gradient, clearBlocks))
+        if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
           AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test
         }
-      for(bx = bb.pos2.x, checkHeight = 0; bx <= bb.pos2.x + borderSize; bx++, checkHeight++)
+      for(bx = bb.pos2.x+1; bx <= bb.pos2.x + borderSize; bx++)
         {
-        if(!checkBorderBlockValidity(world, bx, y, bz, checkHeight, maxLeveling, maxFill, gradient, clearBlocks))
+        if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
           AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
@@ -292,13 +292,21 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   return true;
   }
 
-private boolean checkBorderBlockValidity(World world, int x, int y, int z, int checkHeight, int maxLeveling, int maxFill, boolean gradient, Set<String> validClearingBlocks)
+private boolean checkBorderBlockValidity(World world, int x, int y, int z, int maxLeveling, int maxFill, Set<String> validClearingBlocks)
   {
-  int topEmptyBlockY = world.getTopSolidOrLiquidBlock(x, z)+1;
+  int topEmptyBlockY = getTargetY(world, x, z)+1;
   if(topEmptyBlockY<=0){return false;}
-  int heightDiff = y - topEmptyBlockY;
-  if(maxLeveling>=0 && ((gradient && heightDiff>checkHeight) || (!gradient && heightDiff>maxLeveling))){return false;}//fail borderLeveling
-  else if(maxFill>=0 &&((gradient && heightDiff>checkHeight) || (!gradient && -heightDiff>maxFill))){return false;}//fail border depth test
+  int heightDiff = topEmptyBlockY - y;
+  if(maxLeveling>=0 && heightDiff > maxLeveling)
+    {
+    AWLog.logDebug("failed border leveling "+maxLeveling + " found: "+heightDiff + " at: "+x+","+z + " topBlock: "+topEmptyBlockY);
+    return false;
+    }//fail borderLeveling
+  else if(maxFill>=0 && -heightDiff>maxFill)
+    {
+    AWLog.logDebug("failed border fill "+maxFill + " found: "+ (-heightDiff) + " at: "+x+","+z + " topBlock: "+topEmptyBlockY);
+    return false;
+    }//fail border depth test
   int id;
   Block block;
   if(maxLeveling>0)
@@ -309,6 +317,7 @@ private boolean checkBorderBlockValidity(World world, int x, int y, int z, int c
       block = Block.blocksList[id];
       if(block!=null && !validClearingBlocks.contains(block.getUnlocalizedName()))
         {
+        AWLog.logDebug("failed border clearing block test ");
         return false;
         }
       }

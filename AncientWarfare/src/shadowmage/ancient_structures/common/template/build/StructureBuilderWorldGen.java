@@ -35,9 +35,10 @@ public StructureBuilderWorldGen(World world, StructureTemplate template, int fac
 @Override
 public void instantConstruction()
   {
-  /**
-   * TODO clearing / fill
-   */
+  this.doLeveling();
+  this.doFill();
+  this.doBorderLeveling();
+  this.doBorderFill();
   super.instantConstruction();
   }
 

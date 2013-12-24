@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.item;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -57,9 +58,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     {
     int id = world.getBlockId(hit.x, hit.y, hit.z);
     int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
-    if(Statics.DEBUG)
+    Block block = Block.blocksList[id];
+    if(block!=null && Statics.DEBUG)
       {
-      player.addChatMessage("block hit is: "+id+" :: "+meta);      
+      player.addChatMessage("block hit is: "+id+" :: "+meta + " :: "+block.getUnlocalizedName());      
       }
     } 
   if(!world.isRemote && !player.isSneaking())
