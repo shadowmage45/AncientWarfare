@@ -147,7 +147,7 @@ public void serverStopping(FMLServerStoppingEvent evt)
 @EventHandler
 public void serverStopped(FMLServerStoppedEvent evt)
   {
-
+  AWGameData.resetTrackedData();
   }
 
 }

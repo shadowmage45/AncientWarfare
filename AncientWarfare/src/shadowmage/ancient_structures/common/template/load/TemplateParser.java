@@ -108,7 +108,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   short[] templateData = null;
   boolean newVersion = false;
   boolean[] initData = new boolean[4];
-    
+  int highestParsedRule = 0;
   while(it.hasNext())
     {
     line = it.next();    
@@ -202,6 +202,10 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
       if(rule!=null)
         {
         parsedRules.add(rule);
+        if(rule.ruleNumber>highestParsedRule)
+        {
+        	highestParsedRule = rule.ruleNumber;
+        }
         }
       groupedLines.clear();
       } 
@@ -253,7 +257,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   /**
    * initialze data for construction of template -- put rules into array
    */
-  ruleArray = new TemplateRule[parsedRules.size()+1];
+  ruleArray = new TemplateRule[highestParsedRule+1];
   for(TemplateRule rule : parsedRules)
     {
   	if(rule!=null && rule.ruleNumber>0)

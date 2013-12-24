@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.template.build;
 
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class StructureBuilderWorldGen extends StructureBuilder
 {
@@ -38,5 +39,20 @@ public void instantConstruction()
    * TODO clearing / fill
    */
   super.instantConstruction();
+  }
+
+protected void placeRule(TemplateRule rule)
+  {  
+  try
+    {
+    if(rule.shouldPlaceOnBuildPass(world, turns, destination.x, destination.y, destination.z, currentPriority))
+      {
+      rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);    
+      }
+    }
+  catch(Exception e)
+    {
+    
+    }
   }
 }

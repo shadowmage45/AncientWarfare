@@ -37,17 +37,24 @@ import shadowmage.ancient_structures.common.manager.BlockDataManager;
 public class StructureValidationSettingsDefault extends StructureValidationSettings
 {
 
-public static HashSet<Block> defaultTargetBlocks = new HashSet<Block>();
+public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
 
 static
 {
-defaultTargetBlocks.add(Block.dirt);
-defaultTargetBlocks.add(Block.grass);
-defaultTargetBlocks.add(Block.cobblestone);
-defaultTargetBlocks.add(Block.stone);
-defaultTargetBlocks.add(Block.sand);
-defaultTargetBlocks.add(Block.gravel);
-defaultTargetBlocks.add(Block.sandStone);
+defaultTargetBlocks.add(Block.dirt.getUnlocalizedName());
+defaultTargetBlocks.add(Block.grass.getUnlocalizedName());
+defaultTargetBlocks.add(Block.cobblestone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.stone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.sand.getUnlocalizedName());
+defaultTargetBlocks.add(Block.gravel.getUnlocalizedName());
+defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.wood.getUnlocalizedName());
+defaultTargetBlocks.add(Block.plantRed.getUnlocalizedName());
+defaultTargetBlocks.add(Block.plantYellow.getUnlocalizedName());
+defaultTargetBlocks.add(Block.deadBush.getUnlocalizedName());
+defaultTargetBlocks.add(Block.tallGrass.getUnlocalizedName());
+defaultTargetBlocks.add(Block.snow.getUnlocalizedName());
+defaultTargetBlocks.add(Block.leaves.getUnlocalizedName());
 }
 /**
  * given an area with a source point, how far above the source-point is the highest acceptable block located? 
@@ -115,9 +122,9 @@ Set<String> biomeList;//list of biomes for white/black list.  treated as white/b
 boolean dimensionWhiteList;//should treat dimension list as white or blacklist?
 int[] acceptedDimensions;//list of accepted dimensions treated as white/black list from whitelist toggle
 
-Set<Block> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
+Set<String> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
 
-Set<Block> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
+Set<String> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
 
 /**
  * world generation selection and clustering settings
@@ -137,8 +144,8 @@ ItemStack[] resourceStacks;
 public StructureValidationSettingsDefault()
   {
   biomeList = new HashSet<String>();
-  acceptedClearBlocks = new HashSet<Block>();
-  acceptedTargetBlocks = new HashSet<Block>();
+  acceptedClearBlocks = new HashSet<String>();
+  acceptedTargetBlocks = new HashSet<String>();
   acceptedDimensions = new int[]{};
   acceptedClearBlocks.addAll(defaultTargetBlocks);
   acceptedTargetBlocks.addAll(defaultTargetBlocks);
@@ -229,13 +236,13 @@ public void setAcceptedDimensions(int[] acceptedDimensions)
   this.acceptedDimensions = acceptedDimensions;
   }
 
-public void setAcceptedTargetBlocks(Collection<Block> acceptedTargetBlocks)
+public void setAcceptedTargetBlocks(Collection<String> acceptedTargetBlocks)
   {
   this.acceptedTargetBlocks.clear();
   this.acceptedTargetBlocks.addAll(acceptedTargetBlocks);
   }
 
-public void setAcceptedClearBlocks(Collection<Block> acceptedClearBlocks)
+public void setAcceptedClearBlocks(Collection<String> acceptedClearBlocks)
   {
   this.acceptedClearBlocks.clear();
   this.acceptedClearBlocks.addAll(acceptedClearBlocks);
@@ -356,12 +363,12 @@ public int[] getAcceptedDimensions()
   return acceptedDimensions;
   }
 
-public Set<Block> getAcceptedTargetBlocks()
+public Set<String> getAcceptedTargetBlocks()
   {
   return acceptedTargetBlocks;
   }
 
-public Set<Block> getAcceptedClearBlocks()
+public Set<String> getAcceptedClearBlocks()
   {
   return acceptedClearBlocks;
   }
@@ -427,8 +434,8 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("accepteddimensions=")){acceptedDimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimensionWhiteList = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("acceptedbiomes=")){biomeList = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
-    else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = BlockDataManager.getBlocksByName(StringTools.safeParseStringArray("=", line), new HashSet<Block>());}
-    else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = BlockDataManager.getBlocksByName(StringTools.safeParseStringArray("=", line), new HashSet<Block>());}
+    else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
+    else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     /**
      * TODO survival resource-list
      */
@@ -484,9 +491,9 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.newLine();
   writer.write("acceptedBiomes="+StringTools.getCSVValueFor(biomeList.toArray(new String[biomeList.size()])));
   writer.newLine();
-  writer.write("validTargetBlocks="+StringTools.getCSVValueFor(getStringArrayFrom(acceptedTargetBlocks, null)));
+  writer.write("validTargetBlocks="+StringTools.getCSVValueFor(acceptedTargetBlocks.toArray(new String[acceptedTargetBlocks.size()])));
   writer.newLine();
-  writer.write("validClearingBlocks="+StringTools.getCSVValueFor(getStringArrayFrom(acceptedClearBlocks, null)));
+  writer.write("validClearingBlocks="+StringTools.getCSVValueFor(acceptedClearBlocks.toArray(new String[acceptedClearBlocks.size()])));
   writer.newLine();  
   /**  
    * TODO survival resource-list

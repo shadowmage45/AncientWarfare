@@ -204,4 +204,14 @@ protected boolean incrementPosition()
   return true;
   }
 
+protected void doLeveling()
+  {
+  
+  }
+
+protected void doClearing()
+  {
+  
+  }
+
 }

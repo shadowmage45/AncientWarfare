@@ -158,4 +158,16 @@ public int getZSize()
   {
   return pos2.z-pos1.z+1;
   }
+
+public int getCenterX()
+  {
+  return pos1.x + (getXSize()/2);
+  }
+
+public int getCenterZ()
+  {
+  return pos1.z + (getZSize()/2);
+  }
+
+
 }

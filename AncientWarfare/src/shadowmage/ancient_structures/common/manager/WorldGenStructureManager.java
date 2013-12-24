@@ -93,6 +93,9 @@ HashMap<String, Integer> distancesFound = new HashMap<String, Integer>();
 
 public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int z, int chunkSearchRange)
   {
+  searchCache.clear();
+  trimmedPotentialStructures.clear();
+  distancesFound.clear();
   StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
   if(map==null){return null;}
   int cx, cz, foundValue, chunkDistance;
@@ -108,10 +111,10 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   for(StructureEntry entry : genEntries)
     {
     foundValue += entry.getValue();
-    mx = ((entry.getBB().pos2.x - entry.getBB().pos1.x)/2 + entry.getBB().pos1.x) - x;
-    mz = ((entry.getBB().pos2.z - entry.getBB().pos1.z)/2 + entry.getBB().pos1.z) - z;
+    mx = entry.getBB().getCenterX() - x;
+    mz = entry.getBB().getCenterZ() - z;
     foundDistance = MathHelper.sqrt_float(mx * mx + mz * mz);
-    chunkDistance = ((int)foundDistance)/16;
+    chunkDistance = (int)(foundDistance/16.f);
     if(distancesFound.containsKey(entry.getName()))
       {
       int dist = distancesFound.get(entry.getName());
@@ -173,22 +176,22 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
     trimmedPotentialStructures.add(template);
     }  
 //  AWLog.logDebug("after trimming for dimension and value, "+trimmedPotentialStructures.size()+" potential structures remain.");
-  
+  if(trimmedPotentialStructures.isEmpty()){return null;}
   int totalWeight = 0;
   for(StructureTemplate t : trimmedPotentialStructures)
     {
     totalWeight += t.getValidationSettings().getSelectionWeight();
     }
-  totalWeight -= totalWeight > 0 ? rng.nextInt(totalWeight) : 0;
+  totalWeight -= rng.nextInt(totalWeight+1);
   StructureTemplate toReturn = null;
   for(StructureTemplate t : trimmedPotentialStructures)
     {
-    totalWeight -= t.getValidationSettings().getSelectionWeight();
     if(totalWeight<=0)
       {
       toReturn = t;
       break;
-      }
+      }   
+    totalWeight -= t.getValidationSettings().getSelectionWeight();     
     }
   distancesFound.clear();
   trimmedPotentialStructures.clear();

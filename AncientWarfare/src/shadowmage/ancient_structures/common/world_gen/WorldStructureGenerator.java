@@ -142,17 +142,18 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {  
   StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
-  AWLog.logDebug("testing structureBB of: "+bb);
+//  AWLog.logDebug("testing structureBB of: "+bb);
   StructureValidationSettingsDefault settings = template.getValidationSettings();
   /**
    * check for colliding bounding boxes
    */
   int xs = bb.getXSize();
   int zs = bb.getZSize();
-  int size = ((xs > zs ? xs : zs)/16)+1;
+  int size = ((xs > zs ? xs : zs)/16)+3;
   Collection<StructureEntry> bbCheckList = map.getEntriesNear(world, x, z, size, true, new ArrayList<StructureEntry>());
   for(StructureEntry entry : bbCheckList)
     {
+//    AWLog.logDebug("testing vs existing bb: "+entry.getBB() + "  this:  "+bb);
     if(bb.collidesWith(entry.bb))
       {
       AWLog.logDebug("structure failed placement for bb intersect with: "+entry.name);
@@ -170,8 +171,8 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   Block targetBlock;
   int maxLeveling = settings.getMaxLeveling();
   int maxFill = settings.getMaxFill();
-  Set<Block> targetBlocks = settings.getAcceptedTargetBlocks();
-  Set<Block> clearBlocks = settings.getAcceptedClearBlocks();
+  Set<String> targetBlocks = settings.getAcceptedTargetBlocks();
+  Set<String> clearBlocks = settings.getAcceptedClearBlocks();
   for(bx = bb.pos1.x; bx <= bb.pos2.x ; bx++)
     {
     for(bz = bb.pos1.z; bz <= bb.pos2.z ; bz++)
@@ -189,18 +190,17 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
           AWLog.logDebug("structure failed validation for fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
           return false;//fail missing edge depth test
           }
-//        AWLog.logDebug("structure fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
         id = world.getBlockId(bx, topEmptyBlockY-1, bz);
         targetBlock = Block.blocksList[id];
-        if(topEmptyBlockY<bb.pos1.y && !targetBlocks.contains(targetBlock))
+        if(topEmptyBlockY<bb.pos1.y && !targetBlocks.contains(targetBlock.getUnlocalizedName()))
           {
           AWLog.logDebug("structure failed validation for invalid target fill block");
           return false;//fail for block to be filled on top of is invalid target block
           }
         }      
-      if(maxLeveling>=0 && topEmptyBlockY-bb.pos1.y+template.yOffset > maxLeveling)
+      if(maxLeveling>=0 && topEmptyBlockY - (bb.pos1.y+template.yOffset) > maxLeveling)
         {
-        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-bb.pos1.y-template.yOffset));
+        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-(bb.pos1.y+template.yOffset)));
         return false;//fail for leveling too high
         }
      
@@ -209,7 +209,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
        */
       id = world.getBlockId(bx, by, bz);
       targetBlock = Block.blocksList[id];
-      if(targetBlock!=null && !targetBlocks.contains(targetBlock))
+      if(targetBlock!=null && !targetBlocks.contains(targetBlock.getUnlocalizedName()))
         {
         AWLog.logDebug("structure failed validation for invalid target block: "+targetBlock.getUnlocalizedName());
         return false;
@@ -224,7 +224,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
           {       
           id = world.getBlockId(bx, cy, bz);
           targetBlock = Block.blocksList[id];
-          if(targetBlock!=null && targetBlock.blockMaterial != Material.plants && !clearBlocks.contains(targetBlock))
+          if(targetBlock!=null && targetBlock.blockMaterial != Material.plants && !clearBlocks.contains(targetBlock.getUnlocalizedName()))
             {
             AWLog.logDebug("structure failed validation for invalid clearing block: "+targetBlock.getUnlocalizedName());
             return false;//fail for block clear check
@@ -292,7 +292,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   return true;
   }
 
-private boolean checkBorderBlockValidity(World world, int x, int y, int z, int checkHeight, int maxLeveling, int maxFill, boolean gradient, Set<Block> validClearingBlocks)
+private boolean checkBorderBlockValidity(World world, int x, int y, int z, int checkHeight, int maxLeveling, int maxFill, boolean gradient, Set<String> validClearingBlocks)
   {
   int topEmptyBlockY = world.getTopSolidOrLiquidBlock(x, z)+1;
   if(topEmptyBlockY<=0){return false;}
@@ -307,7 +307,7 @@ private boolean checkBorderBlockValidity(World world, int x, int y, int z, int c
       {
       id = world.getBlockId(x, by, z);
       block = Block.blocksList[id];
-      if(block!=null && !validClearingBlocks.contains(block))
+      if(block!=null && !validClearingBlocks.contains(block.getUnlocalizedName()))
         {
         return false;
         }
