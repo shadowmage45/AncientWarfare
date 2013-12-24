@@ -148,4 +148,14 @@ public void expand(int x, int y, int z)
   pos2.y+=y;
   pos2.z+=z;
   }
+
+public int getXSize()
+  {
+  return pos2.x-pos1.x+1;
+  }
+
+public int getZSize()
+  {
+  return pos2.z-pos1.z+1;
+  }
 }

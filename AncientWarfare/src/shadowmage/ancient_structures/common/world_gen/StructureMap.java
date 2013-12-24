@@ -218,8 +218,8 @@ public void setGeneratedAt(int chunkX, int chunkZ, StructureEntry entry)
     this.worldMap.put(chunkX, new HashMap<Integer, StructureEntry>());
     }
   this.worldMap.get(chunkX).put(chunkZ, entry);
-  int x = entry.bb.pos2.x - entry.bb.pos1.x;
-  int z = entry.bb.pos2.z - entry.bb.pos1.z;
+  int x = entry.bb.getXSize();
+  int z = entry.bb.getZSize();
   if(x>largestGeneratedX){largestGeneratedX = x;}
   if(z>largestGeneratedZ){largestGeneratedZ = z;}
   }

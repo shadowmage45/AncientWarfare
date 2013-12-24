@@ -87,10 +87,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       player.addChatMessage("no structure found to build...");
       return true;
       }
-    if(player.isSneaking())
-      {
-      hit.offsetForMCSide(side);
-      }
+    hit.offsetForMCSide(side);
     AWLog.logDebug("constructing template: "+template);    
     StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
     builder.instantConstruction();
