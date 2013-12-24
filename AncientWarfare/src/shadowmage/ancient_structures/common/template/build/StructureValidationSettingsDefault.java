@@ -22,6 +22,8 @@ package shadowmage.ancient_structures.common.template.build;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -30,10 +32,23 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
 public class StructureValidationSettingsDefault extends StructureValidationSettings
 {
 
+public static HashSet<Block> defaultTargetBlocks = new HashSet<Block>();
+
+static
+{
+defaultTargetBlocks.add(Block.dirt);
+defaultTargetBlocks.add(Block.grass);
+defaultTargetBlocks.add(Block.cobblestone);
+defaultTargetBlocks.add(Block.stone);
+defaultTargetBlocks.add(Block.sand);
+defaultTargetBlocks.add(Block.gravel);
+defaultTargetBlocks.add(Block.sandStone);
+}
 /**
  * given an area with a source point, how far above the source-point is the highest acceptable block located? 
  * e.g. a 'normal' setting would be the same height as the structures above-ground height which would allow
@@ -91,6 +106,8 @@ boolean doBorderFill;
 boolean gradientBorder;
 
 boolean preserveBlocks;
+boolean preserveWater;
+boolean preserveLava;
 
 boolean biomeWhiteList;//should treat biome list as white or blacklist?
 Set<String> biomeList;//list of biomes for white/black list.  treated as white/black list from whitelist toggle
@@ -120,58 +137,139 @@ ItemStack[] resourceStacks;
 public StructureValidationSettingsDefault()
   {
   biomeList = new HashSet<String>();
+  acceptedClearBlocks = new HashSet<Block>();
+  acceptedTargetBlocks = new HashSet<Block>();
+  acceptedDimensions = new int[]{};
   }
 
-public StructureValidationSettingsDefault setToggles(boolean world, boolean unique, boolean survival, boolean leveling, boolean fill, boolean borderLevel, boolean borderFill, boolean preserveBlocks, boolean gradientBorder)
+public void setMaxLeveling(int maxLeveling)
   {
-  this.worldGenEnabled = world;
-  this.isUnique = unique;
-  this.survivalEnabled = survival;
-  this.doLeveling = leveling;
-  this.doFillBelow = fill;
-  this.doBorderLeveling= borderLevel;
-  this.doBorderFill = borderFill;
-  this.preserveBlocks = preserveBlocks;
+  this.maxLeveling = maxLeveling;
+  }
+
+public void setDoLeveling(boolean doLeveling)
+  {
+  this.doLeveling = doLeveling;
+  }
+
+public void setMaxMissingEdgeDepth(int maxMissingEdgeDepth)
+  {
+  this.maxMissingEdgeDepth = maxMissingEdgeDepth;
+  }
+
+public void setDoFillBelow(boolean doFillBelow)
+  {
+  this.doFillBelow = doFillBelow;
+  }
+
+public void setBorderSize(int borderSize)
+  {
+  this.borderSize = borderSize;
+  }
+
+public void setBorderMaxLeveling(int borderMaxLeveling)
+  {
+  this.borderMaxLeveling = borderMaxLeveling;
+  }
+
+public void setDoBorderLeveling(boolean doBorderLeveling)
+  {
+  this.doBorderLeveling = doBorderLeveling;
+  }
+
+public void setBorderMissingEdgeDepth(int borderMissingEdgeDepth)
+  {
+  this.borderMissingEdgeDepth = borderMissingEdgeDepth;
+  }
+
+public void setDoBorderFill(boolean doBorderFill)
+  {
+  this.doBorderFill = doBorderFill;
+  }
+
+public void setGradientBorder(boolean gradientBorder)
+  {
   this.gradientBorder = gradientBorder;
-  return this;
   }
 
-public StructureValidationSettingsDefault setValidationParams(int leveling, int fill, int border, int borderLevel, int borderFill)
+public void setPreserveBlocks(boolean preserveBlocks)
   {
-  this.maxLeveling = leveling;
-  this.maxMissingEdgeDepth = fill;
-  this.borderMaxLeveling = borderLevel;
-  this.borderMissingEdgeDepth = borderFill;
-  return this;
+  this.preserveBlocks = preserveBlocks;
   }
 
-public StructureValidationSettingsDefault setValidBlocks(Set<Block> targetBlocks, Set<Block> clearableBlocks)
+public void setPreserveWater(boolean preserveWater)
   {
-  this.acceptedTargetBlocks = targetBlocks;
-  this.acceptedClearBlocks = clearableBlocks;
-  return this;
+  this.preserveWater = preserveWater;
   }
 
-public StructureValidationSettingsDefault setValidDimensions(int[] dimensions, boolean white)
+public void setPreserveLava(boolean preserveLava)
   {
-  this.acceptedDimensions = dimensions;
-  this.dimensionWhiteList = white;
-  return this;
+  this.preserveLava = preserveLava;
   }
 
-public StructureValidationSettingsDefault setValidBiomes(Set<String> biomes, boolean white)
+public void setBiomeWhiteList(boolean biomeWhiteList)
   {
-  this.biomeList = biomes;
-  this.biomeWhiteList = white;
-  return this;
+  this.biomeWhiteList = biomeWhiteList;
   }
 
-public StructureValidationSettingsDefault setGenerationValues(int weight, int value, int dupeDistance)
+public void setBiomeList(Set<String> biomeList)
   {
-  this.selectionWeight = weight;
-  this.clusterValue = value;
-  this.minDuplicateDistance = dupeDistance;
-  return this;
+  this.biomeList = biomeList;
+  }
+
+public void setDimensionWhiteList(boolean dimensionWhiteList)
+  {
+  this.dimensionWhiteList = dimensionWhiteList;
+  }
+
+public void setAcceptedDimensions(int[] acceptedDimensions)
+  {
+  this.acceptedDimensions = acceptedDimensions;
+  }
+
+public void setAcceptedTargetBlocks(Collection<Block> acceptedTargetBlocks)
+  {
+  this.acceptedTargetBlocks.addAll(acceptedTargetBlocks);
+  }
+
+public void setAcceptedClearBlocks(Collection<Block> acceptedClearBlocks)
+  {
+  this.acceptedClearBlocks.addAll(acceptedClearBlocks);
+  }
+
+public void setWorldGenEnabled(boolean worldGenEnabled)
+  {
+  this.worldGenEnabled = worldGenEnabled;
+  }
+
+public void setUnique(boolean isUnique)
+  {
+  this.isUnique = isUnique;
+  }
+
+public void setSelectionWeight(int selectionWeight)
+  {
+  this.selectionWeight = selectionWeight;
+  }
+
+public void setClusterValue(int clusterValue)
+  {
+  this.clusterValue = clusterValue;
+  }
+
+public void setMinDuplicateDistance(int minDuplicateDistance)
+  {
+  this.minDuplicateDistance = minDuplicateDistance;
+  }
+
+public void setSurvivalEnabled(boolean survivalEnabled)
+  {
+  this.survivalEnabled = survivalEnabled;
+  }
+
+public void setResourceStacks(ItemStack[] resourceStacks)
+  {
+  this.resourceStacks = resourceStacks;
   }
 
 public int getClusterValue()
@@ -307,6 +405,8 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("worldgenenabled=")){worldGenEnabled = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("unique=")){isUnique = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("preserveblocks=")){preserveBlocks = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("preservewater=")){preserveWater = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("preservelava=")){preserveLava = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("selectionweight=")){selectionWeight = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("clustervalue=")){clusterValue = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("minduplicatedistance=")){minDuplicateDistance = StringTools.safeParseInt("=", line);}
@@ -319,12 +419,13 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("dofill=")){doFillBelow = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("doborderleveling=")){doBorderLeveling = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("gradientBorder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("accepteddimensions=")){acceptedDimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimensionWhiteList = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("gradientBorder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("acceptedbiomes=")){biomeList = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
+    else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = BlockDataManager.getBlocksByName(StringTools.safeParseStringArray("=", line), new HashSet<Block>());}
+    else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = BlockDataManager.getBlocksByName(StringTools.safeParseStringArray("=", line), new HashSet<Block>());}
     /**
-     * TODO biomes
-     * TODO target and clearing blocks
      * TODO survival resource-list
      */
     }
@@ -340,6 +441,10 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.write("unique="+isUnique);
   writer.newLine();
   writer.write("preserveBlocks="+preserveBlocks);
+  writer.newLine();
+  writer.write("preserveWater="+preserveWater);
+  writer.newLine();
+  writer.write("preserveLava="+preserveLava);
   writer.newLine();
   writer.write("selectionWeight="+selectionWeight);
   writer.newLine();
@@ -367,16 +472,40 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.newLine();  
   writer.write("gradientBorder="+gradientBorder);
   writer.newLine();
-  writer.write("acceptedDimensions="+StringTools.getCSVStringForArray(acceptedDimensions));
-  writer.newLine();
   writer.write("dimensionWhiteList="+dimensionWhiteList);
   writer.newLine();
-  /**
-   * TODO biomes
-   * TODO target and clearing blocks
+  writer.write("acceptedDimensions="+StringTools.getCSVStringForArray(acceptedDimensions));
+  writer.newLine();  
+  writer.write("biomeWhiteList="+biomeWhiteList);
+  writer.newLine();
+  writer.write("acceptedBiomes="+StringTools.getCSVValueFor(biomeList.toArray(new String[biomeList.size()])));
+  writer.newLine();
+  writer.write("validTargetBlocks="+StringTools.getCSVValueFor(getStringArrayFrom(acceptedTargetBlocks, null)));
+  writer.newLine();
+  writer.write("validClearingBlocks="+StringTools.getCSVValueFor(getStringArrayFrom(acceptedClearBlocks, null)));
+  writer.newLine();  
+  /**  
    * TODO survival resource-list
    */
-
   }
+
+
+
+private String[] getStringArrayFrom(Set<Block> blocks, String[] in)
+  {
+  if(in==null || in.length< blocks.size())
+    {
+    in = new String[blocks.size()];
+    }
+  int index = 0;
+  for(Block b : blocks)
+    {
+    if(b==null){continue;}
+    in[index] = b.getUnlocalizedName();
+    index++;    
+    }
+  return in;
+  }
+
 
 }

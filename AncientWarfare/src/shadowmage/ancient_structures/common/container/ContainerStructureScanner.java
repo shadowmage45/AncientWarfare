@@ -109,11 +109,39 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
 //  tag.setInteger("dupe", minDuplicateLine.getIntVal());
 
   StructureValidationSettingsDefault settings = new StructureValidationSettingsDefault();
-  settings.setToggles(tag.getBoolean("world"), tag.getBoolean("unique"), tag.getBoolean("survival"), tag.getBoolean("doLeveling"), tag.getBoolean("doFill"), tag.getBoolean("doBorderLeveling"), tag.getBoolean("doBorderFill"), tag.getBoolean("preserveBlocks"), tag.getBoolean("gradientBorder"));
-  settings.setValidationParams(tag.getInteger("leveling"), tag.getInteger("fill"), tag.getInteger("border"), tag.getInteger("borderLeveling"), tag.getInteger("borderFill"));
-  settings.setGenerationValues(tag.getInteger("weight"), tag.getInteger("value"), tag.getInteger("dupe"));
-  template.setValidationSettings(settings);
   
+  settings.setWorldGenEnabled(tag.getBoolean("world"));
+  settings.setUnique(tag.getBoolean("unique"));
+  settings.setSurvivalEnabled(tag.getBoolean("survival"));
+  settings.setDoLeveling(tag.getBoolean("doLeveling"));
+  settings.setDoFillBelow(tag.getBoolean("doFill"));
+  settings.setDoBorderLeveling(tag.getBoolean("doBorderLeveling"));
+  settings.setDoBorderFill(tag.getBoolean("doBorderFill"));
+  settings.setPreserveBlocks(tag.getBoolean("preserveBlocks"));
+  settings.setPreserveWater(tag.getBoolean("preserveWater"));
+  settings.setPreserveWater(tag.getBoolean("preserveLava"));
+  settings.setGradientBorder(tag.getBoolean("gradient"));
+  settings.setBiomeWhiteList(tag.getBoolean("biomeWhiteList"));
+  settings.setDimensionWhiteList(tag.getBoolean("dimensionWhiteList"));  
+  
+  
+  settings.setMaxLeveling(tag.getInteger("leveling"));
+  settings.setMaxMissingEdgeDepth(tag.getInteger("fill"));
+  settings.setBorderSize(tag.getInteger("border"));
+  settings.setBorderMaxLeveling(tag.getInteger("borderLeveling"));
+  settings.setBorderMissingEdgeDepth(tag.getInteger("borderFill"));
+  settings.setSelectionWeight(tag.getInteger("weight"));
+  settings.setClusterValue(tag.getInteger("value"));
+  settings.setMinDuplicateDistance(tag.getInteger("dupe"));
+  
+  settings.setAcceptedDimensions(tag.getIntArray("acceptedDimensions"));
+  
+  if(tag.hasKey("biomeList")){}//TODO
+  if(tag.hasKey("targetBlocksList")){}//TODO
+  settings.setAcceptedTargetBlocks(settings.defaultTargetBlocks);
+  if(tag.hasKey("clearBlocksList")){}//TODO
+  settings.setAcceptedClearBlocks(settings.defaultTargetBlocks);  
+  template.setValidationSettings(settings);  
   if(include)
     {
     StructureTemplateManager.instance().addTemplate(template);    

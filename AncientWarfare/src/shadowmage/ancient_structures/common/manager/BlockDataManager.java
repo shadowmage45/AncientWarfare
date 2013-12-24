@@ -255,4 +255,19 @@ public static Block getBlockByName(String name)
   return block;
   }
 
+public static Set<Block> getBlocksByName(String[] names, Set<Block> in)
+  {
+  Block block;
+  for(String st : names)
+    {
+    if(st==null){continue;}
+    block = BlockDataManager.getBlockByName(st);
+    if(block!=null)
+      {
+      in.add(block);
+      }
+    }
+  return in;
+  }
+
 }
