@@ -88,6 +88,8 @@ boolean doBorderLeveling;
 int borderMissingEdgeDepth;
 boolean doBorderFill;
 
+boolean gradientBorder;
+
 boolean preserveBlocks;
 
 boolean biomeWhiteList;//should treat biome list as white or blacklist?
@@ -96,9 +98,9 @@ Set<String> biomeList;//list of biomes for white/black list.  treated as white/b
 boolean dimensionWhiteList;//should treat dimension list as white or blacklist?
 int[] acceptedDimensions;//list of accepted dimensions treated as white/black list from whitelist toggle
 
-Block[] acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon -- 100% of blocks directly below the structure must meet this list
+Set<Block> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
 
-Block[] acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
+Set<Block> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
 
 /**
  * world generation selection and clustering settings
@@ -120,7 +122,7 @@ public StructureValidationSettingsDefault()
   biomeList = new HashSet<String>();
   }
 
-public StructureValidationSettingsDefault setToggles(boolean world, boolean unique, boolean survival, boolean leveling, boolean fill, boolean borderLevel, boolean borderFill, boolean preserveBlocks)
+public StructureValidationSettingsDefault setToggles(boolean world, boolean unique, boolean survival, boolean leveling, boolean fill, boolean borderLevel, boolean borderFill, boolean preserveBlocks, boolean gradientBorder)
   {
   this.worldGenEnabled = world;
   this.isUnique = unique;
@@ -130,6 +132,7 @@ public StructureValidationSettingsDefault setToggles(boolean world, boolean uniq
   this.doBorderLeveling= borderLevel;
   this.doBorderFill = borderFill;
   this.preserveBlocks = preserveBlocks;
+  this.gradientBorder = gradientBorder;
   return this;
   }
 
@@ -142,7 +145,7 @@ public StructureValidationSettingsDefault setValidationParams(int leveling, int 
   return this;
   }
 
-public StructureValidationSettingsDefault setValidBlocks(Block[] targetBlocks, Block[] clearableBlocks)
+public StructureValidationSettingsDefault setValidBlocks(Set<Block> targetBlocks, Set<Block> clearableBlocks)
   {
   this.acceptedTargetBlocks = targetBlocks;
   this.acceptedClearBlocks = clearableBlocks;
@@ -251,12 +254,12 @@ public int[] getAcceptedDimensions()
   return acceptedDimensions;
   }
 
-public Block[] getAcceptedTargetBlocks()
+public Set<Block> getAcceptedTargetBlocks()
   {
   return acceptedTargetBlocks;
   }
 
-public Block[] getAcceptedClearBlocks()
+public Set<Block> getAcceptedClearBlocks()
   {
   return acceptedClearBlocks;
   }
@@ -286,6 +289,11 @@ public ItemStack[] getResourceStacks()
   return resourceStacks;
   }
 
+public boolean isGradientBorder()
+  {
+  return gradientBorder;
+  }
+
 @Override
 public void parseSettings(List<String> lines)
   {
@@ -313,8 +321,10 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("accepteddimensions=")){acceptedDimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimensionWhiteList = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("gradientBorder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
     /**
      * TODO biomes
+     * TODO target and clearing blocks
      * TODO survival resource-list
      */
     }
@@ -354,6 +364,8 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.write("doBorderLeveling="+doBorderLeveling);
   writer.newLine();
   writer.write("doBorderFill="+doBorderFill);
+  writer.newLine();  
+  writer.write("gradientBorder="+gradientBorder);
   writer.newLine();
   writer.write("acceptedDimensions="+StringTools.getCSVStringForArray(acceptedDimensions));
   writer.newLine();
@@ -361,8 +373,10 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.newLine();
   /**
    * TODO biomes
+   * TODO target and clearing blocks
    * TODO survival resource-list
    */
 
   }
+
 }

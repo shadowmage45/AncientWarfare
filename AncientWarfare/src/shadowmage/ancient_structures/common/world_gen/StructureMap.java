@@ -70,18 +70,12 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
   NBTTagCompound mapTag = new NBTTagCompound();
   map.writeToNBT(mapTag);
   nbttagcompound.setTag("map", mapTag);
-  List<String> lines = new ArrayList<String>();
-  NBTTools.writeNBTToLines(mapTag, lines);
-  for(String line : lines)
-    {
-    AWLog.logDebug(line);
-    }
   }
 
 public Collection<StructureEntry> getEntriesNear(World world, int worldX, int worldZ, int chunkRadius, boolean expandBySize, Collection<StructureEntry> list)
   {
-  int cx = worldX/16;
-  int cz = worldZ/16;
+  int cx = worldX << 4;
+  int cz = worldZ << 4;
   return map.getEntriesNear(world.provider.dimensionId, cx, cz, chunkRadius, expandBySize, list);
   }
 

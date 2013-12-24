@@ -109,7 +109,7 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
 //  tag.setInteger("dupe", minDuplicateLine.getIntVal());
 
   StructureValidationSettingsDefault settings = new StructureValidationSettingsDefault();
-  settings.setToggles(tag.getBoolean("world"), tag.getBoolean("unique"), tag.getBoolean("survival"), tag.getBoolean("doLeveling"), tag.getBoolean("doFill"), tag.getBoolean("doBorderLeveling"), tag.getBoolean("doBorderFill"), tag.getBoolean("preserveBlocks"));
+  settings.setToggles(tag.getBoolean("world"), tag.getBoolean("unique"), tag.getBoolean("survival"), tag.getBoolean("doLeveling"), tag.getBoolean("doFill"), tag.getBoolean("doBorderLeveling"), tag.getBoolean("doBorderFill"), tag.getBoolean("preserveBlocks"), tag.getBoolean("gradientBorder"));
   settings.setValidationParams(tag.getInteger("leveling"), tag.getInteger("fill"), tag.getInteger("border"), tag.getInteger("borderLeveling"), tag.getInteger("borderFill"));
   settings.setGenerationValues(tag.getInteger("weight"), tag.getInteger("value"), tag.getInteger("dupe"));
   template.setValidationSettings(settings);
