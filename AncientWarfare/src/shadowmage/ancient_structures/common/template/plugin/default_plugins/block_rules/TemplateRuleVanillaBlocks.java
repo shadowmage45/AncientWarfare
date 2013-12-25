@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
@@ -70,38 +71,11 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns);  
   world.setBlock(x, y, z, block.blockID, localMeta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
   }
-
-@Override
-public void writeRuleData(BufferedWriter out) throws IOException
-  {
-  out.write("blockName="+this.blockName);
-  out.newLine();
-  out.write("meta="+this.meta);
-  out.newLine();
-  out.write("buildPass="+this.buildPass);
-  out.newLine();
-  }
   
 @Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
   return block!=null && blockName.equals(block.getUnlocalizedName()) && BlockDataManager.getRotatedMeta(block, meta, turns) == this.meta;
-  }
-
-@Override
-public void parseRuleData(List<String> ruleData)
-  {
-  if(ruleData.size()<3){throw new IllegalArgumentException("not enough data for block rule");}
-  for(String line : ruleData)
-    {
-    if(line.toLowerCase().startsWith("blockname=")){this.blockName = StringTools.safeParseString("=", line);}
-    else if(line.toLowerCase().startsWith("meta=")){this.meta = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("buildpass=")){this.buildPass = StringTools.safeParseInt("=", line);}
-    }
-  if(this.blockName==null || this.blockName.equals(""))
-    {
-    throw new IllegalArgumentException("Not enough data to fill block rule for blockName: "+blockName);
-    }
   }
 
 @Override
@@ -125,6 +99,22 @@ public boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int 
 public String toString()
   {
   return String.format("Vanilla Block Rule id: %s meta: %s buildPass: %s", blockName, meta, buildPass);
+  }
+
+@Override
+public void writeRuleData(NBTTagCompound tag)
+  {
+  tag.setString("blockName", blockName);
+  tag.setInteger("meta", meta);
+  tag.setInteger("buildPass", buildPass);
+  }
+
+@Override
+public void parseRuleData(NBTTagCompound tag)
+  {
+  this.blockName = tag.getString("blockName");
+  this.meta = tag.getInteger("meta");
+  this.buildPass = tag.getInteger("buildPass");      
   }
 
 }

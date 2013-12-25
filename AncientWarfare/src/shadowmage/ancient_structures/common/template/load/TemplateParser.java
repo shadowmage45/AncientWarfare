@@ -278,7 +278,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
 
 private TemplateRule parseRule(List<String> templateLines, String ruleType)
   {
-  return AWStructures.instance.pluginManager.getRule(templateLines, ruleType);
+  return TemplateRule.getRule(templateLines, ruleType);
   }
 
 private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, TemplateRuleEntity[] entityRules, StructureValidationSettingsDefault validation)

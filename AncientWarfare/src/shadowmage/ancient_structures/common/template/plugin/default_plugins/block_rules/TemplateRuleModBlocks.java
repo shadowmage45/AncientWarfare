@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.StringTools;
@@ -64,27 +65,17 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
+public void writeRuleData(NBTTagCompound tag)
   {
-  if(ruleData.size()<2){throw new IllegalArgumentException("not enough data for block rule");}
-  for(String line : ruleData)
-    {
-    if(line.toLowerCase().startsWith("blockname=")){this.blockName = StringTools.safeParseString("=", line);}
-    else if(line.toLowerCase().startsWith("meta=")){this.meta = StringTools.safeParseInt("=", line);}    
-    }
-  if(this.blockName==null || this.blockName.equals(""))
-    {
-    throw new IllegalArgumentException("Not enough data to fill block rule for blockName: "+blockName);
-    }
+  tag.setString("blockName", blockName);
+  tag.setInteger("meta", meta);
   }
 
 @Override
-public void writeRuleData(BufferedWriter out) throws IOException
+public void parseRuleData(NBTTagCompound tag)
   {
-  out.write("blockName="+this.blockName);
-  out.newLine();
-  out.write("meta="+this.meta);
-  out.newLine();
+  blockName = tag.getString("blockName");
+  meta = tag.getInteger("meta");
   }
 
 @Override

@@ -74,26 +74,19 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
+public void writeRuleData(NBTTagCompound tag)
   {
-  super.parseRuleData(ruleData);
-  tag = readTag(ruleData);
-  for(String line : ruleData)
-    {
-    if(line.toLowerCase().startsWith("direction="))
-      {
-      this.direction = StringTools.safeParseInt("=", line);
-      }
-    }  
+  super.writeRuleData(tag);
+  tag.setInteger("direction", direction);
+  tag.setTag("entityData", this.tag);
   }
 
 @Override
-public void writeRuleData(BufferedWriter out) throws IOException
+public void parseRuleData(NBTTagCompound tag)
   {
-  super.writeRuleData(out);
-  out.write("direction="+direction);
-  out.newLine();
-  writeTag(out, tag);
+  super.parseRuleData(tag);
+  this.tag = tag.getCompoundTag("entityData");
+  this.direction = tag.getInteger("direction");
   }
 
 }

@@ -27,6 +27,7 @@ import java.util.List;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public abstract class TemplateRuleEntity extends TemplateRule
@@ -44,10 +45,17 @@ public TemplateRuleEntity()
   
   }
 
-@Override
-public void parseRuleData(List<String> ruleData)
+public final void writeRule(BufferedWriter out) throws IOException
+  {  
+  out.write("position="+StringTools.getCSVStringForArray(new int[]{x,y,z}));
+  out.newLine();
+  super.writeRule(out);
+  }
+
+public final void parseRule(int ruleNumber, List<String> lines)
   {
-  for(String line : ruleData)
+  this.ruleNumber = ruleNumber;
+  for(String line : lines)
     {
     if(line.toLowerCase().startsWith("position="))
       {
@@ -58,15 +66,8 @@ public void parseRuleData(List<String> ruleData)
       break;
       }
     }
+  NBTTagCompound tag = readTag(lines);
+  parseRuleData(tag);
   }
-
-@Override
-public void writeRuleData(BufferedWriter out) throws IOException
-  {
-  out.write("position="+StringTools.getCSVStringForArray(new int[]{x,y,z}));
-  out.newLine();
-  }
-
-
 
 }

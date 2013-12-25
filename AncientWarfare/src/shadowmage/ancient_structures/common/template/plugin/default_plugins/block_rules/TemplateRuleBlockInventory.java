@@ -97,32 +97,30 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public void writeRuleData(BufferedWriter out) throws IOException
-  {
-  super.writeRuleData(out);
-  out.write("randomLootLevel="+randomLootLevel);
-  out.newLine();
-  writeTag(out, tag);
-  }
-
-@Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
   return false;
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
+public void writeRuleData(NBTTagCompound tag)
   {
-  super.parseRuleData(ruleData);
-  tag = readTag(ruleData);
-  for(String line : ruleData)
+  super.writeRuleData(tag);
+  tag.setInteger("lootLevel", randomLootLevel);
+  if(randomLootLevel<=0)
     {
-    if(line.toLowerCase().startsWith("randomlootlevel="))
-      {
-      this.randomLootLevel = StringTools.safeParseInt("=", line);
-      }
-    }  
+    tag.setTag("teData", this.tag);    
+    }
   }
 
+@Override
+public void parseRuleData(NBTTagCompound tag)
+  {
+  super.parseRuleData(tag);  
+  randomLootLevel = tag.getInteger("lootLevel");
+  if(randomLootLevel<=0)
+    {
+    this.tag = tag.getCompoundTag("teData");
+    }
+  }
 }

@@ -70,19 +70,17 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
+public void writeRuleData(NBTTagCompound tag)
   {
-  super.parseRuleData(ruleData);
-  tag = readTag(ruleData);
+  super.writeRuleData(tag);
+  tag.setTag("entityData", this.tag);
   }
 
 @Override
-public void writeRuleData(BufferedWriter out) throws IOException
+public void parseRuleData(NBTTagCompound tag)
   {
-  super.writeRuleData(out);
-  writeTag(out, tag);
+  super.parseRuleData(tag);
+  this.tag = tag.getCompoundTag("entityData");
   }
-
-
 
 }

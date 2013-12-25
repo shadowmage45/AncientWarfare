@@ -67,14 +67,14 @@ public static void exportTo(StructureTemplate template, File directory)
     TemplateRule[] templateRules = template.getTemplateRules();
     for(TemplateRule rule : templateRules)
       {
-      writeRuleLines(rule, writer, "rule");
+      TemplateRule.writeRuleLines(rule, writer, "rule");
       }    
     writer.write("#### ENTITIES ####");
     writer.newLine();
     templateRules = template.getEntityRules();
     for(TemplateRule rule : templateRules)
       {
-      writeRuleLines(rule, writer, "entity");
+      TemplateRule.writeRuleLines(rule, writer, "entity");
       }    
     } 
   catch (IOException e)
@@ -163,32 +163,7 @@ private static void writeLayers(StructureTemplate template, BufferedWriter write
   writer.newLine();
   }
 
-public final static void writeRuleLines(TemplateRule rule, BufferedWriter out, String ruleType) throws IOException
-  {
-  if(rule==null)
-    {
-    return;
-    }
-  String id = AWStructures.instance.pluginManager.getPluginNameFor(rule.getClass());
-  if(id==null)
-    {
-    return;
-    }
-  out.write(ruleType+":");
-  out.newLine();
-  out.write("plugin="+id);
-  out.newLine();
-  out.write("number="+rule.ruleNumber);
-  out.newLine();
-  out.write("data:");
-  out.newLine();
-  rule.writeRuleData(out);
-  out.write(":enddata");
-  out.newLine();
-  out.write(":end"+ruleType);
-  out.newLine();
-  out.newLine();
-  }
+
 
 
 

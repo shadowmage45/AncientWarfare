@@ -27,6 +27,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
@@ -71,38 +72,21 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
+public void writeRuleData(NBTTagCompound tag)
   {
-  super.parseRuleData(ruleData);
-  for(String line : ruleData)
-    {
-    if(line.toLowerCase().startsWith("mobid="))
-      {
-      mobID = StringTools.safeParseString("=", line);
-      }
-    else if(line.toLowerCase().startsWith("offset="))
-      {
-      float[] offsets = StringTools.safeParseFloatArray("=", line); 
-      xOffset = offsets[0];
-      zOffset = offsets[1];
-      }
-    else if(line.toLowerCase().startsWith("rotation="))
-      {
-      rotation = StringTools.safeParseFloat("=", line);
-      }
-    }
+  tag.setString("mobID", mobID);
+  tag.setFloat("xOffset", xOffset);
+  tag.setFloat("zOffset", zOffset);
+  tag.setFloat("rotation", rotation);
   }
 
 @Override
-public void writeRuleData(BufferedWriter out) throws IOException
+public void parseRuleData(NBTTagCompound tag)
   {
-  super.writeRuleData(out);
-  out.write("mobID="+mobID);
-  out.newLine();
-  out.write("offset="+StringTools.getCSVStringForArray(xOffset, zOffset));
-  out.newLine();
-  out.write("rotation="+rotation);
-  out.newLine();
+  mobID = tag.getString("mobID");
+  xOffset = tag.getFloat("xOffset");
+  zOffset = tag.getFloat("zOffset");
+  rotation = tag.getFloat("rotation");
   }
 
 @Override

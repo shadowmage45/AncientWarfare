@@ -22,11 +22,14 @@ package shadowmage.ancient_structures.common.template.rule;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import shadowmage.ancient_framework.common.utils.NBTTools;
+import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.AWStructures;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,7 +46,6 @@ public abstract class TemplateRule
 {
 
 public int ruleNumber = -1;
-
 /**
  * all sub-classes must implement a no-param constructor for when loaded from file (at which point they should initialize from the parseRuleData method)
  */
@@ -62,14 +64,28 @@ public TemplateRule()
  */
 public abstract void handlePlacement(World world, int turns, int x, int y, int z);
 
-public abstract void parseRuleData(List<String> ruleData);
-public abstract void writeRuleData(BufferedWriter out) throws IOException;
+public abstract void parseRuleData(NBTTagCompound tag);
+public abstract void writeRuleData(NBTTagCompound tag);
 
 public abstract void addResources(List<ItemStack> resources);
 
 public abstract boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass);
 
-public void writeTag(BufferedWriter out, NBTTagCompound tag) throws IOException
+public void writeRule(BufferedWriter out) throws IOException
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  writeRuleData(tag);
+  writeTag(out, tag);
+  }
+
+public void parseRule(int ruleNumber, List<String> lines)
+  {
+  this.ruleNumber = ruleNumber;
+  NBTTagCompound tag = readTag(lines);
+  parseRuleData(tag);
+  }
+
+public final void writeTag(BufferedWriter out, NBTTagCompound tag) throws IOException
   {
   out.write("tag:");
   out.newLine();
@@ -84,7 +100,7 @@ public void writeTag(BufferedWriter out, NBTTagCompound tag) throws IOException
   out.newLine();
   }
 
-public NBTTagCompound readTag(List<String> ruleData)
+public final NBTTagCompound readTag(List<String> ruleData)
   {
   List<String> tagLines = new ArrayList<String>();  
   String line;
@@ -107,4 +123,114 @@ public NBTTagCompound readTag(List<String> ruleData)
     }
   return NBTTools.readNBTFrom(tagLines);
   }
+
+public final static void writeRuleLines(TemplateRule rule, BufferedWriter out, String ruleType) throws IOException
+  {
+  if(rule==null)
+    {
+    return;
+    }
+  String id = AWStructures.instance.pluginManager.getPluginNameFor(rule.getClass());
+  if(id==null)
+    {
+    return;
+    }
+  out.write(ruleType+":");
+  out.newLine();
+  out.write("plugin="+id);
+  out.newLine();
+  out.write("number="+rule.ruleNumber);
+  out.newLine();
+  out.write("data:");
+  out.newLine();
+  rule.writeRule(out);
+  out.write(":enddata");
+  out.newLine();
+  out.write(":end"+ruleType);
+  out.newLine();
+  out.newLine();
+  }
+
+public static final TemplateRule getRule(List<String> ruleData, String ruleType)
+  {
+  Iterator<String> it = ruleData.iterator();
+  String name = null;
+  int ruleNumber = -1;
+  String line;
+  List<String> ruleDataPackage = new ArrayList<String>();
+  while(it.hasNext())
+    {
+    line = it.next();
+    if(line.startsWith(ruleType+":"))
+      {
+      continue;
+      }
+    if(line.startsWith(":end"+ruleType))
+      {
+      break;
+      }
+    if(line.startsWith("plugin="))
+      {
+      name = StringTools.safeParseString("=", line);
+      }
+    if(line.startsWith("number="))
+      {
+      ruleNumber = StringTools.safeParseInt("=", line);
+      }
+    if(line.startsWith("data:"))
+      {
+      while(it.hasNext())
+        {
+        line = it.next();
+        if(line.startsWith(":enddata"))
+          {
+          break;
+          }
+        ruleDataPackage.add(line);
+        }
+      }
+    }
+  Class<?extends TemplateRule> clz = AWStructures.instance.pluginManager.getRuleByName(name);
+  if(name==null || ruleNumber<0 || ruleDataPackage.size()==0 || clz==null)
+    {
+    throw new IllegalArgumentException("Not enough data to create template rule.\n"+
+        "name: "+name+"\n"+
+        "number:"+ruleNumber+"\n"+
+        "ruleDataPackage.size:"+ruleDataPackage.size()+"\n"+
+        "ruleClass: "+clz);
+    }
+  
+  try
+    {    
+    TemplateRule rule = clz.getConstructor().newInstance();    
+    rule.parseRule(ruleNumber, ruleDataPackage);
+    return rule;
+    } 
+  catch (InstantiationException e)
+    {
+    e.printStackTrace();
+    } 
+  catch (IllegalAccessException e)
+    {
+    e.printStackTrace();
+    } 
+  catch (IllegalArgumentException e)
+    {
+    e.printStackTrace();
+    } 
+  catch (InvocationTargetException e)
+    {
+    e.printStackTrace();
+    } 
+  catch (NoSuchMethodException e)
+    {
+    e.printStackTrace();
+    } 
+  catch (SecurityException e)
+    {
+    e.printStackTrace();
+    }
+  return null;
+  }
+
 }

@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
@@ -80,17 +81,6 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   }
 
 @Override
-public void writeRuleData(BufferedWriter out) throws IOException
-  {
-  super.writeRuleData(out);
-  for(int i = 0; i<4 ;i++)
-    {
-    out.write(signContents[i]);
-    out.newLine();
-    }
-  }
-
-@Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
   if(te instanceof TileEntitySign)
@@ -104,14 +94,23 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
   }
 
 @Override
-public void parseRuleData(List<String> ruleData)
+public void writeRuleData(NBTTagCompound tag)
   {
-  super.parseRuleData(ruleData);
-  this.signContents = new String[4];
-  signContents[0] = ruleData.get(2);
-  signContents[1] = ruleData.get(3);
-  signContents[2] = ruleData.get(4);
-  signContents[3] = ruleData.get(5);  
+  super.writeRuleData(tag);
+  for(int i =0; i < 4; i++)
+    {
+    tag.setString("signContents"+i, signContents[i]);
+    }
+  }
+
+@Override
+public void parseRuleData(NBTTagCompound tag)
+  {
+  super.parseRuleData(tag);
+  for(int i = 0; i <4 ;i++)
+    {
+    this.signContents[i] = tag.getString("signContents"+i);
+    }
   }
 
 }
