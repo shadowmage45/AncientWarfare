@@ -85,7 +85,7 @@ public void setGeneratedAt(World world, int worldX, int worldY, int worldZ, int 
   int cz = worldZ >> 4;
   StructureEntry entry = new StructureEntry(worldX, worldY, worldZ, face, structure);  
   map.setGeneratedAt(world.provider.dimensionId, cx, cz, entry, structure.getValidationSettings().isUnique());
-  AWLog.logDebug("marking generated at: "+cx+","+cz);
+//  AWLog.logDebug("marking generated at: "+cx+","+cz);
   this.markDirty();
   }
 
@@ -189,7 +189,7 @@ public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chu
     crx+=largestGeneratedX/16;
     crz+=largestGeneratedZ/16;
     }
-  AWLog.logDebug("checking radius for structures: "+(chunkX-crx)+","+(chunkZ-crz)+"::"+(chunkX+crx)+","+(chunkZ+crz));
+//  AWLog.logDebug("checking radius for structures: "+(chunkX-crx)+","+(chunkZ-crz)+"::"+(chunkX+crx)+","+(chunkZ+crz));
   for(int x = chunkX-crx; x<=chunkX+crx; x++)
     {
     if(worldMap.containsKey(x))
@@ -204,7 +204,7 @@ public Collection<StructureEntry> getEntriesNear(int chunkX, int chunkZ, int chu
         }
       }
     }
-  AWLog.logDebug("found: "+list.size()+" nearby entries");
+//  AWLog.logDebug("found: "+list.size()+" nearby entries");
   return list;
   }
 

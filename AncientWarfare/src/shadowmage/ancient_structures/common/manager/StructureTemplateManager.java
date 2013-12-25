@@ -49,7 +49,7 @@ public void addTemplate(StructureTemplate template)
     }
   if(template.getValidationSettings().isWorldGenEnabled())
     {
-    AWLog.logDebug("adding world gen structure entry for: "+template.name);
+//    AWLog.logDebug("adding world gen structure entry for: "+template.name);
     WorldGenStructureManager.instance().registerWorldGenStructure(template);    
     }
   loadedTemplates.put(template.name, template);

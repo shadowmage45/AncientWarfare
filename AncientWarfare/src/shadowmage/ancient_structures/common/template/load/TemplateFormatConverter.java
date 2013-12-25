@@ -544,7 +544,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
       }
     else if(line.toLowerCase().startsWith("verticaloffset="))
       {
-      yOffset = (StringTools.safeParseInt("=", line))+1;
+      yOffset = (StringTools.safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("xoffset="))
       {

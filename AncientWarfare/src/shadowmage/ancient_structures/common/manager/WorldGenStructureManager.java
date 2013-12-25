@@ -79,7 +79,7 @@ public void registerWorldGenStructure(StructureTemplate template)
     for(String biome : templatesByBiome.keySet())
       {
       if(!biomes.isEmpty() && biomes.contains(biome.toLowerCase())){continue;}
-      AWLog.logDebug("adding template to biome: "+biome.toLowerCase()+", "+template);
+//      AWLog.logDebug("adding template to biome: "+biome.toLowerCase()+", "+template);
       templatesByBiome.get(biome).add(template);
       }
     }

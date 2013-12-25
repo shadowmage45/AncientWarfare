@@ -100,7 +100,7 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   else
     {
     long t2 = System.currentTimeMillis() - t1;
-    AWLog.log(String.format("failed generation of structure: %s at %s, %s, %s  generation took: %sms", template.name, x, y, z, t2));
+//    AWLog.log(String.format("failed generation of structure: %s at %s, %s, %s  generation took: %sms", template.name, x, y, z, t2));
     }
   }
 
@@ -143,7 +143,7 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {  
   StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
-  AWLog.logDebug("testing structureBB of: "+bb);
+//  AWLog.logDebug("testing structureBB of: "+bb);
   StructureValidationSettingsDefault settings = template.getValidationSettings();
   /**
    * check for colliding bounding boxes
@@ -188,20 +188,20 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
         
         if(bb.pos1.y - topEmptyBlockY > maxFill)
           {
-          AWLog.logDebug("structure failed validation for fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
+//          AWLog.logDebug("structure failed validation for fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
           return false;//fail missing edge depth test
           }
         id = world.getBlockId(bx, topEmptyBlockY-1, bz);
         targetBlock = Block.blocksList[id];
         if(topEmptyBlockY<bb.pos1.y && !targetBlocks.contains(targetBlock.getUnlocalizedName()))
           {
-          AWLog.logDebug("structure failed validation for invalid target fill block");
+//          AWLog.logDebug("structure failed validation for invalid target fill block");
           return false;//fail for block to be filled on top of is invalid target block
           }
         }      
       if(maxLeveling>=0 && topEmptyBlockY - (bb.pos1.y+template.yOffset) > maxLeveling)
         {
-        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-(bb.pos1.y+template.yOffset)));
+//        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-(bb.pos1.y+template.yOffset)));
         return false;//fail for leveling too high
         }
      
@@ -212,7 +212,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
       targetBlock = Block.blocksList[id];
       if(targetBlock!=null && !targetBlocks.contains(targetBlock.getUnlocalizedName()))
         {
-        AWLog.logDebug("structure failed validation for invalid target block: "+targetBlock.getUnlocalizedName());
+//        AWLog.logDebug("structure failed validation for invalid target block: "+targetBlock.getUnlocalizedName());
         return false;
         }
       
@@ -227,7 +227,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
           targetBlock = Block.blocksList[id];
           if(targetBlock!=null && targetBlock.blockMaterial != Material.plants && !clearBlocks.contains(targetBlock.getUnlocalizedName()))
             {
-            AWLog.logDebug("structure failed validation for invalid clearing block: "+targetBlock.getUnlocalizedName());
+//            AWLog.logDebug("structure failed validation for invalid clearing block: "+targetBlock.getUnlocalizedName());
             return false;//fail for block clear check
             }
           }  
@@ -245,8 +245,8 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   maxFill = settings.getBorderMaxFill();  
   if(borderSize>0)
     {
-    AWLog.logDebug("checking along x-axis. min " +(bb.pos1.x-borderSize)+ " max: "+(bb.pos2.x+borderSize));
-    AWLog.logDebug("z-s to check: "+(bb.pos1.z-borderSize)+" to: "+(bb.pos1.z) + "  and   " + (bb.pos2.z) + " to " +(bb.pos2.z+borderSize));
+//    AWLog.logDebug("checking along x-axis. min " +(bb.pos1.x-borderSize)+ " max: "+(bb.pos2.x+borderSize));
+//    AWLog.logDebug("z-s to check: "+(bb.pos1.z-borderSize)+" to: "+(bb.pos1.z) + "  and   " + (bb.pos2.z) + " to " +(bb.pos2.z+borderSize));
     //check min and max Z along X axis, and corners
     for(bx = bb.pos1.x - borderSize; bx <= bb.pos2.x + borderSize; bx++)
       {   
@@ -255,7 +255,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
         {
         if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
-          AWLog.logDebug("structure failed validation for border clearing or leveling test");
+//          AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test        
         }      
@@ -263,12 +263,12 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
         {
         if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
-          AWLog.logDebug("structure failed validation for border clearing or leveling test");
+//          AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test
         }
       }
-    AWLog.logDebug("checking along z-axis");
+//    AWLog.logDebug("checking along z-axis");
     //check min+1 and max-1 X along Z axis (already checked corners in previous test)
     for(bz = bb.pos1.z; bz<=bb.pos2.z; bz++)
       {
@@ -276,7 +276,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
         {
         if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
-          AWLog.logDebug("structure failed validation for border clearing or leveling test");
+//          AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test
         }
@@ -284,7 +284,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
         {
         if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks))
           {
-          AWLog.logDebug("structure failed validation for border clearing or leveling test");
+//          AWLog.logDebug("structure failed validation for border clearing or leveling test");
           return false;
           }//fail border level or clearing depth test
         }
@@ -300,12 +300,12 @@ private boolean checkBorderBlockValidity(World world, int x, int y, int z, int m
   int heightDiff = topEmptyBlockY - y;
   if(maxLeveling>=0 && heightDiff > maxLeveling)
     {
-    AWLog.logDebug("failed border leveling "+maxLeveling + " found: "+heightDiff + " at: "+x+","+z + " topBlock: "+topEmptyBlockY);
+//    AWLog.logDebug("failed border leveling "+maxLeveling + " found: "+heightDiff + " at: "+x+","+z + " topBlock: "+topEmptyBlockY);
     return false;
     }//fail borderLeveling
   else if(maxFill>=0 && -heightDiff>maxFill)
     {
-    AWLog.logDebug("failed border fill "+maxFill + " found: "+ (-heightDiff) + " at: "+x+","+z + " topBlock: "+topEmptyBlockY);
+//    AWLog.logDebug("failed border fill "+maxFill + " found: "+ (-heightDiff) + " at: "+x+","+z + " topBlock: "+topEmptyBlockY);
     return false;
     }//fail border depth test
   int id;
@@ -318,7 +318,7 @@ private boolean checkBorderBlockValidity(World world, int x, int y, int z, int m
       block = Block.blocksList[id];
       if(block!=null && block.blockMaterial!=Material.wood && block.blockMaterial!=Material.plants && block.blockMaterial!= Material.leaves && !validClearingBlocks.contains(block.getUnlocalizedName()))
         {
-        AWLog.logDebug("failed border clearing block test ");
+//        AWLog.logDebug("failed border clearing block test ");
         return false;
         }
       }
