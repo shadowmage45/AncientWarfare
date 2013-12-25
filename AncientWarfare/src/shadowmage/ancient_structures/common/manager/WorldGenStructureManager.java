@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -91,7 +92,7 @@ List<StructureEntry> searchCache = new ArrayList<StructureEntry>();
 List<StructureTemplate> trimmedPotentialStructures = new ArrayList<StructureTemplate>();
 HashMap<String, Integer> distancesFound = new HashMap<String, Integer>();
 
-public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int z, int chunkSearchRange)
+public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int y, int z, int chunkSearchRange)
   {
   searchCache.clear();
   trimmedPotentialStructures.clear();
@@ -100,6 +101,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   if(map==null){return null;}
   int cx, cz, foundValue, chunkDistance;
   float foundDistance, mx, mz;
+  Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
   cx = x << 4;
   cz = z << 4;
   String biomeName = world.getBiomeGenForCoords(x, z).biomeName.toLowerCase();
@@ -173,6 +175,10 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
         continue;
         }//skip if minDuplicate distance is not met
       }
+    if(block!=null && !settings.getAcceptedTargetBlocks().contains(block.getUnlocalizedName()))
+      {
+      continue;
+      }//skip if the target block is inelgible...quick and dirty early out to remove e.g. water or desert only structures from the list
     trimmedPotentialStructures.add(template);
     }  
 //  AWLog.logDebug("after trimming for dimension and value, "+trimmedPotentialStructures.size()+" potential structures remain.");

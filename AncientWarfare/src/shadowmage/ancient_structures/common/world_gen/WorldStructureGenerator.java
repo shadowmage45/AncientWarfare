@@ -87,9 +87,9 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   int x = chunkX*16 + rng.nextInt(16);  
   int z = chunkZ*16 + rng.nextInt(16);  
   int face = rng.nextInt(4);
-  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, z, AWStructureStatics.chunkSearchRadius);
-  if(template==null){return;}
   int y = getTargetY(world, x, z)+1;
+  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, AWStructureStatics.chunkSearchRadius);
+  if(template==null){return;}  
   if(y<=0){return;}
   StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
   if(attemptStructureGenerationAt(world, x, y, z, face, template, map))
