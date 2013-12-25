@@ -39,23 +39,46 @@ public class StructureValidationSettingsDefault extends StructureValidationSetti
 {
 
 public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
+public static HashSet<String> defaultClearBlocks = new HashSet<String>();
+public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
 static
 {
 defaultTargetBlocks.add(Block.dirt.getUnlocalizedName());
 defaultTargetBlocks.add(Block.grass.getUnlocalizedName());
-defaultTargetBlocks.add(Block.cobblestone.getUnlocalizedName());
 defaultTargetBlocks.add(Block.stone.getUnlocalizedName());
 defaultTargetBlocks.add(Block.sand.getUnlocalizedName());
 defaultTargetBlocks.add(Block.gravel.getUnlocalizedName());
 defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
-defaultTargetBlocks.add(Block.wood.getUnlocalizedName());
-defaultTargetBlocks.add(Block.plantRed.getUnlocalizedName());
-defaultTargetBlocks.add(Block.plantYellow.getUnlocalizedName());
-defaultTargetBlocks.add(Block.deadBush.getUnlocalizedName());
-defaultTargetBlocks.add(Block.tallGrass.getUnlocalizedName());
+defaultTargetBlocks.add(Block.blockClay.getUnlocalizedName());
 defaultTargetBlocks.add(Block.snow.getUnlocalizedName());
-defaultTargetBlocks.add(Block.leaves.getUnlocalizedName());
+defaultTargetBlocks.add(Block.oreIron.getUnlocalizedName());
+defaultTargetBlocks.add(Block.oreCoal.getUnlocalizedName());
+
+defaultClearBlocks.addAll(defaultTargetBlocks);
+defaultClearBlocks.add(Block.waterStill.getUnlocalizedName());
+defaultClearBlocks.add(Block.lavaStill.getUnlocalizedName());
+defaultClearBlocks.add(Block.cactus.getUnlocalizedName());
+defaultClearBlocks.add(Block.vine.getUnlocalizedName());
+defaultClearBlocks.add(Block.tallGrass.getUnlocalizedName());
+defaultClearBlocks.add(Block.wood.getUnlocalizedName());
+defaultClearBlocks.add(Block.plantRed.getUnlocalizedName());
+defaultClearBlocks.add(Block.plantYellow.getUnlocalizedName());
+defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
+defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
+defaultClearBlocks.add(Block.wood.getUnlocalizedName());
+
+skippableWorldGenBlocks.add(Block.waterStill.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.lavaStill.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.cactus.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.vine.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.tallGrass.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.plantRed.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
 }
 /**
  * given an area with a source point, how far above the source-point is the highest acceptable block located? 
@@ -148,7 +171,7 @@ public StructureValidationSettingsDefault()
   acceptedClearBlocks = new HashSet<String>();
   acceptedTargetBlocks = new HashSet<String>();
   acceptedDimensions = new int[]{};
-  acceptedClearBlocks.addAll(defaultTargetBlocks);
+  acceptedClearBlocks.addAll(defaultClearBlocks);
   acceptedTargetBlocks.addAll(defaultTargetBlocks);
   }
 
@@ -520,5 +543,16 @@ private String[] getStringArrayFrom(Set<Block> blocks, String[] in)
   return in;
   }
 
+public void setDefaultValidationSettings(int xSize, int ySize, int zSize, int yOffset)
+  {
+  int thirdSize = (int)((float)ySize/3.f) + 1;
+  this.maxFill = thirdSize;
+  this.maxLeveling = -1;
+  
+  this.borderSize = thirdSize;
+  this.borderMaxFill = thirdSize;
+  this.borderMaxLeveling = thirdSize;
+  this.gradientBorder = true;
+  }
 
 }
