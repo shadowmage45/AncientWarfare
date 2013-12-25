@@ -23,6 +23,7 @@ package shadowmage.ancient_structures.common.template.build;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_framework.common.config.AWLog;
@@ -227,15 +228,12 @@ protected void doLeveling()
 
 protected void doBorderLeveling()
   {
-  if(!template.getValidationSettings().doBorderLeveling || template.getValidationSettings().getBorderMaxLeveling()<=0){return;}  
+  if(template.getValidationSettings().getBorderSize()<=0 || !template.getValidationSettings().doBorderLeveling || template.getValidationSettings().getBorderMaxLeveling()<=0){return;}  
   int bx, by, bz;
   int borderSize = template.getValidationSettings().getBorderSize();
   int maxLeveling = template.getValidationSettings().getBorderMaxLeveling();
-  int stepNumber = 0;
-  int stepHeight = borderSize / maxLeveling;
-  int targetY = min.y + template.yOffset;
-  int leveledY;
-  int actualHeight;
+  int stepHeight = maxLeveling / borderSize;  
+  int minClearY = min.y + template.yOffset;
   boolean gradient = template.getValidationSettings().isGradientBorder();
   if(borderSize>0)
     {
@@ -244,29 +242,11 @@ protected void doBorderLeveling()
       {
       for(bz = min.z-1; bz >= min.z - borderSize; bz--)
         {
-        stepNumber=getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        leveledY = gradient? targetY + stepNumber*stepHeight : targetY; 
-        actualHeight = WorldStructureGenerator.getTargetY(world, bx, bz);
-        if(actualHeight>leveledY)
-          {
-          for(by = actualHeight; by>= leveledY; by--)
-            {
-            world.setBlockToAir(bx, by, bz);
-            }
-          }
+        levelBorderBlock(bx, bz, minClearY, gradient, stepHeight);        
         }      
       for(bz = max.z+1; bz <= max.z + borderSize; bz++)
         {
-        stepNumber=getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        leveledY = gradient? targetY + stepNumber*stepHeight : targetY; 
-        actualHeight = WorldStructureGenerator.getTargetY(world, bx, bz);
-        if(actualHeight>leveledY)
-          {
-          for(by = actualHeight; by>= leveledY; by--)
-            {
-            world.setBlockToAir(bx, by, bz);
-            }
-          }
+        levelBorderBlock(bx, bz, minClearY, gradient, stepHeight);
         }
       }
     //check min+1 and max-1 X along Z axis (already checked corners in previous test)
@@ -274,134 +254,110 @@ protected void doBorderLeveling()
       {
       for(bx = min.x-1; bx >= min.x - borderSize; bx--)
         {
-        stepNumber=getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        leveledY = gradient? targetY + stepNumber*stepHeight : targetY; 
-        actualHeight = WorldStructureGenerator.getTargetY(world, bx, bz);
-        if(actualHeight>leveledY)
-          {
-          for(by = actualHeight; by>= leveledY; by--)
-            {
-            world.setBlockToAir(bx, by, bz);
-            }
-          }
+        levelBorderBlock(bx, bz, minClearY, gradient, stepHeight);
         }
       for(bx = max.x+1; bx <= max.x + borderSize; bx++)
         {
-        stepNumber=getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        leveledY = gradient? targetY + stepNumber*stepHeight : targetY; 
-        actualHeight = WorldStructureGenerator.getTargetY(world, bx, bz);
-        if(actualHeight>leveledY)
-          {
-          for(by = actualHeight; by>= leveledY; by--)
-            {
-            world.setBlockToAir(bx, by, bz);
-            }
-          }
+        levelBorderBlock(bx, bz, minClearY, gradient, stepHeight);
         }
       }  
+    }
+  }
+
+private void levelBorderBlock(int x, int z, int minClearY, boolean gradient, int stepHeight)
+  {
+  int stepNumber=getStepNumber(x, z, min.x, max.x, min.z, max.z);
+  minClearY = gradient? minClearY + stepNumber*stepHeight : minClearY;  
+  int topEmptyBlockY = WorldStructureGenerator.getTargetY(world, x, z)+1;
+  if(topEmptyBlockY > minClearY)
+    {
+    int id;
+    Block block;
+    for(int y = topEmptyBlockY-1; y>= minClearY; y--)
+      {
+      id = world.getBlockId(x, y, z);
+      block = Block.blocksList[id];
+      if(block!=null && block.blockMaterial == Material.wood){continue;}//skip clearing of trees in the border-leveling process
+      world.setBlockToAir(x, y, z);
+      }
+    }
+  }
+
+private void fillBorderBlock(int x, int z, int maxFillY, boolean gradient, int stepHeight)
+  {      
+  int topEmptyBlockY = WorldStructureGenerator.getTargetY(world, x, z)+1;    
+  if(topEmptyBlockY <= maxFillY)
+    {
+    int stepNumber = getStepNumber(x, z, min.x, max.x, min.z, max.z);
+    maxFillY = gradient? maxFillY - stepNumber*stepHeight : maxFillY;   
+    BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+    int id = biome!=null? biome.topBlock>=0? biome.topBlock : Block.grass.blockID : Block.grass.blockID;
+    for(int y = topEmptyBlockY; y<=maxFillY; y++)
+      {
+      world.setBlock(x, y, z, id);
+      }
     }
   }
 
 protected void doBorderFill()
   {
-  if(!template.getValidationSettings().doBorderFill || template.getValidationSettings().getBorderMaxFill()<=0){return;}  
+  if(template.getValidationSettings().getBorderSize()<=0 || !template.getValidationSettings().doBorderFill || template.getValidationSettings().getBorderMaxFill()<=0){return;}  
   int bx, by, bz;
   int borderSize = template.getValidationSettings().getBorderSize();
   int maxFill = template.getValidationSettings().getBorderMaxFill();
   
   int stepNumber = 0;
-  int stepHeight = borderSize / maxFill;
+  int stepHeight = maxFill / borderSize;
   
-  int targetY = min.y + template.yOffset;
-  
-  int filledBottomY;
-  
-  int topEmptyBlockY;
+  int targetY = min.y + template.yOffset-1;
+    
   boolean gradient = template.getValidationSettings().isGradientBorder();
-  if(borderSize>0)
+  //check min and max Z along X axis, and corners
+  for(bx = min.x-borderSize; bx <= max.x+borderSize; bx++)
     {
-    //check min and max Z along X axis, and corners
-    for(bx = min.x-borderSize; bx <= max.x+borderSize; bx++)
+    for(bz = min.z-1; bz >= min.z - borderSize; bz--)
+      {      
+      fillBorderBlock(bx, bz, targetY, gradient, stepHeight);
+      }      
+    for(bz = max.z+1; bz <= max.z + borderSize; bz++)
       {
-      for(bz = min.z-1; bz >= min.z - borderSize; bz--)
-        {        
-        stepNumber = getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        filledBottomY = gradient? targetY - stepNumber*stepHeight : targetY;         
-        topEmptyBlockY = WorldStructureGenerator.getTargetY(world, bx, bz)+1;
-        if(topEmptyBlockY <= filledBottomY)
-          {
-          for(by = topEmptyBlockY; by<=filledBottomY; by++)
-            {
-            world.setBlock(bx, by, bz, Block.cobblestone.blockID);
-            }
-          }
-        }      
-      for(bz = max.z+1; bz <= max.z + borderSize; bz++)
-        {
-        stepNumber = getStepNumber(bx, bz, min.x, max.x, min.z, max.z);    
-        filledBottomY = gradient? targetY - stepNumber*stepHeight : targetY;         
-        topEmptyBlockY = WorldStructureGenerator.getTargetY(world, bx, bz)+1;
-        if(topEmptyBlockY <= filledBottomY)
-          {
-          for(by = topEmptyBlockY; by<=filledBottomY; by++)
-            {
-            world.setBlock(bx, by, bz, Block.cobblestone.blockID);
-            }
-          }
-        }
+      fillBorderBlock(bx, bz, targetY, gradient, stepHeight);
       }
-    //check min+1 and max-1 X along Z axis (already checked corners in previous test)
-    for(bz = min.z; bz <= max.z; bz++)
-      {
-      for(bx = min.x-1; bx >= min.x - borderSize; bx--)
-        {
-        stepNumber = getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        filledBottomY = gradient? targetY - stepNumber*stepHeight : targetY;         
-        topEmptyBlockY = WorldStructureGenerator.getTargetY(world, bx, bz)+1;
-        if(topEmptyBlockY <= filledBottomY)
-          {
-          for(by = topEmptyBlockY; by<=filledBottomY; by++)
-            {
-            world.setBlock(bx, by, bz, Block.cobblestone.blockID);
-            }
-          }
-        }
-      for(bx = max.x+1; bx <= max.x + borderSize; bx++)
-        {
-        stepNumber = getStepNumber(bx, bz, min.x, max.x, min.z, max.z);
-        filledBottomY = gradient? targetY - stepNumber*stepHeight : targetY;         
-        topEmptyBlockY = WorldStructureGenerator.getTargetY(world, bx, bz)+1;
-        if(topEmptyBlockY <= filledBottomY)
-          {
-          for(by = topEmptyBlockY; by<=filledBottomY; by++)
-            {
-            world.setBlock(bx, by, bz, Block.cobblestone.blockID);
-            }
-          }
-        }
-      }  
     }
+  //check min+1 and max-1 X along Z axis (already checked corners in previous test)
+  for(bz = min.z; bz <= max.z; bz++)
+    {
+    for(bx = min.x-1; bx >= min.x - borderSize; bx--)
+      {
+      fillBorderBlock(bx, bz, targetY, gradient, stepHeight);
+      }
+    for(bx = max.x+1; bx <= max.x + borderSize; bx++)
+      {
+      fillBorderBlock(bx, bz, targetY, gradient, stepHeight);
+      }
+    } 
   }
 
 private int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)
   {
   int steps = 0;
-  if(x<minX)
+  if(x<minX-1)
     {
-    steps += minX - x;
+    steps += (minX-1) - x;
     }
-  else if(x > maxX)
+  else if(x > maxX+1)
     {
-    steps += x - maxX;
+    steps += x - (maxX+1);
     }  
-  if(z<minZ)
+  if(z<minZ-1)
     {
-    steps += minZ - z;
+    steps += (minZ-1) - z;
     }
-  else if(z > maxZ)
+  else if(z > maxZ+1)
     {
-    steps += z - maxZ;
+    steps += z - (maxZ+1);
     }  
+//  AWLog.logDebug("getting step number for: "+x+","+z+" min: "+minX+","+minZ+" :: max: "+maxX+","+maxZ + " stepHeight: "+steps);
   return steps;
   }
 

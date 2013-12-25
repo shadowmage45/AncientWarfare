@@ -30,6 +30,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.utils.Trig;
@@ -113,7 +114,7 @@ public static int getTargetY(World world, int x, int z)
     if(id==0){continue;}
     block = Block.blocksList[id];
     if(block==null || block.isAirBlock(world, x, y, z) || block.blockMaterial==Material.leaves || block.blockMaterial==Material.snow || block.blockMaterial==Material.plants){continue;}
-    if(block==Block.tallGrass || block==Block.plantYellow || block==Block.deadBush || block==Block.cactus || block==Block.plantRed){continue;}    
+    if(block==Block.tallGrass || block==Block.plantYellow || block==Block.deadBush || block==Block.cactus || block==Block.plantRed){continue;} 
     return y;
     }
   return -1;
@@ -315,7 +316,7 @@ private boolean checkBorderBlockValidity(World world, int x, int y, int z, int m
       {
       id = world.getBlockId(x, by, z);
       block = Block.blocksList[id];
-      if(block!=null && !validClearingBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && block.blockMaterial!=Material.wood && block.blockMaterial!=Material.plants && block.blockMaterial!= Material.leaves && !validClearingBlocks.contains(block.getUnlocalizedName()))
         {
         AWLog.logDebug("failed border clearing block test ");
         return false;
