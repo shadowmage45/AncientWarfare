@@ -63,7 +63,6 @@ skippableWorldGenBlocks.add(Block.plantRed.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
 }
 
 private boolean isGenerating = false;
