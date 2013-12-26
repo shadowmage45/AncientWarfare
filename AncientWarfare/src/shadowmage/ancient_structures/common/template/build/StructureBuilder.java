@@ -294,7 +294,10 @@ private void fillBorderBlock(int x, int z, int maxFillY, boolean gradient, int s
     int id = biome!=null? biome.topBlock>=0? biome.topBlock : Block.grass.blockID : Block.grass.blockID;
     for(int y = topEmptyBlockY; y<=maxFillY; y++)
       {
-      world.setBlock(x, y, z, id);
+      if(world.isAirBlock(x, y, z))
+        {
+        world.setBlock(x, y, z, id);        
+        }
       }
     }
   }
@@ -367,13 +370,15 @@ protected void doFill()
   String biomeName;
   BiomeGenBase biome;
   int id;
+  int topEmptyBlockY;
   for(int bx = this.min.x; bx<=this.max.x; bx++)
     {
     for(int bz = this.min.z; bz<=this.max.z; bz++)
       {
-      for(int by = this.min.y; by>=this.min.y-template.getValidationSettings().getMaxFill(); by--)
+      topEmptyBlockY = WorldStructureGenerator.getTargetY(world, bx, bz)+1;      
+      for(int by = this.min.y; by>=topEmptyBlockY; by--)
         {
-        if(world.getBlockId(bx, by, bz)!=0){continue;}
+        if(world.getBlockId(bx, by, bz)!=0){continue;}        
         biome = world.getBiomeGenForCoords(bx, bz);
         if(by >= this.min.y+template.yOffset-4)
           {

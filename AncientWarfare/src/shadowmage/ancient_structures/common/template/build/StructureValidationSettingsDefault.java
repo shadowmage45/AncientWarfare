@@ -40,7 +40,6 @@ public class StructureValidationSettingsDefault extends StructureValidationSetti
 
 public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
 public static HashSet<String> defaultClearBlocks = new HashSet<String>();
-public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
 static
 {
@@ -68,17 +67,6 @@ defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
 defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
 defaultClearBlocks.add(Block.wood.getUnlocalizedName());
 
-skippableWorldGenBlocks.add(Block.waterStill.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.lavaStill.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.cactus.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.vine.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.tallGrass.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.plantRed.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
 }
 /**
  * given an area with a source point, how far above the source-point is the highest acceptable block located? 

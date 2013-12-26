@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.world_gen;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Set;
@@ -48,7 +49,22 @@ public class WorldStructureGenerator implements IWorldGenerator
 private static WorldStructureGenerator instance = new WorldStructureGenerator();
 private WorldStructureGenerator(){}
 public static WorldStructureGenerator instance(){return instance;}
+public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
+static
+{
+skippableWorldGenBlocks.add(Block.waterStill.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.lavaStill.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.cactus.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.vine.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.tallGrass.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.plantRed.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
+}
 
 private boolean isGenerating = false;
 private LinkedList<DelayedGenerationEntry> delayedChunks = new LinkedList<DelayedGenerationEntry>();
@@ -113,8 +129,8 @@ public static int getTargetY(World world, int x, int z)
     id = world.getBlockId(x, y, z);
     if(id==0){continue;}
     block = Block.blocksList[id];
-    if(block==null || block.isAirBlock(world, x, y, z) || block.blockMaterial==Material.leaves || block.blockMaterial==Material.snow || block.blockMaterial==Material.plants){continue;}
-    if(block==Block.tallGrass || block==Block.plantYellow || block==Block.deadBush || block==Block.cactus || block==Block.plantRed){continue;} 
+    if(block==null){continue;}
+    if(skippableWorldGenBlocks.contains(block.getUnlocalizedName())){continue;}
     return y;
     }
   return -1;
