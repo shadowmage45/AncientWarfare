@@ -394,7 +394,6 @@ private int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)
   return steps;
   }
 
-
 private boolean validateStructurePlacementOld(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {  
   StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
@@ -578,7 +577,6 @@ private boolean checkBorderBlockValidity(World world, int x, int y, int z, int m
     }  
   return true;
   }
-
 
 private class DelayedGenerationEntry
 {

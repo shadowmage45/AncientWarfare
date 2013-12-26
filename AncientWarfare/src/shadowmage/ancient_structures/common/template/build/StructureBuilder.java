@@ -129,8 +129,7 @@ protected void placeEntities()
   TemplateRuleEntity[] rules = template.getEntityRules();
   for(TemplateRuleEntity rule : rules)
     {
-	if(rule==null){continue;}
-	AWLog.logDebug("placing entity from rule..."+rule);
+    if(rule==null){continue;}
     destination.x = rule.x;
     destination.y = rule.y;
     destination.z = rule.z;
