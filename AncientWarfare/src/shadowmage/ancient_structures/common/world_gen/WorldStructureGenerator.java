@@ -307,6 +307,9 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
   int leveling = border? template.getValidationSettings().getBorderMaxLeveling() : template.getValidationSettings().getMaxLeveling();
   int fill = border? template.getValidationSettings().getBorderMaxFill() : template.getValidationSettings().getMaxFill();
   
+  /**
+   * most of this is just to try and minimize the total Y range that is examined for clear/fill
+   */
   int minFillY = bb.min.y - fill;
   if(border){minFillY+=template.yOffset;}
   int maxFillY = minFillY + fill;
@@ -319,6 +322,11 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     {
     if(fill>0)
       {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0
+      //wish I could find a better way than this...as it just iterates the blocks that I'm about to iterate...
+      //but for non-border, I need to know the lowest are to fill=\
+      // if I changed it around to iterate from top to bottom
+      // I could use some sloppy flag checking to see if !border, set minY == 0, and have a flag
+      // that 
       int topEmptyBlockY = getTargetY(world, x, z)+1;
       minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
       }    
@@ -332,7 +340,11 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
     }
   int maxY = maxFillY> maxLevelY ? maxFillY : maxLevelY;
-    
+  
+  int xInChunk = x&15;
+  int zInChunk = z&15;  
+  Chunk chunk = world.getChunkFromBlockCoords(xInChunk, zInChunk);
+  
   int id;
   Block block;
   BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
@@ -345,7 +357,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     {    
     if(doLeveling && leveling>0 && y>=minLevelY)
       {
-      world.setBlockToAir(x, y, z);
+      chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);
       }
     if(doFill && fill>0 && y<=maxFillY)
       {
@@ -353,7 +365,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
       block = Block.blocksList[id];
       if(block==null || !skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
         {
-        world.setBlock(x, y, z, fillBlockID);
+        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
         }
       }
     }
