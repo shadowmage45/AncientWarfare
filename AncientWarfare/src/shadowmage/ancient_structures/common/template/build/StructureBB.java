@@ -26,8 +26,8 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 public class StructureBB
 {
 
-public BlockPosition pos1;
-public BlockPosition pos2;
+public BlockPosition min;
+public BlockPosition max;
 
 public StructureBB(int x, int y, int z, int face, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
@@ -84,21 +84,21 @@ public final StructureBB setFromStructure(int x, int y, int z, int face, int xSi
   /**
    * calculate structure bounding box min/max from destination 1 and destination 2
    */
-  this.pos1 = BlockTools.getMin(destination1, destination2);
-  this.pos2 = BlockTools.getMax(destination1, destination2);
+  this.min = BlockTools.getMin(destination1, destination2);
+  this.max = BlockTools.getMax(destination1, destination2);
   return this;
   }
 
 public StructureBB(BlockPosition pos1, BlockPosition pos2)
   {
-  this.pos1 = BlockTools.getMin(pos1, pos2);
-  this.pos2 = BlockTools.getMax(pos1, pos2);
+  this.min = BlockTools.getMin(pos1, pos2);
+  this.max = BlockTools.getMax(pos1, pos2);
   }
 
 @Override
 public String toString()
   {
-  return pos1.toString() + " : " +pos2.toString();
+  return min.toString() + " : " +max.toString();
   }
 
 /**
@@ -108,27 +108,27 @@ public String toString()
  */
 public boolean collidesWith(StructureBB bb)
   {
-  if(pos2.x < bb.pos1.x)
+  if(max.x < bb.min.x)
     {
     return false;
     }
-  if(pos2.y < bb.pos1.y)
+  if(max.y < bb.min.y)
     {
     return false;
     }
-  if(pos2.z < bb.pos1.z)
+  if(max.z < bb.min.z)
     {
     return false;
     }
-  if(pos1.x > bb.pos2.x)
+  if(min.x > bb.max.x)
     {
     return false;
     }
-  if(pos1.y > bb.pos2.y)
+  if(min.y > bb.max.y)
     {
     return false;
     }
-  if(pos1.z > bb.pos2.z)
+  if(min.z > bb.max.z)
     {
     return false;
     }  
@@ -141,32 +141,32 @@ public boolean collidesWith(StructureBB bb)
  */
 public void expand(int x, int y, int z)
   {
-  pos1.x-=x;
-  pos1.y-=y;
-  pos1.z-=z;
-  pos2.x+=x;
-  pos2.y+=y;
-  pos2.z+=z;
+  min.x-=x;
+  min.y-=y;
+  min.z-=z;
+  max.x+=x;
+  max.y+=y;
+  max.z+=z;
   }
 
 public int getXSize()
   {
-  return pos2.x-pos1.x+1;
+  return max.x-min.x+1;
   }
 
 public int getZSize()
   {
-  return pos2.z-pos1.z+1;
+  return max.z-min.z+1;
   }
 
 public int getCenterX()
   {
-  return pos1.x + (getXSize()/2);
+  return min.x + (getXSize()/2);
   }
 
 public int getCenterZ()
   {
-  return pos1.z + (getZSize()/2);
+  return min.z + (getZSize()/2);
   }
 
 

@@ -30,11 +30,10 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
-import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
@@ -123,7 +122,7 @@ public static int getTargetY(World world, int x, int z)
   {
   int id;
   Block block;
-  for(int y = world.provider.getActualHeight(); y>1; y--)
+  for(int y = world.provider.getActualHeight(); y>=1; y--)
     {
     id = world.getBlockId(x, y, z);
     if(id==0){continue;}
@@ -147,12 +146,115 @@ public static int getTargetY(World world, int x, int z)
  */
 public boolean attemptStructureGenerationAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {
-  if(validateStructurePlacement(world, x, y, z, face, template, map))
+  if(validateStructurePlacement2(world, x, y, z, face, template, map))
     {   
     generateStructureAt(world, x, y, z, face, template, map);  
     return true;
     }
   return false;
+  }
+
+private boolean validateStructurePlacement2(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
+  {
+  StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
+  StructureValidationSettingsDefault settings = template.getValidationSettings();
+  int borderSize = settings.getBorderSize();
+  int maxLeveling = settings.getMaxLeveling();
+  int maxFill = settings.getMaxFill();
+  int maxBorderLeveling = settings.getBorderMaxLeveling();
+  int maxBorderFill = settings.getBorderMaxFill();
+  Set<String> targetBlocks = settings.getAcceptedTargetBlocks();
+  Set<String> clearBlocks = settings.getAcceptedClearBlocks();
+  
+  /**
+   * check for intersecting bounding boxes
+   */
+  int xs = bb.getXSize();
+  int zs = bb.getZSize();
+  int size = ((xs > zs ? xs : zs)/16)+3;
+  Collection<StructureEntry> bbCheckList = map.getEntriesNear(world, x, z, size, true, new ArrayList<StructureEntry>());
+  bb.expand(borderSize, 0, borderSize);//expand by border-size to help catch issues of border cutting into other structures
+  for(StructureEntry entry : bbCheckList)
+    {
+    if(bb.collidesWith(entry.bb))
+      {
+      return false;
+      }
+    }
+  bb.expand(-borderSize, 0, -borderSize);//un-expand the bb, so we can continue to use it for the rest of the checks
+  
+  /**
+   * search the entire structure area, min->max for valid target conditions.
+   */
+  int bx, by, bz;
+  for(bx = bb.min.x-borderSize; bx <= bb.max.x+borderSize ; bx++)
+    {
+    for(bz = bb.min.z-borderSize; bz <= bb.max.z+borderSize ; bz++)
+      {      
+      if(bx>=bb.min.x && bx<=bb.max.x && bz>=bb.min.z && bz<=bb.max.z)//is inside bounds
+        {
+        if(!validateStructureBlock(world, bx, bz, template.yOffset, settings, bb, false))
+          {
+          return false;
+          }
+        }
+      else//is a border block
+        {
+        if(!validateStructureBlock(world, bx, bz, template.yOffset, settings, bb, true))
+          {
+          return false;
+          }
+        }
+      }
+    }
+  return true;
+  }
+
+private boolean validateStructureBlock(World world, int x, int z, int yOffset, StructureValidationSettingsDefault settings, StructureBB bb, boolean border)
+  {
+  Set<String> targetBlocks = settings.getAcceptedTargetBlocks();
+  Set<String> clearBlocks = settings.getAcceptedClearBlocks();
+  int fill = border? settings.getBorderMaxFill() : settings.getMaxFill();
+  int leveling = border? settings.getBorderMaxLeveling() : settings.getMaxLeveling();
+  int id;
+  int minY = bb.min.y-fill-1;
+  if(border)
+    {
+    minY += yOffset;
+    }
+  Chunk chunk = world.getChunkFromBlockCoords(x, z);
+  int inChunkX = x & 15;
+  int inChunkZ = z & 15;  
+  Block block;
+  for(int y = world.provider.getActualHeight(); y >= bb.min.y-fill-1; y--)
+    {    
+    id = chunk.getBlockID(inChunkX, y, inChunkZ);
+    block = Block.blocksList[id];
+    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y <= minY && (block==null || targetBlocks.contains(block.getUnlocalizedName())))
+      {
+      return false;//fail for
+      }
+    else if(block!=null)
+      {
+      if(skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+        {//should ignore this block, it is acceptable to be within bounds (tree/plant/etc)
+        continue;
+        }
+      else if(leveling>=0 && y >= bb.min.y + yOffset + leveling)
+        {//max leveling target too high
+        return false;
+        }
+      else if(leveling>=0 && y >= bb.min.y+yOffset && !clearBlocks.contains(block.getUnlocalizedName()))
+        {//invalid block to clear
+        return false;
+        }
+      else if(fill>=0 && y < (border? bb.min.y+yOffset : bb.min.y) && !targetBlocks.contains(block.getUnlocalizedName()))
+        {//invalid block to fill-on-top of
+        return false;
+        }     
+      }    
+    }    
+  return true;
   }
 
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
@@ -169,10 +271,8 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   Collection<StructureEntry> bbCheckList = map.getEntriesNear(world, x, z, size, true, new ArrayList<StructureEntry>());
   for(StructureEntry entry : bbCheckList)
     {
-//    AWLog.logDebug("testing vs existing bb: "+entry.getBB() + "  this:  "+bb);
     if(bb.collidesWith(entry.bb))
       {
-//      AWLog.logDebug("structure failed placement for bb intersect with: "+entry.name);
       return false;
       }
     }
@@ -181,7 +281,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
    * most checks are done in a single loop across structure bounds
    */
   int bx, bz;
-  int by = bb.pos1.y - 1;
+  int by = bb.min.y - 1;
   int topEmptyBlockY;
   int id;
   Block targetBlock;
@@ -189,32 +289,32 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
   int maxFill = settings.getMaxFill();
   Set<String> targetBlocks = settings.getAcceptedTargetBlocks();
   Set<String> clearBlocks = settings.getAcceptedClearBlocks();
-  for(bx = bb.pos1.x; bx <= bb.pos2.x ; bx++)
+  for(bx = bb.min.x; bx <= bb.max.x ; bx++)
     {
-    for(bz = bb.pos1.z; bz <= bb.pos2.z ; bz++)
+    for(bz = bb.min.z; bz <= bb.max.z ; bz++)
       {
       /**
        * check for leveling and fill depth
        */
       topEmptyBlockY = getTargetY(world, bx, bz)+1;
       if(topEmptyBlockY<=0){return false;}//fail due to...wtf? no block?
-      if(maxFill >= 0 && (bx==bb.pos1.x || bx==bb.pos2.x || bz == bb.pos1.z || bz== bb.pos2.z))//missing edge depth test
+      if(maxFill >= 0 && (bx==bb.min.x || bx==bb.max.x || bz == bb.min.z || bz== bb.max.z))//missing edge depth test
         {
         
-        if(bb.pos1.y - topEmptyBlockY > maxFill)
+        if(bb.min.y - topEmptyBlockY > maxFill)
           {
 //          AWLog.logDebug("structure failed validation for fill depth test. val: "+maxFill + " found: "+(bb.pos1.y - topEmptyBlockY));
           return false;//fail missing edge depth test
           }
         id = world.getBlockId(bx, topEmptyBlockY-1, bz);
         targetBlock = Block.blocksList[id];
-        if(topEmptyBlockY<bb.pos1.y && !targetBlocks.contains(targetBlock.getUnlocalizedName()))
+        if(topEmptyBlockY<bb.min.y && !targetBlocks.contains(targetBlock.getUnlocalizedName()))
           {
 //          AWLog.logDebug("structure failed validation for invalid target fill block");
           return false;//fail for block to be filled on top of is invalid target block
           }
         }      
-      if(maxLeveling>=0 && topEmptyBlockY - (bb.pos1.y+template.yOffset) > maxLeveling)
+      if(maxLeveling>=0 && topEmptyBlockY - (bb.min.y+template.yOffset) > maxLeveling)
         {
 //        AWLog.logDebug("structure failed validation for invalid leveling. maxLevel: "+maxLeveling +" found leveling difference: "+(topEmptyBlockY-(bb.pos1.y+template.yOffset)));
         return false;//fail for leveling too high
@@ -236,7 +336,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
        */
       if(!settings.isPreserveBlocks())
         {
-        for(int cy = bb.pos1.y; cy <= topEmptyBlockY; cy++)
+        for(int cy = bb.min.y; cy <= topEmptyBlockY; cy++)
           {       
           id = world.getBlockId(bx, cy, bz);
           targetBlock = Block.blocksList[id];
@@ -271,16 +371,16 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
 private boolean checkBorderValidity(World world, int y, int borderSize, int maxLeveling, int maxFill, StructureBB bb, Set<String> clearBlocks, Set<String> targetBlocks)
   {
   int bx, bz;  
-  for(bx = bb.pos1.x - borderSize; bx <= bb.pos2.x + borderSize; bx++)
+  for(bx = bb.min.x - borderSize; bx <= bb.max.x + borderSize; bx++)
     {       
-    for(bz = bb.pos1.z-1; bz >= bb.pos1.z - borderSize; bz--)
+    for(bz = bb.min.z-1; bz >= bb.min.z - borderSize; bz--)
       {
       if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks, targetBlocks))
         {
         return false;
         }    
       }      
-    for(bz = bb.pos2.z+1; bz <= bb.pos2.z + borderSize; bz++)
+    for(bz = bb.max.z+1; bz <= bb.max.z + borderSize; bz++)
       {
       if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks, targetBlocks))
         {
@@ -288,16 +388,16 @@ private boolean checkBorderValidity(World world, int y, int borderSize, int maxL
         }
       }
     }
-  for(bz = bb.pos1.z; bz<=bb.pos2.z; bz++)
+  for(bz = bb.min.z; bz<=bb.max.z; bz++)
     {
-    for(bx = bb.pos1.x-1; bx >= bb.pos1.x - borderSize; bx--)
+    for(bx = bb.min.x-1; bx >= bb.min.x - borderSize; bx--)
       {
       if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks, targetBlocks))
         {
         return false;
         }
       }
-    for(bx = bb.pos2.x+1; bx <= bb.pos2.x + borderSize; bx++)
+    for(bx = bb.max.x+1; bx <= bb.max.x + borderSize; bx++)
       {
       if(!checkBorderBlockValidity(world, bx, y, bz, maxLeveling, maxFill, clearBlocks, targetBlocks))
         {

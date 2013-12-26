@@ -116,8 +116,8 @@ private void renderBuildBoundingBox(EntityPlayer player, ItemStack stack, float 
   int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   if(hit==null){return;}
   bb.setFromStructure(hit.x, hit.y, hit.z, face, structure.xSize, structure.ySize, structure.zSize, structure.xOffset, structure.yOffset, structure.zOffset);
-  BlockPosition pos1 = bb.pos1;
-  BlockPosition pos2 = bb.pos2.copy();
+  BlockPosition pos1 = bb.min;
+  BlockPosition pos2 = bb.max.copy();
   pos2.offset(1, 1, 1);
   renderBoundingBox(player, pos1, pos2, delta);
   }

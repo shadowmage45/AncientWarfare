@@ -48,7 +48,7 @@ public void writeToNBT(NBTTagCompound tag)
   {
   tag.setString("name", name);
   tag.setInteger("value", value);
-  tag.setIntArray("bb", new int[]{bb.pos1.x, bb.pos1.y, bb.pos1.z, bb.pos2.x, bb.pos2.y, bb.pos2.z});
+  tag.setIntArray("bb", new int[]{bb.min.x, bb.min.y, bb.min.z, bb.max.x, bb.max.y, bb.max.z});
   }
 
 public void readFromNBT(NBTTagCompound tag)
@@ -58,12 +58,12 @@ public void readFromNBT(NBTTagCompound tag)
   int[] datas = tag.getIntArray("bb");
   if(datas.length>=6)
     {
-    bb.pos1.x = datas[0];
-    bb.pos1.y = datas[1];
-    bb.pos1.z = datas[2];
-    bb.pos2.x = datas[3];
-    bb.pos2.y = datas[4];
-    bb.pos2.z = datas[5]; 
+    bb.min.x = datas[0];
+    bb.min.y = datas[1];
+    bb.min.z = datas[2];
+    bb.max.x = datas[3];
+    bb.max.y = datas[4];
+    bb.max.z = datas[5]; 
     }
   }
 
