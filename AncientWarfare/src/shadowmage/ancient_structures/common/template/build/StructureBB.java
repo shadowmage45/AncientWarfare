@@ -22,12 +22,18 @@ package shadowmage.ancient_structures.common.template.build;
 
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
 
 public class StructureBB
 {
 
 public BlockPosition min;
 public BlockPosition max;
+
+public StructureBB(int x, int y, int z, int face, StructureTemplate template)
+  {
+  this(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
+  }
 
 public StructureBB(int x, int y, int z, int face, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
@@ -108,28 +114,8 @@ public String toString()
  */
 public boolean collidesWith(StructureBB bb)
   {
-  if(max.x < bb.min.x)
-    {
-    return false;
-    }
-  if(max.y < bb.min.y)
-    {
-    return false;
-    }
-  if(max.z < bb.min.z)
-    {
-    return false;
-    }
-  if(min.x > bb.max.x)
-    {
-    return false;
-    }
-  if(min.y > bb.max.y)
-    {
-    return false;
-    }
-  if(min.z > bb.max.z)
-    {
+  if(max.x < bb.min.x || max.y < bb.min.y || max.z < bb.min.z || min.x > bb.max.x || min.y > bb.max.y || min.z > bb.max.z)
+    {//separation of axis...the early-out version of containment testing
     return false;
     }  
   return true;

@@ -91,9 +91,20 @@ public void registerWorldGenStructure(StructureTemplate template)
 List<StructureEntry> searchCache = new ArrayList<StructureEntry>();
 List<StructureTemplate> trimmedPotentialStructures = new ArrayList<StructureTemplate>();
 HashMap<String, Integer> distancesFound = new HashMap<String, Integer>();
+int remainingValueCache;
+
+/**
+ * returns the remaining value from cluster-value check from the last selected structure/attempt at structure selection
+ * @return
+ */
+public int getRemainingValue()
+  {
+  return remainingValueCache;
+  }
 
 public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int y, int z, int chunkSearchRange)
   {
+  remainingValueCache = 0;
   searchCache.clear();
   trimmedPotentialStructures.clear();
   distancesFound.clear();
@@ -130,7 +141,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
       distancesFound.put(entry.getName(), chunkDistance);
       }
     }
-  int remainingValue = AWStructureStatics.maxClusterValue - foundValue;
+  remainingValueCache = AWStructureStatics.maxClusterValue - foundValue;
   Collection<String> generatedUniques = map.getGeneratedUniques();
   Set<StructureTemplate> potentialStructures = templatesByBiome.get(biomeName);
   if(potentialStructures==null || potentialStructures.isEmpty()){return null;}
@@ -161,7 +172,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
 //      AWLog.logDebug("excluding template from selection for unique status..already present in generated list");
       continue;
       }//skip already generated uniques
-    if(settings.getClusterValue()>remainingValue)
+    if(settings.getClusterValue()>remainingValueCache)
       {
 //      AWLog.logDebug("excluding template from selection for remaining value check: "+template.name +" val: "+settings.getClusterValue()+ " remVal: "+remainingValue);
       continue;

@@ -29,7 +29,8 @@ public class AWStructureStatics extends ModConfiguration
 {
 
 public static String templateExtension = "aws";
-public static boolean enableVillageGen;
+public static boolean enableVillageGen = true;
+public static boolean enableStructureGeneration = true;
 public static int chunkSearchRadius = 16;
 public static int maxClusterValue = 500;
 public static int randomChance = 75;
