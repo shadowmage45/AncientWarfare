@@ -104,7 +104,7 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   int y = getTargetY(world, x, z)+1;  
   if(y<=0){return;}
   int face = rng.nextInt(4);
-  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, AWStructureStatics.chunkSearchRadius);
+  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, face, AWStructureStatics.chunkSearchRadius);
   int remainingClusterValue = WorldGenStructureManager.instance().getRemainingValue();
   
   if(Statics.DEBUG)

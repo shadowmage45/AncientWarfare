@@ -32,8 +32,8 @@ import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
@@ -92,6 +92,7 @@ List<StructureEntry> searchCache = new ArrayList<StructureEntry>();
 List<StructureTemplate> trimmedPotentialStructures = new ArrayList<StructureTemplate>();
 HashMap<String, Integer> distancesFound = new HashMap<String, Integer>();
 int remainingValueCache;
+BlockPosition rearBorderPos = new BlockPosition(0,0,0);
 
 /**
  * returns the remaining value from cluster-value check from the last selected structure/attempt at structure selection
@@ -102,7 +103,7 @@ public int getRemainingValue()
   return remainingValueCache;
   }
 
-public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int y, int z, int chunkSearchRange)
+public StructureTemplate selectTemplateForGeneration(World world, Random rng, int x, int y, int z, int face, int chunkSearchRange)
   {
   remainingValueCache = 0;
   searchCache.clear();
@@ -113,6 +114,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   int cx, cz, foundValue, chunkDistance;
   float foundDistance, mx, mz;
   Block borderTargetBlock = Block.blocksList[world.getBlockId(x, y-1, z)];
+  Block borderTargetBlockRear = null;
   Block baseTargetBlock = null;
   cx = x << 4;
   cz = z << 4;
@@ -196,6 +198,13 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
       {
       continue;
       }//skip if the target block is ineligible...quick and dirty early out to remove e.g. water or desert only structures from the list
+    rearBorderPos.reassign(x, y-1, z);
+    rearBorderPos.moveForward(face, template.zSize-1);
+    borderTargetBlockRear = Block.blocksList[world.getBlockId(rearBorderPos.x, rearBorderPos.y, rearBorderPos.z)];
+    if(borderTargetBlockRear!=null && !settings.getAcceptedTargetBlocksBorderRear().contains(borderTargetBlockRear.getUnlocalizedName()))
+      {
+      continue;
+      }
     trimmedPotentialStructures.add(template);
     }  
 //  AWLog.logDebug("after trimming for dimension and value, "+trimmedPotentialStructures.size()+" potential structures remain.");

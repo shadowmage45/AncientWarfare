@@ -138,6 +138,9 @@ int[] acceptedDimensions;//list of accepted dimensions treated as white/black li
 
 Set<String> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
 Set<String> acceptedTargetBlocksBorder;
+Set<String> acceptedTargetBlocksBorderRear;
+
+
 Set<String> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
 
 /**
@@ -164,6 +167,17 @@ public StructureValidationSettingsDefault()
   acceptedClearBlocks.addAll(defaultClearBlocks);
   acceptedTargetBlocks.addAll(defaultTargetBlocks);
   acceptedTargetBlocksBorder.addAll(defaultBorderTargetBlocks);
+  acceptedTargetBlocksBorderRear.addAll(defaultBorderTargetBlocks);
+  }
+
+public Set<String> getAcceptedTargetBlocksBorderRear()
+  {
+  return acceptedTargetBlocksBorderRear;
+  }
+
+public void setAcceptedTargetBlocksBorderRear(  Set<String> acceptedTargetBlocksBorderRear)
+  {
+  this.acceptedTargetBlocksBorderRear = acceptedTargetBlocksBorderRear;
   }
 
 public Set<String> getAcceptedTargetBlocksBorder()
@@ -462,6 +476,7 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     else if(line.toLowerCase().startsWith("validborderblocks=")){acceptedTargetBlocksBorder = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
+    else if(line.toLowerCase().startsWith("validborderblocksrear=")){acceptedTargetBlocksBorderRear = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     
     /**
      * TODO survival resource-list
@@ -523,6 +538,8 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.write("validClearingBlocks="+StringTools.getCSVValueFor(acceptedClearBlocks.toArray(new String[acceptedClearBlocks.size()])));
   writer.newLine();  
   writer.write("validBorderBlocks="+StringTools.getCSVValueFor(acceptedTargetBlocksBorder.toArray(new String[acceptedTargetBlocksBorder.size()])));
+  writer.newLine();
+  writer.write("validBorderBlocksRear="+StringTools.getCSVValueFor(acceptedTargetBlocksBorderRear.toArray(new String[acceptedTargetBlocksBorderRear.size()])));
   writer.newLine();
   /**  
    * TODO survival resource-list
