@@ -54,8 +54,6 @@ public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
 static
 {
-skippableWorldGenBlocks.add(Block.waterStill.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.lavaStill.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.cactus.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.vine.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.tallGrass.getUnlocalizedName());
@@ -97,7 +95,7 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
 
 private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
-  if(AWStructureStatics.enableStructureGeneration){return;}
+  if(!AWStructureStatics.enableStructureGeneration){return;}
   long t1 = System.currentTimeMillis();
   long seed = (((long)chunkX)<< 32) | (((long)chunkZ) & 0xffffffffl);
   rng.setSeed(seed);
@@ -204,6 +202,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
     {
     if(bb.collidesWith(entry.bb))
       {
+      AWLog.logDebug("invalid placement, intersects with other structure");
       return false;
       }
     }
@@ -252,13 +251,14 @@ private boolean validateStructureBlock(World world, int x, int z, int yOffset, S
   int inChunkX = x & 15;
   int inChunkZ = z & 15;  
   Block block;
-  for(int y = world.provider.getActualHeight(); y >= bb.min.y-fill-1; y--)
+  for(int y = world.provider.getActualHeight(); y >= minY-1; y--)
     {    
     id = chunk.getBlockID(inChunkX, y, inChunkZ);
     block = Block.blocksList[id];
-    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y <= minY && (block==null || targetBlocks.contains(block.getUnlocalizedName())))
+    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y < minY && (block==null || !targetBlocks.contains(block.getUnlocalizedName())))
       {
-      return false;//fail for
+      AWLog.logDebug("invalid edge border depth or target block: y: "+y + " minY: "+minY+ " block: "+block);
+      return false;//fail for border-edge-depth test
       }
     else if(block==null || skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
       {//block is within the area to be cleared or filled, but not a base target block -- skip empty blocks or 'skippable' blocks
@@ -266,14 +266,17 @@ private boolean validateStructureBlock(World world, int x, int z, int yOffset, S
       }
     else if(leveling>=0 && y >= bb.min.y + yOffset + leveling)
       {//max leveling target too high
+      AWLog.logDebug("block too high for structure leveling value");
       return false;
       }
     else if(leveling>=0 && !settings.isPreserveBlocks() && y >= bb.min.y+yOffset && !clearBlocks.contains(block.getUnlocalizedName()))
       {//invalid block to clear
+      AWLog.logDebug("invalid clearing block");
       return false;
       }
     else if(fill>=0 && y < (border? bb.min.y+yOffset : bb.min.y) && !targetBlocks.contains(block.getUnlocalizedName()))
       {//invalid block to fill-on-top of
+      AWLog.logDebug("invalid fill-on-top-of block: "+block.getUnlocalizedName());
       return false;
       }    
     }    
@@ -312,7 +315,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
    */
   int minFillY = bb.min.y - fill;
   if(border){minFillY+=template.yOffset;}
-  int maxFillY = minFillY + fill;
+  int maxFillY = (minFillY + fill) -1;
   
   int minLevelY = bb.min.y + template.yOffset;
   int maxLevelY = minLevelY + leveling;
@@ -335,7 +338,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     {
     int step = getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
     int stepHeight = fill / template.getValidationSettings().getBorderSize();
-    maxFillY-=step*stepHeight;
+    maxFillY -= step*stepHeight;
     minLevelY += step*stepHeight;
     minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
     }
@@ -343,7 +346,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
   
   int xInChunk = x&15;
   int zInChunk = z&15;  
-  Chunk chunk = world.getChunkFromBlockCoords(xInChunk, zInChunk);
+  Chunk chunk = world.getChunkFromBlockCoords(x, z);
   
   int id;
   Block block;
@@ -355,14 +358,17 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     }
   for(int y = minY; y <=maxY; y++)
     {    
+    id = world.getBlockId(x, y, z);
+    block = Block.blocksList[id];
     if(doLeveling && leveling>0 && y>=minLevelY)
       {
-      chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);
+      if(block!=null && !skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+        {
+        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
+        }
       }
     if(doFill && fill>0 && y<=maxFillY)
       {
-      id = world.getBlockId(x, y, z);
-      block = Block.blocksList[id];
       if(block==null || !skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
