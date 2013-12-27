@@ -112,7 +112,8 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   if(map==null){return null;}
   int cx, cz, foundValue, chunkDistance;
   float foundDistance, mx, mz;
-  Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
+  Block borderTargetBlock = Block.blocksList[world.getBlockId(x, y-1, z)];
+  Block baseTargetBlock = null;
   cx = x << 4;
   cz = z << 4;
   String biomeName = world.getBiomeGenForCoords(x, z).biomeName.toLowerCase();
@@ -161,7 +162,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
         dimensionMatch = !dimensionMatch;        
         break;
         }      
-      }
+      }    
     if(!dimensionMatch)//skip if dimension is blacklisted, or not present on whitelist
       {
 //      AWLog.logDebug("excluding template from selection for dimension not eligible: " + dim + " :: "+settings.getAcceptedDimensions());
@@ -186,10 +187,15 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
         continue;
         }//skip if minDuplicate distance is not met
       }
-    if(block!=null && !settings.getAcceptedTargetBlocks().contains(block.getUnlocalizedName()))
+    baseTargetBlock = Block.blocksList[world.getBlockId(x, y-template.yOffset-1, z)];
+    if(baseTargetBlock!=null && !settings.getAcceptedTargetBlocks().contains(baseTargetBlock.getUnlocalizedName()))
       {
       continue;
-      }//skip if the target block is inelgible...quick and dirty early out to remove e.g. water or desert only structures from the list
+      }//skip if target base block is ineligible
+    if(borderTargetBlock!=null && !settings.getAcceptedTargetBlocksBorder().contains(borderTargetBlock.getUnlocalizedName()))
+      {
+      continue;
+      }//skip if the target block is ineligible...quick and dirty early out to remove e.g. water or desert only structures from the list
     trimmedPotentialStructures.add(template);
     }  
 //  AWLog.logDebug("after trimming for dimension and value, "+trimmedPotentialStructures.size()+" potential structures remain.");

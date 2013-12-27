@@ -126,10 +126,10 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
   
   
   settings.setMaxLeveling(tag.getInteger("leveling"));
-  settings.setMaxMissingEdgeDepth(tag.getInteger("fill"));
+  settings.setMaxFill(tag.getInteger("fill"));
   settings.setBorderSize(tag.getInteger("border"));
   settings.setBorderMaxLeveling(tag.getInteger("borderLeveling"));
-  settings.setBorderMissingEdgeDepth(tag.getInteger("borderFill"));
+  settings.setBorderMaxFill(tag.getInteger("borderFill"));
   settings.setSelectionWeight(tag.getInteger("weight"));
   settings.setClusterValue(tag.getInteger("value"));
   settings.setMinDuplicateDistance(tag.getInteger("dupe"));  

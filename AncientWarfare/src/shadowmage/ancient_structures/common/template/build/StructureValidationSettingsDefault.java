@@ -40,6 +40,7 @@ public class StructureValidationSettingsDefault extends StructureValidationSetti
 
 public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
 public static HashSet<String> defaultClearBlocks = new HashSet<String>();
+public static HashSet<String> defaultBorderTargetBlocks = new HashSet<String>();
 
 static
 {
@@ -67,6 +68,7 @@ defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
 defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
 defaultClearBlocks.add(Block.wood.getUnlocalizedName());
 
+defaultBorderTargetBlocks.addAll(defaultTargetBlocks);
 }
 /**
  * given an area with a source point, how far above the source-point is the highest acceptable block located? 
@@ -135,7 +137,7 @@ boolean dimensionWhiteList;//should treat dimension list as white or blacklist?
 int[] acceptedDimensions;//list of accepted dimensions treated as white/black list from whitelist toggle
 
 Set<String> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
-
+Set<String> acceptedTargetBlocksBorder;
 Set<String> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
 
 /**
@@ -161,6 +163,17 @@ public StructureValidationSettingsDefault()
   acceptedDimensions = new int[]{};
   acceptedClearBlocks.addAll(defaultClearBlocks);
   acceptedTargetBlocks.addAll(defaultTargetBlocks);
+  acceptedTargetBlocksBorder.addAll(defaultBorderTargetBlocks);
+  }
+
+public Set<String> getAcceptedTargetBlocksBorder()
+  {
+  return acceptedTargetBlocksBorder;
+  }
+
+public void setAcceptedTargetBlocksBorder(Set<String> acceptedTargetBlocksBorder)
+  {
+  this.acceptedTargetBlocksBorder = acceptedTargetBlocksBorder;
   }
 
 public void setMaxLeveling(int maxLeveling)
@@ -173,9 +186,9 @@ public void setDoLeveling(boolean doLeveling)
   this.doLeveling = doLeveling;
   }
 
-public void setMaxMissingEdgeDepth(int maxMissingEdgeDepth)
+public void setMaxFill(int maxFill)
   {
-  this.maxFill = maxMissingEdgeDepth;
+  this.maxFill = maxFill;
   }
 
 public void setDoFillBelow(boolean doFillBelow)
@@ -198,9 +211,9 @@ public void setDoBorderLeveling(boolean doBorderLeveling)
   this.doBorderLeveling = doBorderLeveling;
   }
 
-public void setBorderMissingEdgeDepth(int borderMissingEdgeDepth)
+public void setBorderMaxFill(int borderFill)
   {
-  this.borderMaxFill = borderMissingEdgeDepth;
+  this.borderMaxFill = borderFill;
   }
 
 public void setDoBorderFill(boolean doBorderFill)
@@ -448,6 +461,7 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("acceptedbiomes=")){biomeList = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
+    else if(line.toLowerCase().startsWith("validborderblocks=")){acceptedTargetBlocksBorder = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
     
     /**
      * TODO survival resource-list
@@ -508,6 +522,8 @@ public void writeSettings(BufferedWriter writer) throws IOException
   writer.newLine();
   writer.write("validClearingBlocks="+StringTools.getCSVValueFor(acceptedClearBlocks.toArray(new String[acceptedClearBlocks.size()])));
   writer.newLine();  
+  writer.write("validBorderBlocks="+StringTools.getCSVValueFor(acceptedTargetBlocksBorder.toArray(new String[acceptedTargetBlocksBorder.size()])));
+  writer.newLine();
   /**  
    * TODO survival resource-list
    */
