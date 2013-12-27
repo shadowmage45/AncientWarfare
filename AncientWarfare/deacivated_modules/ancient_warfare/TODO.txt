@@ -46,6 +46,7 @@ Modules:
 
 [youtube]http://youtu.be/euKFV3FJ47E[/youtube]
 
+https://github.com/spring-projects/eclipse-integration-gradle
 
 server opt flags::
 ionice -c1 -n0 nice -n -10 /usr/lib/jvm/jdk1.7.0/bin/java -Djava.library.path=/usr/lib/jvm/jdk1.7.0/lib/amd64 -d64 -server -XX:+UseG1GC -DJINTEGRA_NATIVE_MODE -DJINTEGRA_COINIT_VALUE=0 -Dsun.io.useCanonCaches=false -Djline.terminal=jline.UnsupportedTerminal -XX:ThreadPriorityPolicy=42 -XX:CompileThreshold=1500 -XX:+TieredCompilation -XX:parallelGCThreads=4 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15 -XX:+UnlockExperimentalVMOptions -XX:+UseAdaptiveGCBoundary -XX:permSize=64M -XX:MaxPermSize=256M -XX:+UseGCOverheadLimit -XX:+UseBiasedLocking -Xnoclassgc -Xverify:none -XX:UseSSE=3 -XX:+UseThreadPriorities -Djava.net.preferIPv4Stack=true -XX:+UseLargePages -XX:+UseStringCache -XX:+OptimizeStringConcat -XX:+UseFastAccessorMethods -Xrs -XX:+UseCompressedOops -XX:+AggressiveOpts -jar craftbukkit-0.0.1-SNAPSHOT.jar nogui
