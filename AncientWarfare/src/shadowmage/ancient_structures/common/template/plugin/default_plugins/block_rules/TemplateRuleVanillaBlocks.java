@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -30,7 +28,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.IDPairCount;
-import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.utils.BlockInfo;

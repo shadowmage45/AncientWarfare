@@ -63,7 +63,7 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationType;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginAutomation;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;

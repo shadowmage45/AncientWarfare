@@ -20,22 +20,18 @@
  */
 package shadowmage.ancient_structures.common.world_gen;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 
 public class StructureMap extends WorldSavedData

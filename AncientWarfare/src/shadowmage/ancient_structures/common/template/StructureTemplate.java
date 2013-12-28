@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template;
 
-import shadowmage.ancient_structures.common.template.build.StructureValidator;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 

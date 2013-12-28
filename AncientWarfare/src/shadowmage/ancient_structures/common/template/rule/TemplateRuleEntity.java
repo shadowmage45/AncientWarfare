@@ -24,11 +24,10 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
-import shadowmage.ancient_framework.common.utils.StringTools;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.StringTools;
 
 public abstract class TemplateRuleEntity extends TemplateRule
 {

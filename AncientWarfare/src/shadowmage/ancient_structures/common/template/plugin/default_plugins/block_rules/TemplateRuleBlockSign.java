@@ -20,10 +20,6 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

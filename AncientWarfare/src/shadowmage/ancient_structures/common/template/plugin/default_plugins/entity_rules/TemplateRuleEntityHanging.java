@@ -20,20 +20,12 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_framework.common.utils.NBTTools;
-import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class TemplateRuleEntityHanging extends TemplateRuleVanillaEntity
 {

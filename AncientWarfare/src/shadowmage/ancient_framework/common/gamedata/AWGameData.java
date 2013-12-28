@@ -22,11 +22,10 @@ package shadowmage.ancient_framework.common.gamedata;
 
 import java.util.HashMap;
 
-import shadowmage.ancient_framework.common.config.AWLog;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import shadowmage.ancient_framework.common.config.AWLog;
 
 public class AWGameData
 {

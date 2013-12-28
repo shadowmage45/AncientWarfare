@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
@@ -30,7 +28,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockTools;
-import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
 public class TemplateRuleVanillaEntity extends TemplateRuleEntity

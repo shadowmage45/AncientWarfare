@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.build;
+package shadowmage.ancient_structures.common.template.build.validation;
 
 public enum StructureValidationType
 {

@@ -20,12 +20,6 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -34,8 +28,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.registry.LootGenerator;
-import shadowmage.ancient_framework.common.utils.NBTTools;
-import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class TemplateRuleBlockInventory extends TemplateRuleVanillaBlocks
 {

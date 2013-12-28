@@ -27,13 +27,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import shadowmage.ancient_framework.common.utils.NBTTools;
-import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.AWStructures;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.NBTTools;
+import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.AWStructures;
 
 /**
  * base template-rule class.  Plugins should define their own rule classes.

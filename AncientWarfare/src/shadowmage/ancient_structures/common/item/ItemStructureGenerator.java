@@ -22,17 +22,13 @@ package shadowmage.ancient_structures.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
-import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 

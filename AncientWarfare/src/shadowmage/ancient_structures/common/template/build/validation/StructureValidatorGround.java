@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.build;
+package shadowmage.ancient_structures.common.template.build.validation;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -33,6 +33,7 @@ import net.minecraft.world.chunk.Chunk;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public class StructureValidatorGround extends StructureValidator
