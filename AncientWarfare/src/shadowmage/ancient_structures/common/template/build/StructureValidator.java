@@ -110,11 +110,16 @@ public static final StructureValidator parseValidator(List<String> lines)
         }
       }
     }
-  StructureValidator validator = null;
   if(type==null)
     {
-    validator = new StructureValidatorGround();
+    return new StructureValidatorGround();
     }  
+  StructureValidationType validatorType = StructureValidationType.getTypeFromName(type);
+  if(validatorType==null)
+    {
+    return new StructureValidatorGround();
+    }
+  StructureValidator validator = validatorType.getValidator();
   NBTTagCompound tag = NBTTools.readNBTFrom(tagLines);
   validator.readFromNBT(tag);
   return validator;
