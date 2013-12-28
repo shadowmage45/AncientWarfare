@@ -324,12 +324,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
   if(!border)
     {
     if(fill>0)
-      {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0
-      //wish I could find a better way than this...as it just iterates the blocks that I'm about to iterate...
-      //but for non-border, I need to know the lowest are to fill=\
-      // if I changed it around to iterate from top to bottom
-      // I could use some sloppy flag checking to see if !border, set minY == 0, and have a flag
-      // that 
+      {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0    
       int topEmptyBlockY = getTargetY(world, x, z)+1;
       minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
       }    
