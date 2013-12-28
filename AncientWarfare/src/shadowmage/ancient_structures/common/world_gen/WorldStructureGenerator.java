@@ -251,7 +251,7 @@ private boolean validateStructureBlock(World world, int x, int z, int yOffset, S
   int inChunkX = x & 15;
   int inChunkZ = z & 15;  
   Block block;
-  for(int y = world.provider.getActualHeight(); y >= minY-1; y--)
+  for(int y = world.provider.getActualHeight(); y >= minY-1 && y>=0; y--)
     {    
     id = chunk.getBlockID(inChunkX, y, inChunkZ);
     block = Block.blocksList[id];
@@ -342,6 +342,8 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     minLevelY += step*stepHeight;
     minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
     }
+  
+  minY = minY<=0 ? 1 : minY;
   int maxY = maxFillY> maxLevelY ? maxFillY : maxLevelY;
   
   int xInChunk = x&15;

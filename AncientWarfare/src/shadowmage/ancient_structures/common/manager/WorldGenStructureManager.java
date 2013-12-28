@@ -151,9 +151,14 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
 //  AWLog.logDebug("found : "+potentialStructures.size()+ " potential structures.");
   StructureValidationSettingsDefault settings;
   int dim = world.provider.dimensionId;
+  int minLevel = 0;
   for(StructureTemplate template : potentialStructures)//loop through initial structures, only adding to 2nd list those which meet biome, unique, value, and minDuplicate distance settings
     {
     settings = template.getValidationSettings();
+    minLevel = y - template.yOffset - settings.getMaxFill();
+    if(minLevel<0){continue;}
+    minLevel = y - settings.getBorderMaxFill();
+    if(minLevel<0){continue;}    
     boolean dimensionFound = false;
     boolean dimensionMatch = !settings.isDimensionWhiteList();
     for(int i = 0; i < settings.getAcceptedDimensions().length; i++)
