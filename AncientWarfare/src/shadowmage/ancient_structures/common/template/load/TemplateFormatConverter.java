@@ -63,7 +63,7 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.build.StructureValidationType;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginAutomation;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;
@@ -729,7 +729,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   template.setRuleArray(rules);
   template.setEntityRules(entityRules);
   template.setTemplateData(templateData);
-  template.setValidationSettings(new StructureValidationSettingsDefault());
+  template.setValidationSettings(StructureValidationType.GROUND.getValidator().setDefaults(template));
   TemplateExporter.exportTo(template, new File(TemplateLoader.outputDirectory));
   return template;
   }

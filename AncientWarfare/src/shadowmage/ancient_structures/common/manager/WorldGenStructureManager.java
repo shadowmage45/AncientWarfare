@@ -36,7 +36,7 @@ import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.build.StructureValidator;
 import shadowmage.ancient_structures.common.world_gen.StructureEntry;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
 
@@ -62,7 +62,7 @@ public void loadBiomeList()
 
 public void registerWorldGenStructure(StructureTemplate template)
   {
-  StructureValidationSettingsDefault validation = template.getValidationSettings();
+  StructureValidator validation = template.getValidationSettings();
   Set<String> biomes = validation.getBiomeList();
   if(validation.isBiomeWhiteList())
     {    
@@ -148,17 +148,16 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   Collection<String> generatedUniques = map.getGeneratedUniques();
   Set<StructureTemplate> potentialStructures = templatesByBiome.get(biomeName);
   if(potentialStructures==null || potentialStructures.isEmpty()){return null;}
-//  AWLog.logDebug("found : "+potentialStructures.size()+ " potential structures.");
-  StructureValidationSettingsDefault settings;
+  StructureValidator settings;
   int dim = world.provider.dimensionId;
   int minLevel = 0;
   for(StructureTemplate template : potentialStructures)//loop through initial structures, only adding to 2nd list those which meet biome, unique, value, and minDuplicate distance settings
     {
     settings = template.getValidationSettings();
-    minLevel = y - template.yOffset - settings.getMaxFill();
-    if(minLevel<0){continue;}
-    minLevel = y - settings.getBorderMaxFill();
-    if(minLevel<0){continue;}    
+    if(!settings.shouldIncludeForSelection(world, x, y, z, face, template))
+      {
+      continue;
+      }        
     boolean dimensionFound = false;
     boolean dimensionMatch = !settings.isDimensionWhiteList();
     for(int i = 0; i < settings.getAcceptedDimensions().length; i++)
@@ -172,17 +171,14 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
       }    
     if(!dimensionMatch)//skip if dimension is blacklisted, or not present on whitelist
       {
-//      AWLog.logDebug("excluding template from selection for dimension not eligible: " + dim + " :: "+settings.getAcceptedDimensions());
       continue;
       }
     if(generatedUniques.contains(template.name))
       {
-//      AWLog.logDebug("excluding template from selection for unique status..already present in generated list");
       continue;
       }//skip already generated uniques
     if(settings.getClusterValue()>remainingValueCache)
       {
-//      AWLog.logDebug("excluding template from selection for remaining value check: "+template.name +" val: "+settings.getClusterValue()+ " remVal: "+remainingValue);
       continue;
       }//skip if cluster value is to high to place in given area
     if(distancesFound.containsKey(template.name))
@@ -190,29 +186,11 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
       int dist = distancesFound.get(template.name);
       if(dist<settings.getMinDuplicateDistance())
         {
-//        AWLog.logDebug("excluding template from selection for min dupe distance check: "+template.name);
         continue;
         }//skip if minDuplicate distance is not met
       }
-    baseTargetBlock = Block.blocksList[world.getBlockId(x, y-template.yOffset-1, z)];
-    if(baseTargetBlock!=null && !settings.getAcceptedTargetBlocks().contains(baseTargetBlock.getUnlocalizedName()))
-      {
-      continue;
-      }//skip if target base block is ineligible
-    if(borderTargetBlock!=null && !settings.getAcceptedTargetBlocksBorder().contains(borderTargetBlock.getUnlocalizedName()))
-      {
-      continue;
-      }//skip if the target block is ineligible...quick and dirty early out to remove e.g. water or desert only structures from the list
-    rearBorderPos.reassign(x, y-1, z);
-    rearBorderPos.moveForward(face, template.zSize-1);
-    borderTargetBlockRear = Block.blocksList[world.getBlockId(rearBorderPos.x, rearBorderPos.y, rearBorderPos.z)];
-    if(borderTargetBlockRear!=null && !settings.getAcceptedTargetBlocksBorderRear().contains(borderTargetBlockRear.getUnlocalizedName()))
-      {
-      continue;
-      }
     trimmedPotentialStructures.add(template);
     }  
-//  AWLog.logDebug("after trimming for dimension and value, "+trimmedPotentialStructures.size()+" potential structures remain.");
   if(trimmedPotentialStructures.isEmpty()){return null;}
   int totalWeight = 0;
   for(StructureTemplate t : trimmedPotentialStructures)
@@ -232,7 +210,6 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
     }
   distancesFound.clear();
   trimmedPotentialStructures.clear();
-//  AWLog.logDebug("after examining for weight, "+toReturn+" was selected.");
   return toReturn;
   }
 

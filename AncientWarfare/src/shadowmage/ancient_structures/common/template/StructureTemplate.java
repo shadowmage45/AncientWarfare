@@ -20,7 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template;
 
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.build.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
@@ -43,9 +43,9 @@ private TemplateRuleEntity[] entityRules;
 private short[] templateData;
 
 /**
- * world generation placement validation settings, optional, should only exist if a world-gen entry was loaded/parsed for this structure
+ * world generation placement validation settings
  */
-private StructureValidationSettingsDefault validationSettings;
+private StructureValidator validator;
 
 public StructureTemplate(String name, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
@@ -74,9 +74,9 @@ public short[] getTemplateData()
   return templateData;
   }
 
-public StructureValidationSettingsDefault getValidationSettings()
+public StructureValidator getValidationSettings()
   {
-  return validationSettings;
+  return validator;
   }
 
 public void setRuleArray(TemplateRule[] rules)
@@ -94,9 +94,9 @@ public void setTemplateData(short[] datas)
   this.templateData = datas;
   }
 
-public void setValidationSettings(StructureValidationSettingsDefault settings)
+public void setValidationSettings(StructureValidator settings)
   {
-  this.validationSettings = settings;
+  this.validator = settings;
   }
 
 public TemplateRule getRuleAt(int x, int y, int z)

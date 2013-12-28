@@ -20,18 +20,12 @@
  */
 package shadowmage.ancient_structures.common.world_gen;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
@@ -39,9 +33,7 @@ import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldStructureGenerator implements IWorldGenerator
@@ -71,23 +63,20 @@ private Random rng = new Random();
 @Override
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
-//  if(true){return;}
+  if(!AWStructureStatics.enableStructureGeneration){return;}
   if(isGenerating)
     {
-//    AWLog.logDebug("delaying generation for chunk: "+chunkX+", "+chunkZ);
     delayedChunks.add(new DelayedGenerationEntry(chunkX, chunkZ, world, chunkGenerator, chunkProvider));
     return;
     }
   else
     {
     isGenerating = true;
-//    AWLog.logDebug("checking structure generation for chunk: "+chunkX+", "+chunkZ);
     generateAt(chunkX, chunkZ, world, chunkGenerator, chunkProvider);
     }
   while(!delayedChunks.isEmpty())
     {    
     DelayedGenerationEntry entry = delayedChunks.poll();
-//    AWLog.logDebug("generating delayed chunk: "+entry.chunkX+", "+entry.chunkZ);
     generateAt(entry.chunkX, entry.chunkZ, entry.world, entry.generator, entry.provider);
     }
   isGenerating = false;
@@ -95,7 +84,6 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
 
 private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
-  if(!AWStructureStatics.enableStructureGeneration){return;}
   long t1 = System.currentTimeMillis();
   long seed = (((long)chunkX)<< 32) | (((long)chunkZ) & 0xffffffffl);
   rng.setSeed(seed);
@@ -105,8 +93,7 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   if(y<=0){return;}
   int face = rng.nextInt(4);
   StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, face, AWStructureStatics.chunkSearchRadius);
-  int remainingClusterValue = WorldGenStructureManager.instance().getRemainingValue();
-  
+  int remainingClusterValue = WorldGenStructureManager.instance().getRemainingValue();//TODO use this to alter the random chance/range values to favor generating in clusters  
   if(Statics.DEBUG)
     {
     AWLog.logDebug("Template selection took: "+(System.currentTimeMillis()-t1)+" ms.");
@@ -119,14 +106,6 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
     } 
   }
 
-/**
- * returns the Y coordinate for the top filled block, skipping any blocks in the
- * 'skippableWorldGenBlocks' set
- * @param world
- * @param x
- * @param z
- * @return
- */
 public static int getTargetY(World world, int x, int z)
   {
   int id;
@@ -143,22 +122,12 @@ public static int getTargetY(World world, int x, int z)
   return -1;
   }
 
-/**
- * so that generation methods can be called externally (from test-item, to test for validation settings)
- * @param world
- * @param x
- * @param y
- * @param z
- * @param face
- * @param template
- * @return
- */
 public boolean attemptStructureGenerationAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {
   boolean generate = false;
   long t1, t2;
   t1 = System.currentTimeMillis();
-  generate = validateStructurePlacement(world, x, y, z, face, template, map);
+  generate = template.getValidationSettings().validatePlacement(world, x, y, z, face, template);
   if(Statics.DEBUG)
     {
     AWLog.logDebug("validation took: "+(System.currentTimeMillis()-t1+" ms"));   
@@ -177,224 +146,11 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
 
 private void generateStructureAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {
-  doStructurePrePlacement(world, x, y, z, face, template);
+  template.getValidationSettings().preGeneration(world, x, y, z, face, template);
   StructureBuilder builder = new StructureBuilder(world, template, face, x, y, z);
   builder.instantConstruction();
   map.setGeneratedAt(world, x, y, z, face, template);
   map.markDirty();
-  }
-
-private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
-  {
-  StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
-  StructureValidationSettingsDefault settings = template.getValidationSettings();
-  int borderSize = settings.getBorderSize();
- 
-  /**
-   * check for intersecting bounding boxes
-   */
-  int xs = bb.getXSize();
-  int zs = bb.getZSize();
-  int size = ((xs > zs ? xs : zs)/16)+3;
-  Collection<StructureEntry> bbCheckList = map.getEntriesNear(world, x, z, size, true, new ArrayList<StructureEntry>());
-  bb.expand(borderSize, 0, borderSize);//expand by border-size to help catch issues of border cutting into other structures
-  for(StructureEntry entry : bbCheckList)
-    {
-    if(bb.collidesWith(entry.bb))
-      {
-      AWLog.logDebug("invalid placement, intersects with other structure");
-      return false;
-      }
-    }
-  bb.expand(-borderSize, 0, -borderSize);//un-expand the bb, so we can continue to use it for the rest of the checks
-  
-  /**
-   * search the entire structure area, min->max for valid target conditions.
-   */
-  int bx, by, bz;
-  for(bx = bb.min.x-borderSize; bx <= bb.max.x+borderSize ; bx++)
-    {
-    for(bz = bb.min.z-borderSize; bz <= bb.max.z+borderSize ; bz++)
-      {      
-      if(bx < bb.min.x || bx > bb.max.x || bz < bb.min.z || bz > bb.max.z)//is outside bounds, must be a border block
-        {
-        if(!validateStructureBlock(world, bx, bz, template.yOffset, settings, bb, true))
-          {
-          return false;
-          }
-        }
-      else//is inside bounds, must be a regular structure block
-        {
-        if(!validateStructureBlock(world, bx, bz, template.yOffset, settings, bb, false))
-          {
-          return false;
-          }
-        }
-      }
-    }
-  return true;
-  }
-
-private boolean validateStructureBlock(World world, int x, int z, int yOffset, StructureValidationSettingsDefault settings, StructureBB bb, boolean border)
-  {
-  Set<String> targetBlocks = border? settings.getAcceptedTargetBlocksBorder() : settings.getAcceptedTargetBlocks();
-  Set<String> clearBlocks = settings.getAcceptedClearBlocks();
-  int fill = border? settings.getBorderMaxFill() : settings.getMaxFill();
-  int leveling = border? settings.getBorderMaxLeveling() : settings.getMaxLeveling();
-  int id;
-  int minY = bb.min.y-fill-1;
-  if(border)
-    {
-    minY += yOffset;
-    }
-  Chunk chunk = world.getChunkFromBlockCoords(x, z);
-  int inChunkX = x & 15;
-  int inChunkZ = z & 15;  
-  Block block;
-  for(int y = world.provider.getActualHeight(); y >= minY-1 && y>=0; y--)
-    {    
-    id = chunk.getBlockID(inChunkX, y, inChunkZ);
-    block = Block.blocksList[id];
-    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y < minY && (block==null || !targetBlocks.contains(block.getUnlocalizedName())))
-      {
-      AWLog.logDebug("invalid edge border depth or target block: y: "+y + " minY: "+minY+ " block: "+block);
-      return false;//fail for border-edge-depth test
-      }
-    else if(block==null || skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
-      {//block is within the area to be cleared or filled, but not a base target block -- skip empty blocks or 'skippable' blocks
-      continue;
-      }
-    else if(leveling>=0 && y >= bb.min.y + yOffset + leveling)
-      {//max leveling target too high
-      AWLog.logDebug("block too high for structure leveling value");
-      return false;
-      }
-    else if(leveling>=0 && !settings.isPreserveBlocks() && y >= bb.min.y+yOffset && !clearBlocks.contains(block.getUnlocalizedName()))
-      {//invalid block to clear
-      AWLog.logDebug("invalid clearing block");
-      return false;
-      }
-    else if(fill>=0 && y < (border? bb.min.y+yOffset : bb.min.y) && !targetBlocks.contains(block.getUnlocalizedName()))
-      {//invalid block to fill-on-top of
-      AWLog.logDebug("invalid fill-on-top-of block: "+block.getUnlocalizedName());
-      return false;
-      }    
-    }    
-  return true;
-  }
-
-private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
-  {
-  StructureBB bb = new StructureBB(x, y, z, face, template);
-  int borderSize = template.getValidationSettings().getBorderSize();
-  for(int bx = bb.min.x-borderSize; bx<= bb.max.x+borderSize; bx++)
-    {
-    for(int bz = bb.min.z-borderSize; bz<= bb.max.z+borderSize; bz++)
-      {
-      if(bx<bb.min.x || bx>bb.max.x || bz<bb.min.z || bz>bb.max.z)
-        {//is border block, do border clear/fill
-        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, true);
-        }
-      else
-        {//is structure block, do structure clear/fill
-        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, false);
-        }
-      }
-    }  
-  }
-
-private void doStructurePrePlacementBlockPlace(World world, int x, int z, StructureTemplate template, StructureBB bb, boolean border)
-  {
-  boolean doLeveling = border ? template.getValidationSettings().isDoBorderLeveling() : template.getValidationSettings().isDoLeveling();
-  boolean doFill = border ? template.getValidationSettings().isDoBorderFill() : template.getValidationSettings().isDoFillBelow();
-  int leveling = border? template.getValidationSettings().getBorderMaxLeveling() : template.getValidationSettings().getMaxLeveling();
-  int fill = border? template.getValidationSettings().getBorderMaxFill() : template.getValidationSettings().getMaxFill();
-  
-  /**
-   * most of this is just to try and minimize the total Y range that is examined for clear/fill
-   */
-  int minFillY = bb.min.y - fill;
-  if(border){minFillY+=template.yOffset;}
-  int maxFillY = (minFillY + fill) -1;
-  
-  int minLevelY = bb.min.y + template.yOffset;
-  int maxLevelY = minLevelY + leveling;
-  
-  int minY = minFillY< minLevelY ? minFillY : minLevelY;
-  if(!border)
-    {
-    if(fill>0)
-      {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0    
-      int topEmptyBlockY = getTargetY(world, x, z)+1;
-      minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
-      }    
-    }  
-  else if(template.getValidationSettings().isGradientBorder())
-    {
-    int step = getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
-    int stepHeight = fill / template.getValidationSettings().getBorderSize();
-    maxFillY -= step*stepHeight;
-    minLevelY += step*stepHeight;
-    minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
-    }
-  
-  minY = minY<=0 ? 1 : minY;
-  int maxY = maxFillY> maxLevelY ? maxFillY : maxLevelY;
-  
-  int xInChunk = x&15;
-  int zInChunk = z&15;  
-  Chunk chunk = world.getChunkFromBlockCoords(x, z);
-  
-  int id;
-  Block block;
-  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
-  int fillBlockID = Block.grass.blockID;
-  if(biome!=null && biome.topBlock>=1)
-    {
-    fillBlockID = biome.topBlock;
-    }
-  for(int y = minY; y <=maxY; y++)
-    {    
-    id = world.getBlockId(x, y, z);
-    block = Block.blocksList[id];
-    if(doLeveling && leveling>0 && y>=minLevelY)
-      {
-      if(block!=null && !skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
-        }
-      }
-    if(doFill && fill>0 && y<=maxFillY)
-      {
-      if(block==null || !skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
-        }
-      }
-    }
-  }
-
-private int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)
-  {
-  int steps = 0;
-  if(x<minX-1)
-    {
-    steps += (minX-1) - x;
-    }
-  else if(x > maxX+1)
-    {
-    steps += x - (maxX+1);
-    }  
-  if(z<minZ-1)
-    {
-    steps += (minZ-1) - z;
-    }
-  else if(z > maxZ+1)
-    {
-    steps += z - (maxZ+1);
-    }  
-//  AWLog.logDebug("getting step number for: "+x+","+z+" min: "+minX+","+minZ+" :: max: "+maxX+","+maxZ + " stepHeight: "+steps);
-  return steps;
   }
 
 private class DelayedGenerationEntry

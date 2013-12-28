@@ -31,9 +31,8 @@ import java.util.Scanner;
 
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.build.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
@@ -97,7 +96,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   List<TemplateRuleEntity> parsedEntities = new ArrayList<TemplateRuleEntity>();
   TemplateRule[] ruleArray = null;
   TemplateRuleEntity[] entityRuleArray = null;
-  StructureValidationSettingsDefault validation = null;  
+  StructureValidator validation = null;  
   List<String> groupedLines = new ArrayList<String>();
   
   
@@ -179,7 +178,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
           break;
           }
         }
-      validation = parseValidation(groupedLines);    
+      validation = StructureValidator.parseValidator(groupedLines);    
       groupedLines.clear();
       }
     
@@ -203,9 +202,9 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
         {
         parsedRules.add(rule);
         if(rule.ruleNumber>highestParsedRule)
-        {
-        	highestParsedRule = rule.ruleNumber;
-        }
+          {
+          highestParsedRule = rule.ruleNumber;
+          }
         }
       groupedLines.clear();
       } 
@@ -281,7 +280,7 @@ private TemplateRule parseRule(List<String> templateLines, String ruleType)
   return TemplateRule.getRule(templateLines, ruleType);
   }
 
-private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, TemplateRuleEntity[] entityRules, StructureValidationSettingsDefault validation)
+private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, TemplateRuleEntity[] entityRules, StructureValidator validation)
   {
   StructureTemplate template = new StructureTemplate(name, x, y, z, xo, yo, zo);
   template.setRuleArray(rules);
@@ -310,13 +309,6 @@ private void parseLayer(List<String> templateLines, int yLayer, int xSize, int y
       }
     z++;
     }
-  }
-
-private StructureValidationSettingsDefault parseValidation(List<String> lines)
-  {
-  StructureValidationSettingsDefault validation = new StructureValidationSettingsDefault();
-  validation.parseSettings(lines);
-  return validation;
   }
 
 }

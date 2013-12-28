@@ -27,10 +27,9 @@ import java.io.IOException;
 import java.util.Calendar;
 
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.build.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateExporter
@@ -99,13 +98,13 @@ public static void exportTo(StructureTemplate template, File directory)
     }
   }
 
-private static void writeValidationSettings(StructureValidationSettingsDefault settings, BufferedWriter writer) throws IOException
+private static void writeValidationSettings(StructureValidator settings, BufferedWriter writer) throws IOException
   {
   writer.write("#### VALIDATION ####");    
   writer.newLine(); 
   writer.write("validation:");
   writer.newLine();
-  settings.writeSettings(writer); 
+  StructureValidator.writeValidator(writer, settings);
   writer.write(":endvalidation");
   writer.newLine();
   writer.newLine();

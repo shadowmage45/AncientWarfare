@@ -35,7 +35,7 @@ import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettingsDefault;
+import shadowmage.ancient_structures.common.template.build.StructureValidationType;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
@@ -108,36 +108,38 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
 //  tag.setInteger("value", clusterLine.getIntVal());
 //  tag.setInteger("dupe", minDuplicateLine.getIntVal());
 
-  StructureValidationSettingsDefault settings = new StructureValidationSettingsDefault();
+//  StructureValidationSettingsDefault settings = new StructureValidationSettingsDefault();
+//  
+//  settings.setWorldGenEnabled(tag.getBoolean("world"));
+//  settings.setUnique(tag.getBoolean("unique"));
+//  settings.setSurvivalEnabled(tag.getBoolean("survival"));
+//  settings.setDoLeveling(tag.getBoolean("doLeveling"));
+//  settings.setDoFillBelow(tag.getBoolean("doFill"));
+//  settings.setDoBorderLeveling(tag.getBoolean("doBorderLeveling"));
+//  settings.setDoBorderFill(tag.getBoolean("doBorderFill"));
+//  settings.setPreserveBlocks(tag.getBoolean("preserveBlocks"));
+//  settings.setPreserveWater(tag.getBoolean("preserveWater"));
+//  settings.setPreserveWater(tag.getBoolean("preserveLava"));
+//  settings.setGradientBorder(tag.getBoolean("gradient"));
+//  settings.setBiomeWhiteList(tag.getBoolean("biomeWhiteList"));
+//  settings.setDimensionWhiteList(tag.getBoolean("dimensionWhiteList"));  
+//  
+//  
+//  settings.setMaxLeveling(tag.getInteger("leveling"));
+//  settings.setMaxFill(tag.getInteger("fill"));
+//  settings.setBorderSize(tag.getInteger("border"));
+//  settings.setBorderMaxLeveling(tag.getInteger("borderLeveling"));
+//  settings.setBorderMaxFill(tag.getInteger("borderFill"));
+//  settings.setSelectionWeight(tag.getInteger("weight"));
+//  settings.setClusterValue(tag.getInteger("value"));
+//  settings.setMinDuplicateDistance(tag.getInteger("dupe"));  
+//  settings.setAcceptedDimensions(tag.getIntArray("acceptedDimensions"));  
+//  if(tag.hasKey("biomeList")){}//TODO
+//  if(tag.hasKey("targetBlocksList")){}//TODO
+//  if(tag.hasKey("clearBlocksList")){}//TODO
+//  template.setValidationSettings(settings);
   
-  settings.setWorldGenEnabled(tag.getBoolean("world"));
-  settings.setUnique(tag.getBoolean("unique"));
-  settings.setSurvivalEnabled(tag.getBoolean("survival"));
-  settings.setDoLeveling(tag.getBoolean("doLeveling"));
-  settings.setDoFillBelow(tag.getBoolean("doFill"));
-  settings.setDoBorderLeveling(tag.getBoolean("doBorderLeveling"));
-  settings.setDoBorderFill(tag.getBoolean("doBorderFill"));
-  settings.setPreserveBlocks(tag.getBoolean("preserveBlocks"));
-  settings.setPreserveWater(tag.getBoolean("preserveWater"));
-  settings.setPreserveWater(tag.getBoolean("preserveLava"));
-  settings.setGradientBorder(tag.getBoolean("gradient"));
-  settings.setBiomeWhiteList(tag.getBoolean("biomeWhiteList"));
-  settings.setDimensionWhiteList(tag.getBoolean("dimensionWhiteList"));  
-  
-  
-  settings.setMaxLeveling(tag.getInteger("leveling"));
-  settings.setMaxFill(tag.getInteger("fill"));
-  settings.setBorderSize(tag.getInteger("border"));
-  settings.setBorderMaxLeveling(tag.getInteger("borderLeveling"));
-  settings.setBorderMaxFill(tag.getInteger("borderFill"));
-  settings.setSelectionWeight(tag.getInteger("weight"));
-  settings.setClusterValue(tag.getInteger("value"));
-  settings.setMinDuplicateDistance(tag.getInteger("dupe"));  
-  settings.setAcceptedDimensions(tag.getIntArray("acceptedDimensions"));  
-  if(tag.hasKey("biomeList")){}//TODO
-  if(tag.hasKey("targetBlocksList")){}//TODO
-  if(tag.hasKey("clearBlocksList")){}//TODO
-  template.setValidationSettings(settings);  
+  template.setValidationSettings(StructureValidationType.GROUND.getValidator().setDefaults(template));
   if(include)
     {
     StructureTemplateManager.instance().addTemplate(template);    

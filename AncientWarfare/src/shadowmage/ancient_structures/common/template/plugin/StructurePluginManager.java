@@ -23,16 +23,12 @@ package shadowmage.ancient_structures.common.template.plugin;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWFramework;
-import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.common.template.build.StructureValidationSettings;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginAutomation;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
@@ -44,9 +40,6 @@ import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 public class StructurePluginManager
 {
 
-private List<StructureValidationPlugin> loadedValidationPlugins = new ArrayList<StructureValidationPlugin>();
-private HashMap<String, Class<? extends StructureValidationSettings>> validationClassesByName = new HashMap<String, Class<? extends StructureValidationSettings>>();
-private HashMap<Class<? extends StructureValidationSettings>, String> validationClassesByClass = new HashMap<Class<? extends StructureValidationSettings>, String>();
 
 private List<StructureContentPlugin> loadedContentPlugins = new ArrayList<StructureContentPlugin>();
 
@@ -74,21 +67,11 @@ public void loadPlugins()
     plugin.addHandledBlocks(this);
     plugin.addHandledEntities(this);
     }
-  
-  for(StructureValidationPlugin plugin : this.loadedValidationPlugins)
-    {
-    plugin.registerValidationClasses(this);
-    }
   }
 
 public void addPlugin(StructureContentPlugin plugin)
   {
   loadedContentPlugins.add(plugin);
-  }
-
-public void addPlugin(StructureValidationPlugin plugin)
-  {
-  loadedValidationPlugins.add(plugin);
   }
 
 public String getPluginNameForEntity(Class<? extends Entity> entityClass)
@@ -222,12 +205,6 @@ public void registerBlockHandler(String pluginName, Block block, Class<? extends
   ruleByID.put(pluginName, ruleClass);
   idByRuleClass.put(ruleClass, pluginName);
   pluginByBlock.put(block, pluginName);  
-  }
-
-public void registerValidationClass(String pluginName, Class<? extends StructureValidationSettings> validationClass)
-  {
-  validationClassesByClass.put(validationClass, pluginName);
-  validationClassesByName.put(pluginName, validationClass);
   }
 
 }
