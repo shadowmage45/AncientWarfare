@@ -22,23 +22,17 @@ package shadowmage.ancient_structures.common.template.build;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.world_gen.StructureEntry;
-import shadowmage.ancient_structures.common.world_gen.StructureMap;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public class StructureValidatorGround extends StructureValidator
@@ -170,6 +164,9 @@ protected void setDefaultSettings(StructureTemplate template)
   this.borderMaxLeveling = size;
   this.maxLeveling = template.ySize-template.yOffset;
   this.maxFill = size;
+  
+  
+
   }
 
 @Override
@@ -184,8 +181,7 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-
-  return validateStructurePlacement(world, x, y, z, face, template, bb);
+  return validateStructurePlacement3(world, x, y, z, face, template, bb);
   }
 
 @Override
@@ -194,10 +190,71 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
   doStructurePrePlacement(world, x, y, z, face, template);
   }
 
-private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+private boolean validateStructurePlacement3(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
+  /**
+   *  
+   * when validating, need to check:
+   *    check for missing edge depth/overhang height, and target blocks along outside edge (including border, single check on very outskirts of template)
+   *    check for clearing blocks within structure bounds??
+   *    check for cut-in height along structure edge
+   *    
+   */
+  int bx, bz, bottomY, topY;
+  bottomY = borderSize > 0 ? bb.min.y + template.yOffset - borderMaxFill : bb.min.y - maxFill;
+  topY = borderSize> 0 ? bb.min.y+template.yOffset + borderMaxLeveling : bb.min.y + template.yOffset + maxLeveling;
+  int maxFillY = borderSize > 0 ? bb.min.y+template.yOffset-1 : bb.min.y-1;
+  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
+    {
+    bz = bb.min.z-borderSize;
+    if(!validateBlock(world, bx, bz, bottomY, topY, maxFillY))
+      {
+      return false;
+      }    
+    bz = bb.max.z+borderSize;
+    if(!validateBlock(world, bx, bz, bottomY, topY, maxFillY))
+      {
+      return false;
+      }
+    }
+  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
+    {
+    bx = bb.min.x-borderSize;
+    if(!validateBlock(world, bx, bz, bottomY, topY, maxFillY))
+      {
+      return false;
+      }    
+    bx = bb.max.x+borderSize;
+    if(!validateBlock(world, bx, bz, bottomY, topY, maxFillY))
+      {
+      return false;
+      }
+    }
+  return true;
+  }
 
-  
+private boolean validateBlock(World world, int x, int z, int minY, int maxY, int maxFillY)
+  {
+  int topEmptyY = WorldStructureGenerator.getTargetY(world, x, z)+1;
+  if(topEmptyY<=minY || topEmptyY>maxY)
+    {
+    AWLog.logDebug("rejected for leveling or depth test. foundY: "+topEmptyY + " min: "+minY +" max:"+maxY +  " at: "+x+","+topEmptyY+","+z);
+    return false;
+    }
+  if(topEmptyY-1<=maxFillY)
+    {
+    Block block = Block.blocksList[world.getBlockId(x, topEmptyY-1, z)];
+    if(block==null || !acceptedTargetBlocks.contains(block.getUnlocalizedName()))
+      {
+      AWLog.logDebug("rejected for invalid target block: "+(block==null ? "air" : block.getUnlocalizedName())+  " at: "+x+","+topEmptyY+","+z);
+      return false;
+      }
+    }  
+  return true;
+  }
+
+private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {  
   /**
    * search the entire structure area, min->max for valid target conditions.
    */
@@ -348,7 +405,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     block = Block.blocksList[id];
     if(doLeveling && leveling>0 && y>=minLevelY)
       {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && acceptedClearBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
         }
