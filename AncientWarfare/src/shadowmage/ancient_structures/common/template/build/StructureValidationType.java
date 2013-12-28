@@ -70,6 +70,6 @@ public static StructureValidationType getTypeFromName(String name)
   else if(name.equals("underwater")){return UNDERWATER;}
   else if(name.equals("island")){return ISLAND;}
   else if(name.equals("harbor")){return HARBOR;}
-  return GROUND;
+  return null;
   }
 }
