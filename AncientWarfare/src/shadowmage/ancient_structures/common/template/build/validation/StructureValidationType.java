@@ -25,7 +25,7 @@ public enum StructureValidationType
 GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", null),
 SKY("sky", null),
-WATER("water", null),
+WATER("water", StructureValidatorWater.class),
 UNDERWATER("underwater", null),
 ISLAND("island", null),
 HARBOR("harbor", null);

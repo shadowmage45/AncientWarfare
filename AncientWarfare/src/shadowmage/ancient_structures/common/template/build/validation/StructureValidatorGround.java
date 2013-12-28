@@ -253,7 +253,7 @@ private boolean validateBlock(World world, int x, int z, int minY, int maxY, int
       }
     }  
   block = Block.blocksList[world.getBlockId(x, topEmptyY, z)];
-  if(block!=null && !acceptedTargetBlocks.contains(block.getUnlocalizedName()))
+  if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && !acceptedTargetBlocks.contains(block.getUnlocalizedName()))
     {
     AWLog.logDebug("rejected for invalid target block: "+block.getUnlocalizedName()+  " at: "+x+","+topEmptyY+","+z);
     return false;
@@ -413,7 +413,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     block = Block.blocksList[id];
     if(doLeveling && leveling>0 && y>=minLevelY)
       {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && acceptedClearBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && (!WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) || chunk.getBlockID(xInChunk, y-1, zInChunk)==0) && acceptedClearBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
         }
