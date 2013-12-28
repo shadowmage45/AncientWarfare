@@ -241,15 +241,22 @@ private boolean validateBlock(World world, int x, int z, int minY, int maxY, int
     AWLog.logDebug("rejected for leveling or depth test. foundY: "+topEmptyY + " min: "+minY +" max:"+maxY +  " at: "+x+","+topEmptyY+","+z);
     return false;
     }
+  Block block;
   if(topEmptyY-1<=maxFillY)
     {
-    Block block = Block.blocksList[world.getBlockId(x, topEmptyY-1, z)];
+    block = Block.blocksList[world.getBlockId(x, topEmptyY-1, z)];
     if(block==null || !acceptedTargetBlocks.contains(block.getUnlocalizedName()))
       {
-      AWLog.logDebug("rejected for invalid target block: "+(block==null ? "air" : block.getUnlocalizedName())+  " at: "+x+","+topEmptyY+","+z);
+      AWLog.logDebug("rejected for invalid target block: "+(block==null ? "air" : block.getUnlocalizedName())+  " at: "+x+","+(topEmptyY-1)+","+z);
       return false;
       }
     }  
+  block = Block.blocksList[world.getBlockId(x, topEmptyY, z)];
+  if(block!=null && !acceptedTargetBlocks.contains(block.getUnlocalizedName()))
+    {
+    AWLog.logDebug("rejected for invalid target block: "+block.getUnlocalizedName()+  " at: "+x+","+topEmptyY+","+z);
+    return false;
+    }
   return true;
   }
 
