@@ -63,9 +63,11 @@ public StructureValidator getValidator()
 
 public static StructureValidationType getTypeFromName(String name)
   {
+  if(name==null){return null;}
   name = name.toLowerCase();
   if(name.equals("ground")){return GROUND;}
   else if(name.equals("underground")){return UNDERGROUND;}
+  else if(name.equals("sky")){return SKY;}
   else if(name.equals("water")){return WATER;}
   else if(name.equals("underwater")){return UNDERWATER;}
   else if(name.equals("island")){return ISLAND;}

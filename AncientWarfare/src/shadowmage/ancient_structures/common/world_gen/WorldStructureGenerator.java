@@ -54,6 +54,7 @@ skippableWorldGenBlocks.add(Block.plantRed.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
+skippableWorldGenBlocks.add(Block.snow.getUnlocalizedName());
 }
 
 private boolean isGenerating = false;
@@ -64,6 +65,7 @@ private Random rng = new Random();
 public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider)
   {
   if(!AWStructureStatics.enableStructureGeneration){return;}
+//  if(rng.nextInt(10)>0){return;}
   if(isGenerating)
     {
     delayedChunks.add(new DelayedGenerationEntry(chunkX, chunkZ, world, chunkGenerator, chunkProvider));

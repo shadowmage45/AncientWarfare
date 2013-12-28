@@ -20,109 +20,165 @@
  */
 package shadowmage.ancient_structures.common.template.build;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.gamedata.AWGameData;
-import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.world_gen.StructureEntry;
-import shadowmage.ancient_structures.common.world_gen.StructureMap;
-import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.world_gen.StructureEntry;
+import shadowmage.ancient_structures.common.world_gen.StructureMap;
+import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public class StructureValidatorGround extends StructureValidator
 {
-/**
- * given an area with a source point, how far above the source-point is the highest acceptable block located? 
- * e.g. a 'normal' setting would be the same height as the structures above-ground height which would allow
- * generation of a structure with no blocks left 'hanging' above it, and minimal cut-in into a cliffside/etc
- * e.g. a 'perfect' setting would be 0, meaning the ground must be flat and level prior to generation
- * 
- * negative values imply to skip leveling checking
- */
+
+public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
+public static HashSet<String> defaultClearBlocks = new HashSet<String>();
+
+static
+{
+defaultTargetBlocks.add(Block.dirt.getUnlocalizedName());
+defaultTargetBlocks.add(Block.grass.getUnlocalizedName());
+defaultTargetBlocks.add(Block.stone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.sand.getUnlocalizedName());
+defaultTargetBlocks.add(Block.gravel.getUnlocalizedName());
+defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.blockClay.getUnlocalizedName());
+defaultTargetBlocks.add(Block.oreIron.getUnlocalizedName());
+defaultTargetBlocks.add(Block.oreCoal.getUnlocalizedName());
+
+defaultClearBlocks.addAll(defaultTargetBlocks);
+defaultClearBlocks.add(Block.waterStill.getUnlocalizedName());
+defaultClearBlocks.add(Block.lavaStill.getUnlocalizedName());
+defaultClearBlocks.add(Block.cactus.getUnlocalizedName());
+defaultClearBlocks.add(Block.vine.getUnlocalizedName());
+defaultClearBlocks.add(Block.tallGrass.getUnlocalizedName());
+defaultClearBlocks.add(Block.wood.getUnlocalizedName());
+defaultClearBlocks.add(Block.plantRed.getUnlocalizedName());
+defaultClearBlocks.add(Block.plantYellow.getUnlocalizedName());
+defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
+defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
+defaultClearBlocks.add(Block.wood.getUnlocalizedName());
+defaultClearBlocks.add(Block.snow.getUnlocalizedName());
+}
+
 int maxLeveling;
-
-/**
- * if true, will clear blocks in leveling bounds PRIOR to template construction.  Set to false if you wish to
- * preserve any existing blocks within the structure bounds.
- */
 boolean doLeveling;
-
-/**
- * given an area with a source point, how far below the source point may 'holes' extend into the ground along the
- * edges of the structure.
- * e.g. a 'normal' setting would be 1-2 blocks, which would ensure that the chosen site was flat enough that it would
- * generate with minimal under-fill.
- * e.g. an 'extreme' setting to force-placement might be 4-8 blocks or more.  Placement would often be ugly with only
- * part of the structure resting on the ground.
- * 
- * negative values imply to skip edge-depth checking
- */
 int maxFill;
-
-/**
- * if true, will fill _directly_ below the structure down to the specified number of blocks from maxMissingEdgeDepth
- * filling will occur PRIOR to template construction.
- */
 boolean doFillBelow;
-
-/**
- * the size of the border around the base structure BB to check for additional functions
- * 0 or negative values denote no border.
- */
 int borderSize;
-
-/**
- * same as with structure-leveling -- how much irregularity can there be above the chose ground level
- * negative values imply to skip border leveling tests
- */
 int borderMaxLeveling;
 boolean doBorderLeveling;
 
-/**
- * how irregular can the border surrounding the structure be in the -Y direction?
- * negative values imply to skip border depth tests
- */
 int borderMaxFill;
 boolean doBorderFill;
-
 boolean gradientBorder;
 
-
-
 Set<String> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
-Set<String> acceptedTargetBlocksBorder;
-Set<String> acceptedTargetBlocksBorderRear;
-
-
 Set<String> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
-
-/**
- * world generation selection and clustering settings
- */
 
 
 public StructureValidatorGround()
   {
   super(StructureValidationType.GROUND);
+  acceptedTargetBlocks = new HashSet<String>();
+  acceptedClearBlocks = new HashSet<String>();
   }
 
 @Override
-protected void readFromNBT(NBTTagCompound tag)
+protected void readFromLines(List<String> lines)
   {
+  for(String line : lines)
+    {
+    if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("borderleveling=")){borderMaxLeveling = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("borderfill=")){borderMaxFill = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("doleveling=")){doLeveling = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("dofill=")){doFillBelow = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("doborderleveling=")){doBorderLeveling = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("gradientborder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("validtargetblocks=")){parseStringsToSet(acceptedTargetBlocks, StringTools.safeParseStringArray("=", line), false);}
+    else if(line.toLowerCase().startsWith("validclearingblocks=")){parseStringsToSet(acceptedClearBlocks, StringTools.safeParseStringArray("=", line), false);}
+    }
+  }
 
+private void parseStringsToSet(Set<String> toFill, String[] data, boolean lowerCase)
+  {
+  for(String name : data)
+    {
+    toFill.add(lowerCase? name.toLowerCase() : name);
+    }
   }
 
 @Override
-protected void writeToNBT(NBTTagCompound tag)
+protected void write(BufferedWriter writer) throws IOException
   {
+  writer.write("leveling="+maxLeveling);
+  writer.newLine();
+  writer.write("fill="+maxFill);
+  writer.newLine();
+  writer.write("border="+borderSize);
+  writer.newLine();
+  writer.write("borderLeveling="+borderMaxLeveling);
+  writer.newLine();
+  writer.write("borderFill="+borderMaxFill);
+  writer.newLine();
+  writer.write("doLeveling="+doLeveling);
+  writer.newLine();
+  writer.write("doFill="+doFillBelow);
+  writer.newLine();
+  writer.write("doBorderLeveling="+doBorderLeveling);
+  writer.newLine();
+  writer.write("doBorderFill="+doBorderFill);
+  writer.newLine();  
+  writer.write("gradientBorder="+gradientBorder);
+  writer.newLine();
+  writer.write("validTargetBlocks="+StringTools.getCSVValueFor(acceptedTargetBlocks.toArray(new String[acceptedTargetBlocks.size()])));
+  writer.newLine();
+  writer.write("validClearingBlocks="+StringTools.getCSVValueFor(acceptedClearBlocks.toArray(new String[acceptedClearBlocks.size()])));
+  writer.newLine();  
+  }
 
+@Override
+protected void setDefaultSettings(StructureTemplate template)
+  {
+  this.acceptedClearBlocks.addAll(defaultClearBlocks);
+  this.acceptedTargetBlocks.addAll(defaultTargetBlocks);
+  this.doBorderFill = true;
+  this.doBorderLeveling = true;
+  this.doFillBelow = true;
+  this.doLeveling = true;
+  this.gradientBorder = true;  
+  int size = (template.ySize-template.yOffset)/3;
+  this.borderSize = size;
+  this.borderMaxFill = size;
+  this.borderMaxLeveling = size;
+  this.maxLeveling = template.ySize-template.yOffset;
+  this.maxFill = size;
+  }
+
+@Override
+public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
+  {
+  if( y <= template.yOffset+maxFill){return false;}
+  Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
+  if(block==null || !acceptedTargetBlocks.contains(block.getUnlocalizedName())){return false;}
+  return true;
   }
 
 @Override
@@ -186,7 +242,7 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
 
 private boolean validateStructureBlock(World world, int x, int z, int yOffset, StructureBB bb, boolean border)
   {
-  Set<String> targetBlocks = border? acceptedTargetBlocksBorder : acceptedTargetBlocks;
+  Set<String> targetBlocks = acceptedTargetBlocks;
   Set<String> clearBlocks = acceptedClearBlocks;
   int fill = border? borderMaxFill : maxFill;
   int leveling = border? borderMaxLeveling : maxLeveling;
@@ -200,11 +256,11 @@ private boolean validateStructureBlock(World world, int x, int z, int yOffset, S
   int inChunkX = x & 15;
   int inChunkZ = z & 15;  
   Block block;
-  for(int y = world.provider.getActualHeight(); y >= minY-1 && y>=0; y--)
+  for(int y = world.provider.getActualHeight(); y >= minY && y>=0; y--)
     {    
     id = chunk.getBlockID(inChunkX, y, inChunkZ);
     block = Block.blocksList[id];
-    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y < minY && (block==null || !targetBlocks.contains(block.getUnlocalizedName())))
+    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y <= minY && (block==null || !targetBlocks.contains(block.getUnlocalizedName())))
       {
       AWLog.logDebug("invalid edge border depth or target block: y: "+y + " minY: "+minY+ " block: "+block);
       return false;//fail for border-edge-depth test
@@ -215,7 +271,7 @@ private boolean validateStructureBlock(World world, int x, int z, int yOffset, S
       }
     else if(leveling>=0 && y >= bb.min.y + yOffset + leveling)
       {//max leveling target too high
-      AWLog.logDebug("block too high for structure leveling value");
+      AWLog.logDebug("block too high for structure leveling value: "+y+ " target: "+(bb.min.y+yOffset+leveling));
       return false;
       }
     else if(leveling>=0 && !isPreserveBlocks() && y >= bb.min.y+yOffset && !clearBlocks.contains(block.getUnlocalizedName()))
@@ -345,18 +401,4 @@ private int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)
   return steps;
   }
 
-@Override
-protected void setDefaultSettings(StructureTemplate template)
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
-@Override
-public boolean shouldIncludeForSelection(World world, int x, int y, int z,
-    int face, StructureTemplate template)
-  {
-  // TODO Auto-generated method stub
-  return false;
-  }
 }

@@ -154,10 +154,7 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   for(StructureTemplate template : potentialStructures)//loop through initial structures, only adding to 2nd list those which meet biome, unique, value, and minDuplicate distance settings
     {
     settings = template.getValidationSettings();
-    if(!settings.shouldIncludeForSelection(world, x, y, z, face, template))
-      {
-      continue;
-      }        
+     
     boolean dimensionFound = false;
     boolean dimensionMatch = !settings.isDimensionWhiteList();
     for(int i = 0; i < settings.getAcceptedDimensions().length; i++)
@@ -189,6 +186,10 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
         continue;
         }//skip if minDuplicate distance is not met
       }
+    if(!settings.shouldIncludeForSelection(world, x, y, z, face, template))
+      {
+      continue;
+      }   
     trimmedPotentialStructures.add(template);
     }  
   if(trimmedPotentialStructures.isEmpty()){return null;}

@@ -57,17 +57,13 @@ protected StructureValidator(StructureValidationType validationType)
   this.validationType = validationType;
   selectionWeight = 1;
   clusterValue = 1;  
+  minDuplicateDistance = 4;
+  biomeList = new HashSet<String>();
   }
 
-protected abstract void readFromNBT(NBTTagCompound tag);
-protected abstract void writeToNBT(NBTTagCompound tag);
+protected abstract void readFromLines(List<String> lines);
+protected abstract void write(BufferedWriter writer) throws IOException;
 protected abstract void setDefaultSettings(StructureTemplate template);
-
-public StructureValidator setDefaults(StructureTemplate template)
-  {
-  setDefaultSettings(template);
-  return this;
-  }
 
 public abstract boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template);
 
@@ -99,23 +95,19 @@ public static final StructureValidator parseValidator(List<String> lines)
     else if(line.toLowerCase().startsWith("selectionweight=")){selectionWeight = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("clustervalue=")){clusterValue = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("minduplicatedistance=")){duplicate = StringTools.safeParseInt("=", line);}    
-    else if(line.toLowerCase().startsWith("tag:"))
+    else if(line.toLowerCase().startsWith("data:"))
       {
       tagLines.add(line);
       while(it.hasNext() && (line=it.next())!=null)
         {
         tagLines.add(line);
-        if(line.toLowerCase().startsWith(":endtag"))
+        if(line.toLowerCase().startsWith(":enddata"))
           {
           break;
           }
         }
       }
     }
-  if(type==null)
-    {
-    return new StructureValidatorGround();
-    }  
   StructureValidationType validatorType = StructureValidationType.getTypeFromName(type);
   StructureValidator validator;
   if(validatorType==null)
@@ -125,8 +117,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   else
     {
     validator = validatorType.getValidator();
-    NBTTagCompound tag = NBTTools.readNBTFrom(tagLines);
-    validator.readFromNBT(tag);
+    validator.readFromLines(tagLines);
     }
   validator.dimensionWhiteList = dimension;
   validator.acceptedDimensions = dimensions;
@@ -141,7 +132,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   return validator;
   }
 
-private static void addBiomesToSet(Set<String> biomes, String[] names)
+private static final void addBiomesToSet(Set<String> biomes, String[] names)
   {
   for(String name : names)
     {
@@ -151,10 +142,6 @@ private static void addBiomesToSet(Set<String> biomes, String[] names)
 
 public static final void writeValidator(BufferedWriter out, StructureValidator validator) throws IOException
   {
-  NBTTagCompound tag = new NBTTagCompound();
-  validator.writeToNBT(tag);
-  List<String> lines = new ArrayList<String>();
-  NBTTools.writeNBTToLines(tag, lines);
   out.write("type="+validator.validationType.getName());  
   out.newLine();
   out.write("worldGenEnabled="+validator.worldGenEnabled);  
@@ -177,64 +164,65 @@ public static final void writeValidator(BufferedWriter out, StructureValidator v
   out.newLine();
   out.write("biomeList="+StringTools.getCSVValueFor(validator.biomeList.toArray(new String[validator.biomeList.size()])));
   out.newLine();
-  out.write("tag:");
-  for(String line : lines)
-    {
-    out.write(line);
-    out.newLine();
-    }  
-  out.write(":endtag");
+  out.write("data:");
+  out.newLine();
+  validator.write(out);
+  out.write(":enddata");
   out.newLine();
   }
 
-public int getSelectionWeight()
+public final StructureValidator setDefaults(StructureTemplate template)
+  {
+  setDefaultSettings(template);
+  return this;
+  }
+
+public final int getSelectionWeight()
   {
   return selectionWeight;
   }
 
-public int getClusterValue()
+public final int getClusterValue()
   {
   return clusterValue;
   }
 
-
-
-public boolean isWorldGenEnabled()
+public final boolean isWorldGenEnabled()
   {
   return worldGenEnabled;
   }
 
-public Set<String> getBiomeList()
+public final Set<String> getBiomeList()
   {
   return biomeList;
   }
 
-public boolean isPreserveBlocks()
+public final boolean isPreserveBlocks()
   {
   return preserveBlocks;
   }
 
-public boolean isBiomeWhiteList()
+public final boolean isBiomeWhiteList()
   {
   return biomeWhiteList;
   }
 
-public boolean isUnique()
+public final boolean isUnique()
   {
   return isUnique;
   }
 
-public boolean isDimensionWhiteList() 
+public final boolean isDimensionWhiteList() 
   {
 	return dimensionWhiteList;
 	}
 
-public int[] getAcceptedDimensions()
+public final int[] getAcceptedDimensions()
   {
   return acceptedDimensions;
   }
 
-public int getMinDuplicateDistance()
+public final int getMinDuplicateDistance()
   {
   return minDuplicateDistance;
   }
