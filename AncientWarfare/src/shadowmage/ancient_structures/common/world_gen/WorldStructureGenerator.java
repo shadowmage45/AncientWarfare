@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_structures.common.world_gen;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Random;
@@ -33,6 +35,7 @@ import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 import cpw.mods.fml.common.IWorldGenerator;
 
@@ -129,7 +132,20 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
   boolean generate = false;
   long t1, t2;
   t1 = System.currentTimeMillis();
-  generate = template.getValidationSettings().validatePlacement(world, x, y, z, face, template);
+  StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);  
+  int xs = bb.getXSize();
+  int zs = bb.getZSize();
+  int size = ((xs > zs ? xs : zs)/16)+3;
+  Collection<StructureEntry> bbCheckList = map.getEntriesNear(world, x, z, size, true, new ArrayList<StructureEntry>());  
+  for(StructureEntry entry : bbCheckList)
+    {
+    if(bb.collidesWith(entry.getBB()))
+      {
+      AWLog.logDebug("invalid placement, intersects with other structure");
+      return false;
+      }
+    }  
+  generate = template.getValidationSettings().validatePlacement(world, x, y, z, face, template, bb);
   if(Statics.DEBUG)
     {
     AWLog.logDebug("validation took: "+(System.currentTimeMillis()-t1+" ms"));   
@@ -137,7 +153,7 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
   if(generate)
     {    
     t2 = System.currentTimeMillis();
-    generateStructureAt(world, x, y, z, face, template, map);
+    generateStructureAt(world, x, y, z, face, template, map, bb);
     if(Statics.DEBUG)
       {
       AWLog.logDebug("generation took: "+(System.currentTimeMillis()-t2)+" ms");      
@@ -146,9 +162,9 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
   return generate;
   }
 
-private void generateStructureAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
+private void generateStructureAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map, StructureBB bb)
   {
-  template.getValidationSettings().preGeneration(world, x, y, z, face, template);
+  template.getValidationSettings().preGeneration(world, x, y, z, face, template, bb);
   StructureBuilder builder = new StructureBuilder(world, template, face, x, y, z);
   builder.instantConstruction();
   map.setGeneratedAt(world, x, y, z, face, template);

@@ -182,36 +182,21 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   }
 
 @Override
-public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
+public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  return validateStructurePlacement(world, x, y, z, face, template);
+
+  return validateStructurePlacement(world, x, y, z, face, template, bb);
   }
 
 @Override
-public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template)
+public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
   doStructurePrePlacement(world, x, y, z, face, template);
   }
 
-private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
+private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
-  StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
-  
-  int xs = bb.getXSize();
-  int zs = bb.getZSize();
-  int size = ((xs > zs ? xs : zs)/16)+3;
-  Collection<StructureEntry> bbCheckList = map.getEntriesNear(world, x, z, size, true, new ArrayList<StructureEntry>());
-  bb.expand(borderSize, 0, borderSize);//expand by border-size to help catch issues of border cutting into other structures
-  for(StructureEntry entry : bbCheckList)
-    {
-    if(bb.collidesWith(entry.getBB()))
-      {
-      AWLog.logDebug("invalid placement, intersects with other structure");
-      return false;
-      }
-    }
-  bb.expand(-borderSize, 0, -borderSize);//un-expand the bb, so we can continue to use it for the rest of the checks
+
   
   /**
    * search the entire structure area, min->max for valid target conditions.

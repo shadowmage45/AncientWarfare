@@ -67,9 +67,9 @@ protected abstract void setDefaultSettings(StructureTemplate template);
 
 public abstract boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template);
 
-public abstract boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template);
+public abstract boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
-public abstract void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template);
+public abstract void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
 public static final StructureValidator parseValidator(List<String> lines)
   {
