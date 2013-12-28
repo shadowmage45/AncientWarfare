@@ -163,7 +163,10 @@ public StructureValidationSettingsDefault()
   biomeList = new HashSet<String>();
   acceptedClearBlocks = new HashSet<String>();
   acceptedTargetBlocks = new HashSet<String>();
+  acceptedTargetBlocksBorder = new HashSet<String>();
+  acceptedTargetBlocksBorderRear = new HashSet<String>();
   acceptedDimensions = new int[]{};
+  
   acceptedClearBlocks.addAll(defaultClearBlocks);
   acceptedTargetBlocks.addAll(defaultTargetBlocks);
   acceptedTargetBlocksBorder.addAll(defaultBorderTargetBlocks);

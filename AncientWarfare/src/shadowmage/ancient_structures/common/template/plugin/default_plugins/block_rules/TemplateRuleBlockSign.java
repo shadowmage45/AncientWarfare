@@ -107,6 +107,7 @@ public void writeRuleData(NBTTagCompound tag)
 public void parseRuleData(NBTTagCompound tag)
   {
   super.parseRuleData(tag);
+  this.signContents = new String[4];
   for(int i = 0; i <4 ;i++)
     {
     this.signContents[i] = tag.getString("signContents"+i);

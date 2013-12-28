@@ -55,6 +55,6 @@ public int compare(StructureTemplateClient arg0, StructureTemplateClient arg1)
     {
     return 1;
     }
-  return arg0.name.compareTo(arg1.name);  
+  return a.compareTo(b);  
   }
 }

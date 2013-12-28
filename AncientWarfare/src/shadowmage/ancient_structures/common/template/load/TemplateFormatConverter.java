@@ -136,13 +136,13 @@ normalHandledEntities.add(EntityOcelot.class);//
 normalHandledEntities.add(EntityWither.class);//
 normalHandledEntities.add(EntitySnowman.class);//
 
-hangingEntities.add(EntityPainting.class);/**TODO**/
-hangingEntities.add(EntityItemFrame.class);/**TODO**/
+hangingEntities.add(EntityPainting.class);//TODO nbt datas
+hangingEntities.add(EntityItemFrame.class);//TODO nbt datas
 
 nbtEntities.add(EntityHorse.class);//TECHNICALLY NOOP, BUT HANDLED ANYWAY
 nbtEntities.add(EntityVillager.class);//
-nbtEntities.add(EntityMinecartChest.class);/**TODO**/
-nbtEntities.add(EntityMinecartHopper.class);/**TODO**/
+nbtEntities.add(EntityMinecartChest.class);//
+nbtEntities.add(EntityMinecartHopper.class);//
 nbtEntities.add(EntityMinecartEmpty.class);//
 nbtEntities.add(EntityMinecartFurnace.class);//
 nbtEntities.add(EntityMinecartTNT.class);//
@@ -482,6 +482,73 @@ lines.add("}");
 
 tag= NBTTools.readNBTFrom(lines);
 entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityMinecartTNT.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=1=Dir{0}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=3=TileY{4}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=3=TileX{465}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=3=TileZ{529}");
+lines.add("TAG=8=Motive{Bomb}");
+lines.add("TAG=1=Direction{2}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={465.5}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={528.9375}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=2=Fire{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={0.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("}");
+
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityPainting.class), tag);
+lines.clear();
+
+lines.add("TAG=10={");
+lines.add("TAG=1=Dir{3}");
+lines.add("TAG=9=Motion{");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("TAG=6={0.0}");
+lines.add("}");
+lines.add("TAG=1=OnGround{0}");
+lines.add("TAG=3=TileY{4}");
+lines.add("TAG=3=Dimension{0}");
+lines.add("TAG=3=TileX{463}");
+lines.add("TAG=2=Air{300}");
+lines.add("TAG=3=TileZ{527}");
+lines.add("TAG=1=Direction{3}");
+lines.add("TAG=9=Pos{");
+lines.add("TAG=6={464.0625}");
+lines.add("TAG=6={4.5}");
+lines.add("TAG=6={527.5}");
+lines.add("}");
+lines.add("TAG=3=PortalCooldown{0}");
+lines.add("TAG=2=Fire{0}");
+lines.add("TAG=5=FallDistance{0.0}");
+lines.add("TAG=9=Rotation{");
+lines.add("TAG=5={270.0}");
+lines.add("TAG=5={0.0}");
+lines.add("}");
+lines.add("TAG=1=Invulnerable{0}");
+lines.add("}");
+
+tag= NBTTools.readNBTFrom(lines);
+entityDefaultTags.put((String) EntityList.classToStringMapping.get(EntityItemFrame.class), tag);
 lines.clear();
 }
 
