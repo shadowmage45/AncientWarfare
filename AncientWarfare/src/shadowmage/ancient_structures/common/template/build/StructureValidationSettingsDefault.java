@@ -475,15 +475,23 @@ public void parseSettings(List<String> lines)
     else if(line.toLowerCase().startsWith("gradientborder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("accepteddimensions=")){acceptedDimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimensionWhiteList = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("acceptedbiomes=")){biomeList = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
-    else if(line.toLowerCase().startsWith("validtargetblocks=")){acceptedTargetBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
-    else if(line.toLowerCase().startsWith("validclearingblocks=")){acceptedClearBlocks = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
-    else if(line.toLowerCase().startsWith("validborderblocks=")){acceptedTargetBlocksBorder = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
-    else if(line.toLowerCase().startsWith("validborderblocksrear=")){acceptedTargetBlocksBorderRear = new HashSet<String>(Arrays.asList(StringTools.safeParseStringArray("=", line)));}
+    else if(line.toLowerCase().startsWith("acceptedbiomes=")){parseStringsToSet(biomeList, StringTools.safeParseStringArray("=", line), true);}
+    else if(line.toLowerCase().startsWith("validtargetblocks=")){parseStringsToSet(acceptedTargetBlocks, StringTools.safeParseStringArray("=", line), false);}
+    else if(line.toLowerCase().startsWith("validclearingblocks=")){parseStringsToSet(acceptedClearBlocks, StringTools.safeParseStringArray("=", line), false);}
+    else if(line.toLowerCase().startsWith("validborderblocks=")){parseStringsToSet(acceptedTargetBlocksBorder, StringTools.safeParseStringArray("=", line), false);}
+    else if(line.toLowerCase().startsWith("validborderblocksrear=")){parseStringsToSet(acceptedTargetBlocksBorderRear, StringTools.safeParseStringArray("=", line), false);}
     
     /**
      * TODO survival resource-list
      */
+    }
+  }
+
+private void parseStringsToSet(Set<String> toFill, String[] data, boolean lowerCase)
+  {
+  for(String name : data)
+    {
+    toFill.add(lowerCase? name.toLowerCase() : name);
     }
   }
 
