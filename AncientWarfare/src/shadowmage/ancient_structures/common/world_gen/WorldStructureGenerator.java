@@ -47,6 +47,9 @@ private WorldStructureGenerator(){}
 public static WorldStructureGenerator instance(){return instance;}
 public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
+public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
+public static HashSet<String> defaultClearBlocks = new HashSet<String>();
+
 static
 {
 skippableWorldGenBlocks.add(Block.cactus.getUnlocalizedName());
@@ -58,7 +61,32 @@ skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
 skippableWorldGenBlocks.add(Block.snow.getUnlocalizedName());
+
+defaultTargetBlocks.add(Block.dirt.getUnlocalizedName());
+defaultTargetBlocks.add(Block.grass.getUnlocalizedName());
+defaultTargetBlocks.add(Block.stone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.sand.getUnlocalizedName());
+defaultTargetBlocks.add(Block.gravel.getUnlocalizedName());
+defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
+defaultTargetBlocks.add(Block.blockClay.getUnlocalizedName());
+defaultTargetBlocks.add(Block.oreIron.getUnlocalizedName());
+defaultTargetBlocks.add(Block.oreCoal.getUnlocalizedName());
+
+defaultClearBlocks.addAll(defaultTargetBlocks);
+defaultClearBlocks.add(Block.waterStill.getUnlocalizedName());
+defaultClearBlocks.add(Block.lavaStill.getUnlocalizedName());
+defaultClearBlocks.add(Block.cactus.getUnlocalizedName());
+defaultClearBlocks.add(Block.vine.getUnlocalizedName());
+defaultClearBlocks.add(Block.tallGrass.getUnlocalizedName());
+defaultClearBlocks.add(Block.wood.getUnlocalizedName());
+defaultClearBlocks.add(Block.plantRed.getUnlocalizedName());
+defaultClearBlocks.add(Block.plantYellow.getUnlocalizedName());
+defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
+defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
+defaultClearBlocks.add(Block.wood.getUnlocalizedName());
+defaultClearBlocks.add(Block.snow.getUnlocalizedName());
 }
+
 
 private boolean isGenerating = false;
 private LinkedList<DelayedGenerationEntry> delayedChunks = new LinkedList<DelayedGenerationEntry>();
@@ -97,7 +125,7 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   int y = getTargetY(world, x, z)+1;  
   if(y<=0){return;}
   int face = rng.nextInt(4);
-  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, face, AWStructureStatics.chunkSearchRadius);
+  StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, face, AWStructureStatics.chunkSearchRadius);  
   int remainingClusterValue = WorldGenStructureManager.instance().getRemainingValue();//TODO use this to alter the random chance/range values to favor generating in clusters  
   if(Statics.DEBUG)
     {
@@ -127,12 +155,52 @@ public static int getTargetY(World world, int x, int z)
   return -1;
   }
 
+public static int getSeaFloorHeight(World world, int x, int z, int startY)
+  {
+  int y, id;  
+  for(y = startY; y>0; y--)
+    {
+    id = world.getBlockId(x, y, z);
+    if(id!=0 && id!=Block.waterMoving.blockID && id!=Block.waterStill.blockID)
+      {
+      break;
+      }
+    }
+  return y;
+  }
+
+public static int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)
+  {
+  int steps = 0;
+  if(x<minX-1)
+    {
+    steps += (minX-1) - x;
+    }
+  else if(x > maxX+1)
+    {
+    steps += x - (maxX+1);
+    }  
+  if(z<minZ-1)
+    {
+    steps += (minZ-1) - z;
+    }
+  else if(z > maxZ+1)
+    {
+    steps += z - (maxZ+1);
+    }
+  return steps;
+  }
+
 public boolean attemptStructureGenerationAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map)
   {
   boolean generate = false;
   long t1, t2;
   t1 = System.currentTimeMillis();
-  StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);  
+  int prevY = y;
+  StructureBB bb = new StructureBB(x, y, z, face, template.xSize, template.ySize, template.zSize, template.xOffset, template.yOffset, template.zOffset);
+  y = template.getValidationSettings().getAdjustedSpawnY(world, x, y, z, face, template, bb);
+  bb.min.y -= prevY-y;
+  bb.max.y -= prevY-y;
   int xs = bb.getXSize();
   int zs = bb.getZSize();
   int size = ((xs > zs ? xs : zs)/16)+3;

@@ -25,11 +25,43 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class StringTools
 {
+
+public static String getCSVfor(Set<String> values)
+  {
+  StringBuilder b = new StringBuilder();
+  Iterator it = values.iterator();
+  while(it.hasNext())
+    {
+    b.append(it.next());
+    if(it.hasNext())
+      {
+      b.append(",");
+      }
+    }
+  return b.toString();
+  }
+
+public static Set<String> safeParseStringsToSet(Set<String> toFill, String test, String line, boolean lowerCase)
+  {
+  String[] lines = safeParseStringArray("=", line);
+  return parseStringsToSet(toFill, lines, lowerCase);
+  }
+
+public static Set<String> parseStringsToSet(Set<String> toFill, String[] data, boolean lowerCase)
+  {
+  for(String name : data)
+    {
+    toFill.add(lowerCase? name.toLowerCase() : name);
+    }
+  return toFill;
+  }
 
 public static String getCSVStringForArray(float... values)
   {

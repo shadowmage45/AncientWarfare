@@ -26,8 +26,8 @@ GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", null),
 SKY("sky", null),
 WATER("water", StructureValidatorWater.class),
-UNDERWATER("underwater", null),
-ISLAND("island", null),
+UNDERWATER("underwater", StructureValidatorUnderwater.class),
+ISLAND("island", StructureValidatorIsland.class),
 HARBOR("harbor", null);
 
 private String name;

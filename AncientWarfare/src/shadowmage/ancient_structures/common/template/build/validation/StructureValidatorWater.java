@@ -58,6 +58,7 @@ protected void readFromLines(List<String> lines)
 protected void write(BufferedWriter out) throws IOException
   {
   out.write("border="+borderSize);
+  out.newLine();
   }
 
 @Override
@@ -122,4 +123,9 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
 
   }
 
+@Override
+public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {
+  return y;
+  }
 }

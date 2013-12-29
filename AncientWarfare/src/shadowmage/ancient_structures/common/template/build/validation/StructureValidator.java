@@ -63,10 +63,24 @@ protected abstract void readFromLines(List<String> lines);
 protected abstract void write(BufferedWriter writer) throws IOException;
 protected abstract void setDefaultSettings(StructureTemplate template);
 
+/**
+ * should this template be included for selection for generation? should only validate block placement, most other stuff has been checked (dimension/biome/cluster value/etc)
+ */
 public abstract boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template);
 
+/**
+ * if template should be included for selection, get the adjusted spawn Y level from the input block position.  this adjustedY will be used for validation and generation if template is selected and validated
+ */
+public abstract int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
+
+/**
+ * if selected for placement, validate that placement. return false if placement is invalid 
+ */
 public abstract boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
+/**
+ * after validation, do any necessary clearing or leveling/etc
+ */
 public abstract void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
 public static final StructureValidator parseValidator(List<String> lines)

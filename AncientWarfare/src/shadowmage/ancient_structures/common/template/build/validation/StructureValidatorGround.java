@@ -39,35 +39,7 @@ import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 public class StructureValidatorGround extends StructureValidator
 {
 
-public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
-public static HashSet<String> defaultClearBlocks = new HashSet<String>();
 
-static
-{
-defaultTargetBlocks.add(Block.dirt.getUnlocalizedName());
-defaultTargetBlocks.add(Block.grass.getUnlocalizedName());
-defaultTargetBlocks.add(Block.stone.getUnlocalizedName());
-defaultTargetBlocks.add(Block.sand.getUnlocalizedName());
-defaultTargetBlocks.add(Block.gravel.getUnlocalizedName());
-defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
-defaultTargetBlocks.add(Block.blockClay.getUnlocalizedName());
-defaultTargetBlocks.add(Block.oreIron.getUnlocalizedName());
-defaultTargetBlocks.add(Block.oreCoal.getUnlocalizedName());
-
-defaultClearBlocks.addAll(defaultTargetBlocks);
-defaultClearBlocks.add(Block.waterStill.getUnlocalizedName());
-defaultClearBlocks.add(Block.lavaStill.getUnlocalizedName());
-defaultClearBlocks.add(Block.cactus.getUnlocalizedName());
-defaultClearBlocks.add(Block.vine.getUnlocalizedName());
-defaultClearBlocks.add(Block.tallGrass.getUnlocalizedName());
-defaultClearBlocks.add(Block.wood.getUnlocalizedName());
-defaultClearBlocks.add(Block.plantRed.getUnlocalizedName());
-defaultClearBlocks.add(Block.plantYellow.getUnlocalizedName());
-defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
-defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
-defaultClearBlocks.add(Block.wood.getUnlocalizedName());
-defaultClearBlocks.add(Block.snow.getUnlocalizedName());
-}
 
 int maxLeveling;
 boolean doLeveling;
@@ -107,16 +79,8 @@ protected void readFromLines(List<String> lines)
     else if(line.toLowerCase().startsWith("doborderleveling=")){doBorderLeveling = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("gradientborder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("validtargetblocks=")){parseStringsToSet(acceptedTargetBlocks, StringTools.safeParseStringArray("=", line), false);}
-    else if(line.toLowerCase().startsWith("validclearingblocks=")){parseStringsToSet(acceptedClearBlocks, StringTools.safeParseStringArray("=", line), false);}
-    }
-  }
-
-private void parseStringsToSet(Set<String> toFill, String[] data, boolean lowerCase)
-  {
-  for(String name : data)
-    {
-    toFill.add(lowerCase? name.toLowerCase() : name);
+    else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(acceptedTargetBlocks, "=", line, false);}
+    else if(line.toLowerCase().startsWith("validclearingblocks=")){StringTools.safeParseStringsToSet(acceptedClearBlocks, "=", line, false);}
     }
   }
 
@@ -143,17 +107,17 @@ protected void write(BufferedWriter writer) throws IOException
   writer.newLine();  
   writer.write("gradientBorder="+gradientBorder);
   writer.newLine();
-  writer.write("validTargetBlocks="+StringTools.getCSVValueFor(acceptedTargetBlocks.toArray(new String[acceptedTargetBlocks.size()])));
+  writer.write("validTargetBlocks="+StringTools.getCSVfor(acceptedTargetBlocks));
   writer.newLine();
-  writer.write("validClearingBlocks="+StringTools.getCSVValueFor(acceptedClearBlocks.toArray(new String[acceptedClearBlocks.size()])));
+  writer.write("validClearingBlocks="+StringTools.getCSVfor(acceptedClearBlocks));
   writer.newLine();  
   }
 
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-  this.acceptedClearBlocks.addAll(defaultClearBlocks);
-  this.acceptedTargetBlocks.addAll(defaultTargetBlocks);
+  this.acceptedClearBlocks.addAll(WorldStructureGenerator.defaultClearBlocks);
+  this.acceptedTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
   this.doBorderFill = true;
   this.doBorderLeveling = true;
   this.doFillBelow = true;
@@ -261,83 +225,6 @@ private boolean validateBlock(World world, int x, int z, int minY, int maxY, int
   return true;
   }
 
-private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {  
-  /**
-   * search the entire structure area, min->max for valid target conditions.
-   */
-  int bx, by, bz;
-  for(bx = bb.min.x-borderSize; bx <= bb.max.x+borderSize ; bx++)
-    {
-    for(bz = bb.min.z-borderSize; bz <= bb.max.z+borderSize ; bz++)
-      {      
-      if(bx < bb.min.x || bx > bb.max.x || bz < bb.min.z || bz > bb.max.z)//is outside bounds, must be a border block
-        {
-        if(!validateStructureBlock(world, bx, bz, template.yOffset, bb, true))
-          {
-          return false;
-          }
-        }
-      else//is inside bounds, must be a regular structure block
-        {
-        if(!validateStructureBlock(world, bx, bz, template.yOffset, bb, false))
-          {
-          return false;
-          }
-        }
-      }
-    }
-  return true;
-  }
-
-private boolean validateStructureBlock(World world, int x, int z, int yOffset, StructureBB bb, boolean border)
-  {
-  Set<String> targetBlocks = acceptedTargetBlocks;
-  Set<String> clearBlocks = acceptedClearBlocks;
-  int fill = border? borderMaxFill : maxFill;
-  int leveling = border? borderMaxLeveling : maxLeveling;
-  int id;
-  int minY = bb.min.y-fill-1;
-  if(border)
-    {
-    minY += yOffset;
-    }
-  Chunk chunk = world.getChunkFromBlockCoords(x, z);
-  int inChunkX = x & 15;
-  int inChunkZ = z & 15;  
-  Block block;
-  for(int y = world.provider.getActualHeight(); y >= minY && y>=0; y--)
-    {    
-    id = chunk.getBlockID(inChunkX, y, inChunkZ);
-    block = Block.blocksList[id];
-    if(fill>=0 && (border || (x==bb.min.x || x==bb.max.x || z==bb.min.z || z==bb.max.z)) && y <= minY && (block==null || !targetBlocks.contains(block.getUnlocalizedName())))
-      {
-      AWLog.logDebug("invalid edge border depth or target block: y: "+y + " minY: "+minY+ " block: "+block);
-      return false;//fail for border-edge-depth test
-      }
-    else if(block==null || WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
-      {//block is within the area to be cleared or filled, but not a base target block -- skip empty blocks or 'skippable' blocks
-      continue;
-      }
-    else if(leveling>=0 && y >= bb.min.y + yOffset + leveling)
-      {//max leveling target too high
-      AWLog.logDebug("block too high for structure leveling value: "+y+ " target: "+(bb.min.y+yOffset+leveling));
-      return false;
-      }
-    else if(leveling>=0 && !isPreserveBlocks() && y >= bb.min.y+yOffset && !clearBlocks.contains(block.getUnlocalizedName()))
-      {//invalid block to clear
-      AWLog.logDebug("invalid clearing block");
-      return false;
-      }
-    else if(fill>=0 && y < (border? bb.min.y+yOffset : bb.min.y) && !targetBlocks.contains(block.getUnlocalizedName()))
-      {//invalid block to fill-on-top of
-      AWLog.logDebug("invalid fill-on-top-of block: "+block.getUnlocalizedName());
-      return false;
-      }    
-    }    
-  return true;
-  }
-
 private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
   {
   StructureBB bb = new StructureBB(x, y, z, face, template);  
@@ -385,7 +272,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     }  
   else if(gradientBorder)
     {
-    int step = getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
+    int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
     int stepHeight = fill / borderSize;
     maxFillY -= step*stepHeight;
     minLevelY += step*stepHeight;
@@ -428,27 +315,10 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     }
   }
 
-private int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)
+@Override
+public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  int steps = 0;
-  if(x<minX-1)
-    {
-    steps += (minX-1) - x;
-    }
-  else if(x > maxX+1)
-    {
-    steps += x - (maxX+1);
-    }  
-  if(z<minZ-1)
-    {
-    steps += (minZ-1) - z;
-    }
-  else if(z > maxZ+1)
-    {
-    steps += z - (maxZ+1);
-    }  
-//  AWLog.logDebug("getting step number for: "+x+","+z+" min: "+minX+","+minZ+" :: max: "+maxX+","+maxZ + " stepHeight: "+steps);
-  return steps;
+  return y;
   }
 
 }
