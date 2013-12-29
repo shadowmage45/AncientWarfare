@@ -83,6 +83,8 @@ public abstract boolean validatePlacement(World world, int x, int y, int z, int 
  */
 public abstract void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
+
+
 public static final StructureValidator parseValidator(List<String> lines)
   {
   String type = null;

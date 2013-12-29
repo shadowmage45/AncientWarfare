@@ -39,22 +39,16 @@ import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 public class StructureValidatorIsland extends StructureValidator
 {
 
-int maxFill;
-int maxLeveling;
-int borderSize;
 int minWaterDepth;
 int maxWaterDepth;
 Set<String> validTargetBlocks;
-Set<String> validClearingBlocks;
 
 public StructureValidatorIsland()
   {
   super(StructureValidationType.ISLAND);
   minWaterDepth = 1;
   maxWaterDepth = 40;
-  borderSize = 0;
   validTargetBlocks = new HashSet<String>();
-  validClearingBlocks = new HashSet<String>();
   }
 
 @Override
@@ -64,11 +58,7 @@ protected void readFromLines(List<String> lines)
     {
     if(line.toLowerCase().startsWith("minwaterdepth=")){minWaterDepth = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("maxwaterdepth=")){maxWaterDepth = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("maxfill=")){maxFill = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("maxleveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(validTargetBlocks, "=", line, false);}
-    else if(line.toLowerCase().startsWith("validclearingblocks=")){StringTools.safeParseStringsToSet(validClearingBlocks, "=", line, false);}
     }
   }
 
@@ -78,16 +68,8 @@ protected void write(BufferedWriter out) throws IOException
   out.write("minWaterDepth="+minWaterDepth);
   out.newLine();
   out.write("minWaterDepth="+maxWaterDepth);
-  out.newLine();
-  out.write("border="+borderSize);
-  out.newLine();
-  out.write("maxFill="+maxFill);
-  out.newLine();
-  out.write("maxLeveling="+maxLeveling);
-  out.newLine();
+  out.newLine();  
   out.write("validTargetBlocks="+StringTools.getCSVfor(validTargetBlocks));
-  out.newLine();
-  out.write("validClearingBlocks="+StringTools.getCSVfor(validClearingBlocks));
   out.newLine();
   }
 
@@ -95,11 +77,8 @@ protected void write(BufferedWriter out) throws IOException
 protected void setDefaultSettings(StructureTemplate template)
   {
   this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
-  this.validClearingBlocks.addAll(WorldStructureGenerator.defaultClearBlocks);
-  int size = (template.ySize-template.yOffset)/3;
-  this.borderSize = size;  
-  this.maxLeveling = template.ySize-template.yOffset;
-  this.maxFill = size;
+  this.minWaterDepth = template.yOffset/2;
+  this.maxWaterDepth = template.yOffset;      
   }
 
 @Override
@@ -126,22 +105,21 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face,  Struct
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
-  int bx, bz;
-    
-  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
+  int bx, bz;    
+  for(bx = bb.min.x; bx<=bb.max.x; bx++)
     {
-    bz = bb.min.z-borderSize;
+    bz = bb.min.z;
     if(!validateBlock(world, bx, bz, template, bb)){return false;}
     
-    bz = bb.max.z+borderSize;
+    bz = bb.max.z;
     if(!validateBlock(world, bx, bz, template, bb)){return false;}    
     }
-  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
+  for(bz = bb.min.z+1; bz<=bb.max.z-1; bz++)
     {
-    bx = bb.min.x-borderSize;
+    bx = bb.min.x;
     if(!validateBlock(world, bx, bz, template, bb)){return false;}
     
-    bx = bb.max.x+borderSize;
+    bx = bb.max.x;
     if(!validateBlock(world, bx, bz, template, bb)){return false;}    
     }
   return true;
@@ -149,120 +127,45 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
 
 private boolean validateBlock(World world, int x, int z, StructureTemplate template, StructureBB bb)
   {
-  int maxY = bb.min.y + template.yOffset + maxLeveling;
-  int minY = bb.min.y - maxFill;
-  int topWaterBlockY = WorldStructureGenerator.getSeaFloorHeight(world, x, z, bb.max.y+1)+1;
-  if(topWaterBlockY>maxY || topWaterBlockY<minY)
+  int lowestBlock = bb.min.y+template.yOffset - maxWaterDepth;
+  int highestBlock = bb.min.y+template.yOffset - minWaterDepth;  
+  int seaFloorHeight = WorldStructureGenerator.getSeaFloorHeight(world, x, z, bb.max.y);  
+  if(seaFloorHeight<lowestBlock || seaFloorHeight>highestBlock)
     {
-    AWLog.logDebug("rejected due to depth: "+topWaterBlockY + " min: "+minY +" max: "+maxY);
     return false;
     }
-  Block block = Block.blocksList[world.getBlockId(x, topWaterBlockY-1, z)];
-  if(block!=null)
+  Block block = Block.blocksList[world.getBlockId(x, seaFloorHeight, z)];
+  if(block==null || !validTargetBlocks.contains(block.getUnlocalizedName()))
     {
-    if((topWaterBlockY-1<minY+maxFill && !validTargetBlocks.contains(block.getUnlocalizedName()))||(topWaterBlockY >= bb.min.y+template.yOffset && !validClearingBlocks.contains(block.getUnlocalizedName()) ))
-      {
-      AWLog.logDebug("rejected placement for improper block: "+block.getUnlocalizedName()+" at: "+x+","+(topWaterBlockY-1)+","+z);      
-      return false;
-      }        
-    }  
+    return false;
+    }
   return true;
   }
+
 @Override
 public void preGeneration(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
-  doStructurePrePlacement(world, x, y, z, face, template, bb);
-  }
-
-private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {    
-  for(int bx = bb.min.x-borderSize; bx<= bb.max.x+borderSize; bx++)
-    {
-    for(int bz = bb.min.z-borderSize; bz<= bb.max.z+borderSize; bz++)
-      {
-      if(bx<bb.min.x || bx>bb.max.x || bz<bb.min.z || bz>bb.max.z)
-        {//is border block, do border clear/fill
-        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, true);
-        }
-      else
-        {//is structure block, do structure clear/fill
-        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, false);
-        }
-      }
-    }  
-  }
-
-private void doStructurePrePlacementBlockPlace(World world, int x, int z, StructureTemplate template, StructureBB bb, boolean border)
-  {
-  int leveling = maxLeveling;
-  int fill = maxFill;
-  
-  /**
-   * most of this is just to try and minimize the total Y range that is examined for clear/fill
-   */
-  int minFillY = bb.min.y - fill;
-  if(border){minFillY+=template.yOffset;}
-  int maxFillY = (minFillY + fill) -1;
-  
-  int minLevelY = bb.min.y + template.yOffset;
-  int maxLevelY = minLevelY + leveling;
-  
-  int minY = minFillY< minLevelY ? minFillY : minLevelY;
-  if(!border)
-    {
-    if(fill>0)
-      {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0    
-      int topEmptyBlockY = WorldStructureGenerator.getSeaFloorHeight(world, x, z, bb.max.y+1)+1;
-      minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
-      }    
-    }  
-  else
-    {
-    int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
-    int stepHeight = fill / borderSize;
-    maxFillY -= step*stepHeight;
-    minLevelY += step*stepHeight;
-    minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
-    }
-  
-  minY = minY<=0 ? 1 : minY;
-  int maxY = maxFillY> maxLevelY ? maxFillY : maxLevelY;
-  
-  int xInChunk = x&15;
-  int zInChunk = z&15;  
-  Chunk chunk = world.getChunkFromBlockCoords(x, z);
-  
-  int id;
+  int id;  
   Block block;
-  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
-  int fillBlockID = Block.grass.blockID;
-  int clearBlockID;
-  if(biome!=null && biome.topBlock>=1)
+  for(int bx = bb.min.x; bx<=bb.max.x; bx++)
     {
-    fillBlockID = biome.topBlock;
-    }
-  for(int y = minY; y <=maxY; y++)
-    {    
-    id = world.getBlockId(x, y, z);
-    block = Block.blocksList[id];
-    clearBlockID = y>=bb.min.y+template.yOffset? 0 : Block.waterStill.blockID;
-    if(leveling>0 && y>=minLevelY)
+    for(int bz = bb.min.z; bz<=bb.max.z; bz++)
       {
-      if(block!=null && (!WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) || chunk.getBlockID(xInChunk, y-1, zInChunk)==0) && validClearingBlocks.contains(block.getUnlocalizedName()))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, clearBlockID, 0);        
-        }
-      }
-    if(fill>0 && y<=maxFillY)
-      {
-      if(block==null || !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
+      for(int by = bb.min.y-1; by>0; by--)
+        {        
+        block = Block.blocksList[world.getBlockId(bx, by, bz)];
+        if(block!=null && validTargetBlocks.contains(block.getUnlocalizedName()))
+          {
+          break;
+          }
+        else
+          {
+          world.setBlock(bx, by, bz, Block.dirt.blockID);
+          }        
         }
       }
     }
   }
-
 
 
 }

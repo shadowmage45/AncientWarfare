@@ -28,7 +28,8 @@ SKY("sky", null),
 WATER("water", StructureValidatorWater.class),
 UNDERWATER("underwater", StructureValidatorUnderwater.class),
 ISLAND("island", StructureValidatorIsland.class),
-HARBOR("harbor", null);
+HARBOR("harbor", null),
+SWAMP("swamp", null);
 
 private String name;
 private Class<? extends StructureValidator> validatorClass;
@@ -72,6 +73,42 @@ public static StructureValidationType getTypeFromName(String name)
   else if(name.equals("underwater")){return UNDERWATER;}
   else if(name.equals("island")){return ISLAND;}
   else if(name.equals("harbor")){return HARBOR;}
+  else if(name.equals("swamp")){return SWAMP;}
   return null;
   }
+
+/**
+ * validation types:
+ * --ground:
+ *    validate outisde edge blocks for depth and leveling
+ * 
+ * underground:
+ *    validate min/max land depth / overfill height, validate clearing blocks along edges
+ *    template should have no external air, it should all be encased. not enforced.
+ *    
+ * sky:
+ *    validate min flying height along edges
+ *    template should have no ground/land in it (unless desired)
+ *    
+ * --water:
+ *    validate outside edge blocks for min water depth
+ *    template should have no ground/land in it. yOffset determines floating depth
+ *    
+ * --underwater:
+ *    validate outside edge blocks for water depth, depth, and leveling
+ *    template should be setup as-per normal, any air blocks above yOffset will be filled with water during construction
+ *    
+ * --island:
+ *    validate min/max water depth along edges. do blanket fill-below if water depth is good
+ *    template should be setup as-per normal, with any air blocks below yOffset being filled with water during construction
+ * 
+ * harbor:
+ *    validate edges--front all land, sides land/water, back all water. validate edge-depth and leveling
+ *    template should have water along back edge, land on front edge, structure/indetermined on sides
+ *   
+ * swamp:
+ *    validate edges -- count water and land blocks, only allow if ratio meets %. validate border-edge-depth and leveling
+ *    template should have a mix of land and water along the edges -- no clue how to get this one to look good in a swamp=\    
+ */
+
 }
