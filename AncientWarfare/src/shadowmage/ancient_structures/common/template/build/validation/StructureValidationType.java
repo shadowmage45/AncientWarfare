@@ -23,12 +23,12 @@ package shadowmage.ancient_structures.common.template.build.validation;
 public enum StructureValidationType
 {
 GROUND("ground", StructureValidatorGround.class),
-UNDERGROUND("underground", null),
-SKY("sky", null),
+UNDERGROUND("underground", StructureValidatorUnderground.class),
+SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
-UNDERWATER("underwater", null),
-HARBOR("harbor", null),
-SWAMP("swamp", null);
+SUBMERGED("underwater", StructureValidatorSubmerged.class),
+HARBOR("harbor", StructureValidatorHarbor.class),
+SWAMP("swamp", StructureValidatorSwamp.class);
 
 private String name;
 private Class<? extends StructureValidator> validatorClass;
@@ -69,7 +69,7 @@ public static StructureValidationType getTypeFromName(String name)
   else if(name.equals("underground")){return UNDERGROUND;}
   else if(name.equals("sky")){return SKY;}
   else if(name.equals("water")){return WATER;}
-  else if(name.equals("underwater")){return UNDERWATER;}
+  else if(name.equals("underwater")){return SUBMERGED;}
   else if(name.equals("harbor")){return HARBOR;}
   else if(name.equals("swamp")){return SWAMP;}
   return null;
@@ -77,28 +77,24 @@ public static StructureValidationType getTypeFromName(String name)
 
 /**
  * validation types:
- * --ground:
- *    validate outisde edge blocks for depth and leveling
+ * ground:
+ *    validate border edge blocks for depth and leveling
+ *    validate border target blocks
  * 
  * underground:
- *    validate min/max land depth / overfill height, validate clearing blocks along edges
- *    template should have no external air, it should all be encased. not enforced.
+ *    validate min/max overfill height is met
+ *    validate border target blocks
  *    
  * sky:
  *    validate min flying height along edges
  *    template should have no ground/land in it (unless desired)
  *    
- * --water:
- *    validate outside edge blocks for min water depth
- *    template should have no ground/land in it. yOffset determines floating depth
+ * water:
+ *    validate water depth along edges
  *    
- * --underwater:
- *    validate outside edge blocks for water depth, depth, and leveling
- *    template should be setup as-per normal, any air blocks above yOffset will be filled with water during construction
- *    
- * --island:
- *    validate min/max water depth along edges. do blanket fill-below if water depth is good
- *    template should be setup as-per normal, with any air blocks below yOffset being filled with water during construction
+ * submerged (previously underwater/island):
+ *    validate min/max water depth at placement x/z
+ *    validate border edge blocks for depth and leveling
  * 
  * harbor:
  *    validate edges--front all land, sides land/water, back all water. validate edge-depth and leveling
