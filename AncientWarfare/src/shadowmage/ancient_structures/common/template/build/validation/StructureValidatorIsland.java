@@ -100,36 +100,9 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face,  Struct
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
-  int bx, bz;
   int minY = getMinY(template, bb);
   int maxY = getMaxY(template, bb);
-  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
-    {
-    bz = bb.min.z-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
-      {
-      return false;
-      }        
-    bz = bb.max.z+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
-      {
-      return false;
-      }        
-    }
-  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
-    {
-    bx = bb.min.x-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
-      {
-      return false;
-      }        
-    bx = bb.max.x+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
-      {
-      return false;
-      }        
-    }
-  return true;
+  return validateBorderBlocks(world, template, bb, minY, maxY, true);
   }
 
 private boolean validateBlock(World world, int x, int z, StructureTemplate template, StructureBB bb)

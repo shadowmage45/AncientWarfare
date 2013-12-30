@@ -67,13 +67,18 @@ protected StructureValidator(StructureValidationType validationType)
   this.validationType = validationType;
   selectionWeight = 1;
   clusterValue = 1;  
-  minDuplicateDistance = 4;
+  minDuplicateDistance = 8;
   biomeList = new HashSet<String>();
   validTargetBlocks = new HashSet<String>();
   }
 
-protected abstract void readFromLines(List<String> lines);
-protected abstract void write(BufferedWriter writer) throws IOException;
+protected void readFromLines(List<String> lines)
+  {  
+  }
+protected void write(BufferedWriter writer) throws IOException
+  {
+  }
+
 protected abstract void setDefaultSettings(StructureTemplate template);
 
 /**
@@ -271,6 +276,38 @@ public final int getMinDuplicateDistance()
   }
 
 //************************************************ UTILITY METHODS *************************************************//
+protected boolean validateBorderBlocks(World world, StructureTemplate template, StructureBB bb, int minY, int maxY, boolean skipWater)
+  {
+  int bx, bz;
+  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
+    {
+    bz = bb.min.z-borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, skipWater, validTargetBlocks))
+      {
+      return false;
+      }        
+    bz = bb.max.z+borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, skipWater, validTargetBlocks))
+      {
+      return false;
+      }        
+    }
+  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
+    {
+    bx = bb.min.x-borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, skipWater, validTargetBlocks))
+      {
+      return false;
+      }        
+    bx = bb.max.x+borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, skipWater, validTargetBlocks))
+      {
+      return false;
+      }        
+    }
+  return true;
+  }
+
 /**
  * validates both top block height and block type for the input position and settings
  */

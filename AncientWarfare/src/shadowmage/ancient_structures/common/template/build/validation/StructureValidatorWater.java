@@ -41,18 +41,6 @@ public StructureValidatorWater()
   }
 
 @Override
-protected void readFromLines(List<String> lines)
-  {
- 
-  }
-
-@Override
-protected void write(BufferedWriter out) throws IOException
-  {
-  
-  }
-
-@Override
 protected void setDefaultSettings(StructureTemplate template)
   {
   
@@ -75,37 +63,7 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face, Structu
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
   int minY = getMinY(template, bb);
-  int maxY = getMaxY(template, bb);
-  int bx, bz;
-  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
-    {
-    bz = bb.min.z-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-              
-    bz = bb.max.z+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-    }
-  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
-    {
-    bx = bb.min.x-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-    
-    bx = bb.max.x+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-    }
-  return true;
+  return validateBorderBlocks(world, template, bb, 0, minY, true);
   }
 
 @Override

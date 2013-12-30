@@ -39,22 +39,9 @@ import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 public class StructureValidatorGround extends StructureValidator
 {
 
-
 public StructureValidatorGround()
   {
   super(StructureValidationType.GROUND);
-  }
-
-@Override
-protected void readFromLines(List<String> lines)
-  {
- 
-  }
-
-@Override
-protected void write(BufferedWriter writer) throws IOException
-  {
- 
   }
 
 @Override
@@ -79,47 +66,15 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  return validateStructurePlacement(world, x, y, z, face, template, bb);
+  int minY = getMinY(template, bb);
+  int maxY = getMaxY(template, bb);
+  return validateBorderBlocks(world, template, bb, minY, maxY, false);
   }
 
 @Override
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
   doStructurePrePlacement(world, x, y, z, face, template);
-  }
-
-private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {
-  int bx, bz;
-  int minY = getMinY(template, bb);
-  int maxY = getMaxY(template, bb);
-  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
-    {
-    bz = bb.min.z-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
-      {
-      return false;
-      }        
-    bz = bb.max.z+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
-      {
-      return false;
-      }        
-    }
-  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
-    {
-    bx = bb.min.x-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
-      {
-      return false;
-      }        
-    bx = bb.max.x+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
-      {
-      return false;
-      }        
-    }
-  return true;
   }
 
 private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
