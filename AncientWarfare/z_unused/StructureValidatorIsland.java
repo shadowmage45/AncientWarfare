@@ -41,14 +41,12 @@ public class StructureValidatorIsland extends StructureValidator
 
 int minWaterDepth;
 int maxWaterDepth;
-Set<String> validTargetBlocks;
 
 public StructureValidatorIsland()
   {
   super(StructureValidationType.ISLAND);
   minWaterDepth = 1;
   maxWaterDepth = 40;
-  validTargetBlocks = new HashSet<String>();
   }
 
 @Override
@@ -58,7 +56,6 @@ protected void readFromLines(List<String> lines)
     {
     if(line.toLowerCase().startsWith("minwaterdepth=")){minWaterDepth = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("maxwaterdepth=")){maxWaterDepth = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(validTargetBlocks, "=", line, false);}
     }
   }
 
@@ -69,8 +66,6 @@ protected void write(BufferedWriter out) throws IOException
   out.newLine();
   out.write("minWaterDepth="+maxWaterDepth);
   out.newLine();  
-  out.write("validTargetBlocks="+StringTools.getCSVfor(validTargetBlocks));
-  out.newLine();
   }
 
 @Override
@@ -105,22 +100,34 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face,  Struct
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
-  int bx, bz;    
-  for(bx = bb.min.x; bx<=bb.max.x; bx++)
+  int bx, bz;
+  int minY = getMinY(template, bb);
+  int maxY = getMaxY(template, bb);
+  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
     {
-    bz = bb.min.z;
-    if(!validateBlock(world, bx, bz, template, bb)){return false;}
-    
-    bz = bb.max.z;
-    if(!validateBlock(world, bx, bz, template, bb)){return false;}    
+    bz = bb.min.z-borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
+      {
+      return false;
+      }        
+    bz = bb.max.z+borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
+      {
+      return false;
+      }        
     }
-  for(bz = bb.min.z+1; bz<=bb.max.z-1; bz++)
+  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
     {
-    bx = bb.min.x;
-    if(!validateBlock(world, bx, bz, template, bb)){return false;}
-    
-    bx = bb.max.x;
-    if(!validateBlock(world, bx, bz, template, bb)){return false;}    
+    bx = bb.min.x-borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
+      {
+      return false;
+      }        
+    bx = bb.max.x+borderSize;
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, true, validTargetBlocks))
+      {
+      return false;
+      }        
     }
   return true;
   }

@@ -268,9 +268,9 @@ public final int getMinDuplicateDistance()
 /**
  * validates both top block height and block type for the input position and settings
  */
-protected boolean validateBlockHeightAndType(World world, int x, int z, int min, int max, boolean skipWater, boolean allowAir, Set<String> validBlocks)
+protected boolean validateBlockHeightAndType(World world, int x, int z, int min, int max, boolean skipWater, Set<String> validBlocks)
   {
-  return validateBlockType(world, x, validateBlockHeight(world, x, z, min, max, skipWater), z, validBlocks, allowAir);
+  return validateBlockType(world, x, validateBlockHeight(world, x, z, min, max, skipWater), z, validBlocks);
   }
 
 /**
@@ -291,7 +291,7 @@ protected int validateBlockHeight(World world, int x, int z, int minimumAcceptab
 /**
  * validates the target block at x,y,z is one of the input valid blocks (or air if allowAir == true)
  */
-protected boolean validateBlockType(World world, int x, int y, int z, Set<String> validBlocks, boolean allowAir)
+protected boolean validateBlockType(World world, int x, int y, int z, Set<String> validBlocks)
   {
   if(y < 0 || y>=256)
     {
@@ -299,11 +299,7 @@ protected boolean validateBlockType(World world, int x, int y, int z, Set<String
     }
   Block block = Block.blocksList[world.getBlockId(x, y, z)];
   if(block==null)
-    {
-    if(!allowAir)
-      {
-      return false;
-      }
+    {   
     AWLog.logDebug("rejected for non-matching block: air");
     return false;
     }
@@ -313,6 +309,29 @@ protected boolean validateBlockType(World world, int x, int y, int z, Set<String
     return false;
     }
   return true;  
+  }
+
+/**
+ * return the lowest acceptable Y level for a filled block
+ * for the input template and BB
+ */
+protected int getMinY(StructureTemplate template, StructureBB bb)
+  {
+  int minY = bb.min.y - maxFill - 1;
+  if(borderSize>0)
+    {
+    minY+=template.yOffset;
+    }
+  return minY;
+  }
+
+/**
+ * return the highest acceptable Y level for a filled block
+ * for the input template and BB
+ */
+protected int getMaxY(StructureTemplate template, StructureBB bb)
+  {
+  return bb.min.y + template.yOffset + maxLeveling;
   }
 
 }

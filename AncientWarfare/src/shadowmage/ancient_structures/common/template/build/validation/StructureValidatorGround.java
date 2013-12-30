@@ -90,39 +90,34 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
 
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  int bx, bz, by, bottomY, topY;
-  bottomY = borderSize > 0 ? bb.min.y + template.yOffset - maxFill : bb.min.y - maxFill;
-  topY = borderSize> 0 ? bb.min.y+template.yOffset + maxLeveling : bb.min.y + template.yOffset + maxLeveling;
-  int maxFillY = borderSize > 0 ? bb.min.y+template.yOffset-1 : bb.min.y-1;
+  int bx, bz;
+  int minY = getMinY(template, bb);
+  int maxY = getMaxY(template, bb);
   for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
     {
     bz = bb.min.z-borderSize;
-    by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
       {
       return false;
       }        
     bz = bb.max.z+borderSize;
-    by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
       {
       return false;
-      } 
+      }        
     }
   for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
     {
     bx = bb.min.x-borderSize;
-    by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
       {
       return false;
-      }    
+      }        
     bx = bb.max.x+borderSize;
-    by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
+    if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
       {
       return false;
-      } 
+      }        
     }
   return true;
   }

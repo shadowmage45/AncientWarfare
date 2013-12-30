@@ -116,10 +116,8 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
   int side;
   int minX, minZ, maxX, maxZ;
   
-  int minLevelingY = bb.min.y + template.yOffset;
-  int maxLevelingY = minLevelingY + maxLeveling;
-  int minFillY = bb.min.y + template.yOffset - maxFill - 1;
-  int maxFillY = minFillY + maxFill;
+  int minY = getMinY(template, bb);
+  int maxY = getMaxY(template, bb);
   
   testPosition1 = bb.getFLCorner(face, testPosition1);
   testPosition2 = bb.getFRCorner(face, testPosition2);
@@ -130,9 +128,8 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
   for(bx = minX; bx<=maxX; bx++)
     {
     for(bz = minZ; bz<=maxZ; bz++)
-      {
-      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
+      {      
+      if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
         {
         return false;
         }
@@ -149,8 +146,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     {
     for(bz = minZ; bz<=maxZ; bz++)
       {
-      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateBlockType(world, bx, by, bz, validTargetBlocksRear, false))
+      if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksRear))
         {
         return false;
         }
@@ -167,8 +163,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     {
     for(bz = minZ; bz<=maxZ; bz++)
       {
-      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateBlockType(world, bx, by, bz, validTargetBlocksSide, false))
+      if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksSide))
         {
         return false;
         }
@@ -185,8 +180,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     {
     for(bz = minZ; bz<=maxZ; bz++)
       {
-      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateBlockType(world, bx, by, bz, validTargetBlocksSide, false))
+      if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksSide))
         {
         return false;
         }

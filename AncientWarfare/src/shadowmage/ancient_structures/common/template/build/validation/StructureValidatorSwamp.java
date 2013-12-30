@@ -26,43 +26,45 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
-import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class StructureValidatorWater extends StructureValidator
+public class StructureValidatorSwamp extends StructureValidator
 {
 
-public StructureValidatorWater()
+/**
+ * @param validationType
+ */
+public StructureValidatorSwamp(StructureValidationType validationType)
   {
-  super(StructureValidationType.WATER);
+  super(StructureValidationType.SWAMP);
   }
 
 @Override
 protected void readFromLines(List<String> lines)
   {
- 
+
   }
 
 @Override
-protected void write(BufferedWriter out) throws IOException
+protected void write(BufferedWriter writer) throws IOException
   {
-  
+
   }
 
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-  
+
   }
 
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
-  int id = world.getBlockId(x, y-1, z);
-  return id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
+  if( y <= template.yOffset+maxFill){return false;}
+  Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
+  if(block==null || !validTargetBlocks.contains(block.getUnlocalizedName())){return false;}
+  return true;
   }
 
 @Override
@@ -74,56 +76,19 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face, Structu
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  int minY = getMinY(template, bb);
-  int maxY = getMaxY(template, bb);
-  int bx, bz;
-  for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
-    {
-    bz = bb.min.z-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-              
-    bz = bb.max.z+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-    }
-  for(bz = bb.min.z-borderSize+1; bz<=bb.max.z+borderSize-1; bz++)
-    {
-    bx = bb.min.x-borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-    
-    bx = bb.max.x+borderSize;
-    if(!validateBlockHeightAndType(world, bx, bz, 0, minY, true, WorldStructureGenerator.defaultTargetBlocks))
-      {
-      return false;
-      }
-    }
-  return true;
+  return false;
   }
 
 @Override
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-
+  
   }
 
 @Override
 public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  if( y < bb.min.y+template.yOffset)
-    {
-    world.setBlock(x, y, z, Block.waterStill.blockID);
-    }
-  else
-    {
-    world.setBlock(x, y, z, 0);
-    }
+
   }
+
 }
