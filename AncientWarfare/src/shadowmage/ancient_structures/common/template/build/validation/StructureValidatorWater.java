@@ -128,4 +128,10 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face, Structu
   {
   return y;
   }
+
+@Override
+public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {
+  
+  }
 }

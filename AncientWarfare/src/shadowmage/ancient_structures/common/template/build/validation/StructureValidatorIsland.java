@@ -87,7 +87,7 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   int id;
   int water = 0;
   int startY = y-1;
-  y = WorldStructureGenerator.getSeaFloorHeight(world, x, z, startY)+1;
+  y = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
   water = startY-y+1;
   if(water<minWaterDepth || water>maxWaterDepth)
     {   
@@ -129,7 +129,7 @@ private boolean validateBlock(World world, int x, int z, StructureTemplate templ
   {
   int lowestBlock = bb.min.y+template.yOffset - maxWaterDepth;
   int highestBlock = bb.min.y+template.yOffset - minWaterDepth;  
-  int seaFloorHeight = WorldStructureGenerator.getSeaFloorHeight(world, x, z, bb.max.y);  
+  int seaFloorHeight = WorldStructureGenerator.getTargetY(world, x, z, true);  
   if(seaFloorHeight<lowestBlock || seaFloorHeight>highestBlock)
     {
     return false;
@@ -167,5 +167,10 @@ public void preGeneration(World world, int x, int y, int z, int face,  Structure
     }
   }
 
+@Override
+public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {
+  
+  }
 
 }

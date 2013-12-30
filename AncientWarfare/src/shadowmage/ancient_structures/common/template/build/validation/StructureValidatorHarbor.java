@@ -22,11 +22,13 @@ package shadowmage.ancient_structures.common.template.build.validation;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
@@ -35,8 +37,12 @@ import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 public class StructureValidatorHarbor extends StructureValidator
 {
 
-BlockPosition testPosition = new BlockPosition();
+BlockPosition testPosition1 = new BlockPosition();
+BlockPosition testPosition2 = new BlockPosition();
+
 Set<String> validTargetBlocks;
+Set<String> validTargetBlocksSide;
+Set<String> validTargetBlocksRear;
 int borderSize;
 int maxFill;
 int maxLeveling;
@@ -44,6 +50,11 @@ int maxLeveling;
 public StructureValidatorHarbor()
   {
   super(StructureValidationType.HARBOR);
+  validTargetBlocks = new HashSet<String>();
+  validTargetBlocksSide = new HashSet<String>();
+  validTargetBlocksRear = new HashSet<String>();
+  validTargetBlocksRear.add(Block.waterMoving.getUnlocalizedName());  
+  validTargetBlocksSide.add(Block.waterMoving.getUnlocalizedName());
   }
 
 @Override
@@ -61,20 +72,26 @@ protected void write(BufferedWriter writer) throws IOException
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-
+  validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
+  validTargetBlocksSide.addAll(WorldStructureGenerator.defaultTargetBlocks);
   }
 
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
+  /**
+   * testing that front target position is valid block
+   * then test back target position to ensure that it has water at same level
+   * or at an acceptable level difference
+   */
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];  
   if(block!=null && validTargetBlocks.contains(block.getUnlocalizedName()))
     {
-    testPosition.reassign(x, y, z);
-    testPosition.moveForward(face, template.zSize-template.zOffset-1);
+    testPosition1.reassign(x, y, z);
+    testPosition1.moveForward(face, template.zSize-template.zOffset-1);
     for(int by = y-1; by>= by-maxLeveling; by--)
       {
-      block = Block.blocksList[world.getBlockId(x, y, z)];
+      block = Block.blocksList[world.getBlockId(testPosition1.x, y, testPosition1.z)];
       if(block==Block.waterStill || block==Block.waterMoving)
         {
         return true;
@@ -87,89 +104,105 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
 @Override
 public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  testPosition.reassign(x, y, z);
-  testPosition.moveForward(face, template.zSize-template.zOffset-1);
-  return WorldStructureGenerator.getTargetY(world, testPosition.x, testPosition.z)+1;
+  testPosition1.reassign(x, y, z);
+  testPosition1.moveForward(face, template.zSize-template.zOffset-1);
+  return WorldStructureGenerator.getTargetY(world, testPosition1.x, testPosition1.z, false)+1;
   }
 
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
-  int bx, bz;  
+  int bx, bz, by;  
   int side;
-  for(bx = bb.min.x; bx<=bb.max.x; bx++)
+  int minX, minZ, maxX, maxZ;
+  
+  int minLevelingY = bb.min.y + template.yOffset;
+  int maxLevelingY = minLevelingY + maxLeveling;
+  int minFillY = bb.min.y + template.yOffset - maxFill - 1;
+  int maxFillY = minFillY + maxFill;
+  
+  testPosition1 = bb.getFLCorner(face, testPosition1);
+  testPosition2 = bb.getFRCorner(face, testPosition2);
+  minX = Math.min(testPosition1.x, testPosition2.x);
+  maxX = Math.max(testPosition1.x, testPosition2.x);
+  minZ = Math.min(testPosition1.z, testPosition2.z);
+  maxZ = Math.max(testPosition1.z, testPosition2.z);
+  for(bx = minX; bx<=maxX; bx++)
     {
-    bz = bb.min.z;
-    side = getSide(bx, bz, face, bb);   
-    if(!validateBlock(world, bx, bz, side, template, bb)){return false;}
-    
-    bz = bb.max.z;
-    side = getSide(bx, bz, face, bb);
-    if(!validateBlock(world, bx, bz, side, template, bb)){return false;}    
+    for(bz = minZ; bz<=maxZ; bz++)
+      {
+      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
+      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocks, false))
+        {
+        return false;
+        }
+      }
     }
-  for(bz = bb.min.z+1; bz<=bb.max.z-1; bz++)
+  
+  testPosition1 = bb.getRLCorner(face, testPosition1);
+  testPosition2 = bb.getRRCorner(face, testPosition2);
+  minX = Math.min(testPosition1.x, testPosition2.x);
+  maxX = Math.max(testPosition1.x, testPosition2.x);
+  minZ = Math.min(testPosition1.z, testPosition2.z);
+  maxZ = Math.max(testPosition1.z, testPosition2.z);  
+  for(bx = minX; bx<=maxX; bx++)
     {
-    bx = bb.min.x;
-    side = getSide(bx, bz, face, bb);
-    if(!validateBlock(world, bx, bz, side, template, bb)){return false;}
-    
-    bx = bb.max.x;
-    side = getSide(bx, bz, face, bb);
-    if(!validateBlock(world, bx, bz, side, template, bb)){return false;}    
+    for(bz = minZ; bz<=maxZ; bz++)
+      {
+      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
+      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocksRear, false))
+        {
+        return false;
+        }
+      }
     }
-  return true;
-  }
-
-/**
- * 0 - front
- * 1 - rear
- * 2 - sides
- */
-private int getSide(int x, int z, int face, StructureBB bb)
-  {
-  switch(face)
-  {
-  case 0:
+  
+  testPosition1 = bb.getFRCorner(face, testPosition1);
+  testPosition2 = bb.getRRCorner(face, testPosition2);
+  minX = Math.min(testPosition1.x, testPosition2.x);
+  maxX = Math.max(testPosition1.x, testPosition2.x);
+  minZ = Math.min(testPosition1.z, testPosition2.z);
+  maxZ = Math.max(testPosition1.z, testPosition2.z);  
+  for(bx = minX; bx<=maxX; bx++)
     {
-    if(z==bb.min.z){return 0;}
-    else if(z==bb.max.z){return 1;}
-    else if(x==bb.min.x || x==bb.max.x){return 2;}
+    for(bz = minZ; bz<=maxZ; bz++)
+      {
+      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
+      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocksSide, false))
+        {
+        return false;
+        }
+      }
     }
-    break;
-  case 1:
+  
+  testPosition1 = bb.getFLCorner(face, testPosition1);
+  testPosition2 = bb.getRLCorner(face, testPosition2);
+  minX = Math.min(testPosition1.x, testPosition2.x);
+  maxX = Math.max(testPosition1.x, testPosition2.x);
+  minZ = Math.min(testPosition1.z, testPosition2.z);
+  maxZ = Math.max(testPosition1.z, testPosition2.z);  
+  for(bx = minX; bx<=maxX; bx++)
     {
-    if(x==bb.max.x){return 0;}
-    else if(x==bb.min.x){return 1;}
-    else if(z==bb.min.z || z==bb.max.z){return 2;}
-    }
-    break;
-  case 2:
-    {
-    if(z==bb.min.z){return 1;}
-    else if(z==bb.max.z){return 0;}
-    else if(x==bb.min.x || x==bb.max.x){return 2;}
-    }
-    break;
-  case 3:
-    {
-    if(x==bb.max.x){return 1;}
-    else if(x==bb.min.x){return 0;}
-    else if(z==bb.min.z || z==bb.max.z){return 2;}
-    }
-    break;
-  }
-  return 0;
-  }
-
-private boolean validateBlock(World world, int x, int z, int side, StructureTemplate template, StructureBB bb)
-  {  
-  boolean ground = side!=1;
-  boolean water = side!=0;
+    for(bz = minZ; bz<=maxZ; bz++)
+      {
+      by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
+      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocksSide, false))
+        {
+        return false;
+        }
+      }
+    }  
   return true;
   }
 
 @Override
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {
+  
+  }
+
+@Override
+public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
   
   }

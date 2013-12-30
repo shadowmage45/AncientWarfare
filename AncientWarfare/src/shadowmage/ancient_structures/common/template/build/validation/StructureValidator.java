@@ -28,10 +28,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.Chunk;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
+import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public abstract class StructureValidator
 {
@@ -83,7 +88,7 @@ public abstract boolean validatePlacement(World world, int x, int y, int z, int 
  */
 public abstract void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
-
+public abstract void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
 public static final StructureValidator parseValidator(List<String> lines)
   {
@@ -239,6 +244,46 @@ public final int[] getAcceptedDimensions()
 public final int getMinDuplicateDistance()
   {
   return minDuplicateDistance;
+  }
+
+//************************************************ UTILITY METHODS *************************************************//
+/**
+ * validates block height at X, Z is greater than min and less than max (non inclusive)
+ * returns topFoundY or -1 if not within range
+ */
+protected int validateBlockHeight(World world, int x, int z, int minimumAcceptableY, int maximumAcceptableY, boolean skipWater)
+  {
+  int topFilledY = WorldStructureGenerator.getTargetY(world, x, z, skipWater);
+  if(topFilledY < minimumAcceptableY || topFilledY > maximumAcceptableY)
+    {
+    AWLog.logDebug("rejected for leveling or depth test. foundY: "+topFilledY + " min: "+minimumAcceptableY +" max:"+maximumAcceptableY +  " at: "+x+","+topFilledY+","+z);
+    return -1;
+    }
+  return topFilledY;
+  }
+
+protected boolean validateTargetBlock(World world, int x, int y, int z, Set<String> validBlocks, boolean allowAir)
+  {
+  if(y<=0)
+    {
+    return false;
+    }
+  Block block = Block.blocksList[world.getBlockId(x, y, z)];
+  if(block==null)
+    {
+    if(!allowAir)
+      {
+      return false;
+      }
+    AWLog.logDebug("rejected for non-matching block: air");
+    return false;
+    }
+  if(!validBlocks.contains(block.getUnlocalizedName()))
+    {
+    AWLog.logDebug("rejected for non-matching block: "+block.getUnlocalizedName());
+    return false;
+    }
+  return true;  
   }
 
 }

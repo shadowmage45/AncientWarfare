@@ -155,5 +155,87 @@ public int getCenterZ()
   return min.z + (getZSize()/2);
   }
 
+/**
+ * 0-- z++==forward x++==left
+ * 1-- x--==forward z++==left
+ * 2-- z--==forward x--==left
+ * 3-- x++==forward z--==left
+ */
+
+public BlockPosition getFLCorner(int face, BlockPosition out)
+  {
+  switch(face)
+  {
+  case 0:
+  return out.reassign(max.x, min.y, max.z);
+  
+  case 1:
+  return out.reassign(min.x, min.y, max.z);
+  
+  case 2:
+  return out.reassign(min.x, min.y, min.z);
+  
+  case 3:
+  return out.reassign(max.x, min.y, min.z);  
+  }
+  return out;
+  }
+
+public BlockPosition getFRCorner(int face, BlockPosition out)
+  {
+  switch(face)
+  {
+  case 0:
+  return out.reassign(min.x, min.y, max.z);
+  
+  case 1:
+  return out.reassign(min.x, min.y, min.z);
+  
+  case 2:
+  return out.reassign(max.x, min.y, min.z);
+  
+  case 3:
+  return out.reassign(max.x, min.y, max.z);  
+  }
+  return out;
+  }
+
+public BlockPosition getRLCorner(int face, BlockPosition out)
+  {
+  switch(face)
+  {
+  case 0:
+  return out.reassign(max.x, min.y, min.z);
+  
+  case 1:
+  return out.reassign(max.x, min.y, max.z);
+  
+  case 2:
+  return out.reassign(min.x, min.y, max.z);
+  
+  case 3:
+  return out.reassign(min.x, min.y, min.z);  
+  }
+  return out;
+  }
+
+public BlockPosition getRRCorner(int face, BlockPosition out)
+  {
+  switch(face)
+  {
+  case 0:
+  return out.reassign(min.x, min.y, min.z);
+  
+  case 1:
+  return out.reassign(max.x, min.y, min.z);
+  
+  case 2:
+  return out.reassign(max.x, min.y, max.z);
+  
+  case 3:
+  return out.reassign(min.x, min.y, max.z);  
+  }
+  return out;
+  }
 
 }

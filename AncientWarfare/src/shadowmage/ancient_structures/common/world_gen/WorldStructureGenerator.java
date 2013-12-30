@@ -122,7 +122,7 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   rng.setSeed(seed);
   int x = chunkX*16 + rng.nextInt(16);  
   int z = chunkZ*16 + rng.nextInt(16); 
-  int y = getTargetY(world, x, z)+1;  
+  int y = getTargetY(world, x, z, false)+1;  
   if(y<=0){return;}
   int face = rng.nextInt(4);
   StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, face, AWStructureStatics.chunkSearchRadius);  
@@ -139,34 +139,21 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
     } 
   }
 
-public static int getTargetY(World world, int x, int z)
+public static int getTargetY(World world, int x, int z, boolean skipWater)
   {
   int id;
   Block block;
-  for(int y = world.provider.getActualHeight(); y>=1; y--)
+  for(int y = world.provider.getActualHeight(); y >0 ; y--)
     {
     id = world.getBlockId(x, y, z);
     if(id==0){continue;}
     block = Block.blocksList[id];
     if(block==null){continue;}
     if(skippableWorldGenBlocks.contains(block.getUnlocalizedName())){continue;}
+    if(skipWater && (id==Block.waterMoving.blockID || id==Block.waterStill.blockID)){continue;}
     return y;
     }
   return -1;
-  }
-
-public static int getSeaFloorHeight(World world, int x, int z, int startY)
-  {
-  int y, id;  
-  for(y = startY; y>0; y--)
-    {
-    id = world.getBlockId(x, y, z);
-    if(id!=0 && id!=Block.waterMoving.blockID && id!=Block.waterStill.blockID)
-      {
-      break;
-      }
-    }
-  return y;
   }
 
 public static int getStepNumber(int x, int z, int minX, int maxX, int minZ, int maxZ)

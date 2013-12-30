@@ -110,7 +110,7 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   int id;
   int water = 0;
   int startY = y-1;
-  y = WorldStructureGenerator.getSeaFloorHeight(world, x, z, startY)+1;
+  y = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
   water = startY-y+1;
   if(water<minWaterDepth || water>maxWaterDepth)
     {  
@@ -163,7 +163,7 @@ private boolean validateBlock(World world, int x, int z, StructureTemplate templ
   {
   int maxY = bb.min.y + template.yOffset + maxLeveling;
   int minY = bb.min.y + template.yOffset - maxFill;
-  int topWaterBlockY = WorldStructureGenerator.getSeaFloorHeight(world, x, z, bb.max.y+1)+1;
+  int topWaterBlockY = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
   if(topWaterBlockY>maxY || topWaterBlockY<minY)
     {
     AWLog.logDebug("rejected due to depth: "+topWaterBlockY + " min: "+minY +" max: "+maxY);
@@ -225,7 +225,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     {
     if(fill>0)
       {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0    
-      int topEmptyBlockY = WorldStructureGenerator.getSeaFloorHeight(world, x, z, bb.max.y+1)+1;
+      int topEmptyBlockY = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
       minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
       }    
     }  
@@ -274,6 +274,10 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     }
   }
 
-
+@Override
+public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {
+  
+  }
 
 }
