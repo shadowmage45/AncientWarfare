@@ -40,59 +40,31 @@ public class StructureValidatorGround extends StructureValidator
 {
 
 
-
-int maxLeveling;
-int maxFill;
-int borderSize;
-
-Set<String> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
-Set<String> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
-
-
 public StructureValidatorGround()
   {
   super(StructureValidationType.GROUND);
-  acceptedTargetBlocks = new HashSet<String>();
-  acceptedClearBlocks = new HashSet<String>();
   }
 
 @Override
 protected void readFromLines(List<String> lines)
   {
-  for(String line : lines)
-    {
-    if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}   
-    else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(acceptedTargetBlocks, "=", line, false);}
-    else if(line.toLowerCase().startsWith("validclearingblocks=")){StringTools.safeParseStringsToSet(acceptedClearBlocks, "=", line, false);}
-    }
+ 
   }
 
 @Override
 protected void write(BufferedWriter writer) throws IOException
   {
-  writer.write("leveling="+maxLeveling);
-  writer.newLine();
-  writer.write("fill="+maxFill);
-  writer.newLine();
-  writer.write("border="+borderSize);
-  writer.newLine();
-  writer.write("validTargetBlocks="+StringTools.getCSVfor(acceptedTargetBlocks));
-  writer.newLine();
-  writer.write("validClearingBlocks="+StringTools.getCSVfor(acceptedClearBlocks));
-  writer.newLine();  
+ 
   }
 
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-  this.acceptedClearBlocks.addAll(WorldStructureGenerator.defaultClearBlocks);
-  this.acceptedTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
-  int size = (template.ySize-template.yOffset)/3;
-  this.borderSize = size;
-  this.maxLeveling = template.ySize-template.yOffset;
-  this.maxFill = size;
+//  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
+//  int size = (template.ySize-template.yOffset)/3;
+//  this.borderSize = size;
+//  this.maxLeveling = template.ySize-template.yOffset;
+//  this.maxFill = size;
   }
 
 @Override
@@ -100,7 +72,7 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   {
   if( y <= template.yOffset+maxFill){return false;}
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
-  if(block==null || !acceptedTargetBlocks.contains(block.getUnlocalizedName())){return false;}
+  if(block==null || !validTargetBlocks.contains(block.getUnlocalizedName())){return false;}
   return true;
   }
 
@@ -126,13 +98,13 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
     {
     bz = bb.min.z-borderSize;
     by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateTargetBlock(world, bx, by, bz, acceptedTargetBlocks, false))
+    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
       {
       return false;
       }        
     bz = bb.max.z+borderSize;
     by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateTargetBlock(world, bx, by, bz, acceptedTargetBlocks, false))
+    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
       {
       return false;
       } 
@@ -141,13 +113,13 @@ private boolean validateStructurePlacement(World world, int x, int y, int z, int
     {
     bx = bb.min.x-borderSize;
     by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateTargetBlock(world, bx, by, bz, acceptedTargetBlocks, false))
+    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
       {
       return false;
       }    
     bx = bb.max.x+borderSize;
     by = validateBlockHeight(world, bx, bz, bottomY, topY, true);
-    if(!validateTargetBlock(world, bx, by, bz, acceptedTargetBlocks, false))
+    if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
       {
       return false;
       } 
@@ -228,7 +200,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     block = Block.blocksList[id];
     if(leveling>0 && y>=minLevelY)
       {
-      if(block!=null && (!WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) || chunk.getBlockID(xInChunk, y-1, zInChunk)==0) && acceptedClearBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && validTargetBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
         }

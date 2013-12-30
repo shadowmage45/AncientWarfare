@@ -55,6 +55,13 @@ private Set<String> biomeList;//list of biomes for white/black list.  treated as
 private boolean dimensionWhiteList;//should treat dimension list as white or blacklist?
 private int[] acceptedDimensions;//list of accepted dimensions treated as white/black list from whitelist toggle
 
+int maxLeveling;
+int maxFill;
+int borderSize;
+
+Set<String> validTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
+
+
 protected StructureValidator(StructureValidationType validationType)
   {
   this.validationType = validationType;
@@ -62,6 +69,7 @@ protected StructureValidator(StructureValidationType validationType)
   clusterValue = 1;  
   minDuplicateDistance = 4;
   biomeList = new HashSet<String>();
+  validTargetBlocks = new HashSet<String>();
   }
 
 protected abstract void readFromLines(List<String> lines);
@@ -97,9 +105,10 @@ public static final StructureValidator parseValidator(List<String> lines)
   Iterator<String> it = lines.iterator();
   String line;
   boolean unique = false, worldGen = false, biome = false, dimension = false, blocks = false;
-  int selectionWeight=1, clusterValue=1, duplicate=1;
+  int selectionWeight=1, clusterValue=1, duplicate=1, maxLeveling = 0, maxFill = 0, borderSize = 0;
   int[] dimensions = null;
   Set<String> biomes = new HashSet<String>();
+  Set<String> validTargetBlocks = new HashSet<String>();
   
   while(it.hasNext() && (line=it.next())!=null)
     {    
@@ -110,10 +119,14 @@ public static final StructureValidator parseValidator(List<String> lines)
     else if(line.toLowerCase().startsWith("dimensionwhitelise=")){dimension = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("preserveblocks=")){blocks = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("dimensionlist=")){dimensions = StringTools.safeParseIntArray("=", line);}
-    else if(line.toLowerCase().startsWith("biomelist=")){addBiomesToSet(biomes, StringTools.safeParseStringArray("=", line));}
+    else if(line.toLowerCase().startsWith("biomelist=")){StringTools.safeParseStringsToSet(biomes, "=", line, true);}
     else if(line.toLowerCase().startsWith("selectionweight=")){selectionWeight = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("clustervalue=")){clusterValue = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("minduplicatedistance=")){duplicate = StringTools.safeParseInt("=", line);}    
+    else if(line.toLowerCase().startsWith("minduplicatedistance=")){duplicate = StringTools.safeParseInt("=", line);}
+    if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}   
+    else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(validTargetBlocks, "=", line, false);}
     else if(line.toLowerCase().startsWith("data:"))
       {
       tagLines.add(line);
@@ -148,15 +161,12 @@ public static final StructureValidator parseValidator(List<String> lines)
   validator.clusterValue = clusterValue;
   validator.selectionWeight = selectionWeight;
   validator.minDuplicateDistance = duplicate;  
+  
+  validator.maxFill = maxFill;
+  validator.maxLeveling = maxLeveling;      
+  validator.borderSize = borderSize;
+  validator.validTargetBlocks = validTargetBlocks;
   return validator;
-  }
-
-private static final void addBiomesToSet(Set<String> biomes, String[] names)
-  {
-  for(String name : names)
-    {
-    biomes.add(name.toLowerCase());
-    }
   }
 
 public static final void writeValidator(BufferedWriter out, StructureValidator validator) throws IOException
@@ -183,6 +193,14 @@ public static final void writeValidator(BufferedWriter out, StructureValidator v
   out.newLine();
   out.write("biomeList="+StringTools.getCSVValueFor(validator.biomeList.toArray(new String[validator.biomeList.size()])));
   out.newLine();
+  out.write("leveling="+validator.maxLeveling);
+  out.newLine();
+  out.write("fill="+validator.maxFill);
+  out.newLine();
+  out.write("border="+validator.borderSize);
+  out.newLine();
+  out.write("validTargetBlocks="+StringTools.getCSVfor(validator.validTargetBlocks));
+  out.newLine(); 
   out.write("data:");
   out.newLine();
   validator.write(out);
@@ -248,7 +266,15 @@ public final int getMinDuplicateDistance()
 
 //************************************************ UTILITY METHODS *************************************************//
 /**
- * validates block height at X, Z is greater than min and less than max (non inclusive)
+ * validates both top block height and block type for the input position and settings
+ */
+protected boolean validateBlockHeightAndType(World world, int x, int z, int min, int max, boolean skipWater, boolean allowAir, Set<String> validBlocks)
+  {
+  return validateBlockType(world, x, validateBlockHeight(world, x, z, min, max, skipWater), z, validBlocks, allowAir);
+  }
+
+/**
+ * validates top block height at X, Z is >=  min and <= max (inclusive)
  * returns topFoundY or -1 if not within range
  */
 protected int validateBlockHeight(World world, int x, int z, int minimumAcceptableY, int maximumAcceptableY, boolean skipWater)
@@ -262,9 +288,12 @@ protected int validateBlockHeight(World world, int x, int z, int minimumAcceptab
   return topFilledY;
   }
 
-protected boolean validateTargetBlock(World world, int x, int y, int z, Set<String> validBlocks, boolean allowAir)
+/**
+ * validates the target block at x,y,z is one of the input valid blocks (or air if allowAir == true)
+ */
+protected boolean validateBlockType(World world, int x, int y, int z, Set<String> validBlocks, boolean allowAir)
   {
-  if(y<=0)
+  if(y < 0 || y>=256)
     {
     return false;
     }

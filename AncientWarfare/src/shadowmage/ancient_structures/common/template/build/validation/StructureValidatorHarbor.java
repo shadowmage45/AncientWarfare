@@ -132,7 +132,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     for(bz = minZ; bz<=maxZ; bz++)
       {
       by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocks, false))
+      if(!validateBlockType(world, bx, by, bz, validTargetBlocks, false))
         {
         return false;
         }
@@ -150,7 +150,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     for(bz = minZ; bz<=maxZ; bz++)
       {
       by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocksRear, false))
+      if(!validateBlockType(world, bx, by, bz, validTargetBlocksRear, false))
         {
         return false;
         }
@@ -168,7 +168,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     for(bz = minZ; bz<=maxZ; bz++)
       {
       by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocksSide, false))
+      if(!validateBlockType(world, bx, by, bz, validTargetBlocksSide, false))
         {
         return false;
         }
@@ -186,7 +186,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
     for(bz = minZ; bz<=maxZ; bz++)
       {
       by = validateBlockHeight(world, bx, bz, minFillY, maxLevelingY, true);
-      if(!validateTargetBlock(world, bx, by, bz, validTargetBlocksSide, false))
+      if(!validateBlockType(world, bx, by, bz, validTargetBlocksSide, false))
         {
         return false;
         }
