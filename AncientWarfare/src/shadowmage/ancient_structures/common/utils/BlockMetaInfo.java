@@ -27,18 +27,20 @@ import net.minecraft.item.ItemStack;
 
 public class BlockMetaInfo
 {
-private static HashMap<String, BlockMetaInfo> blockNameMap = new HashMap<String, BlockMetaInfo>();
+private static HashMap<String, Block> blockNameMap = new HashMap<String, Block>();
+private static HashMap<Block, BlockMetaInfo> infoByBlock = new HashMap<Block, BlockMetaInfo>();
 
 int id;
 String name;
 byte[] rotationMatrix = new byte[16];
-
+int buildPriority = 0;
 
 public BlockMetaInfo(Block block)
   {
   id = block.blockID;
   name = block.getUnlocalizedName();
-  blockNameMap.put(name, this);
+  blockNameMap.put(name, block);
+  infoByBlock.put(block, this);
   }
 
 public int getRotatedMetaFor(int meta, int turns)
@@ -66,6 +68,20 @@ public void setRotationMap(int... metaMap)
 public ItemStack getItemToPlace(int meta)
   {
   return null;
+  }
+
+public static Block getBlockForName(String name)
+  {
+  return blockNameMap.get(name);
+  }
+
+public static int getRotatedMetaFor(Block block, int meta, int turns)
+  {
+  if(infoByBlock.containsKey(block))
+    {
+    return infoByBlock.get(block).getRotatedMetaFor(meta, turns);
+    }
+  return meta;
   }
 
 }
