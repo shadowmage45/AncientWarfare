@@ -71,9 +71,9 @@ protected void write(BufferedWriter out) throws IOException
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
+  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
   int size = (template.ySize-template.yOffset)/3;
-  this.borderSize = size;  
+  this.borderSize = size;
   this.maxLeveling = template.ySize-template.yOffset;
   this.maxFill = size;
   }
@@ -83,9 +83,9 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   {
   int id;
   int water = 0;
-  int startY = y-1;
+  int startY = y;
   y = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
-  water = startY - y + 1;
+  water = startY - y;
   if(water<minWaterDepth || water>maxWaterDepth)
     {  
     return false;

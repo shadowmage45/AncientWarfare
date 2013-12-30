@@ -26,7 +26,7 @@ GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", StructureValidatorUnderground.class),
 SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
-SUBMERGED("underwater", StructureValidatorSubmerged.class),
+SUBMERGED("submerged", StructureValidatorSubmerged.class),
 HARBOR("harbor", StructureValidatorHarbor.class);
 
 private String name;
@@ -64,12 +64,12 @@ public static StructureValidationType getTypeFromName(String name)
   {
   if(name==null){return null;}
   name = name.toLowerCase();
-  if(name.equals("ground")){return GROUND;}
-  else if(name.equals("underground")){return UNDERGROUND;}
-  else if(name.equals("sky")){return SKY;}
-  else if(name.equals("water")){return WATER;}
-  else if(name.equals("underwater")){return SUBMERGED;}
-  else if(name.equals("harbor")){return HARBOR;}
+  if(name.equals(GROUND.name)){return GROUND;}
+  else if(name.equals(UNDERGROUND.name)){return UNDERGROUND;}
+  else if(name.equals(SKY.name)){return SKY;}
+  else if(name.equals(WATER.name)){return WATER;}
+  else if(name.equals(SUBMERGED.name)){return SUBMERGED;}
+  else if(name.equals(HARBOR.name)){return HARBOR;}
   return null;
   }
 
@@ -83,16 +83,16 @@ public static StructureValidationType getTypeFromName(String name)
  *    validate min/max overfill height is met
  *    validate border target blocks
  *    
- * sky:
- *    validate min flying height along edges
- *    template should have no ground/land in it (unless desired)
- *    
  * water:
  *    validate water depth along edges
  *    
  * submerged (previously underwater/island):
  *    validate min/max water depth at placement x/z
  *    validate border edge blocks for depth and leveling
+ *    
+ * sky:
+ *    validate min flying height along edges
+ *    template should have no ground/land in it (unless desired)
  * 
  * harbor:
  *    validate edges--front all land, sides land/water, back all water. validate edge-depth and leveling

@@ -60,11 +60,11 @@ protected void write(BufferedWriter writer) throws IOException
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-//  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
-//  int size = (template.ySize-template.yOffset)/3;
-//  this.borderSize = size;
-//  this.maxLeveling = template.ySize-template.yOffset;
-//  this.maxFill = size;
+  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
+  int size = (template.ySize-template.yOffset)/3;
+  this.borderSize = size;
+  this.maxLeveling = template.ySize-template.yOffset;
+  this.maxFill = size;
   }
 
 @Override
