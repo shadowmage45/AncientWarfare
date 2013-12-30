@@ -26,8 +26,9 @@ GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", StructureValidatorUnderground.class),
 SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
-SUBMERGED("submerged", StructureValidatorSubmerged.class),
-HARBOR("harbor", StructureValidatorHarbor.class);
+UNDERWATER("underwater", StructureValidatorSubmerged.class),
+HARBOR("harbor", StructureValidatorHarbor.class), 
+ISLAND("island", StructureValidatorIsland.class);
 
 private String name;
 private Class<? extends StructureValidator> validatorClass;
@@ -68,8 +69,9 @@ public static StructureValidationType getTypeFromName(String name)
   else if(name.equals(UNDERGROUND.name)){return UNDERGROUND;}
   else if(name.equals(SKY.name)){return SKY;}
   else if(name.equals(WATER.name)){return WATER;}
-  else if(name.equals(SUBMERGED.name)){return SUBMERGED;}
+  else if(name.equals(UNDERWATER.name)){return UNDERWATER;}
   else if(name.equals(HARBOR.name)){return HARBOR;}
+  else if(name.equals(ISLAND.name)){return ISLAND;}
   return null;
   }
 

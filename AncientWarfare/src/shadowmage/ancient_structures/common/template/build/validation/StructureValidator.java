@@ -96,6 +96,12 @@ public abstract boolean validatePlacement(World world, int x, int y, int z, int 
  */
 public abstract void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
+/**
+ * called from StructureBuilder when constructed with world-gen settings whenever a '0' rule is detected
+ * in the template
+ * implementations should fill the input x,y,z with whatever block is an appropriate 'fill' for that
+ * validation type -- e.g. air or water
+ */
 public abstract void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
 
 public static final StructureValidator parseValidator(List<String> lines)

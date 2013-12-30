@@ -44,7 +44,7 @@ int maxWaterDepth;
 
 public StructureValidatorSubmerged()
   {
-  super(StructureValidationType.SUBMERGED);
+  super(StructureValidationType.UNDERWATER);
   minWaterDepth = 1;
   maxWaterDepth = 40;
   }
