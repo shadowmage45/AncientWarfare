@@ -37,6 +37,8 @@ public class StructureValidatorHarbor extends StructureValidator
 
 BlockPosition testPosition = new BlockPosition();
 Set<String> validTargetBlocks;
+int borderSize;
+int maxFill;
 int maxLeveling;
 
 public StructureValidatorHarbor()
@@ -161,7 +163,7 @@ private int getSide(int x, int z, int face, StructureBB bb)
 
 private boolean validateBlock(World world, int x, int z, int side, StructureTemplate template, StructureBB bb)
   {  
-  boolean ground = (side==0 || side==2);
+  boolean ground = side!=1;
   boolean water = side!=0;
   return true;
   }
