@@ -43,7 +43,6 @@ public ItemStructureGenerator(int itemID)
   super(itemID);
   }
 
-ItemStructureSettings buildSettings = new ItemStructureSettings();
 @Override
 public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
@@ -74,19 +73,4 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
   return true;
   }
 
-//@Override
-//public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
-//  {  
-//  if(player==null || world.isRemote){return true;}
-//  if(player.isSneaking())
-//    {
-//    GUIHandler.instance().openGUI(Statics.guiStructureBuilderCreative, player, 0, 0, 0);    
-//    return true;    
-//    }
-//  else
-//    {
-//    
-//    }
-//  return true;
-//  }
 }
