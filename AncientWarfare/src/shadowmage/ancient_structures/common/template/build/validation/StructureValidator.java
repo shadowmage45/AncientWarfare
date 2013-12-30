@@ -387,4 +387,24 @@ protected int getMaxY(StructureTemplate template, StructureBB bb)
   return bb.min.y + template.yOffset + maxLeveling;
   }
 
+protected int getMinFillY(StructureTemplate template, StructureBB bb)
+  {
+  return getMinY(template, bb);
+  }
+
+protected int getMaxFillY(StructureTemplate template, StructureBB bb)
+  {
+  return getMinY(template, bb)+maxFill;
+  }
+
+protected int getMinLevelingY(StructureTemplate template, StructureBB bb)
+  {
+  return bb.min.y+template.yOffset;
+  }
+
+protected int getMaxLevelingY(StructureTemplate template, StructureBB bb)
+  {
+  return bb.min.y + template.yOffset + maxLeveling;
+  }
+
 }

@@ -44,8 +44,6 @@ public StructureValidatorGround()
   super(StructureValidationType.GROUND);
   }
 
-
-
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
