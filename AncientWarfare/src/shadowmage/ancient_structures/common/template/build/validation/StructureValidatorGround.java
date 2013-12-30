@@ -42,16 +42,8 @@ public class StructureValidatorGround extends StructureValidator
 
 
 int maxLeveling;
-boolean doLeveling;
 int maxFill;
-boolean doFillBelow;
 int borderSize;
-int borderMaxLeveling;
-boolean doBorderLeveling;
-
-int borderMaxFill;
-boolean doBorderFill;
-boolean gradientBorder;
 
 Set<String> acceptedTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
 Set<String> acceptedClearBlocks;//list of blocks which may be cleared/removed during leveling and buffer operations. 100% of blocks to be removed must meet this list
@@ -71,14 +63,7 @@ protected void readFromLines(List<String> lines)
     {
     if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("borderleveling=")){borderMaxLeveling = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("borderfill=")){borderMaxFill = StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("doleveling=")){doLeveling = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("dofill=")){doFillBelow = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("doborderleveling=")){doBorderLeveling = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("doborderfill=")){doBorderFill = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("gradientborder=")){gradientBorder = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}   
     else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(acceptedTargetBlocks, "=", line, false);}
     else if(line.toLowerCase().startsWith("validclearingblocks=")){StringTools.safeParseStringsToSet(acceptedClearBlocks, "=", line, false);}
     }
@@ -93,20 +78,6 @@ protected void write(BufferedWriter writer) throws IOException
   writer.newLine();
   writer.write("border="+borderSize);
   writer.newLine();
-  writer.write("borderLeveling="+borderMaxLeveling);
-  writer.newLine();
-  writer.write("borderFill="+borderMaxFill);
-  writer.newLine();
-  writer.write("doLeveling="+doLeveling);
-  writer.newLine();
-  writer.write("doFill="+doFillBelow);
-  writer.newLine();
-  writer.write("doBorderLeveling="+doBorderLeveling);
-  writer.newLine();
-  writer.write("doBorderFill="+doBorderFill);
-  writer.newLine();  
-  writer.write("gradientBorder="+gradientBorder);
-  writer.newLine();
   writer.write("validTargetBlocks="+StringTools.getCSVfor(acceptedTargetBlocks));
   writer.newLine();
   writer.write("validClearingBlocks="+StringTools.getCSVfor(acceptedClearBlocks));
@@ -117,16 +88,9 @@ protected void write(BufferedWriter writer) throws IOException
 protected void setDefaultSettings(StructureTemplate template)
   {
   this.acceptedClearBlocks.addAll(WorldStructureGenerator.defaultClearBlocks);
-  this.acceptedTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
-  this.doBorderFill = true;
-  this.doBorderLeveling = true;
-  this.doFillBelow = true;
-  this.doLeveling = true;
-  this.gradientBorder = true;  
+  this.acceptedTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
   int size = (template.ySize-template.yOffset)/3;
   this.borderSize = size;
-  this.borderMaxFill = size;
-  this.borderMaxLeveling = size;
   this.maxLeveling = template.ySize-template.yOffset;
   this.maxFill = size;
   }
@@ -155,8 +119,8 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
 private boolean validateStructurePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
   int bx, bz, by, bottomY, topY;
-  bottomY = borderSize > 0 ? bb.min.y + template.yOffset - borderMaxFill : bb.min.y - maxFill;
-  topY = borderSize> 0 ? bb.min.y+template.yOffset + borderMaxLeveling : bb.min.y + template.yOffset + maxLeveling;
+  bottomY = borderSize > 0 ? bb.min.y + template.yOffset - maxFill : bb.min.y - maxFill;
+  topY = borderSize> 0 ? bb.min.y+template.yOffset + maxLeveling : bb.min.y + template.yOffset + maxLeveling;
   int maxFillY = borderSize > 0 ? bb.min.y+template.yOffset-1 : bb.min.y-1;
   for(bx = bb.min.x-borderSize; bx<=bb.max.x+borderSize; bx++)
     {
@@ -212,10 +176,8 @@ private void doStructurePrePlacement(World world, int x, int y, int z, int face,
 
 private void doStructurePrePlacementBlockPlace(World world, int x, int z, StructureTemplate template, StructureBB bb, boolean border)
   {
-  boolean doLeveling = border ? doBorderLeveling : this.doLeveling;
-  boolean doFill = border ? doBorderFill : doFillBelow;
-  int leveling = border? borderMaxLeveling : maxLeveling;
-  int fill = border? borderMaxFill : maxFill;
+  int leveling = maxLeveling;
+  int fill = maxFill;
   
   /**
    * most of this is just to try and minimize the total Y range that is examined for clear/fill
@@ -236,7 +198,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
       minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
       }    
     }  
-  else if(gradientBorder)
+  else
     {
     int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
     int stepHeight = fill / borderSize;
@@ -264,14 +226,14 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     {    
     id = world.getBlockId(x, y, z);
     block = Block.blocksList[id];
-    if(doLeveling && leveling>0 && y>=minLevelY)
+    if(leveling>0 && y>=minLevelY)
       {
       if(block!=null && (!WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) || chunk.getBlockID(xInChunk, y-1, zInChunk)==0) && acceptedClearBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
         }
       }
-    if(doFill && fill>0 && y<=maxFillY)
+    if(fill>0 && y<=maxFillY)
       {
       if(block==null || !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
         {
