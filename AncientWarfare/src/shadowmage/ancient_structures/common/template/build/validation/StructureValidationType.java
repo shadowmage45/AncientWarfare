@@ -27,8 +27,7 @@ UNDERGROUND("underground", StructureValidatorUnderground.class),
 SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
 SUBMERGED("underwater", StructureValidatorSubmerged.class),
-HARBOR("harbor", StructureValidatorHarbor.class),
-SWAMP("swamp", StructureValidatorSwamp.class);
+HARBOR("harbor", StructureValidatorHarbor.class);
 
 private String name;
 private Class<? extends StructureValidator> validatorClass;
@@ -71,7 +70,6 @@ public static StructureValidationType getTypeFromName(String name)
   else if(name.equals("water")){return WATER;}
   else if(name.equals("underwater")){return SUBMERGED;}
   else if(name.equals("harbor")){return HARBOR;}
-  else if(name.equals("swamp")){return SWAMP;}
   return null;
   }
 
@@ -100,9 +98,6 @@ public static StructureValidationType getTypeFromName(String name)
  *    validate edges--front all land, sides land/water, back all water. validate edge-depth and leveling
  *    template should have water along back edge, land on front edge, structure/indetermined on sides
  *   
- * swamp:
- *    validate edges -- count water and land blocks, only allow if ratio meets %. validate border-edge-depth and leveling
- *    template should have a mix of land and water along the edges -- no clue how to get this one to look good in a swamp=\    
  */
 
 }
