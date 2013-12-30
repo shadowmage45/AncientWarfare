@@ -93,14 +93,12 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
   /**
    * most of this is just to try and minimize the total Y range that is examined for clear/fill
    */
-  int minFillY = bb.min.y - fill;
-  if(border){minFillY+=template.yOffset;}
-  int maxFillY = (minFillY + fill) -1;
+  int minFillY = getMinFillY(template, bb);
+  int maxFillY = getMaxFillY(template, bb);  
+  int minLevelY = getMinLevelingY(template, bb);
+  int maxLevelY = getMaxLevelingY(template, bb);
   
-  int minLevelY = bb.min.y + template.yOffset;
-  int maxLevelY = minLevelY + leveling;
-  
-  int minY = minFillY< minLevelY ? minFillY : minLevelY;
+  int minY = minFillY < minLevelY ? minFillY : minLevelY;
   if(!border)
     {
     if(fill>0)

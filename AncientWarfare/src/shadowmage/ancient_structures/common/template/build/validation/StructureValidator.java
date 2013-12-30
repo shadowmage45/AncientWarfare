@@ -342,7 +342,7 @@ protected int validateBlockHeight(World world, int x, int z, int minimumAcceptab
   }
 
 /**
- * validates the target block at x,y,z is one of the input valid blocks (or air if allowAir == true)
+ * validates the target block at x,y,z is one of the input valid blocks
  */
 protected boolean validateBlockType(World world, int x, int y, int z, Set<String> validBlocks)
   {
@@ -394,12 +394,12 @@ protected int getMinFillY(StructureTemplate template, StructureBB bb)
 
 protected int getMaxFillY(StructureTemplate template, StructureBB bb)
   {
-  return getMinY(template, bb)+maxFill;
+  return getMinY(template, bb) + maxFill;
   }
 
 protected int getMinLevelingY(StructureTemplate template, StructureBB bb)
   {
-  return bb.min.y+template.yOffset;
+  return bb.min.y + template.yOffset;
   }
 
 protected int getMaxLevelingY(StructureTemplate template, StructureBB bb)

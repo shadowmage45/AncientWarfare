@@ -88,17 +88,19 @@ public static StructureValidationType getTypeFromName(String name)
  * water:
  *    validate water depth along edges
  *    
- * submerged (previously underwater/island):
+ * underwater:
  *    validate min/max water depth at placement x/z
  *    validate border edge blocks for depth and leveling
  *    
  * sky:
  *    validate min flying height along edges
- *    template should have no ground/land in it (unless desired)
  * 
  * harbor:
- *    validate edges--front all land, sides land/water, back all water. validate edge-depth and leveling
- *    template should have water along back edge, land on front edge, structure/indetermined on sides
+ *    validate edges--front all land, sides land/water, back all water. validate edge-depth and leveling *    
+ * 
+ * island:
+ *    validate min/max water depth at placement x/z
+ *    validate border edge blocks for depth and leveling
  *   
  */
 
