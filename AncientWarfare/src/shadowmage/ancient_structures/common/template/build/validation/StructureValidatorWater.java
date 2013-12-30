@@ -41,22 +41,10 @@ public StructureValidatorWater()
   }
 
 @Override
-protected void setDefaultSettings(StructureTemplate template)
-  {
-  
-  }
-
-@Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
   int id = world.getBlockId(x, y-1, z);
   return id==Block.waterMoving.blockID || id==Block.waterStill.blockID;
-  }
-
-@Override
-public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {
-  return y;
   }
 
 @Override

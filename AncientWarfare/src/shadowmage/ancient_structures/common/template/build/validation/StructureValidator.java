@@ -79,7 +79,14 @@ protected void write(BufferedWriter writer) throws IOException
   {
   }
 
-protected abstract void setDefaultSettings(StructureTemplate template);
+protected void setDefaultSettings(StructureTemplate template)
+  {
+  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
+  int size = (template.ySize-template.yOffset)/3;
+  this.borderSize = size;
+  this.maxLeveling = template.ySize-template.yOffset;
+  this.maxFill = size;
+  }
 
 /**
  * should this template be included for selection for generation? should only validate block placement, most other stuff has been checked (dimension/biome/cluster value/etc)
@@ -89,7 +96,10 @@ public abstract boolean shouldIncludeForSelection(World world, int x, int y, int
 /**
  * if template should be included for selection, get the adjusted spawn Y level from the input block position.  this adjustedY will be used for validation and generation if template is selected and validated
  */
-public abstract int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
+public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+  {
+  return y;
+  }
 
 /**
  * if selected for placement, validate that placement. return false if placement is invalid 

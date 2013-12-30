@@ -69,16 +69,6 @@ protected void write(BufferedWriter out) throws IOException
   }
 
 @Override
-protected void setDefaultSettings(StructureTemplate template)
-  {
-  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
-  int size = (template.ySize-template.yOffset)/3;
-  this.borderSize = size;
-  this.maxLeveling = template.ySize-template.yOffset;
-  this.maxFill = size;
-  }
-
-@Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
   int id;

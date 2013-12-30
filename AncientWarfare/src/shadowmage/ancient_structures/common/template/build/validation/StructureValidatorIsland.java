@@ -92,12 +92,6 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   }
 
 @Override
-public int getAdjustedSpawnY(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
-  {
-  return y;
-  }
-
-@Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
   int minY = getMinY(template, bb);

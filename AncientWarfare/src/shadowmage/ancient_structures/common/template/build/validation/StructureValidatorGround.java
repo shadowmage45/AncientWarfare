@@ -44,20 +44,11 @@ public StructureValidatorGround()
   super(StructureValidationType.GROUND);
   }
 
-@Override
-protected void setDefaultSettings(StructureTemplate template)
-  {
-  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks); 
-  int size = (template.ySize-template.yOffset)/3;
-  this.borderSize = size;
-  this.maxLeveling = template.ySize-template.yOffset;
-  this.maxFill = size;
-  }
+
 
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
-  if( y <= template.yOffset+maxFill){return false;}
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
   if(block==null || !validTargetBlocks.contains(block.getUnlocalizedName())){return false;}
   return true;
@@ -165,11 +156,6 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     }
   }
 
-@Override
-public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {
-  return y;
-  }
 
 @Override
 public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
