@@ -34,7 +34,7 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class StructureValidatorHarbor extends StructureValidator
+public class zStructureValidatorHarbor extends StructureValidator
 {
 
 BlockPosition testPosition1 = new BlockPosition();
@@ -47,7 +47,7 @@ int borderSize;
 int maxFill;
 int maxLeveling;
 
-public StructureValidatorHarbor()
+public zStructureValidatorHarbor()
   {
   super(StructureValidationType.HARBOR);
   validTargetBlocks = new HashSet<String>();

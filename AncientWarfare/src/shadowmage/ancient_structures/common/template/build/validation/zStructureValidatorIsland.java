@@ -36,13 +36,13 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class StructureValidatorIsland extends StructureValidator
+public class zStructureValidatorIsland extends StructureValidator
 {
 
 int minWaterDepth;
 int maxWaterDepth;
 
-public StructureValidatorIsland()
+public zStructureValidatorIsland()
   {
   super(StructureValidationType.ISLAND);
   minWaterDepth = 1;

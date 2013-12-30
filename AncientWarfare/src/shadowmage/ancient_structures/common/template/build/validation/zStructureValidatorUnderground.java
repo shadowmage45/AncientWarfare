@@ -28,59 +28,72 @@ import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 
-public class StructureValidatorSky extends StructureValidator
+public class zStructureValidatorUnderground extends StructureValidator
 {
 
-public StructureValidatorSky()
+public zStructureValidatorUnderground()
   {
-  super(StructureValidationType.SKY);
+  super(StructureValidationType.UNDERGROUND);
   }
 
 @Override
 protected void readFromLines(List<String> lines)
   {
+  // TODO Auto-generated method stub
 
   }
 
 @Override
 protected void write(BufferedWriter writer) throws IOException
   {
+  // TODO Auto-generated method stub
 
   }
 
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
+  // TODO Auto-generated method stub
 
   }
 
 @Override
-public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
+public boolean shouldIncludeForSelection(World world, int x, int y, int z,
+    int face, StructureTemplate template)
   {
+  // TODO Auto-generated method stub
   return false;
   }
 
 @Override
-public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+public int getAdjustedSpawnY(World world, int x, int y, int z, int face,
+    StructureTemplate template, StructureBB bb)
   {
+  // TODO Auto-generated method stub
   return 0;
   }
 
 @Override
-public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+public boolean validatePlacement(World world, int x, int y, int z, int face,
+    StructureTemplate template, StructureBB bb)
   {
+  // TODO Auto-generated method stub
   return false;
   }
 
 @Override
-public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+public void preGeneration(World world, int x, int y, int z, int face,
+    StructureTemplate template, StructureBB bb)
   {
-  
+  // TODO Auto-generated method stub
+
   }
 
 @Override
-public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+public void handleClearAction(World world, int x, int y, int z, int face,
+    StructureTemplate template, StructureBB bb)
   {
+  // TODO Auto-generated method stub
 
   }
 

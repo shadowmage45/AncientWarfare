@@ -32,10 +32,10 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class StructureValidatorWater extends StructureValidator
+public class zStructureValidatorWater extends StructureValidator
 {
 
-public StructureValidatorWater()
+public zStructureValidatorWater()
   {
   super(StructureValidationType.WATER);
   }

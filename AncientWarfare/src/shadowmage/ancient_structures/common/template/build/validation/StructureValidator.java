@@ -47,7 +47,7 @@ private int clusterValue;
 private int minDuplicateDistance;
 private boolean worldGenEnabled;
 private boolean isUnique;//should this structure generate only once?
-private boolean preserveBlocks;
+private boolean preserveBlocks;//should this structure preserve any existing blocks when a rule '0' is encountered?
 
 private boolean biomeWhiteList;//should treat biome list as white or blacklist?
 private Set<String> biomeList;//list of biomes for white/black list.  treated as white/black list from whitelist toggle
