@@ -110,24 +110,16 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face, Structu
 
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
-  {
-  int bx, bz, by;  
-  int side;
-  int minX, minZ, maxX, maxZ;
+  { 
+  int bx, bz;
   
   int minY = getMinY(template, bb);
   int maxY = getMaxY(template, bb);
   
-  AWLog.logDebug("testing front border..");
-  testPosition1 = bb.getFLCorner(face, testPosition1);
-  testPosition2 = bb.getFRCorner(face, testPosition2);
-  minX = Math.min(testPosition1.x, testPosition2.x);
-  maxX = Math.max(testPosition1.x, testPosition2.x);
-  minZ = Math.min(testPosition1.z, testPosition2.z);
-  maxZ = Math.max(testPosition1.z, testPosition2.z);
-  for(bx = minX; bx<=maxX; bx++)
+  bb.getFrontCorners(face, testPosition1, testPosition2);
+  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
     {
-    for(bz = minZ; bz<=maxZ; bz++)
+    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
       {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
         {
@@ -136,17 +128,11 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
       }
     }
   
-  AWLog.logDebug("testing rear border..");
-  testPosition1 = bb.getRLCorner(face, testPosition1);
-  testPosition2 = bb.getRRCorner(face, testPosition2);
-  minX = Math.min(testPosition1.x, testPosition2.x);
-  maxX = Math.max(testPosition1.x, testPosition2.x);
-  minZ = Math.min(testPosition1.z, testPosition2.z);
-  maxZ = Math.max(testPosition1.z, testPosition2.z);  
-  for(bx = minX; bx<=maxX; bx++)
+  bb.getRearCorners(face, testPosition1, testPosition2);
+  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
     {
-    for(bz = minZ; bz<=maxZ; bz++)
-      {
+    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+      {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksRear))
         {
         return false;
@@ -154,17 +140,11 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
       }
     }
   
-  AWLog.logDebug("testing side borders..");
-  testPosition1 = bb.getFRCorner(face, testPosition1);
-  testPosition2 = bb.getRRCorner(face, testPosition2);
-  minX = Math.min(testPosition1.x, testPosition2.x);
-  maxX = Math.max(testPosition1.x, testPosition2.x);
-  minZ = Math.min(testPosition1.z, testPosition2.z);
-  maxZ = Math.max(testPosition1.z, testPosition2.z);  
-  for(bx = minX; bx<=maxX; bx++)
+  bb.getRightCorners(face, testPosition1, testPosition2);
+  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
     {
-    for(bz = minZ; bz<=maxZ; bz++)
-      {
+    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+      {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksSide))
         {
         return false;
@@ -172,22 +152,19 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
       }
     }
   
-  testPosition1 = bb.getFLCorner(face, testPosition1);
-  testPosition2 = bb.getRLCorner(face, testPosition2);
-  minX = Math.min(testPosition1.x, testPosition2.x);
-  maxX = Math.max(testPosition1.x, testPosition2.x);
-  minZ = Math.min(testPosition1.z, testPosition2.z);
-  maxZ = Math.max(testPosition1.z, testPosition2.z);  
-  for(bx = minX; bx<=maxX; bx++)
+  bb.getLeftCorners(face, testPosition1, testPosition2);
+  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
     {
-    for(bz = minZ; bz<=maxZ; bz++)
-      {
+    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+      {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksSide))
         {
         return false;
         }
       }
-    }  
+    }
+  
+   
   return true;
   }
 

@@ -162,6 +162,62 @@ public int getCenterZ()
  * 3-- x++==forward z--==left
  */
 
+public void getFrontCorners(int face, BlockPosition min, BlockPosition max)
+  {  
+  getFLCorner(face, min);
+  getFRCorner(face, max);
+  int minX = Math.min(min.x, max.x);
+  int maxX = Math.max(min.x, max.x);
+  int minZ = Math.min(min.z, max.z);
+  int maxZ = Math.max(min.z, max.z);
+  min.x = minX;
+  min.z = minZ;
+  max.x = maxX;
+  max.z = maxZ;
+  }
+
+public void getLeftCorners(int face, BlockPosition min, BlockPosition max)
+  {
+  getFLCorner(face, min);
+  getRLCorner(face, max);
+  int minX = Math.min(min.x, max.x);
+  int maxX = Math.max(min.x, max.x);
+  int minZ = Math.min(min.z, max.z);
+  int maxZ = Math.max(min.z, max.z);
+  min.x = minX;
+  min.z = minZ;
+  max.x = maxX;
+  max.z = maxZ;
+  }
+
+public void getRearCorners(int face, BlockPosition min, BlockPosition max)
+  {
+  getRLCorner(face, min);
+  getRRCorner(face, max);
+  int minX = Math.min(min.x, max.x);
+  int maxX = Math.max(min.x, max.x);
+  int minZ = Math.min(min.z, max.z);
+  int maxZ = Math.max(min.z, max.z);
+  min.x = minX;
+  min.z = minZ;
+  max.x = maxX;
+  max.z = maxZ;
+  }
+
+public void getRightCorners(int face, BlockPosition min, BlockPosition max)
+  {
+  getFRCorner(face, min);
+  getRRCorner(face, max);
+  int minX = Math.min(min.x, max.x);
+  int maxX = Math.max(min.x, max.x);
+  int minZ = Math.min(min.z, max.z);
+  int maxZ = Math.max(min.z, max.z);
+  min.x = minX;
+  min.z = minZ;
+  max.x = maxX;
+  max.z = maxZ;
+  }
+
 public BlockPosition getFLCorner(int face, BlockPosition out)
   {
   switch(face)
