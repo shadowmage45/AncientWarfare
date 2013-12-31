@@ -57,20 +57,9 @@ public StructureValidatorHarbor()
   }
 
 @Override
-protected void readFromLines(List<String> lines)
-  {
-
-  }
-
-@Override
-protected void write(BufferedWriter writer) throws IOException
-  {
-
-  }
-
-@Override
 protected void setDefaultSettings(StructureTemplate template)
   {
+  
   }
 
 @Override
@@ -172,44 +161,6 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
   prePlacementBorder(world, template, bb);
-//  int bx, bz;  
-//  int minY = getMinY(template, bb);
-//  int maxY = getMaxY(template, bb);  
-//  bb.getFrontCorners(face, testMin, testMax);
-//  for(bx = testMin.x; bx<=testMax.x; bx++)
-//    {
-//    for(bz = testMin.z; bz<=testMax.z; bz++)
-//      {      
-//      bord
-//      }
-//    }
-//  
-//  bb.getRearCorners(face, testMin, testMax);
-//  for(bx = testMin.x; bx<=testMax.x; bx++)
-//    {
-//    for(bz = testMin.z; bz<=testMax.z; bz++)
-//      {      
-//     
-//      }
-//    }
-//  
-//  bb.getRightCorners(face, testMin, testMax);
-//  for(bx = testMin.x; bx<=testMax.x; bx++)
-//    {
-//    for(bz = testMin.z; bz<=testMax.z; bz++)
-//      {      
-//     
-//      }
-//    }
-//  
-//  bb.getLeftCorners(face, testMin, testMax);
-//  for(bx = testMin.x; bx<=testMax.x; bx++)
-//    {
-//    for(bz = testMin.z; bz<=testMax.z; bz++)
-//      {      
-//  
-//      }
-//    }
   }
 
 @Override
