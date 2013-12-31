@@ -353,12 +353,12 @@ protected boolean validateBlockType(World world, int x, int y, int z, Set<String
   Block block = Block.blocksList[world.getBlockId(x, y, z)];
   if(block==null)
     {   
-    AWLog.logDebug("rejected for non-matching block: air");
+    AWLog.logDebug("rejected for non-matching block: air" + " at: "+x+","+y+","+z);
     return false;
     }
   if(!validBlocks.contains(block.getUnlocalizedName()))
     {
-    AWLog.logDebug("rejected for non-matching block: "+block.getUnlocalizedName());
+    AWLog.logDebug("rejected for non-matching block: "+block.getUnlocalizedName() + " at: "+x+","+y+","+z);
     return false;
     }
   return true;  

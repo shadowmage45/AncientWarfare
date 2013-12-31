@@ -83,8 +83,10 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
 @Override
 public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  int range = maxGenerationDepth-minGenerationDepth+1;
-  return minGenerationDepth + world.rand.nextInt(range);
+  y = WorldStructureGenerator.getTargetY(world, x, z, true);  
+  int range = maxGenerationDepth - minGenerationDepth + 1;
+  int tHeight = (template.ySize - template.yOffset);  
+  return y - minOverfill - world.rand.nextInt(range) - tHeight;
   }
 
 @Override

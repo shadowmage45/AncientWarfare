@@ -27,7 +27,7 @@ UNDERGROUND("underground", StructureValidatorUnderground.class),
 SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
 UNDERWATER("underwater", StructureValidatorUnderwater.class),
-HARBOR("harbor", zStructureValidatorHarbor.class), 
+HARBOR("harbor", StructureValidatorHarbor.class), 
 ISLAND("island", StructureValidatorIsland.class);
 
 private String name;

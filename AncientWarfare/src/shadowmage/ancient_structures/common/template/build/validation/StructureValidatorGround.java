@@ -135,11 +135,18 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     {    
     id = world.getBlockId(x, y, z);
     block = Block.blocksList[id];
-    if(leveling>0 && y>=minLevelY)
+    if(leveling>0 && y >= minLevelY)
       {
       if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && validTargetBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
+        }
+      }
+    else if(leveling>0 && y==minLevelY-1)
+      {
+      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && validTargetBlocks.contains(block.getUnlocalizedName()))
+        {
+        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);        
         }
       }
     if(fill>0 && y<=maxFillY)
