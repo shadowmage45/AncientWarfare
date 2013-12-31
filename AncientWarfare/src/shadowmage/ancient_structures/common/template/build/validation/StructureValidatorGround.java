@@ -156,7 +156,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
 @Override
 public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  
+  world.setBlock(x, y, z, 0);
   }
 
 }

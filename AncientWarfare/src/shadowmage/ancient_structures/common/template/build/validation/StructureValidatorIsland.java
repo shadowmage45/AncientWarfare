@@ -125,7 +125,15 @@ public void preGeneration(World world, int x, int y, int z, int face,  Structure
 @Override
 public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  
+  int maxWaterY = bb.min.y+template.yOffset-1;
+  if(y <= maxWaterY)
+    {
+    world.setBlock(x, y, z, Block.waterStill.blockID);
+    }
+  else
+    {
+    world.setBlock(x, y, z, 0);
+    }
   }
 
 }
