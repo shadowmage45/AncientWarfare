@@ -73,7 +73,6 @@ public static NBTTagCompound readNBTFrom(List<String> lines)
   Iterator<String> it = lines.iterator();  
   String leadLine = it.next();
   NBTTagCompound tag = parseCompoundTag(leadLine, it);
-  AWLog.logDebug("parsed tag: "+tag);
   return tag;  
   }
 
@@ -84,13 +83,11 @@ public static NBTTagCompound parseCompoundTag(String leadLine, Iterator<String> 
   String line;
   while(it.hasNext() && (line = it.next())!=null)
     {
-    AWLog.logDebug("test line: "+line);
     if(line.startsWith("}"))
       {
       break;
       }
     baseTag = parseBaseTag(line, it);
-    AWLog.logDebug("parsed tag for line:"+baseTag);
     if(baseTag!=null)
       {
       tag.setTag(baseTag.getName(), baseTag);
@@ -106,7 +103,6 @@ public static NBTTagList parseListTag(String leadLine, Iterator<String> it)
   NBTTagList list = new NBTTagList(leadLine.split("=",-1)[2].split("\\{", -1)[0]);  
   while(it.hasNext() && (line = it.next())!=null)
     {
-    AWLog.logDebug("test line: "+line);
     if(line.startsWith("}"))
       {
       break;
@@ -114,7 +110,6 @@ public static NBTTagList parseListTag(String leadLine, Iterator<String> it)
     tag = parseBaseTag(line, it);
     if(tag!=null)
       {
-      AWLog.logDebug("appending tag to list: "+tag+ "  to: "+list);
       list.appendTag(tag);
       }
     }

@@ -26,7 +26,7 @@ GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", zStructureValidatorUnderground.class),
 SKY("sky", zStructureValidatorSky.class),
 WATER("water", zStructureValidatorWater.class),
-UNDERWATER("underwater", zStructureValidatorSubmerged.class),
+UNDERWATER("underwater", zStructureValidatorUnderwater.class),
 HARBOR("harbor", zStructureValidatorHarbor.class), 
 ISLAND("island", zStructureValidatorIsland.class);
 

@@ -36,17 +36,15 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class zStructureValidatorSubmerged extends StructureValidator
+public class zStructureValidatorUnderwater extends StructureValidator
 {
 
 int minWaterDepth;
 int maxWaterDepth;
 
-public zStructureValidatorSubmerged()
+public zStructureValidatorUnderwater()
   {
   super(StructureValidationType.UNDERWATER);
-  minWaterDepth = 1;
-  maxWaterDepth = 40;
   }
 
 @Override
@@ -57,6 +55,7 @@ protected void readFromLines(List<String> lines)
     if(line.toLowerCase().startsWith("minwaterdepth=")){minWaterDepth = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("maxwaterdepth=")){maxWaterDepth = StringTools.safeParseInt("=", line);}
     }
+  AWLog.logDebug("parsed underwater template rules...min: "+minWaterDepth + " max: "+maxWaterDepth);
   }
 
 @Override
@@ -204,7 +203,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     block = Block.blocksList[id];
     if(leveling>0 && y>=minLevelY)
       {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, Block.waterStill.blockID, 0);        
         }
