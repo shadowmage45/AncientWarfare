@@ -37,8 +37,8 @@ import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 public class StructureValidatorHarbor extends StructureValidator
 {
 
-BlockPosition testPosition1 = new BlockPosition();
-BlockPosition testPosition2 = new BlockPosition();
+BlockPosition testMin = new BlockPosition();
+BlockPosition testMax = new BlockPosition();
 
 Set<String> validTargetBlocks;
 Set<String> validTargetBlocksSide;
@@ -84,14 +84,14 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];  
   if(block!=null && validTargetBlocks.contains(block.getUnlocalizedName()))
     {
-    testPosition1.reassign(x, y, z);
-    testPosition1.moveForward(face, template.zOffset);
-    int by = WorldStructureGenerator.getTargetY(world, testPosition1.x, testPosition1.z, false);
+    testMin.reassign(x, y, z);
+    testMin.moveForward(face, template.zOffset);
+    int by = WorldStructureGenerator.getTargetY(world, testMin.x, testMin.z, false);
     if(y - by >maxFill)
       {
       return false;
       }
-    block = Block.blocksList[world.getBlockId(testPosition1.x, by, testPosition1.z)];
+    block = Block.blocksList[world.getBlockId(testMin.x, by, testMin.z)];
     if(block==Block.waterStill || block==Block.waterMoving)
       {
       return true;
@@ -103,9 +103,9 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
 @Override
 public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  testPosition1.reassign(x, y, z);
-  testPosition1.moveForward(face, template.zOffset);
-  return WorldStructureGenerator.getTargetY(world, testPosition1.x, testPosition1.z, false)+1;
+  testMin.reassign(x, y, z);
+  testMin.moveForward(face, template.zOffset);
+  return WorldStructureGenerator.getTargetY(world, testMin.x, testMin.z, false)+1;
   }
 
 @Override
@@ -116,10 +116,10 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
   int minY = getMinY(template, bb);
   int maxY = getMaxY(template, bb);
   
-  bb.getFrontCorners(face, testPosition1, testPosition2);
-  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
+  bb.getFrontCorners(face, testMin, testMax);
+  for(bx = testMin.x; bx<=testMax.x; bx++)
     {
-    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+    for(bz = testMin.z; bz<=testMax.z; bz++)
       {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocks))
         {
@@ -128,10 +128,10 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
       }
     }
   
-  bb.getRearCorners(face, testPosition1, testPosition2);
-  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
+  bb.getRearCorners(face, testMin, testMax);
+  for(bx = testMin.x; bx<=testMax.x; bx++)
     {
-    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+    for(bz = testMin.z; bz<=testMax.z; bz++)
       {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksRear))
         {
@@ -140,10 +140,10 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
       }
     }
   
-  bb.getRightCorners(face, testPosition1, testPosition2);
-  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
+  bb.getRightCorners(face, testMin, testMax);
+  for(bx = testMin.x; bx<=testMax.x; bx++)
     {
-    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+    for(bz = testMin.z; bz<=testMax.z; bz++)
       {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksSide))
         {
@@ -152,10 +152,10 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
       }
     }
   
-  bb.getLeftCorners(face, testPosition1, testPosition2);
-  for(bx = testPosition1.x; bx<=testPosition2.x; bx++)
+  bb.getLeftCorners(face, testMin, testMax);
+  for(bx = testMin.x; bx<=testMax.x; bx++)
     {
-    for(bz = testPosition1.z; bz<=testPosition2.z; bz++)
+    for(bz = testMin.z; bz<=testMax.z; bz++)
       {      
       if(!validateBlockHeightAndType(world, bx, bz, minY, maxY, false, validTargetBlocksSide))
         {
@@ -171,7 +171,45 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
 @Override
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  
+  prePlacementBorder(world, template, bb);
+//  int bx, bz;  
+//  int minY = getMinY(template, bb);
+//  int maxY = getMaxY(template, bb);  
+//  bb.getFrontCorners(face, testMin, testMax);
+//  for(bx = testMin.x; bx<=testMax.x; bx++)
+//    {
+//    for(bz = testMin.z; bz<=testMax.z; bz++)
+//      {      
+//      bord
+//      }
+//    }
+//  
+//  bb.getRearCorners(face, testMin, testMax);
+//  for(bx = testMin.x; bx<=testMax.x; bx++)
+//    {
+//    for(bz = testMin.z; bz<=testMax.z; bz++)
+//      {      
+//     
+//      }
+//    }
+//  
+//  bb.getRightCorners(face, testMin, testMax);
+//  for(bx = testMin.x; bx<=testMax.x; bx++)
+//    {
+//    for(bz = testMin.z; bz<=testMax.z; bz++)
+//      {      
+//     
+//      }
+//    }
+//  
+//  bb.getLeftCorners(face, testMin, testMax);
+//  for(bx = testMin.x; bx<=testMax.x; bx++)
+//    {
+//    for(bz = testMin.z; bz<=testMax.z; bz++)
+//      {      
+//  
+//      }
+//    }
   }
 
 @Override
