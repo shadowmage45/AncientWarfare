@@ -24,21 +24,23 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
+import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class StructureValidatorSky extends StructureValidator
+public class StructureValidatorUnderground extends StructureValidator
 {
 
-int minGenerationHeight;
-int maxGenerationHeight;
-int minFlyingHeight;
+int minGenerationDepth;
+int maxGenerationDepth;
+int minOverfill;
 
-public StructureValidatorSky()
+public StructureValidatorUnderground()
   {
-  super(StructureValidationType.SKY);
+  super(StructureValidationType.UNDERGROUND);
   }
 
 @Override
@@ -46,20 +48,20 @@ protected void readFromLines(List<String> lines)
   {
   for(String line : lines)
     {
-    if(line.toLowerCase().startsWith("mingenerationheight=")){minGenerationHeight=StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("maxgenerationheight=")){maxGenerationHeight=StringTools.safeParseInt("=", line);}
-    else if(line.toLowerCase().startsWith("minflyingheight=")){minFlyingHeight=StringTools.safeParseInt("=", line);}
+    if(line.toLowerCase().startsWith("mingenerationdepth=")){minGenerationDepth = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("maxgenerationdepth=")){maxGenerationDepth = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("minoverfill=")){minOverfill = StringTools.safeParseInt("=", line);}
     }
   }
 
 @Override
 protected void write(BufferedWriter out) throws IOException
   {
-  out.write("minGenerationHeight="+minGenerationHeight);
+  out.write("minGenerationDepth="+minGenerationDepth);
   out.newLine();
-  out.write("maxGenerationHeight="+maxGenerationHeight);
+  out.write("maxGenerationDepth="+maxGenerationDepth);
   out.newLine();
-  out.write("minFlyingHeight="+minFlyingHeight);
+  out.write("minOverfill="+minOverfill);
   out.newLine();
   }
 
@@ -71,29 +73,37 @@ protected void setDefaultSettings(StructureTemplate template)
 
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
-  {  
-  int remainingHeight = world.provider.getActualHeight() - minFlyingHeight - (template.ySize-template.yOffset);
-  return y < remainingHeight;
+  {
+  y = WorldStructureGenerator.getTargetY(world, x, z, true);
+  int tHeight = (template.ySize-template.yOffset);
+  int low = minGenerationDepth + tHeight + minOverfill;  
+  return y > low;
   }
 
 @Override
 public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  int range = maxGenerationHeight-minGenerationHeight+1;
-  return y + minFlyingHeight + world.rand.nextInt(range);
+  int range = maxGenerationDepth-minGenerationDepth+1;
+  return minGenerationDepth + world.rand.nextInt(range);
   }
 
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {     
-  int maxY = minGenerationHeight - minFlyingHeight;
-  return validateBorderBlocks(world, template, bb, 0, maxY, false);
+  {
+  return true;
   }
 
 @Override
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  
+//  /**
+//   * TODO remove debug stuff
+//   */
+//  int by = WorldStructureGenerator.getTargetY(world, x, z, false);
+//  for(int cy = by; cy<=by+5; cy++)
+//    {
+//    world.setBlock(x, cy, z, Block.obsidian.blockID);
+//    }
   }
 
 @Override

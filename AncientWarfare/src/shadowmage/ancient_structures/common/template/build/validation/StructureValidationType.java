@@ -23,7 +23,7 @@ package shadowmage.ancient_structures.common.template.build.validation;
 public enum StructureValidationType
 {
 GROUND("ground", StructureValidatorGround.class),
-UNDERGROUND("underground", zStructureValidatorUnderground.class),
+UNDERGROUND("underground", StructureValidatorUnderground.class),
 SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
 UNDERWATER("underwater", StructureValidatorUnderwater.class),
