@@ -36,7 +36,7 @@ import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
-import shadowmage.ancient_structures.common.template.build.StructureBuilder;
+import shadowmage.ancient_structures.common.template.build.validation.StructureBuilderWorldGen;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldStructureGenerator implements IWorldGenerator
@@ -219,8 +219,7 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
 
 private void generateStructureAt(World world, int x, int y, int z, int face, StructureTemplate template, StructureMap map, StructureBB bb)
   {
-  template.getValidationSettings().preGeneration(world, x, y, z, face, template, bb);
-  StructureBuilder builder = new StructureBuilder(world, template, face, x, y, z);
+  StructureBuilderWorldGen builder = new StructureBuilderWorldGen(world, template, face, x, y, z);
   builder.instantConstruction();
   map.setGeneratedAt(world, x, y, z, face, template);
   map.markDirty();

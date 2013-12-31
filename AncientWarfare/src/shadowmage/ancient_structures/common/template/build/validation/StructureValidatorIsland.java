@@ -45,8 +45,6 @@ int maxWaterDepth;
 public StructureValidatorIsland()
   {
   super(StructureValidationType.ISLAND);
-  minWaterDepth = 1;
-  maxWaterDepth = 40;
   }
 
 @Override
