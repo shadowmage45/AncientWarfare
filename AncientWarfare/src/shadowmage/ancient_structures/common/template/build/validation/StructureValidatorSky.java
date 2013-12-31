@@ -25,13 +25,18 @@ import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 
-public class zStructureValidatorSky extends StructureValidator
+public class StructureValidatorSky extends StructureValidator
 {
 
-public zStructureValidatorSky()
+int minGenerationHeight;
+int maxGenerationHeight;
+int minFlyingHeight;
+
+public StructureValidatorSky()
   {
   super(StructureValidationType.SKY);
   }
@@ -39,13 +44,20 @@ public zStructureValidatorSky()
 @Override
 protected void readFromLines(List<String> lines)
   {
-
+  for(String line : lines)
+    {
+    if(line.toLowerCase().startsWith("mingenerationheight=")){minGenerationHeight=StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("maxgenerationheight=")){maxGenerationHeight=StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("minflyingheight=")){minFlyingHeight=StringTools.safeParseInt("=", line);}
+    }
   }
 
 @Override
-protected void write(BufferedWriter writer) throws IOException
+protected void write(BufferedWriter out) throws IOException
   {
-
+  out.write("minGenerationHeight="+minGenerationHeight);
+  out.write("maxGenerationHeight="+maxGenerationHeight);
+  out.write("minFlyingHeight="+minFlyingHeight);
   }
 
 @Override
@@ -56,20 +68,23 @@ protected void setDefaultSettings(StructureTemplate template)
 
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
-  {
-  return false;
+  {  
+  int remainingHeight = world.provider.getActualHeight() - minFlyingHeight - (template.ySize-template.yOffset);
+  return y < remainingHeight;
   }
 
 @Override
 public int getAdjustedSpawnY(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  return 0;
+  int range = maxGenerationHeight-minGenerationHeight+1;
+  return y + minFlyingHeight + world.rand.nextInt(range);
   }
 
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
-  {
-  return false;
+  {     
+  int maxY = minGenerationHeight - minFlyingHeight;
+  return validateBorderBlocks(world, template, bb, 0, maxY, false);
   }
 
 @Override
@@ -81,7 +96,7 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
 @Override
 public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-
+  world.setBlock(x, y, z, 0);
   }
 
 }

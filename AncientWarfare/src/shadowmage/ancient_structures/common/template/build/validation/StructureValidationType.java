@@ -24,7 +24,7 @@ public enum StructureValidationType
 {
 GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", zStructureValidatorUnderground.class),
-SKY("sky", zStructureValidatorSky.class),
+SKY("sky", StructureValidatorSky.class),
 WATER("water", StructureValidatorWater.class),
 UNDERWATER("underwater", StructureValidatorUnderwater.class),
 HARBOR("harbor", zStructureValidatorHarbor.class), 
