@@ -31,7 +31,6 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
