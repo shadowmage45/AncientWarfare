@@ -63,7 +63,8 @@ public boolean validatePlacement(World world, int x, int y, int z, int face, Str
 @Override
 public void preGeneration(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
-  doStructurePrePlacement(world, x, y, z, face, template);
+  prePlacementBorder(world, template, bb);
+  prePlacementUnderfill(world, template, bb);
   }
 
 private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
@@ -161,7 +162,7 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
 
 
 @Override
-public void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
+public void handleClearAction(World world, int x, int y, int z, StructureTemplate template, StructureBB bb)
   {
   world.setBlock(x, y, z, 0);
   }

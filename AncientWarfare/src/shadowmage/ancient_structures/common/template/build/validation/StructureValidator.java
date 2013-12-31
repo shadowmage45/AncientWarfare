@@ -117,7 +117,7 @@ public abstract void preGeneration(World world, int x, int y, int z, int face, S
  * implementations should fill the input x,y,z with whatever block is an appropriate 'fill' for that
  * validation type -- e.g. air or water
  */
-public abstract void handleClearAction(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb);
+public abstract void handleClearAction(World world, int x, int y, int z, StructureTemplate template, StructureBB bb);
 
 public static final StructureValidator parseValidator(List<String> lines)
   {
@@ -407,4 +407,109 @@ protected int getMaxLevelingY(StructureTemplate template, StructureBB bb)
   return bb.min.y + template.yOffset + maxLeveling;
   }
 
+protected void borderLeveling(World world, int x, int z, StructureTemplate template, StructureBB bb)
+  {
+  if(maxLeveling<=0){return;}
+  int topFilledY = WorldStructureGenerator.getTargetY(world, x, z, true);
+  int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);  
+  for(int y = bb.min.y + template.yOffset + step; y <= topFilledY ; y++)
+    {
+    handleClearAction(world, x, y, z, template, bb);
+    }
+  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
+  int fillBlockID = Block.grass.blockID;
+  if(biome!=null && biome.topBlock>=1)
+    {
+    fillBlockID = biome.topBlock;
+    }
+  int y = bb.min.y + template.yOffset + step - 1;
+  Block block = Block.blocksList[world.getBlockId(x, y, z)];
+  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+    {
+    world.setBlock(x, y, z, fillBlockID);
+    }  
+  }
+
+protected void borderFill(World world, int x, int z, StructureTemplate template, StructureBB bb)
+  {
+  if(maxFill<=0){return;}
+  int maxFillY = getMaxFillY(template, bb);  
+  int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);  
+  maxFillY -= step;
+  Block block;
+  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
+  int fillBlockID = Block.grass.blockID;
+  if(biome!=null && biome.topBlock>=1)
+    {
+    fillBlockID = biome.topBlock;
+    }
+  for(int y = maxFillY; y>1; y--)
+    {
+    block = Block.blocksList[world.getBlockId(x, y, z)];
+    if(block==null || (block==Block.waterStill || block==block.waterMoving))
+      {
+      world.setBlock(x, y, z, fillBlockID);
+      }
+    }
+  }
+
+protected void underFill(World world, int x, int z, StructureTemplate template, StructureBB bb)
+  {
+  int topFilledY = WorldStructureGenerator.getTargetY(world, x, z, true);
+  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
+  int fillBlockID = Block.grass.blockID;
+  if(biome!=null && biome.topBlock>=1)
+    {
+    fillBlockID = biome.topBlock;
+    }
+  for(int y = topFilledY; y <= bb.min.y-1; y++)
+    {
+    world.setBlock(x, y, z, fillBlockID);
+    }  
+  }
+
+protected void prePlacementUnderfill(World world, StructureTemplate template, StructureBB bb)
+  {
+  if(maxFill<=0){return;}
+  int bx, bz;
+  for(bx = bb.min.x; bx<=bb.max.x; bx++)
+    {
+    for(bz = bb.min.z; bz<=bb.max.z; bz++)
+      {
+      underFill(world, bx, bz, template, bb);
+      }
+    }
+  }
+
+protected void prePlacementBorder(World world, StructureTemplate template, StructureBB bb)
+  {
+  if(borderSize<=0){return;}
+  int bx, bz;
+  for(bx = bb.min.x-borderSize; bx <= bb.max.x + borderSize; bx++)
+    {
+    for(bz = bb.max.z+borderSize; bz>bb.max.z; bz--)
+      {
+      borderLeveling(world, bx, bz, template, bb);
+      borderFill(world, bx, bz, template, bb);
+      }
+    for(bz = bb.min.z-borderSize; bz<bb.min.z; bz++)
+      {
+      borderLeveling(world, bx, bz, template, bb);
+      borderFill(world, bx, bz, template, bb);
+      }         
+    }
+  for(bz = bb.min.z; bz <= bb.max.z; bz++)
+    {    
+    for(bx = bb.min.x-borderSize; bx<bb.min.x; bx++)
+      {
+      borderLeveling(world, bx, bz, template, bb);
+      borderFill(world, bx, bz, template, bb);
+      }
+    for(bx = bb.max.x+borderSize; bx>bb.max.x; bx--)
+      {
+      borderLeveling(world, bx, bz, template, bb);
+      borderFill(world, bx, bz, template, bb);
+      }
+    }
+  }
 }

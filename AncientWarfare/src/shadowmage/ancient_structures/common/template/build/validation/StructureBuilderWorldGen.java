@@ -36,7 +36,7 @@ protected void placeAir()
   {
   if(!template.getValidationSettings().isPreserveBlocks())
     {
-    template.getValidationSettings().handleClearAction(world, destination.x, destination.y, destination.z, buildFace, template, bb);    
+    template.getValidationSettings().handleClearAction(world, destination.x, destination.y, destination.z, template, bb);    
     }
   }
 
