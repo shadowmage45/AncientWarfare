@@ -36,13 +36,13 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class zStructureValidatorUnderwater extends StructureValidator
+public class StructureValidatorUnderwater extends StructureValidator
 {
 
 int minWaterDepth;
 int maxWaterDepth;
 
-public zStructureValidatorUnderwater()
+public StructureValidatorUnderwater()
   {
   super(StructureValidationType.UNDERWATER);
   }
@@ -55,7 +55,6 @@ protected void readFromLines(List<String> lines)
     if(line.toLowerCase().startsWith("minwaterdepth=")){minWaterDepth = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("maxwaterdepth=")){maxWaterDepth = StringTools.safeParseInt("=", line);}
     }
-  AWLog.logDebug("parsed underwater template rules...min: "+minWaterDepth + " max: "+maxWaterDepth);
   }
 
 @Override

@@ -26,9 +26,9 @@ GROUND("ground", StructureValidatorGround.class),
 UNDERGROUND("underground", zStructureValidatorUnderground.class),
 SKY("sky", zStructureValidatorSky.class),
 WATER("water", zStructureValidatorWater.class),
-UNDERWATER("underwater", zStructureValidatorUnderwater.class),
+UNDERWATER("underwater", StructureValidatorUnderwater.class),
 HARBOR("harbor", zStructureValidatorHarbor.class), 
-ISLAND("island", zStructureValidatorIsland.class);
+ISLAND("island", StructureValidatorIsland.class);
 
 private String name;
 private Class<? extends StructureValidator> validatorClass;

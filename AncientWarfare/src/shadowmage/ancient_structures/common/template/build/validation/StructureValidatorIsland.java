@@ -36,13 +36,13 @@ import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
-public class zStructureValidatorIsland extends StructureValidator
+public class StructureValidatorIsland extends StructureValidator
 {
 
 int minWaterDepth;
 int maxWaterDepth;
 
-public zStructureValidatorIsland()
+public StructureValidatorIsland()
   {
   super(StructureValidationType.ISLAND);
   minWaterDepth = 1;
@@ -94,26 +94,9 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
   {
-  int minY = getMinY(template, bb);
-  int maxY = getMaxY(template, bb);
+  int minY = y-maxWaterDepth;
+  int maxY = y-minWaterDepth;
   return validateBorderBlocks(world, template, bb, minY, maxY, true);
-  }
-
-private boolean validateBlock(World world, int x, int z, StructureTemplate template, StructureBB bb)
-  {
-  int lowestBlock = bb.min.y+template.yOffset - maxWaterDepth;
-  int highestBlock = bb.min.y+template.yOffset - minWaterDepth;  
-  int seaFloorHeight = WorldStructureGenerator.getTargetY(world, x, z, true);  
-  if(seaFloorHeight<lowestBlock || seaFloorHeight>highestBlock)
-    {
-    return false;
-    }
-  Block block = Block.blocksList[world.getBlockId(x, seaFloorHeight, z)];
-  if(block==null || !validTargetBlocks.contains(block.getUnlocalizedName()))
-    {
-    return false;
-    }
-  return true;
   }
 
 @Override
