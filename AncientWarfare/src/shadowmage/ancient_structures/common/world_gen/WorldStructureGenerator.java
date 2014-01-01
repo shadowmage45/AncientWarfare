@@ -102,6 +102,11 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     return;
     }
+  int rand = rng.nextInt(AWStructureStatics.randomRange);
+  if(rand>AWStructureStatics.randomChance)
+    {
+    return;
+    }
   if(!AWStructureStatics.enableStructureGeneration){return;}
 //  if(rng.nextInt(10)>0){return;}
   if(isGenerating)
