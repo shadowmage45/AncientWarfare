@@ -72,7 +72,7 @@ protected void setDefaultSettings(StructureTemplate template)
 
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
-  {
+  {  
   y = WorldStructureGenerator.getTargetY(world, x, z, true);
   int tHeight = (template.ySize-template.yOffset);
   int low = minGenerationDepth + tHeight + minOverfill;  
@@ -91,6 +91,19 @@ public int getAdjustedSpawnY(World world, int x, int y, int z, int face, Structu
 @Override
 public boolean validatePlacement(World world, int x, int y, int z, int face, StructureTemplate template, StructureBB bb)
   {
+  int minY = bb.min.y + template.yOffset + minOverfill;
+  int topBlockY;
+  for(int bx = bb.min.x; bx<=bb.max.x; bx++)
+    {
+    for(int bz = bb.min.z; bz<=bb.max.z; bz++)
+      {
+      topBlockY = WorldStructureGenerator.getTargetY(world, bx, bz, true);
+      if(topBlockY<=minY)
+        {
+        return false;
+        }
+      }
+    }
   return true;
   }
 
