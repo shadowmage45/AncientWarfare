@@ -49,7 +49,6 @@ public static WorldStructureGenerator instance(){return instance;}
 public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
 public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
-public static HashSet<String> defaultClearBlocks = new HashSet<String>();
 
 static
 {
@@ -72,20 +71,6 @@ defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
 defaultTargetBlocks.add(Block.blockClay.getUnlocalizedName());
 defaultTargetBlocks.add(Block.oreIron.getUnlocalizedName());
 defaultTargetBlocks.add(Block.oreCoal.getUnlocalizedName());
-
-defaultClearBlocks.addAll(defaultTargetBlocks);
-defaultClearBlocks.add(Block.waterStill.getUnlocalizedName());
-defaultClearBlocks.add(Block.lavaStill.getUnlocalizedName());
-defaultClearBlocks.add(Block.cactus.getUnlocalizedName());
-defaultClearBlocks.add(Block.vine.getUnlocalizedName());
-defaultClearBlocks.add(Block.tallGrass.getUnlocalizedName());
-defaultClearBlocks.add(Block.wood.getUnlocalizedName());
-defaultClearBlocks.add(Block.plantRed.getUnlocalizedName());
-defaultClearBlocks.add(Block.plantYellow.getUnlocalizedName());
-defaultClearBlocks.add(Block.deadBush.getUnlocalizedName());
-defaultClearBlocks.add(Block.leaves.getUnlocalizedName());
-defaultClearBlocks.add(Block.wood.getUnlocalizedName());
-defaultClearBlocks.add(Block.snow.getUnlocalizedName());
 }
 
 
