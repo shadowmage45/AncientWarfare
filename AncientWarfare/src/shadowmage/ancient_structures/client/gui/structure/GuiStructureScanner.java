@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_structures.client.gui.structure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
@@ -45,7 +48,7 @@ public class GuiStructureScanner extends GuiContainerAdvanced
 String name = "";
 GuiTextInputLine nameBox;
 GuiCheckBoxSimple includeBox;
-
+GuiButtonSimple biomeSelectButton;
 
 GuiScrollableArea area;
 
@@ -55,9 +58,11 @@ HashMap<GuiButtonSimple, StructureValidationType> typeButtonMap = new HashMap<Gu
 HashMap<GuiCheckBoxSimple, String> checkBoxNameMap = new HashMap<GuiCheckBoxSimple, String>();
 HashMap<GuiNumberInputLine, String> numberInputNameMap = new HashMap<GuiNumberInputLine, String>();
 
+List<String> biomeSelections = new ArrayList<String>();
+
 StructureValidationType currentValidationType = StructureValidationType.GROUND;
 
-private ContainerStructureScanner container;
+protected ContainerStructureScanner container;
 /**
  * @param container
  */
@@ -90,7 +95,7 @@ public String getGuiBackGroundTexture()
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   this.drawStringGui("Structure Name: ", 8, 8, 0xffffffff);  
-  this.drawString(fontRenderer, "Add to game immediately: ", guiLeft+8, guiTop+38, 0xffffffff);  
+  this.drawStringGui("Add to game immediately: ", 8, 38, 0xffffffff);  
   this.drawStringGui("Validation Settings: ", 8, 55, 0xffffffff);
   }
 
@@ -98,7 +103,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   this.name = nameBox.getText();
-  //area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
@@ -111,9 +115,7 @@ public void setupControls()
   this.guiElements.put(2, area);
   this.addGuiButton(3, 45, 18, "Reset").updateRenderPos(256-45-10, 50);    
   nameBox = this.addTextField(4, 8, 20, 120, 10, 30, name);  
-  includeBox = (GuiCheckBoxSimple) this.addCheckBox(5, 16, 16).setChecked(true).updateRenderPos(145, 35);
-  
-  
+  includeBox = (GuiCheckBoxSimple) this.addCheckBox(5, 16, 16).setChecked(true).updateRenderPos(145, 35);  
   }
 
 private int addBooleanProp(int elementNum, String regName, String displayName, boolean defaultVal, int startHeight)
@@ -136,6 +138,12 @@ private int addIntegerProp(int elementNum, String regName, String displayName, i
   area.addGuiElement(input);
   numberInputNameMap.put(input, regName);    
   return startHeight + 18;
+  }
+
+public void onBiomeSelectionCallback(List<String> biomes)
+  {
+  this.biomeSelections.clear();
+  this.biomeSelections.addAll(biomes);
   }
 
 @Override
@@ -217,6 +225,25 @@ public void updateControls()
     elementNum++;
     }
   
+  totalHeight = addBooleanProp(elementNum, "biomeWhiteList", "Biome White List: ", false, totalHeight);
+  elementNum++;
+  
+  area.elements.add( (biomeSelectButton = new GuiButtonSimple(elementNum, area, 90, 16, "Select Biomes")).updateRenderPos(0, totalHeight));
+  elementNum++;
+  totalHeight+=18;
+  
+  area.elements.add( new GuiString(elementNum, area, 120, 12, "Selected Biomes: ").updateRenderPos(0, totalHeight));
+  totalHeight+=12;
+  
+  for(String biome : this.biomeSelections)
+    {
+    area.elements.add(new GuiString(elementNum, area, 120, 12, biome).updateRenderPos(0, totalHeight));
+    totalHeight+=12;
+    elementNum++;
+    }
+  
+  totalHeight+=12;
+      
   area.updateTotalHeight(totalHeight); 
   }
 
@@ -285,7 +312,10 @@ public void onElementActivated(IGuiElement element)
     AWLog.logDebug("updating current validation type to: "+this.currentValidationType);
     this.refreshGui();
     }
-  
+  else if(element==this.biomeSelectButton)
+    {
+    Minecraft.getMinecraft().displayGuiScreen(new GuiBiomeSelection(this));    
+    }  
   this.name = nameBox.getText(); 
   }
 

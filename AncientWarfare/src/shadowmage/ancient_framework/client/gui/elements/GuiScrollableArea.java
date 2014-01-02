@@ -25,12 +25,6 @@ import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 public class GuiScrollableArea extends GuiScrollableAreaSimple
 {
 
-/**
- * @param elementNum
- * @param parent
- * @param w
- * @param h
- */
 public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalHeight)
   {
   super(elementNum, parent, x, y, w, h, w, totalHeight); 
