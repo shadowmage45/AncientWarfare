@@ -22,28 +22,29 @@ package shadowmage.ancient_structures.client.gui.structure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiItemStack;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
 
-public class GuiBiomeSelection extends GuiContainerAdvanced
+public class GuiBlockSelection extends GuiContainerAdvanced
 {
 
 GuiStructureScanner parent;
 GuiScrollableArea area;
 GuiButtonSimple doneButton;
-GuiCheckBoxSimple whiteListBox;
-private HashMap<GuiCheckBoxSimple, String> biomeBoxes = new HashMap<GuiCheckBoxSimple, String>();
 
-public GuiBiomeSelection(GuiStructureScanner parent)
+public GuiBlockSelection(GuiStructureScanner parent)
   {
   super(parent.container);
   this.parent = parent;
@@ -84,34 +85,49 @@ public void setupControls()
   {
   this.guiElements.clear();
   this.doneButton = (GuiButtonSimple) this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10);
-  this.guiElements.put(1, new GuiString(1, this, 220, 10, "Select Biomes: ").updateRenderPos(8, 10+18+4));  
+  this.guiElements.put(1, new GuiString(1, this, 220, 10, "Select Target Blocks: ").updateRenderPos(8, 10+18+4));  
   this.guiElements.put(2, this.area = new GuiScrollableArea(2, this, 8, 10+18+4+10+4, getXSize()-16, getYSize() - 78, 8));
   
   int totalHeight = 0;
   int elementNum = 3;
-  for(BiomeGenBase biome : BiomeGenBase.biomeList)
+  Block block;
+  int x = 0;
+  for(int i = 0; i <256; i++)
     {
-    if(biome==null || biome.biomeName==null || biome.biomeName.equals("")){continue;}
-    totalHeight = addBiome(elementNum, totalHeight, biome.biomeName);
-    elementNum++;
-    }    
+    block = Block.blocksList[i];
+    if(block==null){continue;}
+    addBlock(elementNum, totalHeight, x*90, block);    
+    x++;
+    if(x>=2)
+      {
+      x = 0;
+      totalHeight += 18;
+      }
+    }
+  
   area.updateTotalHeight(totalHeight);
   }
 
-
-private int addBiome(int elementNum, int targetY, String name)
+private void addBlock(int elementNum, int y, int x, Block block)
   {
-  GuiString string = new GuiString(elementNum, area, 200, 12, name);
-  string.updateRenderPos(0, targetY);
-  area.elements.add(string);
+  GuiString label = new GuiString(elementNum, area, 50, 12, block.getUnlocalizedName());
+  label.updateRenderPos(x, y);
+  area.elements.add(label);
+  
+  GuiItemStack item = new GuiItemStack(elementNum, area);
+  item.updateRenderPos(x+50, y);
+  item.isClickable = false;
+  item.setItemStack(new ItemStack(block));
+  area.elements.add(item);
   
   GuiCheckBoxSimple box = new GuiCheckBoxSimple(elementNum, area, 16, 16);
-  box.updateRenderPos(160, targetY);
+  box.updateRenderPos(x+70, y);
   area.elements.add(box);
   
-  biomeBoxes.put(box, name.toLowerCase());  
-  return targetY + 18;
+  blockBoxes.put(box, block);
   }
+
+private HashMap<GuiCheckBoxSimple, Block> blockBoxes = new HashMap<GuiCheckBoxSimple, Block>();
 
 @Override
 public void updateControls()
@@ -121,18 +137,18 @@ public void updateControls()
 
 @Override
 public void onElementActivated(IGuiElement element)
-  {     
+  {
   if(element==this.doneButton)
     {
-    List<String> selectedBiomes = new ArrayList<String>();
-    for(GuiCheckBoxSimple box : this.biomeBoxes.keySet())
+    List<String> selectedBlocks = new ArrayList<String>();
+    for(GuiCheckBoxSimple box : this.blockBoxes.keySet())
       {
       if(box.checked)
         {
-        selectedBiomes.add(this.biomeBoxes.get(box));
+        selectedBlocks.add(this.blockBoxes.get(box).getUnlocalizedName());
         }
       }
-    this.parent.onBiomeSelectionCallback(selectedBiomes);
+    parent.onBlockSelectionCallback(selectedBlocks);
     Minecraft.getMinecraft().displayGuiScreen(parent);
     }
   }

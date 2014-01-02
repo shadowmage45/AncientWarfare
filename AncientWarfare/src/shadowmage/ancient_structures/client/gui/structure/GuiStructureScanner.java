@@ -49,6 +49,7 @@ String name = "";
 GuiTextInputLine nameBox;
 GuiCheckBoxSimple includeBox;
 GuiButtonSimple biomeSelectButton;
+GuiButtonSimple blockSelectButton;
 
 GuiScrollableArea area;
 
@@ -59,6 +60,7 @@ HashMap<GuiCheckBoxSimple, String> checkBoxNameMap = new HashMap<GuiCheckBoxSimp
 HashMap<GuiNumberInputLine, String> numberInputNameMap = new HashMap<GuiNumberInputLine, String>();
 
 List<String> biomeSelections = new ArrayList<String>();
+List<String> blockSelections = new ArrayList<String>();
 
 StructureValidationType currentValidationType = StructureValidationType.GROUND;
 
@@ -144,6 +146,12 @@ public void onBiomeSelectionCallback(List<String> biomes)
   {
   this.biomeSelections.clear();
   this.biomeSelections.addAll(biomes);
+  }
+
+public void onBlockSelectionCallback(List<String> blocks)
+  {
+  this.blockSelections.clear();
+  this.blockSelections.addAll(blocks);
   }
 
 @Override
@@ -243,7 +251,24 @@ public void updateControls()
     }
   
   totalHeight+=12;
-      
+  
+  
+  area.elements.add( (blockSelectButton = new GuiButtonSimple(elementNum, area, 90, 16, "Select Block")).updateRenderPos(0, totalHeight));
+  elementNum++;
+  totalHeight+=18;
+  
+  area.elements.add( new GuiString(elementNum, area, 120, 12, "Selected Blocks: ").updateRenderPos(0, totalHeight));
+  totalHeight+=12;
+  
+  for(String block : this.blockSelections)
+    {
+    area.elements.add(new GuiString(elementNum, area, 120, 12, block).updateRenderPos(0, totalHeight));
+    totalHeight+=12;
+    elementNum++;
+    }
+  
+  totalHeight+=12;
+        
   area.updateTotalHeight(totalHeight); 
   }
 
@@ -316,6 +341,10 @@ public void onElementActivated(IGuiElement element)
     {
     Minecraft.getMinecraft().displayGuiScreen(new GuiBiomeSelection(this));    
     }  
+  else if(element==this.blockSelectButton)
+    {
+    Minecraft.getMinecraft().displayGuiScreen(new GuiBlockSelection(this));
+    }
   this.name = nameBox.getText(); 
   }
 
