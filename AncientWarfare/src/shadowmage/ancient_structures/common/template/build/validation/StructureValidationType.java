@@ -20,23 +20,36 @@
  */
 package shadowmage.ancient_structures.common.template.build.validation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum StructureValidationType
 {
 GROUND("ground", StructureValidatorGround.class),
-UNDERGROUND("underground", StructureValidatorUnderground.class),
-SKY("sky", StructureValidatorSky.class),
+UNDERGROUND("underground", StructureValidatorUnderground.class, new ValidationProperty("minGenDepth", "Min Generation Depth", int.class), new ValidationProperty("maxGenDepth", "Max Generation Depth", int.class), new ValidationProperty("minOverfill", "Min Overfill Depth", int.class)),
+SKY("sky", StructureValidatorSky.class, new ValidationProperty("minGenHeight","Min Generation Height: ", int.class), new ValidationProperty("maxGenHeight","Max Generation Height: ", int.class), new ValidationProperty("minFlyingHeight", "Min Flying Height: ", int.class)),
 WATER("water", StructureValidatorWater.class),
-UNDERWATER("underwater", StructureValidatorUnderwater.class),
+UNDERWATER("underwater", StructureValidatorUnderwater.class, new ValidationProperty("minWaterDepth","Min Water Depth: ", int.class), new ValidationProperty("maxWaterDepth","Max Water Depth: ", int.class)),
 HARBOR("harbor", StructureValidatorHarbor.class), 
-ISLAND("island", StructureValidatorIsland.class);
+ISLAND("island", StructureValidatorIsland.class, new ValidationProperty("minWaterDepth","Min Water Dpth: ", int.class), new ValidationProperty("maxWaterDepth","Max Water Depth: ", int.class));
 
 private String name;
 private Class<? extends StructureValidator> validatorClass;
+private List<ValidationProperty> props = new ArrayList<ValidationProperty>();
 
-StructureValidationType(String name, Class<? extends StructureValidator> validatorClass)
+StructureValidationType(String name, Class<? extends StructureValidator> validatorClass, ValidationProperty...props)
   {
   this.name = name;
-  this.validatorClass = validatorClass;
+  this.validatorClass = validatorClass; 
+  for(ValidationProperty prop : props)
+    {
+    this.props.add(prop);
+    }
+  }
+
+public List<ValidationProperty> getValidationProperties()
+  {
+  return this.props;
   }
 
 public String getName()
@@ -103,5 +116,19 @@ public static StructureValidationType getTypeFromName(String name)
  *    validate border edge blocks for depth and leveling
  *   
  */
+
+public static class ValidationProperty
+{
+public String displayName;
+public String propertyName;
+public Class clz;//property class -- boolean or int for most
+
+public ValidationProperty(String reg, String display, Class clz)
+  {
+  this.propertyName = reg;
+  this.displayName = display;
+  this.clz = clz;
+  }
+}
 
 }

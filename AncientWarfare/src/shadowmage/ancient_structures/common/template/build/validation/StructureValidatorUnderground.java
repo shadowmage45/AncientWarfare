@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
@@ -40,6 +41,15 @@ int minOverfill;
 public StructureValidatorUnderground()
   {
   super(StructureValidationType.UNDERGROUND);
+  }
+
+@Override
+public void readFromTag(NBTTagCompound tag)
+  {
+  super.readFromTag(tag);
+  minGenerationDepth = tag.getInteger("minGenDepth");
+  maxGenerationDepth = tag.getInteger("maxGenDepth");
+  minOverfill = tag.getInteger("minOverfill");
   }
 
 @Override

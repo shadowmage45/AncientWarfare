@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
@@ -39,6 +40,15 @@ int minFlyingHeight;
 public StructureValidatorSky()
   {
   super(StructureValidationType.SKY);
+  }
+
+@Override
+public void readFromTag(NBTTagCompound tag)
+  {
+  super.readFromTag(tag);
+  minGenerationHeight = tag.getInteger("minGenHeight");
+  maxGenerationHeight = tag.getInteger("maxGenHeight");
+  minFlyingHeight = tag.getInteger("minFlyingHeight");
   }
 
 @Override

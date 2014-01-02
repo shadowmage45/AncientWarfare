@@ -23,18 +23,21 @@ package shadowmage.ancient_structures.common.template.build.validation;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType.ValidationProperty;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public abstract class StructureValidator
@@ -60,7 +63,6 @@ int borderSize;
 
 Set<String> validTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
 
-
 protected StructureValidator(StructureValidationType validationType)
   {
   this.validationType = validationType;
@@ -76,6 +78,23 @@ protected void readFromLines(List<String> lines)
   }
 protected void write(BufferedWriter writer) throws IOException
   {
+  }
+
+/**
+ * helper method to read data from tag -- to be overriden by
+ * child-classes that have additional validation data set through gui
+ */
+public void readFromTag(NBTTagCompound tag)
+  {
+  worldGenEnabled = tag.getBoolean("enableWorldGen");
+  isUnique = tag.getBoolean("unique");
+  preserveBlocks = tag.getBoolean("preserveBlock");
+  selectionWeight = tag.getInteger("selectionWeight");
+  clusterValue = tag.getInteger("clusterValue");
+  minDuplicateDistance = tag.getInteger("minDuplicateDistance");
+  borderSize = tag.getInteger("borderSize");
+  maxLeveling = tag.getInteger("maxLeveling");
+  maxFill = tag.getInteger("maxFill");      
   }
 
 protected void setDefaultSettings(StructureTemplate template)

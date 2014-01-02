@@ -1,0 +1,12 @@
+LEFT TO DO IN STRUCTURE MODULE:
+
+* template conversion from old format
+    --need to port over vehicles, npc, civic modules to include their rules
+    --fix entity rotation code -- it is...borked. seems to place entities inside walls/etc, and not where they should be
+* underground dungeon validation type needs surface-level checking
+* need lots more testing on...everything
+* wood/stone slabs are currently being placed from the first 'slab' block found, which is the OLD double-slab block
+    --this fix won't really be possible until 1.7 and I can reference blocks purely by unique name instead of
+        using 'unlocalized name' which is currently not unique.
+        
+  

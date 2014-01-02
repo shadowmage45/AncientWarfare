@@ -20,53 +20,44 @@
  */
 package shadowmage.ancient_structures.client.gui.structure;
 
+import java.util.HashMap;
+
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiElement;
 import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType.ValidationProperty;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
 {
 
-
 String name = "";
-
-
 GuiTextInputLine nameBox;
 GuiCheckBoxSimple includeBox;
 
+
 GuiScrollableArea area;
 
-GuiCheckBoxSimple worldGenBox;
-GuiCheckBoxSimple uniqueBox;
-GuiCheckBoxSimple survivalBox;
-GuiNumberInputLine weightLine;
-GuiNumberInputLine clusterLine;
-GuiNumberInputLine minDuplicateLine;
-GuiNumberInputLine levelingLine;
-GuiNumberInputLine fillLine;
-GuiNumberInputLine borderLine;
-GuiNumberInputLine borderLevelingLine;
-GuiNumberInputLine borderFillLine;
-GuiCheckBoxSimple levelingBox;
-GuiCheckBoxSimple fillBox;
-GuiCheckBoxSimple borderLevelingBox;
-GuiCheckBoxSimple borderFillBox;
-GuiCheckBoxSimple preserveBlocksBox;
+HashMap<GuiElement, String> elementNameMap = new HashMap<GuiElement, String>();
+HashMap<GuiButtonSimple, StructureValidationType> typeButtonMap = new HashMap<GuiButtonSimple, StructureValidationType>();
 
+HashMap<GuiCheckBoxSimple, String> checkBoxNameMap = new HashMap<GuiCheckBoxSimple, String>();
+HashMap<GuiNumberInputLine, String> numberInputNameMap = new HashMap<GuiNumberInputLine, String>();
 
+StructureValidationType currentValidationType = StructureValidationType.GROUND;
 
 private ContainerStructureScanner container;
-
-
-
 /**
  * @param container
  */
@@ -122,52 +113,134 @@ public void setupControls()
   nameBox = this.addTextField(4, 8, 20, 120, 10, 30, name);  
   includeBox = (GuiCheckBoxSimple) this.addCheckBox(5, 16, 16).setChecked(true).updateRenderPos(145, 35);
   
-  int w = getXSize() - 16 - 20;
-  int h = 16;
-  int totalHeight = 0;
-  area.addGuiElement(new GuiString(5, area, w, h, "World Gen Enabled: ").updateRenderPos(0, h*0));
-  area.addGuiElement(worldGenBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(6, area, 16, h).setChecked(false).updateRenderPos(160, h*0));
-  area.addGuiElement(new GuiString(7, area, w, h, "Unique:").updateRenderPos(0, h*1));
-  area.addGuiElement(uniqueBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(8, area, 16, h).setChecked(false).updateRenderPos(160, h*1));
-  area.addGuiElement(new GuiString(9, area, w, h, "Survival Enabled:").updateRenderPos(0, h*2));
-  area.addGuiElement(survivalBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(10, area, 16, h).setChecked(false).updateRenderPos(160, h*2));
-  area.addGuiElement(new GuiString(11,area, w, h, "Selection Weight:").updateRenderPos(0, h*3));
-  area.addGuiElement(weightLine = (GuiNumberInputLine) new GuiNumberInputLine(12, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(1).updateRenderPos(140, h*3+1));
-  area.addGuiElement(new GuiString(13,area, w, h, "Cluster Value:").updateRenderPos(0, h*4));
-  area.addGuiElement(clusterLine = (GuiNumberInputLine) new GuiNumberInputLine(14, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(1).updateRenderPos(140, h*4+1));
-  area.addGuiElement(new GuiString(15,area, w, h, "Duplicate min distance:").updateRenderPos(0, h*5));
-  area.addGuiElement(minDuplicateLine = (GuiNumberInputLine) new GuiNumberInputLine(16, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(1).updateRenderPos(140, h*5+1));
-  area.addGuiElement(new GuiString(17,area, w, h, "Leveling:").updateRenderPos(0, h*6));
-  area.addGuiElement(levelingLine = (GuiNumberInputLine) new GuiNumberInputLine(18, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(0).updateRenderPos(140, h*6+1));
-  area.addGuiElement(new GuiString(19,area, w, h, "Edge Missing Depth:").updateRenderPos(0, h*7));
-  area.addGuiElement(fillLine = (GuiNumberInputLine) new GuiNumberInputLine(20, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(0).updateRenderPos(140, h*7+1));
-  area.addGuiElement(new GuiString(21,area, w, h, "Border Size:").updateRenderPos(0, h*8));
-  area.addGuiElement(borderLine = (GuiNumberInputLine) new GuiNumberInputLine(22, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(0).updateRenderPos(140, h*8+1));
-  area.addGuiElement(new GuiString(23,area, w, h, "Border Leveling:").updateRenderPos(0, h*9));
-  area.addGuiElement(borderLevelingLine = (GuiNumberInputLine) new GuiNumberInputLine(24, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(0).updateRenderPos(140, h*9+1));
-  area.addGuiElement(new GuiString(25,area, w, h, "Border Edge Depth:").updateRenderPos(0, h*10));
-  area.addGuiElement(borderFillLine = (GuiNumberInputLine) new GuiNumberInputLine(26, area, 40, 12, 20, "").setAsIntegerValue().setIntegerValue(0).updateRenderPos(140, h*10+1));
-  area.addGuiElement(new GuiString(27, area, w, h, "Do Leveling:").updateRenderPos(0, h*11));
-  area.addGuiElement(levelingBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(28, area, 16, h).setChecked(false).updateRenderPos(160, h*11));
-  area.addGuiElement(new GuiString(29, area, w, h, "Do Fill Below:").updateRenderPos(0, h*12));
-  area.addGuiElement(fillBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(30, area, 16, h).setChecked(false).updateRenderPos(160, h*12));
-  area.addGuiElement(new GuiString(31, area, w, h, "Do Border Leveling:").updateRenderPos(0, h*13));
-  area.addGuiElement(borderLevelingBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(32, area, 16, h).setChecked(false).updateRenderPos(160, h*13));
-  area.addGuiElement(new GuiString(33, area, w, h, "Do Border Fill:").updateRenderPos(0, h*14));
-  area.addGuiElement(borderFillBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(34, area, 16, h).setChecked(false).updateRenderPos(160, h*14));
-  area.addGuiElement(new GuiString(35, area, w, h, "Preserve Blocks:").updateRenderPos(0, h*15));
-  area.addGuiElement(preserveBlocksBox = (GuiCheckBoxSimple) new GuiCheckBoxSimple(36, area, 16, h).setChecked(false).updateRenderPos(160, h*15));
   
-  
-  area.updateTotalHeight(h*area.elements.size()/2);
   }
 
+private int addBooleanProp(int elementNum, String regName, String displayName, boolean defaultVal, int startHeight)
+  {
+  area.addGuiElement(new GuiString(elementNum, area, 180, 10, displayName).updateRenderPos(0, startHeight));  
+  GuiCheckBoxSimple checkBox = new GuiCheckBoxSimple(elementNum, area, 16, 16);
+  area.elements.add(checkBox);
+  checkBox.updateRenderPos(160, startHeight);
+  checkBoxNameMap.put(checkBox, regName);  
+  return startHeight + 18;
+  }
 
+private int addIntegerProp(int elementNum, String regName, String displayName, int defaultVal, int startHeight)
+  {
+  area.addGuiElement(new GuiString(elementNum, area, 180, 10, displayName).updateRenderPos(0, startHeight));
+  GuiNumberInputLine input = new GuiNumberInputLine(elementNum, area, 40, 12, 10, "0");
+  input.setAsIntegerValue();
+  input.setIntegerValue(defaultVal);
+  input.updateRenderPos(160, startHeight);
+  area.addGuiElement(input);
+  numberInputNameMap.put(input, regName);    
+  return startHeight + 18;
+  }
 
 @Override
 public void updateControls()
   {
+  area.elements.clear();
+  typeButtonMap.clear();
+  checkBoxNameMap.clear();
+  numberInputNameMap.clear();
+  int w = getXSize() - 16 - 20;
+  int h = 16;
+  int totalHeight = 0;
+  
+  area.elements.add(new GuiString(-1, area, 100, 10, "Validation Type: " + currentValidationType.getName()));
+  totalHeight += 12;
+  
+  GuiButtonSimple typeButton = new GuiButtonSimple(6, area, 48, 16, StructureValidationType.GROUND.getName());
+  typeButton.updateRenderPos(0, 0+12);
+  area.elements.add(typeButton);
+  typeButtonMap.put(typeButton, StructureValidationType.GROUND);
+  
+  typeButton = new GuiButtonSimple(7, area, 73, 16, StructureValidationType.UNDERGROUND.getName());
+  typeButton.updateRenderPos(50, 0+12);
+  area.elements.add(typeButton);
+  typeButtonMap.put(typeButton, StructureValidationType.UNDERGROUND);
+  
+  typeButton = new GuiButtonSimple(8, area, 43, 16, StructureValidationType.SKY.getName());
+  typeButton.updateRenderPos(125, 0+12);
+  area.elements.add(typeButton);
+  typeButtonMap.put(typeButton, StructureValidationType.SKY);
+  
+  typeButton = new GuiButtonSimple(9, area, 48, 16, StructureValidationType.HARBOR.getName());
+  typeButton.updateRenderPos(170, 0+12);
+  area.elements.add(typeButton); 
+  typeButtonMap.put(typeButton, StructureValidationType.HARBOR);
+  totalHeight += 18; 
+  
+  typeButton = new GuiButtonSimple(10, area, 48, 16, StructureValidationType.WATER.getName());
+  typeButton.updateRenderPos(0, 18+12);
+  area.elements.add(typeButton);
+  typeButtonMap.put(typeButton, StructureValidationType.WATER);
+  
+  typeButton = new GuiButtonSimple(11, area, 73, 16, StructureValidationType.UNDERWATER.getName());
+  typeButton.updateRenderPos(50, 18+12);
+  area.elements.add(typeButton); 
+  typeButtonMap.put(typeButton, StructureValidationType.UNDERWATER);
+  
+  typeButton = new GuiButtonSimple(12, area, 48, 16, StructureValidationType.ISLAND.getName());
+  typeButton.updateRenderPos(125, 18+12);
+  area.elements.add(typeButton); 
+  typeButtonMap.put(typeButton, StructureValidationType.ISLAND);
+  totalHeight += 18;
+  
+  totalHeight += 8;
+  
+  totalHeight = addBooleanProp(13, "enableWorldGen", "Enable World Gen: ", false, totalHeight);
+  totalHeight = addBooleanProp(14, "unique", "Is Unique: ", false, totalHeight);
+  totalHeight = addBooleanProp(15, "preserveBlocks", "Preserve Blocks: ", false, totalHeight);
+  
+  totalHeight = addIntegerProp(16, "selectionWeight", "Selection Weight: ", 1, totalHeight);
+  totalHeight = addIntegerProp(17, "clusterValue", "Cluster Value: ", 1, totalHeight);
+  totalHeight = addIntegerProp(18, "minDuplicateDistance", "Min Dupe Distance: ", 1, totalHeight);
+  
+  totalHeight = addIntegerProp(19, "borderSize", "Border Size: ", 0, totalHeight);
+  totalHeight = addIntegerProp(20, "maxLeveling", "Max Leveling: ", 0, totalHeight);
+  totalHeight = addIntegerProp(21, "maxFill", "Max Underfill: ", 0, totalHeight);
+  
+  int elementNum = 22;
+  for(ValidationProperty prop : currentValidationType.getValidationProperties())
+    {
+    if(prop.clz == int.class)
+      {
+      totalHeight = addIntegerProp(elementNum, prop.propertyName, prop.displayName, 0, totalHeight);
+      }
+    else if(prop.clz == boolean.class)
+      {
+      totalHeight = addBooleanProp(elementNum, prop.propertyName, prop.displayName, false, totalHeight);
+      }
+    elementNum++;
+    }
+  
+  area.updateTotalHeight(totalHeight); 
+  }
 
+private void sendExportDataToServer()
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("export", includeBox.checked);
+  tag.setString("name", name);
+  tag.setString("validationType", currentValidationType.getName());
+  
+  String label;
+  for(GuiCheckBoxSimple box : this.checkBoxNameMap.keySet())
+    {
+    label = this.checkBoxNameMap.get(box);
+    tag.setBoolean(label, box.checked);
+    }
+  
+  for(GuiNumberInputLine line : this.numberInputNameMap.keySet())
+    {
+    label = this.numberInputNameMap.get(line);
+    tag.setInteger(label, line.getIntVal());
+    }
+  
+  this.sendDataToServer(tag);
   }
 
 @Override
@@ -184,26 +257,7 @@ public void onElementActivated(IGuiElement element)
     {
     if(!name.equals(""))
       {
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setBoolean("export", includeBox.checked);
-      tag.setString("name", name);
-      tag.setBoolean("world", worldGenBox.checked);
-      tag.setBoolean("survival", survivalBox.checked);
-      tag.setBoolean("unique", uniqueBox.checked);
-      tag.setBoolean("preserveBlocks", preserveBlocksBox.checked);
-      tag.setBoolean("doLeveling", levelingBox.checked);
-      tag.setBoolean("doFill", fillBox.checked);
-      tag.setBoolean("doBorderLeveling", borderLevelingBox.checked);
-      tag.setBoolean("doBorderFill", borderFillBox.checked);
-      tag.setInteger("leveling", levelingLine.getIntVal());
-      tag.setInteger("fill", fillLine.getIntVal());
-      tag.setInteger("border", borderLine.getIntVal());
-      tag.setInteger("borderLeveling", borderLevelingLine.getIntVal());
-      tag.setInteger("borderFill", borderFillLine.getIntVal());
-      tag.setInteger("weight", weightLine.getIntVal());
-      tag.setInteger("value", clusterLine.getIntVal());
-      tag.setInteger("dupe", minDuplicateLine.getIntVal());
-      this.sendDataToServer(tag);
+      sendExportDataToServer();
       closeGUI();      
       }    
     }
@@ -224,6 +278,14 @@ public void onElementActivated(IGuiElement element)
     }  
   break;    
   }  
+  
+  if(this.typeButtonMap.containsKey(element))
+    {    
+    this.currentValidationType = this.typeButtonMap.get(element);
+    AWLog.logDebug("updating current validation type to: "+this.currentValidationType);
+    this.refreshGui();
+    }
+  
   this.name = nameBox.getText(); 
   }
 

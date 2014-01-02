@@ -36,6 +36,7 @@ import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
@@ -43,14 +44,8 @@ import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
 public class ContainerStructureScanner extends ContainerBase
 {
 
-
 ItemStructureSettings settings = new ItemStructureSettings();
 
-
-/**
- * @param openingPlayer
- * @param synch
- */
 public ContainerStructureScanner(EntityPlayer openingPlayer, int x, int y, int z)
   {
   super(openingPlayer, null);
@@ -74,8 +69,6 @@ public void handlePacketData(NBTTagCompound tag)
     boolean include = tag.getBoolean("export");
     String name = tag.getString("name");
     scanStructure(player.worldObj, settings.pos1(), settings.pos2(), settings.buildKey(), settings.face(), name, include, tag);
-    
-    
     settings.clearSettings();    
     }
   if(tag.hasKey("reset"))
@@ -91,55 +84,12 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
   TemplateScanner scanner = new TemplateScanner();
   int turns = face==0 ? 2 : face==1 ? 1 : face==2 ? 0 : face==3 ? 3 : 0; //because for some reason my mod math was off?  
   StructureTemplate template = scanner.scan(world, min, max, key, turns, name);
-  
-//  tag.setBoolean("world", worldGenBox.checked);
-//  tag.setBoolean("unique", uniqueBox.checked);
-//  tag.setBoolean("survival", survivalBox.checked);
-//  tag.setBoolean("doLeveling", levelingBox.checked);
-//  tag.setBoolean("doFill", fillBox.checked);
-//  tag.setBoolean("doBorderLeveling", borderLevelingBox.checked);
-//  tag.setBoolean("doBorderFill", borderFillBox.checked);
-//  tag.setInteger("leveling", levelingLine.getIntVal());
-//  tag.setInteger("fill", fillLine.getIntVal());
-//  tag.setInteger("border", borderLine.getIntVal());
-//  tag.setInteger("borderLeveling", borderLevelingLine.getIntVal());
-//  tag.setInteger("borderFill", borderFillLine.getIntVal());
-//  tag.setInteger("weight", weightLine.getIntVal());
-//  tag.setInteger("value", clusterLine.getIntVal());
-//  tag.setInteger("dupe", minDuplicateLine.getIntVal());
 
-//  StructureValidationSettingsDefault settings = new StructureValidationSettingsDefault();
-//  
-//  settings.setWorldGenEnabled(tag.getBoolean("world"));
-//  settings.setUnique(tag.getBoolean("unique"));
-//  settings.setSurvivalEnabled(tag.getBoolean("survival"));
-//  settings.setDoLeveling(tag.getBoolean("doLeveling"));
-//  settings.setDoFillBelow(tag.getBoolean("doFill"));
-//  settings.setDoBorderLeveling(tag.getBoolean("doBorderLeveling"));
-//  settings.setDoBorderFill(tag.getBoolean("doBorderFill"));
-//  settings.setPreserveBlocks(tag.getBoolean("preserveBlocks"));
-//  settings.setPreserveWater(tag.getBoolean("preserveWater"));
-//  settings.setPreserveWater(tag.getBoolean("preserveLava"));
-//  settings.setGradientBorder(tag.getBoolean("gradient"));
-//  settings.setBiomeWhiteList(tag.getBoolean("biomeWhiteList"));
-//  settings.setDimensionWhiteList(tag.getBoolean("dimensionWhiteList"));  
-//  
-//  
-//  settings.setMaxLeveling(tag.getInteger("leveling"));
-//  settings.setMaxFill(tag.getInteger("fill"));
-//  settings.setBorderSize(tag.getInteger("border"));
-//  settings.setBorderMaxLeveling(tag.getInteger("borderLeveling"));
-//  settings.setBorderMaxFill(tag.getInteger("borderFill"));
-//  settings.setSelectionWeight(tag.getInteger("weight"));
-//  settings.setClusterValue(tag.getInteger("value"));
-//  settings.setMinDuplicateDistance(tag.getInteger("dupe"));  
-//  settings.setAcceptedDimensions(tag.getIntArray("acceptedDimensions"));  
-//  if(tag.hasKey("biomeList")){}//TODO
-//  if(tag.hasKey("targetBlocksList")){}//TODO
-//  if(tag.hasKey("clearBlocksList")){}//TODO
-//  template.setValidationSettings(settings);
-  
-  template.setValidationSettings(StructureValidationType.GROUND.getValidator().setDefaults(template));
+  String validationType = tag.getString("validationType");
+  StructureValidationType type = StructureValidationType.getTypeFromName(validationType);
+  StructureValidator validator = type.getValidator();
+  validator.readFromTag(tag);  
+  template.setValidationSettings(validator);
   if(include)
     {
     StructureTemplateManager.instance().addTemplate(template);    
