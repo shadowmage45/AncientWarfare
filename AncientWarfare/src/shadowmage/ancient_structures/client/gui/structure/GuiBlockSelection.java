@@ -91,18 +91,12 @@ public void setupControls()
   int totalHeight = 0;
   int elementNum = 3;
   Block block;
-  int x = 0;
   for(int i = 0; i <256; i++)
     {
     block = Block.blocksList[i];
     if(block==null){continue;}
-    addBlock(elementNum, totalHeight, x*90, block);    
-    x++;
-    if(x>=2)
-      {
-      x = 0;
-      totalHeight += 18;
-      }
+    addBlock(elementNum, totalHeight, 0, block); 
+    totalHeight += 18;
     }
   
   area.updateTotalHeight(totalHeight);
@@ -110,18 +104,18 @@ public void setupControls()
 
 private void addBlock(int elementNum, int y, int x, Block block)
   {
-  GuiString label = new GuiString(elementNum, area, 50, 12, block.getUnlocalizedName());
+  GuiString label = new GuiString(elementNum, area, 100, 12, block.getUnlocalizedName());
   label.updateRenderPos(x, y);
   area.elements.add(label);
   
   GuiItemStack item = new GuiItemStack(elementNum, area);
-  item.updateRenderPos(x+50, y);
+  item.updateRenderPos(x+110, y);
   item.isClickable = false;
   item.setItemStack(new ItemStack(block));
   area.elements.add(item);
   
   GuiCheckBoxSimple box = new GuiCheckBoxSimple(elementNum, area, 16, 16);
-  box.updateRenderPos(x+70, y);
+  box.updateRenderPos(x+130, y);
   area.elements.add(box);
   
   blockBoxes.put(box, block);

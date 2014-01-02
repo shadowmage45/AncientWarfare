@@ -13,6 +13,3 @@ LEFT TO DO IN STRUCTURE MODULE:
 * rewrite block-meta-info managing classes.  
     yes, this will mean I will need to re-scan a ton of blocks
     (or find a way to import the existing data)
-* add method to scan/export gui to set valid dimensions, and target blocks
-    --dimensions could be a simple text-input line and checkbox    
-    --target blocks should either be a simple text-input line, or separate gui
