@@ -23,7 +23,7 @@ package shadowmage.ancient_structures.common.template.build.validation;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -31,13 +31,14 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
-import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType.ValidationProperty;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public abstract class StructureValidator
@@ -94,7 +95,32 @@ public void readFromTag(NBTTagCompound tag)
   minDuplicateDistance = tag.getInteger("minDuplicateDistance");
   borderSize = tag.getInteger("borderSize");
   maxLeveling = tag.getInteger("maxLeveling");
-  maxFill = tag.getInteger("maxFill");      
+  maxFill = tag.getInteger("maxFill");  
+  
+  if(tag.hasKey("biomeList"))
+    {
+    ArrayList<String> biomes = new ArrayList<String>();
+    NBTTagList biomeList = tag.getTagList("biomeList");
+    NBTTagString biomeTag;
+    for(int i = 0; i <biomeList.tagCount(); i++)
+      {
+      biomeTag = (NBTTagString) biomeList.tagAt(i);      
+      biomes.add(biomeTag.data);
+      }
+    this.setBiomeList(biomes);
+    }
+  if(tag.hasKey("blockList"))
+    {
+    ArrayList<String> blocks = new ArrayList<String>();
+    NBTTagList blockList = tag.getTagList("blockList");
+    NBTTagString blockTag;
+    for(int i = 0; i <blockList.tagCount(); i++)
+      {
+      blockTag = (NBTTagString) blockList.tagAt(i);      
+      blocks.add(blockTag.data);
+      }
+    this.setTargetBlocks(blocks);
+    }
   }
 
 protected void setDefaultSettings(StructureTemplate template)
@@ -301,6 +327,18 @@ public final int[] getAcceptedDimensions()
 public final int getMinDuplicateDistance()
   {
   return minDuplicateDistance;
+  }
+
+public final void setTargetBlocks(Collection<String> targetBlocks)
+  {
+  this.validTargetBlocks.clear();
+  this.validTargetBlocks.addAll(targetBlocks);
+  }
+
+public final void setBiomeList(Collection<String> biomes)
+  {
+  this.biomeList.clear();
+  this.biomeList.addAll(biomes);
   }
 
 //************************************************ UTILITY METHODS *************************************************//

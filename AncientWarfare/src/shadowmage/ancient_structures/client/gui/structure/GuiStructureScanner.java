@@ -26,6 +26,8 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
@@ -291,6 +293,21 @@ private void sendExportDataToServer()
     label = this.numberInputNameMap.get(line);
     tag.setInteger(label, line.getIntVal());
     }
+  
+  NBTTagList biomeList = new NBTTagList();
+  for(String biome : this.biomeSelections)
+    {
+    biomeList.appendTag(new NBTTagString("name", biome));
+    }
+  tag.setTag("biomeList", biomeList);
+  
+  
+  NBTTagList blockList = new NBTTagList();
+  for(String block : this.blockSelections)
+    {
+    blockList.appendTag(new NBTTagString("name", block));
+    }
+  tag.setTag("blockList", blockList);
   
   this.sendDataToServer(tag);
   }
