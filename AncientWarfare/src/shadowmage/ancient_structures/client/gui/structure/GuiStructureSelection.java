@@ -42,7 +42,7 @@ import shadowmage.ancient_structures.common.utils.ComparatorStructureTemplateCli
  * @author Shadowmage
  *
  */
-public class GuiCSB extends GuiContainerAdvanced
+public class GuiStructureSelection extends GuiContainerAdvanced
 {
 
 private ContainerCSB container;
@@ -54,7 +54,7 @@ ComparatorStructureTemplateClient sorter = new ComparatorStructureTemplateClient
 /**
  * @param par1Container
  */
-public GuiCSB(ContainerBase container)
+public GuiStructureSelection(ContainerBase container)
   {
   super(container);
   this.container = (ContainerCSB) container;

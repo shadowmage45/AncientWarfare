@@ -89,13 +89,15 @@ public void readFromTag(NBTTagCompound tag)
   {
   worldGenEnabled = tag.getBoolean("enableWorldGen");
   isUnique = tag.getBoolean("unique");
-  preserveBlocks = tag.getBoolean("preserveBlock");
+  preserveBlocks = tag.getBoolean("preserveBlocks");
   selectionWeight = tag.getInteger("selectionWeight");
   clusterValue = tag.getInteger("clusterValue");
   minDuplicateDistance = tag.getInteger("minDuplicateDistance");
   borderSize = tag.getInteger("borderSize");
   maxLeveling = tag.getInteger("maxLeveling");
   maxFill = tag.getInteger("maxFill");  
+  biomeWhiteList = tag.getBoolean("biomeWhiteList");
+  dimensionWhiteList = tag.getBoolean("dimensionWhiteList");
   
   if(tag.hasKey("biomeList"))
     {
@@ -120,6 +122,11 @@ public void readFromTag(NBTTagCompound tag)
       blocks.add(blockTag.data);
       }
     this.setTargetBlocks(blocks);
+    }
+  
+  if(tag.hasKey("dimensions"))
+    {
+    this.acceptedDimensions = tag.getIntArray("dimensions");
     }
   }
 

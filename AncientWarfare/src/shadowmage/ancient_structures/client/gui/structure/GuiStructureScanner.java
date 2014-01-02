@@ -40,6 +40,7 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
+import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType.ValidationProperty;
@@ -48,7 +49,9 @@ public class GuiStructureScanner extends GuiContainerAdvanced
 {
 
 String name = "";
+String dimensionsString = "";
 GuiTextInputLine nameBox;
+GuiTextInputLine dimensionLine;
 GuiCheckBoxSimple includeBox;
 GuiButtonSimple biomeSelectButton;
 GuiButtonSimple blockSelectButton;
@@ -235,6 +238,15 @@ public void updateControls()
     elementNum++;
     }
   
+  totalHeight = addBooleanProp(elementNum, "dimensionWhiteList", "Dimension White List: ", false, totalHeight);
+  elementNum++;
+    
+  area.elements.add(new GuiString(elementNum, area, 120, 12, "Dimension List: ").updateRenderPos(0, totalHeight));  
+  area.elements.add( dimensionLine = new GuiTextInputLine(elementNum, area, 120, 12, 30, dimensionsString));
+  dimensionLine.updateRenderPos(80, totalHeight);
+  totalHeight+=18;
+  elementNum++;  
+  
   totalHeight = addBooleanProp(elementNum, "biomeWhiteList", "Biome White List: ", false, totalHeight);
   elementNum++;
   
@@ -250,11 +262,9 @@ public void updateControls()
     area.elements.add(new GuiString(elementNum, area, 120, 12, biome).updateRenderPos(0, totalHeight));
     totalHeight+=12;
     elementNum++;
-    }
-  
+    }  
   totalHeight+=12;
-  
-  
+    
   area.elements.add( (blockSelectButton = new GuiButtonSimple(elementNum, area, 90, 16, "Select Block")).updateRenderPos(0, totalHeight));
   elementNum++;
   totalHeight+=18;
@@ -267,8 +277,7 @@ public void updateControls()
     area.elements.add(new GuiString(elementNum, area, 120, 12, block).updateRenderPos(0, totalHeight));
     totalHeight+=12;
     elementNum++;
-    }
-  
+    }  
   totalHeight+=12;
         
   area.updateTotalHeight(totalHeight); 
@@ -309,6 +318,9 @@ private void sendExportDataToServer()
     }
   tag.setTag("blockList", blockList);
   
+  int[] dimensionArray = StringTools.parseIntArray(dimensionsString);
+  
+  tag.setIntArray("dimensions", dimensionArray);
   this.sendDataToServer(tag);
   }
 
@@ -363,6 +375,7 @@ public void onElementActivated(IGuiElement element)
     Minecraft.getMinecraft().displayGuiScreen(new GuiBlockSelection(this));
     }
   this.name = nameBox.getText(); 
+  this.dimensionsString = dimensionLine.getText();
   }
 
 protected String validateString(String input)
