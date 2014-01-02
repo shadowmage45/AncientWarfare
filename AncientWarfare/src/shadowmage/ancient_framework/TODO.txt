@@ -1,0 +1,14 @@
+LEFT TO DO IN FRAMEWORK MODULE:
+
+* build scripts for whole mod and individual modules
+* crafting system
+* research system
+* teams system
+
+
+
+MODULES LEFT TO START
+* Vehicles
+* NPCs
+* Automation
+* Model-Editor
