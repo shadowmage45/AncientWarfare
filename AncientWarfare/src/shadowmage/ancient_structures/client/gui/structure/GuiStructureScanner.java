@@ -64,6 +64,9 @@ HashMap<GuiButtonSimple, StructureValidationType> typeButtonMap = new HashMap<Gu
 HashMap<GuiCheckBoxSimple, String> checkBoxNameMap = new HashMap<GuiCheckBoxSimple, String>();
 HashMap<GuiNumberInputLine, String> numberInputNameMap = new HashMap<GuiNumberInputLine, String>();
 
+HashMap<String, Boolean> lastKnownBooleanValues = new HashMap<String, Boolean>();
+HashMap<String, Integer> lastKnownIntegerValues = new HashMap<String, Integer>();
+
 List<String> biomeSelections = new ArrayList<String>();
 List<String> blockSelections = new ArrayList<String>();
 
@@ -110,6 +113,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 public void updateScreenContents()
   {
   this.name = nameBox.getText();
+  this.dimensionsString = dimensionLine.getText();
   }
 
 @Override
@@ -127,8 +131,10 @@ public void setupControls()
 
 private int addBooleanProp(int elementNum, String regName, String displayName, boolean defaultVal, int startHeight)
   {
+  boolean val = this.lastKnownBooleanValues.containsKey(regName) ? this.lastKnownBooleanValues.get(regName) : defaultVal;
   area.addGuiElement(new GuiString(elementNum, area, 180, 10, displayName).updateRenderPos(0, startHeight));  
   GuiCheckBoxSimple checkBox = new GuiCheckBoxSimple(elementNum, area, 16, 16);
+  checkBox.checked = val;
   area.elements.add(checkBox);
   checkBox.updateRenderPos(160, startHeight);
   checkBoxNameMap.put(checkBox, regName);  
@@ -137,14 +143,27 @@ private int addBooleanProp(int elementNum, String regName, String displayName, b
 
 private int addIntegerProp(int elementNum, String regName, String displayName, int defaultVal, int startHeight)
   {
+  int val = this.lastKnownIntegerValues.containsKey(regName) ? this.lastKnownIntegerValues.get(regName) : defaultVal;
   area.addGuiElement(new GuiString(elementNum, area, 180, 10, displayName).updateRenderPos(0, startHeight));
   GuiNumberInputLine input = new GuiNumberInputLine(elementNum, area, 40, 12, 10, "0");
   input.setAsIntegerValue();
-  input.setIntegerValue(defaultVal);
+  input.setIntegerValue(val);
   input.updateRenderPos(160, startHeight);
   area.addGuiElement(input);
   numberInputNameMap.put(input, regName);    
   return startHeight + 18;
+  }
+
+private void stashValues()
+  {
+  for(GuiCheckBoxSimple box : this.checkBoxNameMap.keySet())
+    {
+    this.lastKnownBooleanValues.put(checkBoxNameMap.get(box), box.checked);
+    }
+  for(GuiNumberInputLine line : this.numberInputNameMap.keySet())
+    {
+    this.lastKnownIntegerValues.put(numberInputNameMap.get(line), line.getIntVal());
+    }
   }
 
 public void onBiomeSelectionCallback(List<String> biomes)
@@ -162,6 +181,7 @@ public void onBlockSelectionCallback(List<String> blocks)
 @Override
 public void updateControls()
   {
+  this.stashValues();  
   area.elements.clear();
   typeButtonMap.clear();
   checkBoxNameMap.clear();
