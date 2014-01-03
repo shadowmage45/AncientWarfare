@@ -84,8 +84,8 @@ public void setupControls()
   {
   this.guiElements.clear();
   this.doneButton = (GuiButtonSimple) this.addGuiButton(0, 35, 18, "Done").updateRenderPos(256-35-10, 10);
-  this.guiElements.put(1, new GuiString(1, this, 220, 10, "Select Biomes: ").updateRenderPos(8, 10+18+4));  
-  this.guiElements.put(2, this.area = new GuiScrollableArea(2, this, 8, 10+18+4+10+4, getXSize()-16, getYSize() - 78, 8));
+  this.guiElements.put(1, new GuiString(1, this, 220, 10, "Select Biomes: ").updateRenderPos(8, 10));  
+  this.guiElements.put(2, this.area = new GuiScrollableArea(2, this, 8, 18+10+4, getXSize()-16, getYSize() - 20-18-4, 8));
   
   int totalHeight = 0;
   int elementNum = 3;

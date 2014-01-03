@@ -195,37 +195,44 @@ public void updateControls()
   
   GuiButtonSimple typeButton = new GuiButtonSimple(6, area, 48, 16, StructureValidationType.GROUND.getName());
   typeButton.updateRenderPos(0, 0+12);
+  if(currentValidationType==StructureValidationType.GROUND){typeButton.enabled = false;}
   area.elements.add(typeButton);
   typeButtonMap.put(typeButton, StructureValidationType.GROUND);
   
   typeButton = new GuiButtonSimple(7, area, 73, 16, StructureValidationType.UNDERGROUND.getName());
   typeButton.updateRenderPos(50, 0+12);
+  if(currentValidationType==StructureValidationType.UNDERGROUND){typeButton.enabled = false;}
   area.elements.add(typeButton);
   typeButtonMap.put(typeButton, StructureValidationType.UNDERGROUND);
   
   typeButton = new GuiButtonSimple(8, area, 43, 16, StructureValidationType.SKY.getName());
   typeButton.updateRenderPos(125, 0+12);
+  if(currentValidationType==StructureValidationType.SKY){typeButton.enabled = false;}
   area.elements.add(typeButton);
   typeButtonMap.put(typeButton, StructureValidationType.SKY);
   
   typeButton = new GuiButtonSimple(9, area, 48, 16, StructureValidationType.HARBOR.getName());
   typeButton.updateRenderPos(170, 0+12);
+  if(currentValidationType==StructureValidationType.HARBOR){typeButton.enabled = false;}
   area.elements.add(typeButton); 
   typeButtonMap.put(typeButton, StructureValidationType.HARBOR);
   totalHeight += 18; 
   
   typeButton = new GuiButtonSimple(10, area, 48, 16, StructureValidationType.WATER.getName());
   typeButton.updateRenderPos(0, 18+12);
+  if(currentValidationType==StructureValidationType.WATER){typeButton.enabled = false;}
   area.elements.add(typeButton);
   typeButtonMap.put(typeButton, StructureValidationType.WATER);
   
   typeButton = new GuiButtonSimple(11, area, 73, 16, StructureValidationType.UNDERWATER.getName());
   typeButton.updateRenderPos(50, 18+12);
+  if(currentValidationType==StructureValidationType.UNDERWATER){typeButton.enabled = false;}
   area.elements.add(typeButton); 
   typeButtonMap.put(typeButton, StructureValidationType.UNDERWATER);
   
   typeButton = new GuiButtonSimple(12, area, 48, 16, StructureValidationType.ISLAND.getName());
   typeButton.updateRenderPos(125, 18+12);
+  if(currentValidationType==StructureValidationType.ISLAND){typeButton.enabled = false;}
   area.elements.add(typeButton); 
   typeButtonMap.put(typeButton, StructureValidationType.ISLAND);
   totalHeight += 18;
@@ -238,7 +245,7 @@ public void updateControls()
   
   totalHeight = addIntegerProp(16, "selectionWeight", "Selection Weight: ", 1, totalHeight);
   totalHeight = addIntegerProp(17, "clusterValue", "Cluster Value: ", 1, totalHeight);
-  totalHeight = addIntegerProp(18, "minDuplicateDistance", "Min Dupe Distance: ", 1, totalHeight);
+  totalHeight = addIntegerProp(18, "minDuplicateDistance", "Min Duplicate Distance: ", 1, totalHeight);
   
   totalHeight = addIntegerProp(19, "borderSize", "Border Size: ", 0, totalHeight);
   totalHeight = addIntegerProp(20, "maxLeveling", "Max Leveling: ", 0, totalHeight);
@@ -285,11 +292,11 @@ public void updateControls()
     }  
   totalHeight+=12;
     
-  area.elements.add( (blockSelectButton = new GuiButtonSimple(elementNum, area, 90, 16, "Select Block")).updateRenderPos(0, totalHeight));
+  area.elements.add( (blockSelectButton = new GuiButtonSimple(elementNum, area, 90, 16, "Select Blocks")).updateRenderPos(0, totalHeight));
   elementNum++;
   totalHeight+=18;
   
-  area.elements.add( new GuiString(elementNum, area, 120, 12, "Selected Blocks: ").updateRenderPos(0, totalHeight));
+  area.elements.add( new GuiString(elementNum, area, 120, 12, "Valid Target Blocks: ").updateRenderPos(0, totalHeight));
   totalHeight+=12;
   
   for(String block : this.blockSelections)
