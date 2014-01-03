@@ -39,10 +39,7 @@ public boolean autoUpdateOnClick = true;
  */
 public GuiFakeSlot(int elementNum, IGuiElementCallback parent)
   {
-  super(elementNum, parent, 18, 18);
-  this.isFake = true;  
-  this.renderSlotBackground = true;
-  this.isClickable = true;
+  this(elementNum, parent, 18, 18);
   }
 
 public GuiFakeSlot(int elementNum, IGuiElementCallback parent, int x, int y)

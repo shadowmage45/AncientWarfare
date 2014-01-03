@@ -20,15 +20,19 @@
  */
 package shadowmage.ancient_framework.common.teams;
 
-import shadowmage.ancient_framework.common.gamedata.AWGameData;
-import shadowmage.ancient_framework.common.network.Packet01ModData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_framework.common.network.Packet05Team;
 import cpw.mods.fml.common.IPlayerTracker;
 
 public class TeamTracker implements IPlayerTracker
 {
+
+private TeamTracker(){}
+private static TeamTracker instance = new TeamTracker();
+public static TeamTracker instance(){return instance;}
 
 TeamData clientTeamData;
 
@@ -94,11 +98,13 @@ public void handlePacketData(NBTTagCompound tag)
 
 public void sendTeamData(TeamData data)
   {
-  Packet01ModData pkt = new Packet01ModData();
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("name", "AWTeamData");
+  /**
+   * TODO clean this up..only send changes?
+   */
+  Packet05Team pkt = new Packet05Team();
+  NBTTagCompound tag = new NBTTagCompound();  
   data.writeToNBT(tag);
-  pkt.packetData.setTag("gameData", tag);
+  pkt.packetData.setTag("teamData", tag);
   pkt.sendPacketToAllPlayers();  
   }
 

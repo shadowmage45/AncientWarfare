@@ -23,6 +23,7 @@ package shadowmage.ancient_framework.common.teams;
 import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_framework.common.gamedata.GameData;
 
 public class TeamData extends GameData
@@ -42,15 +43,36 @@ public TeamData(String par1Str)
   }
 
 @Override
-public void readFromNBT(NBTTagCompound nbttagcompound)
+public void readFromNBT(NBTTagCompound tag)
   {
-  //TODO
+  entriesByPlayerName.clear();
+  entriesByTeamName.clear();
+  NBTTagList entryList = tag.getTagList("entryList");
+  NBTTagCompound entryTag;
+  for(int i = 0; i < entryList.tagCount(); i++)
+    {
+    entryTag = (NBTTagCompound) entryList.tagAt(i);
+    TeamEntry entry = new TeamEntry();
+    entry.readFromNBT(entryTag);
+    this.entriesByTeamName.put(entry.teamName, entry);
+    for(String player : entry.playerNames)
+      {
+      this.entriesByPlayerName.put(player, entry);
+      }
+    }
   }
 
 @Override
-public void writeToNBT(NBTTagCompound nbttagcompound)
+public void writeToNBT(NBTTagCompound tag)
   {
-  //TODO
+  NBTTagList entryList = new NBTTagList();
+  NBTTagCompound entryTag;
+  for(TeamEntry entry : entriesByTeamName.values())
+    {
+    entryTag = new NBTTagCompound();
+    entry.writeToNBT(entryTag);
+    entryList.appendTag(entryTag);
+    }
   }
 
 public boolean isHostileTowards(String offenseTeam, String defenseTeam)
@@ -77,6 +99,8 @@ public void handlePlayerLogin(String playerName)
 @Override
 public void handlePacketData(NBTTagCompound data)
   {
+  // TODO Auto-generated method stub
   
   }
+
 }

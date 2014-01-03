@@ -25,18 +25,15 @@ package shadowmage.ancient_framework.common.network;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -52,6 +49,7 @@ packetTypes.put(1, Packet01ModData.class);
 packetTypes.put(2, Packet02Entity.class);
 packetTypes.put(3, Packet03GuiComs.class);
 packetTypes.put(4, Packet04TE.class);
+packetTypes.put(5, Packet05Team.class);
 }
 
 public PacketHandler()  

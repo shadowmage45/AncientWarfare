@@ -18,32 +18,34 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.network;
+package shadowmage.ancient_framework.common.network;
 
-import shadowmage.ancient_framework.common.network.PacketBase;
-import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+import shadowmage.ancient_framework.common.teams.TeamTracker;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-public class Packet05StructureData extends PacketBase
+public class Packet05Team extends PacketBase
 {
 
-public Packet05StructureData()
+/**
+ * 
+ */
+public Packet05Team()
   {
-  
+  // TODO Auto-generated constructor stub
   }
 
 @Override
 public String getChannel()
   {
-  return "AW_struct";
+  return "AW_mod";
   }
 
 @Override
 public int getPacketType()
   {
-  return 5;
+  return 6;
   }
 
 @Override
@@ -55,13 +57,13 @@ public void writeDataToStream(ByteArrayDataOutput data)
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
-
+ 
   }
 
 @Override
 public void execute()
   {
-  StructureTemplateManager.instance().onTemplateData(packetData);
+  TeamTracker.instance().handlePacketData(packetData);
   }
 
 }

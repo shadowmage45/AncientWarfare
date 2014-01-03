@@ -23,17 +23,29 @@ package shadowmage.ancient_framework.common.teams;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+
 public class TeamEntry
 {
 
-public final String teamName;
+public String teamName;
 String leaderName;
 int teamColor;//RGBA hex color, e.g. 0xff00ffff==purple
+boolean autoAcceptApplications = false;
 Set<String> playerNames = new HashSet<String>();
 Set<String> warringTeams = new HashSet<String>();
 Set<String> alliedTeams = new HashSet<String>();
 
-boolean autoAcceptApplications = false;
+
+/**
+ * nbt-constructor...should immediately read from NBT after construction to ensure things are setup properly
+ */
+public TeamEntry()
+  {
+  
+  }
 
 public TeamEntry(String teamName, String leaderName, int teamColor)
   {
@@ -82,6 +94,64 @@ public void setLeaderName(String playerName)
 public int getTeamColor()
   {
   return teamColor;
+  }
+
+public void readFromNBT(NBTTagCompound tag)
+  {
+  teamName = tag.getString("teamName");
+  leaderName = tag.getString("leaderName");
+  teamColor = tag.getInteger("teamColor");
+  autoAcceptApplications = tag.getBoolean("autoAccept");
+  
+  NBTTagList list = tag.getTagList("playerList");
+  NBTTagString stringTag;
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    stringTag = (NBTTagString) list.tagAt(i);
+    this.playerNames.add(stringTag.data);
+    }
+  
+  list = tag.getTagList("warList");
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    stringTag = (NBTTagString) list.tagAt(i);
+    this.warringTeams.add(stringTag.data);
+    }
+  
+  list = tag.getTagList("allyList");
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    stringTag = (NBTTagString) list.tagAt(i);
+    this.alliedTeams.add(stringTag.data);
+    }
+  }
+
+public void writeToNBT(NBTTagCompound tag)
+  {
+  tag.setString("teamName", teamName);
+  tag.setString("leaderName", leaderName);
+  tag.setInteger("teamColor", teamColor);
+  tag.setBoolean("autoAccept", autoAcceptApplications);
+  NBTTagList list = new NBTTagList();
+  for(String player : playerNames)
+    {
+    list.appendTag(new NBTTagString("name", player));
+    }
+  tag.setTag("playerList", list);
+  
+  list = new NBTTagList();
+  for(String teamName : warringTeams)
+    {
+    list.appendTag(new NBTTagString("name", teamName));
+    }
+  tag.setTag("warList", list);
+  
+  list = new NBTTagList();
+  for(String teamName : alliedTeams)
+    {
+    list.appendTag(new NBTTagString("name", teamName));
+    }
+  tag.setTag("allyList", list);
   }
 
 }

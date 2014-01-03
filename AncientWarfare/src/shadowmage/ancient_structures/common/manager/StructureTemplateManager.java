@@ -27,7 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_structures.common.network.Packet05StructureData;
+import shadowmage.ancient_structures.common.network.Packet06StructureData;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
 
@@ -58,7 +58,7 @@ public void addTemplate(StructureTemplate template)
   
   NBTTagCompound tag = new NBTTagCompound();
   cl.writeToNBT(tag);    
-  Packet05StructureData pkt = new Packet05StructureData();
+  Packet06StructureData pkt = new Packet06StructureData();
   pkt.packetData.setTag("singleStructure", tag);
   pkt.sendPacketToAllPlayers();
   }
@@ -77,7 +77,7 @@ public void onPlayerConnect(EntityPlayer player)
     cl.writeToNBT(tag);
     list.appendTag(tag);
     }
-  Packet05StructureData pkt = new Packet05StructureData();
+  Packet06StructureData pkt = new Packet06StructureData();
   pkt.packetData.setTag("structureList", list);
   pkt.sendPacketToPlayer(player);
   }

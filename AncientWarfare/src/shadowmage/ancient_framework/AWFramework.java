@@ -34,6 +34,7 @@ import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_framework.common.teams.TeamData;
+import shadowmage.ancient_framework.common.teams.TeamTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -48,6 +49,7 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 
 
@@ -98,6 +100,7 @@ public void preInit(FMLPreInitializationEvent evt)
   gameData = new AWGameData();
   gameData.addDataClass("AWTeamData", TeamData.class);
   eventHandler = new shadowmage.ancient_framework.common.event.EventHandler();
+  GameRegistry.registerPlayerTracker(TeamTracker.instance());
   MinecraftForge.EVENT_BUS.register(eventHandler);
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   LanguageLoader.instance().loadLanguageFiles();

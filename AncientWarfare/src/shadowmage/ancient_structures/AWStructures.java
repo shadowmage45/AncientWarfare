@@ -40,7 +40,7 @@ import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
-import shadowmage.ancient_structures.common.network.Packet05StructureData;
+import shadowmage.ancient_structures.common.network.Packet06StructureData;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
@@ -99,7 +99,7 @@ public void preInit(FMLPreInitializationEvent evt)
   TemplateLoader.instance().initializeAndExportDefaults(path);  
   BlockDataManager.instance().loadBlockList();
   AWStructuresItemLoader.instance().registerItems();
-  PacketHandler.registerPacketType(5, Packet05StructureData.class);
+  PacketHandler.registerPacketType(6, Packet06StructureData.class);
   GameRegistry.registerPlayerTracker(instance);
   GUIHandler.instance().registerContainer(Statics.guiStructureBuilderCreative, ContainerCSB.class);
   GUIHandler.instance().registerContainer(Statics.guiStructureScannerCreative, ContainerStructureScanner.class);
