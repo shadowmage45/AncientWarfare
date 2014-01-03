@@ -28,6 +28,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.common.config.AWLog;
 
 public class GuiScrollableAreaSimple extends GuiElement implements IGuiElementCallback
 {
@@ -131,13 +132,14 @@ public void updateGuiPos(int x, int y)
   {  
   this.guiLeft = x;
   this.guiTop = y; 
-  for(GuiElement el : this.elements)
-    {
-    el.updateGuiPos(scrollPosX, -scrollPosY);
-    }
   if(this.scrollBar!=null)
     {
     this.scrollBar.updateHandleHeight(totalHeight, this.height);
+    this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);
+    }  
+  for(GuiElement el : this.elements)
+    {
+    el.updateGuiPos(scrollPosX, -scrollPosY);
     }
   }
 
@@ -210,13 +212,20 @@ public void onMouseWheel(int x, int y, int wheel)
     {
     int adjX = x - this.guiLeft - renderPosX;
     int adjY = y - this.guiTop - renderPosY;
-    if(this.scrollBar!=null)
-      {
-      this.scrollBar.onMouseWheel(adjX, adjY, wheel);
-      }    
+    boolean overElement = false;
     for(GuiElement el : this.elements)
       {
       el.onMouseWheel(adjX, adjY, wheel);
+      if(el.isMouseOver(adjX, adjY))
+        {
+        overElement = true;
+        }
+      }    
+    if(this.scrollBar!=null && !overElement)
+      {
+      this.scrollBar.handleMouseWheel(x, y, wheel);
+      this.scrollBar.updateHandleHeight(totalHeight, this.height);
+      this.updateGuiPos(parentGui.getGuiLeft(), parentGui.getGuiTop());
       }    
     }
   }
@@ -301,12 +310,7 @@ public boolean handleMouseMoved(int x, int y, int num)
 @Override
 public boolean handleMouseWheel(int x, int y, int wheel)
   {
-  if(this.scrollBar!=null)
-    {
-    this.updateGuiPos(parentGui.getGuiLeft(), parentGui.getGuiTop());
-    this.scrollBar.handleMouseWheel(x, y, wheel);
-    return true;
-    }
+
   return false;
   }
 
