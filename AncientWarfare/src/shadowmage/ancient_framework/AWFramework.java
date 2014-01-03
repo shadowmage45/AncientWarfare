@@ -33,6 +33,7 @@ import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
+import shadowmage.ancient_framework.common.teams.TeamData;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -95,6 +96,7 @@ public void preInit(FMLPreInitializationEvent evt)
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.FRAMEWORK_VERSION);  
   gameData = new AWGameData();
+  gameData.addDataClass("AWTeamData", TeamData.class);
   eventHandler = new shadowmage.ancient_framework.common.event.EventHandler();
   MinecraftForge.EVENT_BUS.register(eventHandler);
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
