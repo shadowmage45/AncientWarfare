@@ -52,16 +52,6 @@ public int getPacketType()
   return 1;
   }
 
-public void setInitData(NBTTagCompound tag)
-  {
-  this.packetData.setCompoundTag("init", tag);
-  }
-
-public void setTeamUpdate(NBTTagCompound tag)
-  {
-  this.packetData.setCompoundTag("team", tag);
-  }
-
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
@@ -81,11 +71,7 @@ public void execute()
     {
     String name = this.packetData.getString("gameData");
     AWGameData.handlePacketData(name, packetData);
-    }
-  if(this.packetData.hasKey("teamData"))
-    {
-    
-    }
+    } 
   }
 
 

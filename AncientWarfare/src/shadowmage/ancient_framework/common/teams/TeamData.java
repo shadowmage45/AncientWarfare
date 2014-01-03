@@ -23,9 +23,9 @@ package shadowmage.ancient_framework.common.teams;
 import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.WorldSavedData;
+import shadowmage.ancient_framework.common.gamedata.GameData;
 
-public class TeamData extends WorldSavedData
+public class TeamData extends GameData
 {
 public static String defaultTeamName = "defaultTeam";
 HashMap<String, TeamEntry> entriesByTeamName = new HashMap<String, TeamEntry>();
@@ -74,5 +74,9 @@ public void handlePlayerLogin(String playerName)
     }    
   }
 
-
+@Override
+public void handlePacketData(NBTTagCompound data)
+  {
+  
+  }
 }

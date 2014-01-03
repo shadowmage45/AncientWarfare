@@ -30,10 +30,10 @@ import shadowmage.ancient_framework.common.config.AWLog;
 public class AWGameData
 {
 
-private static HashMap<String, WorldSavedData> gameDatas = new HashMap<String, WorldSavedData>();
-private static HashMap<String, Class<? extends WorldSavedData>> datasToLoad = new HashMap<String, Class<? extends WorldSavedData>>();
+private static HashMap<String, GameData> gameDatas = new HashMap<String, GameData>();
+private static HashMap<String, Class<? extends GameData>> datasToLoad = new HashMap<String, Class<? extends GameData>>();
 
-public static void addDataClass(String name, Class<? extends WorldSavedData> clz)
+public static void addDataClass(String name, Class<? extends GameData> clz)
   {
   datasToLoad.put(name, clz);
   }
@@ -46,14 +46,15 @@ public static <T>T get(World world, String name, Class <T> saveDataClass)
     try
       {
       data = (T) saveDataClass.newInstance();
-      world.mapStorage.setData(name, (WorldSavedData)data);
+      world.mapStorage.setData(name, (GameData)data);
       } 
     catch (Exception e)
       {
       e.printStackTrace();
+      return null;
       }
     }
-  gameDatas.put(name, (WorldSavedData)data);
+  gameDatas.put(name, (GameData)data);
   return data;
   }
 
@@ -82,7 +83,6 @@ public static void handleWorldLoad(World world)
     if(data==null)
       {
       data = get(world, name, datasToLoad.get(name));
-      gameDatas.put(name, data);   
       AWLog.logDebug("loaded new data set for: "+name+" :: "+data);   
       }
     }
@@ -100,6 +100,7 @@ public static void resetTrackedData()
 
 public static void handlePacketData(String name, NBTTagCompound data)
   {
-  
+
   }
+
 }

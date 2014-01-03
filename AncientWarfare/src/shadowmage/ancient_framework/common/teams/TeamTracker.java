@@ -96,8 +96,9 @@ public void sendTeamData(TeamData data)
   {
   Packet01ModData pkt = new Packet01ModData();
   NBTTagCompound tag = new NBTTagCompound();
+  tag.setString("name", "AWTeamData");
   data.writeToNBT(tag);
-  pkt.packetData.setTag("teamData", tag);
+  pkt.packetData.setTag("gameData", tag);
   pkt.sendPacketToAllPlayers();  
   }
 

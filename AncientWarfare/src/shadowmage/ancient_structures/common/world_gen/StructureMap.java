@@ -30,11 +30,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldSavedData;
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.gamedata.GameData;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 
-public class StructureMap extends WorldSavedData
+public class StructureMap extends GameData
 {
 
 private StructureDimensionMap map;
@@ -265,5 +265,13 @@ private StructureEntry getEntryFor(int x, int y, int z, int face, StructureTempl
   {
   StructureEntry entry = new StructureEntry(x, y, z, face, template);  
   return entry;
+  }
+
+@Override
+public void handlePacketData(NBTTagCompound data)
+  {
+  /**
+   * NOOP FOR STRUCTURE MAP -- not needed on client-side
+   */
   }
 }
