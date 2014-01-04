@@ -2,11 +2,11 @@
 {
   "modid": "AncientWarfare",
   "name": "Ancient Warfare",
-  "version": "1.1.038-beta-MC164",
+  "version": "1.1.039-beta-MC164",
   "mcversion": "1.6.4",
   "description": "Adds Soldiers and Worker NPCs, Vehicles, and Automation tools",
   "credits": "me2005 (structures), jodi850 (structures/testing), MohawkyMagoo (many ideas)",
-  "logoFile": "/mods/ancientwarfare/textures/items/castle.png",
+  "logoFile": "/assets/ancientwarfare/textures/items/castle.png",
   "url": "http://ancientwarfare.wikispaces.com/",
   "updateUrl": "",
   "authors": [ "shadowmage4513" ],
