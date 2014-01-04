@@ -141,7 +141,7 @@ public void registerVehicles()
         {
         d.addTooltip(tip, vehicle.getGlobalVehicleType());
         }
-      
+      d.setIconTexture("ancientwarfare:testIcon5", vehicle.getGlobalVehicleType());
       }
     }  
   }
