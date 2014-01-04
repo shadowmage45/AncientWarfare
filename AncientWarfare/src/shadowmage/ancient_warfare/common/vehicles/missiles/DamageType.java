@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
 
 public class DamageType extends DamageSource
 {
@@ -72,12 +74,12 @@ public static DamageSource causeEntityMissileDamage(Entity attacker , boolean fi
   }
 
 @Override
-public ChatMessageComponent getDeathMessage(EntityLivingBase par1EntityLiving)
+public ChatMessageComponent getDeathMessage(EntityLivingBase par1EntityLivingBase)
   {
-  EntityLivingBase entityliving1 = par1EntityLiving.func_94060_bK();
-  String name = entityliving1==null? "No Entity" : entityliving1.getEntityName();
-  ChatMessageComponent chat = ChatMessageComponent.createFromText(name + " was killed by Missile Damage");
-  return chat;
+  EntityLivingBase entitylivingbase1 = par1EntityLivingBase.func_94060_bK();
+  String s = "death.attack." + this.damageType;
+  String s1 = s + ".player";
+  return entitylivingbase1 != null && StatCollector.func_94522_b(s1) ? ChatMessageComponent.createFromTranslationWithSubstitutions(s1, new Object[] {par1EntityLivingBase.getTranslatedEntityName(), entitylivingbase1.getTranslatedEntityName()}): ChatMessageComponent.createFromTranslationWithSubstitutions(s, new Object[] {par1EntityLivingBase.getTranslatedEntityName()});
   }
 
 

@@ -475,7 +475,7 @@ public void drawScreen(int par1, int par2, float par3)
     {
     slot = this.inventorySlots.getSlot(i);
     if(slot!=null && slot.getHasStack() && isMouseInAdjustedArea(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, par1, par2))
-      {
+      {      
       this.drawItemStackTooltip(slot.getStack(), par1, par2);
       break;
       }
@@ -809,6 +809,7 @@ protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3,
 @Override
 protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3)
   {
+  super.drawItemStackTooltip(par1ItemStack, par2, par3);
   List list = par1ItemStack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
 
   for (int k = 0; k < list.size(); ++k)
@@ -822,6 +823,8 @@ protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3)
       list.set(k, EnumChatFormatting.GRAY + (String)list.get(k));
       }
     }
+//  this.func_102021_a(par1List, par2, par3)
+//  this.drawHoveringText(list, par2, par3, getFontRenderer());
   func_102021_a(list, par2, par3);
   }
 

@@ -9,6 +9,7 @@ entity.npc=Ancient Warfare NPC
 entity.vehicle=Ancient Warfare Vehicle
 entity.missile=Ancient Warfare Missile
 entity.gate=Ancient Warfare Gate
+entity.AncientWarfare.entity.npc.name=Ancient Warfare NPC
 
 # damage types
 dmg.firemissile=Fire Missile
@@ -16,6 +17,8 @@ dmg.explosivemissile=Explosive Missile
 dmg.genericmissile=Normal Missile
 dmg.piercingmissile=Piercing Missile
 dmg.battering=Battering Damage
+death.attack.AWMissile=%1$s was killed by missile damage
+death.attack.AWMissile.player=%1$s was killed by missile damage by %2$s
 
 # single items
 item.single.structureScanner=Structure Scanner
