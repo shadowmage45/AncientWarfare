@@ -40,17 +40,28 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler
 {
 
+public static final int MULTI_PART = 0;
+public static final int MOD_DATA = 1;
+public static final int ENTITY = 2;//used by vehicles/npcs/gates
+public static final int GUI_COMS = 3;
+public static final int TILE = 4;//used by any tile-entity based communication
+public static final int TEAM = 5;//dest. teamTracker
+public static final int STRUCTURE = 6;//dest. structureManager
+public static final int RESEARCH = 7;//dest researchTracker
+
+
 private static Map<Integer, Class<? extends PacketBase>> packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
 
 static
 {
-packetTypes.put(0, Packet00MultiPart.class);
-packetTypes.put(1, Packet01ModData.class);
-packetTypes.put(2, Packet02Entity.class);
-packetTypes.put(3, Packet03GuiComs.class);
-packetTypes.put(4, Packet04TE.class);
-packetTypes.put(5, Packet05Team.class);
-
+packetTypes.put(MULTI_PART, Packet00MultiPart.class);
+packetTypes.put(MOD_DATA, Packet01ModData.class);
+packetTypes.put(ENTITY, Packet02Entity.class);
+packetTypes.put(GUI_COMS, Packet03GuiComs.class);
+packetTypes.put(TILE, Packet04TE.class);
+packetTypes.put(TEAM, Packet05Team.class);
+//6 registered from structure module
+//7 TODO
 }
 
 public PacketHandler()  

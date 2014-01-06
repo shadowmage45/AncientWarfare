@@ -45,7 +45,7 @@ public void setParams(Entity ent)
 @Override
 public int getPacketType()
   {  
-  return 2;
+  return PacketHandler.ENTITY;
   }
 
 @Override

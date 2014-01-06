@@ -39,7 +39,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {
-  return 3;
+  return PacketHandler.GUI_COMS;
   }
 
 @Override

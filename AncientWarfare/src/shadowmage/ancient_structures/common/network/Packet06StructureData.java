@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.common.network;
 
 import shadowmage.ancient_framework.common.network.PacketBase;
+import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -43,7 +44,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {
-  return 6;
+  return PacketHandler.STRUCTURE;
   }
 
 @Override

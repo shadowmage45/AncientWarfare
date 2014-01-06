@@ -45,7 +45,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {
-  return 5;
+  return PacketHandler.TEAM;
   }
 
 @Override

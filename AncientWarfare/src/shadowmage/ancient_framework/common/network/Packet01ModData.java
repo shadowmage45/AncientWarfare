@@ -49,7 +49,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {  
-  return 1;
+  return PacketHandler.MOD_DATA;
   }
 
 @Override

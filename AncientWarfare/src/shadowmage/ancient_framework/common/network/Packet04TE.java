@@ -49,7 +49,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {
-  return 4;
+  return PacketHandler.TILE;
   }
 
 public void setParams(TileEntity te)

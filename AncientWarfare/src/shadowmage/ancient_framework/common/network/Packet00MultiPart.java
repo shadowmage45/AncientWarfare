@@ -61,7 +61,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {
-  return 0;
+  return PacketHandler.MULTI_PART;
   }
 
 @Override
