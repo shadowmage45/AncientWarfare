@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class AWConfig extends ModConfiguration
 {
 
-
+public static boolean enableServerPerformanceMonitor = true;
 /**
  * @param configFile
  * @param log

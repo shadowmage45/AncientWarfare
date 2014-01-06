@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.settings;
+package shadowmage.ancient_framework.client.gui.options;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -27,11 +27,10 @@ import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.common.config.AWClientConfig;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.Packet01ModData;
-import shadowmage.ancient_warfare.common.config.AWCoreStatics;
-import shadowmage.ancient_warfare.common.config.Settings;
 
 public class GuiClientSettings extends GuiContainerAdvanced
 {
@@ -102,38 +101,47 @@ public void onElementActivated(IGuiElement element)
   switch(element.getElementNumber())
     {
     case 0:
-    Settings.setRenderOverlay(this.enableOverlayBox.checked());
+    AWClientConfig.setBooleanValue("renderOverlay", this.enableOverlayBox.checked());
     break;    
+    
     case 1:
-    Settings.setRenderAdvOverlay(this.enableAdvancedOverlay.checked());
+    AWClientConfig.setBooleanValue("renderAdvancedOverlay", this.enableAdvancedOverlay.checked());
     break;
+    
     case 2:
-    Settings.setMouseAim(this.enableMouseAim.checked());
+    AWClientConfig.setBooleanValue("mouseAim", this.enableMouseAim.checked());
     break;
+    
     case 3:
     mc.displayGuiScreen(new GuiKeybinds(inventorySlots, this));
     break;
+    
     case 4:
     this.closeGUI();
     break;
+    
     case 5:
-    Settings.setRenderVehiclesInFirstPerson(this.enableVehicleFPR.checked());
+    AWClientConfig.setBooleanValue("renderVehicleFirstPerson", this.enableVehicleFPR.checked());
     break;
+    
     case 6:
-    Settings.setRenderVehicleNameplates(this.enableVehicleNameplates.checked());
+    AWClientConfig.setBooleanValue("renderVehicleNameplates", this.enableVehicleNameplates.checked());
     break;
+    
     case 7:
-    Settings.setRenderNpcNameplates(this.enableNpcNameplates.checked());
+    AWClientConfig.setBooleanValue("renderNpcNameplates", this.enableNpcNameplates.checked());
     break;
+    
     case 8:
-    Settings.setRenderCivicbounds(this.enableCivicBounds.checked());
+    AWClientConfig.setBooleanValue("renderCivicBounds", this.enableCivicBounds.checked());
     break;
+    
     case 9:
-    Settings.setRenderNpcObjectives(this.enableNpcObjective.checked());
+    AWClientConfig.setBooleanValue("renderNpcObjectives", this.enableNpcObjective.checked());
     break;
     
     case 10:
-    GUIHandler.instance().openGUI(AWCoreStatics.guiPerformance, player, 0, 0, 0);    
+    GUIHandler.instance().openGUI(Statics.guiPerformance, player, 0, 0, 0);    
     break;
     
     case 11:
@@ -143,7 +151,7 @@ public void onElementActivated(IGuiElement element)
     pkt.packetData = tag;
     pkt.sendPacketToServer();   
     break;
-    
+//    
     default:
     break;   
     }
@@ -152,16 +160,16 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {
-  this.enableOverlayBox = this.addCheckBox(0, 10, 10, 16, 16).setChecked(Settings.getRenderOverlay());
-  this.enableAdvancedOverlay = this.addCheckBox(1, 10, 30, 16, 16).setChecked(Settings.getRenderAdvOverlay());
-  this.enableMouseAim = this.addCheckBox(2, 10, 50, 16, 16).setChecked(Settings.getMouseAim());
+  this.enableOverlayBox = this.addCheckBox(0, 10, 10, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderOverlay"));
+  this.enableAdvancedOverlay = this.addCheckBox(1, 10, 30, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderAdvancedOverlay"));
+  this.enableMouseAim = this.addCheckBox(2, 10, 50, 16, 16).setChecked(AWClientConfig.getBooleanValue("mouseAim"));
   this.keyBinds = this.addGuiButton(3, this.getXSize()-55-10, 30, 55, 16, "Keybinds");
   this.addGuiButton(4, getXSize()-55-10, 10, 55, 16, "Done");
-  this.enableVehicleFPR = this.addCheckBox(5, 10, 70, 16, 16).setChecked(Settings.renderVehiclesInFirstPerson);
-  this.enableVehicleNameplates = this.addCheckBox(6, 10, 90, 16, 16).setChecked(Settings.getRenderVehicleNameplates());
-  this.enableNpcNameplates = this.addCheckBox(7, 10, 110, 16, 16).setChecked(Settings.getRenderNpcNameplates());
-  this.enableCivicBounds = this.addCheckBox(8, 10, 130, 16, 16).setChecked(Settings.getRenderCivicBounds());
-  this.enableNpcObjective = this.addCheckBox(9, 10, 150, 16, 16).setChecked(Settings.getRenderNpcObjectives());
+  this.enableVehicleFPR = this.addCheckBox(5, 10, 70, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderVehicleFirstPerson"));
+  this.enableVehicleNameplates = this.addCheckBox(6, 10, 90, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderVehicleNameplates"));
+  this.enableNpcNameplates = this.addCheckBox(7, 10, 110, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderNpcNameplates"));
+  this.enableCivicBounds = this.addCheckBox(8, 10, 130, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderCivicBounds"));
+  this.enableNpcObjective = this.addCheckBox(9, 10, 150, 16, 16).setChecked(AWClientConfig.getBooleanValue("renderNpcObjectives"));
   this.performance = this.addGuiButton(10, getXSize()-55-10, 50, 55, 16, "Perf.");
   this.entityDump = this.addGuiButton(11, getXSize()-55-10, 50+18, 55, 16, "Ent Dump");
   }
@@ -169,7 +177,6 @@ public void setupControls()
 @Override
 public void updateControls()
   {
-  // TODO Auto-generated method stub
 
   }
 

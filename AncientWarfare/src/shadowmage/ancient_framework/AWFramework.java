@@ -27,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.common.config.AWConfig;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.container.ContainerPerformanceMonitor;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.lang.LanguageLoader;
 import shadowmage.ancient_framework.common.network.GUIHandler;
@@ -68,7 +69,7 @@ public class AWFramework extends AWMod
 
 @Instance("AncientWarfareCore")
 public static AWFramework instance;
-@SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxyBase", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
+@SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxyCore", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
 public static CommonProxy proxy;
 
 public ObjectRegistry objectRegistry;
@@ -104,6 +105,8 @@ public void preInit(FMLPreInitializationEvent evt)
   MinecraftForge.EVENT_BUS.register(eventHandler);
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   LanguageLoader.instance().loadLanguageFiles();
+  
+  GUIHandler.instance().registerContainer(Statics.guiPerformance, ContainerPerformanceMonitor.class);
   }
 
 @Override

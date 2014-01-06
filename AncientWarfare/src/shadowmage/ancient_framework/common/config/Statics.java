@@ -34,6 +34,8 @@ public static final boolean DEBUG = true;
 
 public static final int guiOptions = 0;
 public static final int guiTeamControl = 1;
+public static final int guiPerformance = 2;
+public static final int guiKeybinds = 3;
 
 public static final int guiStructureBuilderCreative = 10;
 public static final int guiStructureScannerCreative = 11;

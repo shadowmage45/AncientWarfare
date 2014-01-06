@@ -18,26 +18,26 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.client.gui.settings;
+package shadowmage.ancient_framework.client.gui.options;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
+import shadowmage.ancient_framework.common.container.ContainerPerformanceMonitor;
 
-public class GuiDebugInfo extends GuiContainerAdvanced
+public class GuiPerformanceMonitor extends GuiContainerAdvanced
 {
 
 GuiScrollableArea area;
 GuiButtonSimple backButton;
-ContainerDebugInfo container;
+ContainerPerformanceMonitor container;
 
 /**
  * @param container
  */
-public GuiDebugInfo(ContainerDebugInfo container)
+public GuiPerformanceMonitor(ContainerPerformanceMonitor container)
   {
   super(container);
   this.shouldCloseOnVanillaKeys = true;

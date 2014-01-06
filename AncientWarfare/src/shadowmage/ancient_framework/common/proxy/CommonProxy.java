@@ -49,7 +49,7 @@ public void sendPacketToServer(PacketBase pkt)
   //NOOP server side
   }
 
-public void sendPacketToAllClientsTracking(Entity ent, PacketBase packet)
+public final void sendPacketToAllClientsTracking(Entity ent, PacketBase packet)
   {
   PacketBase[] packets = getPackets(packet);
   WorldServer world = (WorldServer)ent.worldObj;
@@ -59,7 +59,7 @@ public void sendPacketToAllClientsTracking(Entity ent, PacketBase packet)
     }
   }
 
-public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
+public final void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
   {
   PacketBase[] packets = getPackets(packet);
   for(PacketBase pkt : packets)
@@ -68,7 +68,7 @@ public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
     }
   }
 
-public void sendPacketToAllPlayers(PacketBase packet)
+public final void sendPacketToAllPlayers(PacketBase packet)
   {
   PacketBase[] packets = getPackets(packet);
   for(PacketBase pkt : packets)
@@ -77,7 +77,7 @@ public void sendPacketToAllPlayers(PacketBase packet)
     }  
   }
 
-protected PacketBase[] getPackets(PacketBase packet)
+protected final PacketBase[] getPackets(PacketBase packet)
   {
   Packet250CustomPayload customPacket = packet.get250Packet();
   PacketBase[] packetArray;
