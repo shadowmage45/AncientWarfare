@@ -62,7 +62,7 @@ private static List<IHandleInput> mouseInputHandlers = new ArrayList<IHandleInpu
 static int mouseX;
 static int mouseY;
 static boolean[] mouseButtonStates = new boolean[3];//left, right, middle/wheel?
-static int mouseWheelState = 0;
+//static int mouseWheelState = 0;
 
 public static void addMouseHandler(IHandleInput mouseHandler)
   {
@@ -100,7 +100,11 @@ public static void onTick()
       kb.owner.onKeyUp(kb);
       kb.changedThisTick = true;
       }
-    }  
+    } 
+  if(mouseInputHandlers.isEmpty())
+    {
+    return;
+    }
   int x = Mouse.getX();
   int y = Mouse.getY();
   if(x!=mouseX || y!=mouseY)
