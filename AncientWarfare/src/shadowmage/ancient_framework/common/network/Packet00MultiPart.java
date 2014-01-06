@@ -30,12 +30,13 @@ static int nextUniquePacketID = 0;
 
 int sourcePacketType;
 String sourcePacketChannel;
+int chunkNumber;
+int totalChunks;
 
 int uniquePacketID;//to identify which multi-part packets belong to this packet
-int packetNumber;//the number of this packet in the total packet list
-int totalPackets;//the total number of packets..used to determine when receipt is done
-
-int datasLength;
+int startIndex;//the start index of this data chunk
+int chunkLength;//the length of this data chunk
+int totalLength;//the total length of the entire original data packet
 byte[] datas;
 
 public Packet00MultiPart()
@@ -61,9 +62,11 @@ public void writeDataToStream(ByteArrayDataOutput data)
   {
   data.writeChars(sourcePacketChannel);
   data.writeInt(sourcePacketType);
-  data.writeInt(packetNumber);
-  data.writeInt(totalPackets);  
-  data.writeInt(datasLength);
+  data.writeInt(chunkNumber);
+  data.writeInt(totalChunks);
+  data.writeInt(startIndex);
+  data.writeInt(chunkLength);  
+  data.writeInt(totalLength);
   data.write(datas);
   }
 
@@ -72,20 +75,19 @@ public void readDataStream(ByteArrayDataInput data)
   {
   sourcePacketChannel = data.readLine();
   sourcePacketType = data.readInt();
-  packetNumber = data.readInt();
-  totalPackets = data.readInt();  
-  datasLength = data.readInt();
-  datas = new byte[datasLength];
+  chunkNumber = data.readInt();
+  totalChunks = data.readInt();
+  startIndex = data.readInt();
+  chunkLength = data.readInt();  
+  totalLength = data.readInt();
+  datas = new byte[chunkLength];
   data.readFully(datas);
   }
 
 @Override
 public void execute()
   {
-  /**
-   * should be handled prior to execute()
-   * ...packet handler should store to combine into the actual end-product packet
-   */
+  PacketHandler.handleMultiPartPacketReceipt(this, this.player);
   }
 
 }

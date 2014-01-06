@@ -82,7 +82,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     {
     e.printStackTrace();
     return;
-    }
+    }  
   if(realPacket==null)
     {
     return;
@@ -91,15 +91,9 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
   realPacket.player = (EntityPlayer)player;  
   realPacket.world = realPacket.player.worldObj;    
   realPacket.readDataStream(data);
-  if(realPacket.getPacketType()==0)
-    {
-    handleMultiPartPacketReceipt((Packet00MultiPart) realPacket, (EntityPlayer) player, manager);
-    }
-  else
-    {
-    realPacket.execute();
-    }    
+  realPacket.execute();
   }
+
 
 /**
  * construct a new instance of a packet given only the packetType
@@ -115,48 +109,96 @@ public static PacketBase constructPacket(int type) throws InstantiationException
   return packetTypes.get(type).newInstance();
   }
 
-private HashMap<String, MPPacketList> multiPartPacketHandlers = new HashMap<String, MPPacketList>();
+private static HashMap<String, MPPacketList> serverMultiPartPacketHandlers = new HashMap<String, MPPacketList>();
+private static HashMap<String, MPPacketList> clientMultiPartPacketHandlers = new HashMap<String, MPPacketList>();
 
-public void handleMultiPartPacketReceipt(Packet00MultiPart pkt, EntityPlayer player, INetworkManager manager)
+public static void handleMultiPartPacketReceipt(Packet00MultiPart pkt, EntityPlayer player)
   {
-  if(!multiPartPacketHandlers.containsKey(player.getEntityName()))
+  HashMap<String, MPPacketList> ph;
+  if(player.worldObj.isRemote)
     {
-    multiPartPacketHandlers.put(player.getEntityName(), new MPPacketList());
+    ph = clientMultiPartPacketHandlers;
     }
-  multiPartPacketHandlers.get(player.getEntityName()).handleMPPacket(pkt, manager);
+  else
+    {
+    ph = serverMultiPartPacketHandlers;
+    }  
+  if(!ph.containsKey(player.getEntityName()))
+    {
+    ph.put(player.getEntityName(), new MPPacketList());
+    }
+  ph.get(player.getEntityName()).handleMPPacket(pkt);
   }
 
-private class MPPacketEntry
+
+
+private static class MPPacketEntry
 {
+
+int uniqueID;
+int packetType;
+String channel;
+int totalSize;
+byte[] fullData;
+int receivedChunks;
+int totalChunks;
+
+public MPPacketEntry(Packet00MultiPart pkt)
+  {
+  this.packetType = pkt.sourcePacketType;
+  this.channel = pkt.sourcePacketChannel;
+  this.uniqueID = pkt.uniquePacketID;
+  this.totalSize = pkt.totalLength;
+  this.fullData = new byte[pkt.totalLength];  
+  }
 
 public boolean addPartialPacket(Packet00MultiPart pkt)
   {
+  byte[] data = pkt.datas;
+  for(int i = 0, k = pkt.startIndex; k < pkt.startIndex+pkt.chunkLength; k++, i++)
+    {
+    this.fullData[k]=data[i];
+    }
   return false;
   }
 
-
-
 }
 
-private class MPPacketList
+private static class MPPacketList
 {
 HashMap<Integer, MPPacketEntry> partialPackets = new HashMap<Integer, MPPacketEntry>();
 
-public void handleMPPacket(Packet00MultiPart pkt, INetworkManager manager)
+public void handleMPPacket(Packet00MultiPart pkt)
   {
   if(!partialPackets.containsKey(pkt.uniquePacketID))
     {
-    partialPackets.put(pkt.uniquePacketID, new MPPacketEntry());    
+    partialPackets.put(pkt.uniquePacketID, new MPPacketEntry(pkt));
     }
   MPPacketEntry entry = partialPackets.get(pkt.uniquePacketID);
   if(entry.addPartialPacket(pkt))
     {
-    partialPackets.remove(pkt.uniquePacketID);
-    /**
-     * TODO construct real packet from partial-packets data, send packet off for execution
-     */
-//    NetHandler handler = ((EntityClientPlayerMP)pkt.player).sendQueue;
-//    FMLNetworkHandler.handlePacket250Packet(pkt, manager, handler);
+    partialPackets.remove(pkt.uniquePacketID);   
+    PacketBase realPacket;
+    try
+      {
+      ByteArrayDataInput data = ByteStreams.newDataInput(entry.fullData);
+      int packetType = data.readInt();      
+      realPacket = constructPacket(packetType);
+      NBTTagCompound tag =  NBTTools.readTagFromStream(data);      
+      realPacket.packetData = tag;
+      realPacket.player = (EntityPlayer)pkt.player;  
+      realPacket.world = pkt.player.worldObj;    
+      realPacket.readDataStream(data);
+      realPacket.execute();
+      } 
+    catch (InstantiationException e)
+      {
+      e.printStackTrace();
+      } 
+    catch (IllegalAccessException e)
+      {
+      e.printStackTrace();
+      }
     }
   }
 
