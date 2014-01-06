@@ -29,7 +29,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -52,7 +51,6 @@ packetTypes.put(3, Packet03GuiComs.class);
 packetTypes.put(4, Packet04TE.class);
 packetTypes.put(5, Packet05Team.class);
 
-packetTypes.put(7, Packet07TestLargePacket.class);
 }
 
 public PacketHandler()  

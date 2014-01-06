@@ -30,7 +30,6 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_framework.common.network.Packet07TestLargePacket;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
