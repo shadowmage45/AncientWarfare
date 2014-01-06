@@ -135,20 +135,18 @@ public static void handleMultiPartPacketReceipt(Packet00MultiPart pkt, EntityPla
 private static class MPPacketEntry
 {
 
-int uniqueID;
-int packetType;
-String channel;
-int totalSize;
-byte[] fullData;
-int receivedChunks;
-int totalChunks;
+int uniquePacketID;//used to determine which packets to combine
+int packetType;//the destination packet type this MP packet represents
+int totalLength;//the total length of byte-array data to be reconstructed for this destination packet
+byte[] fullData;//the byte-array of datas for this destination packet
+int receivedChunks;//how many chunks have been receieved from this packet?
+int totalChunks;//total number of chunks that make up this destination packet
 
 public MPPacketEntry(Packet00MultiPart pkt)
   {
   this.packetType = pkt.sourcePacketType;
-  this.channel = pkt.sourcePacketChannel;
-  this.uniqueID = pkt.uniquePacketID;
-  this.totalSize = pkt.totalLength;
+  this.uniquePacketID = pkt.uniquePacketID;
+  this.totalLength = pkt.totalLength;
   this.fullData = new byte[pkt.totalLength];  
   }
 
@@ -158,6 +156,11 @@ public boolean addPartialPacket(Packet00MultiPart pkt)
   for(int i = 0, k = pkt.startIndex; k < pkt.startIndex+pkt.chunkLength; k++, i++)
     {
     this.fullData[k]=data[i];
+    }
+  this.receivedChunks++;
+  if(this.receivedChunks==this.totalChunks)
+    {
+    return true;
     }
   return false;
   }

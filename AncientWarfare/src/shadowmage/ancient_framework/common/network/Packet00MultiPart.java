@@ -29,7 +29,6 @@ public class Packet00MultiPart extends PacketBase
 static int nextUniquePacketID = 0;
 
 int sourcePacketType;
-String sourcePacketChannel;
 int chunkNumber;
 int totalChunks;
 
@@ -37,6 +36,7 @@ int uniquePacketID;//to identify which multi-part packets belong to this packet
 int startIndex;//the start index of this data chunk
 int chunkLength;//the length of this data chunk
 int totalLength;//the total length of the entire original data packet
+
 byte[] datas;
 
 public Packet00MultiPart()
@@ -60,7 +60,6 @@ public int getPacketType()
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
-  data.writeChars(sourcePacketChannel);
   data.writeInt(sourcePacketType);
   data.writeInt(chunkNumber);
   data.writeInt(totalChunks);
@@ -73,7 +72,6 @@ public void writeDataToStream(ByteArrayDataOutput data)
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
-  sourcePacketChannel = data.readLine();
   sourcePacketType = data.readInt();
   chunkNumber = data.readInt();
   totalChunks = data.readInt();
