@@ -22,15 +22,22 @@
  */
 package shadowmage.ancient_framework.common.proxy;
 
+import java.util.Arrays;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.WorldServer;
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.network.Packet00MultiPart;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class CommonProxy
 {
+
+private PacketBase[] singlePacketArray = new PacketBase[1];
 
 public void registerClientData()
   {
@@ -42,10 +49,11 @@ public void sendPacketToServer(PacketBase pkt)
   //NOOP server side
   }
 
-public void sendPacketToAllClientsTracking(Entity ent, PacketBase pkt)
+public void sendPacketToAllClientsTracking(Entity ent, PacketBase packet)
   {
+  PacketBase[] packets = getPackets(packet);
   WorldServer world = (WorldServer)ent.worldObj;
-  if(world!=null)
+  for(PacketBase pkt : packets)
     {
     world.getEntityTracker().sendPacketToAllPlayersTrackingEntity(ent, pkt.get250Packet());
     }
@@ -53,12 +61,65 @@ public void sendPacketToAllClientsTracking(Entity ent, PacketBase pkt)
 
 public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
   {
-  PacketDispatcher.sendPacketToPlayer(packet.get250Packet(), (Player)player);
+  PacketBase[] packets = getPackets(packet);
+  for(PacketBase pkt : packets)
+    {
+    AWLog.logDebug("sending packet of type: "+pkt.getPacketType()+ " to player: "+player.getEntityName() + " packet class "+pkt.getClass());
+    PacketDispatcher.sendPacketToPlayer(pkt.get250Packet(), (Player)player);
+    }
   }
 
 public void sendPacketToAllPlayers(PacketBase packet)
   {
-  PacketDispatcher.sendPacketToAllPlayers(packet.get250Packet());
+  PacketBase[] packets = getPackets(packet);
+  for(PacketBase pkt : packets)
+    {
+    PacketDispatcher.sendPacketToAllPlayers(pkt.get250Packet());
+    }  
+  }
+
+protected PacketBase[] getPackets(PacketBase packet)
+  {
+  Packet250CustomPayload customPacket = packet.get250Packet();
+  PacketBase[] packetArray;
+  int totalLength = customPacket.data.length;
+   
+  if(totalLength<=32000)
+    {
+    AWLog.logDebug("returned single packet array for packet..");
+    return new PacketBase[]{packet};
+    }
+  else
+    {
+    Packet00MultiPart partPacket;
+    int numOfPackets =  (totalLength/32000) + 1;
+    packetArray = new PacketBase[numOfPackets];
+    int startIndex;
+    int length;
+    int packetID = Packet00MultiPart.getNextPacketID();
+    for(int i = 0; i < numOfPackets; i++)
+      {      
+      startIndex = 32000 * i;      
+      length = totalLength - startIndex;
+      if(length>32000)
+        {
+        length = 32000;
+        }              
+      partPacket = new Packet00MultiPart();
+      partPacket.uniquePacketID = packetID;
+      partPacket.sourcePacketType = packet.getPacketType();
+      partPacket.datas = Arrays.copyOfRange(customPacket.data, startIndex, startIndex+length);   ;
+      partPacket.totalChunks = numOfPackets;
+      partPacket.chunkLength = length;
+      partPacket.chunkNumber = i;
+      partPacket.startIndex = startIndex;
+      partPacket.totalLength = totalLength;
+      AWLog.logDebug("setting packet array index: "+i+" to: "+partPacket.getClass());
+      packetArray[i] = partPacket;
+      }
+    }  
+  AWLog.logDebug("returned multi-part packet array consisting of: "+packetArray.length+" packets");
+  return packetArray;
   }
 
 

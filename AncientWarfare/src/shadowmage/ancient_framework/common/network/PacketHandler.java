@@ -29,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -50,6 +51,8 @@ packetTypes.put(2, Packet02Entity.class);
 packetTypes.put(3, Packet03GuiComs.class);
 packetTypes.put(4, Packet04TE.class);
 packetTypes.put(5, Packet05Team.class);
+
+packetTypes.put(7, Packet07TestLargePacket.class);
 }
 
 public PacketHandler()  
@@ -87,6 +90,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     {
     return;
     }
+  AWLog.logDebug("receiving packet of type: "+packetType);
   realPacket.packetData = tag;
   realPacket.player = (EntityPlayer)player;  
   realPacket.world = realPacket.player.worldObj;    
@@ -114,6 +118,7 @@ private static HashMap<String, MPPacketList> clientMultiPartPacketHandlers = new
 
 public static void handleMultiPartPacketReceipt(Packet00MultiPart pkt, EntityPlayer player)
   {
+  AWLog.logDebug("receiving MP packet, adding to handler list");
   HashMap<String, MPPacketList> ph;
   if(player.worldObj.isRemote)
     {
@@ -148,6 +153,7 @@ public MPPacketEntry(Packet00MultiPart pkt)
   this.uniquePacketID = pkt.uniquePacketID;
   this.totalLength = pkt.totalLength;
   this.fullData = new byte[pkt.totalLength];  
+  this.totalChunks = pkt.totalChunks;
   }
 
 public boolean addPartialPacket(Packet00MultiPart pkt)
@@ -158,8 +164,10 @@ public boolean addPartialPacket(Packet00MultiPart pkt)
     this.fullData[k]=data[i];
     }
   this.receivedChunks++;
+  AWLog.logDebug("received chunks: "+this.receivedChunks + " of total: "+this.totalChunks);
   if(this.receivedChunks==this.totalChunks)
     {
+    AWLog.logDebug("full packet received..should execute...TRUE");
     return true;
     }
   return false;
@@ -192,7 +200,9 @@ public void handleMPPacket(Packet00MultiPart pkt)
       realPacket.player = (EntityPlayer)pkt.player;  
       realPacket.world = pkt.player.worldObj;    
       realPacket.readDataStream(data);
+      AWLog.logDebug("executing packet from mp packet receipt");
       realPacket.execute();
+      this.partialPackets.remove(pkt.uniquePacketID);
       } 
     catch (InstantiationException e)
       {

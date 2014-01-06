@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_framework.common.network;
 
+import net.minecraft.network.packet.Packet250CustomPayload;
+import shadowmage.ancient_framework.common.config.AWLog;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
@@ -28,21 +31,25 @@ public class Packet00MultiPart extends PacketBase
 
 static int nextUniquePacketID = 0;
 
-int sourcePacketType;
-int chunkNumber;
-int totalChunks;
+public int sourcePacketType;//
+public int chunkNumber;//
+public int totalChunks;//
 
-int uniquePacketID;//to identify which multi-part packets belong to this packet
-int startIndex;//the start index of this data chunk
-int chunkLength;//the length of this data chunk
-int totalLength;//the total length of the entire original data packet
+public int uniquePacketID;//to identify which multi-part packets belong to this packet
+public int startIndex;//the start index of this data chunk
+public int chunkLength;//the length of this data chunk
+public int totalLength;//the total length of the entire original data packet
 
-byte[] datas;
+public byte[] datas;
 
 public Packet00MultiPart()
   {
-  uniquePacketID = nextUniquePacketID;
-  nextUniquePacketID++;
+  
+  }
+
+public static int getNextPacketID()
+  {
+  return nextUniquePacketID++;
   }
 
 @Override
@@ -60,7 +67,8 @@ public int getPacketType()
 @Override
 public void writeDataToStream(ByteArrayDataOutput data)
   {
-  data.writeInt(sourcePacketType);
+  data.writeInt(uniquePacketID);
+  data.writeInt(sourcePacketType);  
   data.writeInt(chunkNumber);
   data.writeInt(totalChunks);
   data.writeInt(startIndex);
@@ -72,6 +80,7 @@ public void writeDataToStream(ByteArrayDataOutput data)
 @Override
 public void readDataStream(ByteArrayDataInput data)
   {
+  uniquePacketID = data.readInt();
   sourcePacketType = data.readInt();
   chunkNumber = data.readInt();
   totalChunks = data.readInt();
@@ -83,8 +92,16 @@ public void readDataStream(ByteArrayDataInput data)
   }
 
 @Override
+public Packet250CustomPayload get250Packet()
+  {
+  AWLog.logDebug("get250 called for MP packet");
+  return super.get250Packet();
+  }
+
+@Override
 public void execute()
   {
+  AWLog.logDebug("executing multi-part packet. number: "+chunkNumber + " of: "+totalChunks);
   PacketHandler.handleMultiPartPacketReceipt(this, this.player);
   }
 

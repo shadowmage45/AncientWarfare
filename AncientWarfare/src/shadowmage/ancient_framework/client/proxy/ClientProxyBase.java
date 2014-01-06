@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_framework.client.proxy;
 
+import net.minecraft.world.WorldServer;
 import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
@@ -38,9 +39,13 @@ public ClientProxyBase()
   }
 
 @Override
-public void sendPacketToServer(PacketBase pkt)
+public void sendPacketToServer(PacketBase packet)
   {
-  PacketDispatcher.sendPacketToServer(pkt.get250Packet());
+  PacketBase[] packets = getPackets(packet);
+  for(PacketBase pkt : packets)
+    {
+    PacketDispatcher.sendPacketToServer(pkt.get250Packet());
+    }
   }
 
 @Override

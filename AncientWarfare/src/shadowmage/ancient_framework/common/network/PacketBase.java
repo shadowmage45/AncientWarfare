@@ -28,6 +28,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -98,6 +99,7 @@ protected void constructPacket()
   /**
    * write the packet type number to the stream, decoded in packetHandler to create a new packet
    */
+  AWLog.logDebug("writing packet type to stream: "+this.getPacketType() + " from: "+this);
   data.writeInt(this.getPacketType());
   
   /**
@@ -118,7 +120,10 @@ protected void constructPacket()
 
 public Packet250CustomPayload get250Packet()
   {
-  this.constructPacket();
+  if(this.packet250==null)
+    {
+    this.constructPacket();
+    }
   return this.packet250;
   }
 
