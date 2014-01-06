@@ -37,7 +37,7 @@ public Packet06StructureData()
 @Override
 public String getChannel()
   {
-  return "AW_struct";
+  return "AW_mod";
   }
 
 @Override
