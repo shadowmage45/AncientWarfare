@@ -90,7 +90,6 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
     {
     return;
     }
-  AWLog.logDebug("receiving packet of type: "+packetType);
   realPacket.packetData = tag;
   realPacket.player = (EntityPlayer)player;  
   realPacket.world = realPacket.player.worldObj;    
@@ -118,7 +117,6 @@ private static HashMap<String, MPPacketList> clientMultiPartPacketHandlers = new
 
 public static void handleMultiPartPacketReceipt(Packet00MultiPart pkt, EntityPlayer player)
   {
-  AWLog.logDebug("receiving MP packet, adding to handler list");
   HashMap<String, MPPacketList> ph;
   if(player.worldObj.isRemote)
     {
@@ -164,10 +162,8 @@ public boolean addPartialPacket(Packet00MultiPart pkt)
     this.fullData[k]=data[i];
     }
   this.receivedChunks++;
-  AWLog.logDebug("received chunks: "+this.receivedChunks + " of total: "+this.totalChunks);
   if(this.receivedChunks==this.totalChunks)
     {
-    AWLog.logDebug("full packet received..should execute...TRUE");
     return true;
     }
   return false;
@@ -200,7 +196,6 @@ public void handleMPPacket(Packet00MultiPart pkt)
       realPacket.player = (EntityPlayer)pkt.player;  
       realPacket.world = pkt.player.worldObj;    
       realPacket.readDataStream(data);
-      AWLog.logDebug("executing packet from mp packet receipt");
       realPacket.execute();
       this.partialPackets.remove(pkt.uniquePacketID);
       } 

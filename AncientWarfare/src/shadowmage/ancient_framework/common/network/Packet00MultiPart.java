@@ -92,16 +92,8 @@ public void readDataStream(ByteArrayDataInput data)
   }
 
 @Override
-public Packet250CustomPayload get250Packet()
-  {
-  AWLog.logDebug("get250 called for MP packet");
-  return super.get250Packet();
-  }
-
-@Override
 public void execute()
   {
-  AWLog.logDebug("executing multi-part packet. number: "+chunkNumber + " of: "+totalChunks);
   PacketHandler.handleMultiPartPacketReceipt(this, this.player);
   }
 

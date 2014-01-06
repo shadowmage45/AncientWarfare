@@ -174,16 +174,7 @@ public void onPlayerLogin(EntityPlayer player)
   if(!player.worldObj.isRemote)
     {
     StructureTemplateManager.instance().onPlayerConnect(player);
-    }
-  
-  /**
-   * TODO DEBUG
-   */
-  if(!player.worldObj.isRemote)
-    {
-    Packet07TestLargePacket testPacket = new Packet07TestLargePacket();
-    testPacket.sendPacketToPlayer(player);
-    }
+    }  
   }
 
 @Override

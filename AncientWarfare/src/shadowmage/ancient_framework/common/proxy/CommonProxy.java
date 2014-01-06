@@ -64,7 +64,6 @@ public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
   PacketBase[] packets = getPackets(packet);
   for(PacketBase pkt : packets)
     {
-    AWLog.logDebug("sending packet of type: "+pkt.getPacketType()+ " to player: "+player.getEntityName() + " packet class "+pkt.getClass());
     PacketDispatcher.sendPacketToPlayer(pkt.get250Packet(), (Player)player);
     }
   }
@@ -86,7 +85,6 @@ protected PacketBase[] getPackets(PacketBase packet)
    
   if(totalLength<=32000)
     {
-    AWLog.logDebug("returned single packet array for packet..");
     return new PacketBase[]{packet};
     }
   else
@@ -114,11 +112,9 @@ protected PacketBase[] getPackets(PacketBase packet)
       partPacket.chunkNumber = i;
       partPacket.startIndex = startIndex;
       partPacket.totalLength = totalLength;
-      AWLog.logDebug("setting packet array index: "+i+" to: "+partPacket.getClass());
       packetArray[i] = partPacket;
       }
     }  
-  AWLog.logDebug("returned multi-part packet array consisting of: "+packetArray.length+" packets");
   return packetArray;
   }
 
