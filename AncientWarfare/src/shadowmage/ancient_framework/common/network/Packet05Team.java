@@ -45,7 +45,7 @@ public String getChannel()
 @Override
 public int getPacketType()
   {
-  return 6;
+  return 5;
   }
 
 @Override

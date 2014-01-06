@@ -99,7 +99,6 @@ protected void constructPacket()
   /**
    * write the packet type number to the stream, decoded in packetHandler to create a new packet
    */
-  AWLog.logDebug("writing packet type to stream: "+this.getPacketType() + " from: "+this);
   data.writeInt(this.getPacketType());
   
   /**

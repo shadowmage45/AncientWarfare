@@ -23,6 +23,7 @@ package shadowmage.ancient_framework.common.teams;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.network.Packet05Team;
 import cpw.mods.fml.common.IPlayerTracker;
@@ -98,14 +99,14 @@ public void handlePacketData(NBTTagCompound tag)
 
 public void sendTeamData(TeamData data)
   {
-//  /**
-//   * TODO clean this up..only send changes?
-//   */
-//  Packet05Team pkt = new Packet05Team();
-//  NBTTagCompound tag = new NBTTagCompound();  
-//  data.writeToNBT(tag);
-//  pkt.packetData.setTag("teamData", tag);
-//  pkt.sendPacketToAllPlayers();  
+  /**
+   * TODO clean this up..only send changes?
+   */
+  Packet05Team pkt = new Packet05Team();
+  NBTTagCompound tag = new NBTTagCompound();  
+  data.writeToNBT(tag);
+  pkt.packetData.setTag("teamData", tag);
+  pkt.sendPacketToAllPlayers();  
   }
 
 }

@@ -88,7 +88,7 @@ public void handlePlayerLogin(String playerName)
     {
     if(!this.entriesByTeamName.containsKey(defaultTeamName))
       {
-      this.entriesByTeamName.put(defaultTeamName, new TeamEntry(defaultTeamName, null, 0xffffffff));            
+      this.entriesByTeamName.put(defaultTeamName, new TeamEntry(defaultTeamName, "__default__", 0xffffffff));            
       }
     TeamEntry defaultTeam = entriesByTeamName.get(defaultTeamName);
     defaultTeam.addPlayer(playerName);
