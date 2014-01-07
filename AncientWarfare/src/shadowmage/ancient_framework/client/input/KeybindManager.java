@@ -21,6 +21,7 @@
 package shadowmage.ancient_framework.client.input;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -52,7 +53,7 @@ private static boolean[] keyRepeats = new boolean []{false, false};
  * @param keyBindings
  * @param repeatings
  */
-public KeybindManager(KeyBinding[] keyBindings, boolean[] repeatings)
+public KeybindManager()
   {
   super(keys, keyRepeats);
   }

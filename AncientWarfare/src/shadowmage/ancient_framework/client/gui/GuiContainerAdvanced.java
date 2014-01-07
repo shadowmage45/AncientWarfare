@@ -77,7 +77,7 @@ protected ItemStack tooltipStack = null;
 protected int tooltipStackX;
 protected int tooltipStackY;
 
-public GuiContainerAdvanced(Container container)
+public GuiContainerAdvanced(ContainerBase container)
   {
   super(container);
   this.player = Minecraft.getMinecraft().thePlayer;
@@ -85,10 +85,7 @@ public GuiContainerAdvanced(Container container)
   this.ySize = this.getYSize();
   guiLeft = (this.width - this.xSize) / 2;
   guiTop = (this.height - this.ySize) / 2;  
-  if(container instanceof ContainerBase)
-    {
-    ((ContainerBase)container).setGui(this);
-    }  
+  container.setGui(this);  
   }
 
 public void drawStringGui(String string, int x, int y, int color)
@@ -201,7 +198,10 @@ public abstract int getYSize();
  * get the string filepath/name of the texture to be rendered as a background for this GUI
  * @return
  */
-public abstract String getGuiBackGroundTexture();
+public String getGuiBackGroundTexture()
+  {
+  return Statics.TEXTURE_PATH+"gui/guiBackgroundLarge.png";
+  }
 
 /**
  * called to render any background layer effects (pretty much everything)

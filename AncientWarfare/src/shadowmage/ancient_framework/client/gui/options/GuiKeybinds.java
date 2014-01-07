@@ -22,8 +22,6 @@ package shadowmage.ancient_framework.client.gui.options;
 
 import java.util.List;
 
-import net.minecraft.inventory.Container;
-
 import org.lwjgl.input.Keyboard;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
@@ -33,6 +31,7 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.input.Keybind;
 import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class GuiKeybinds extends GuiContainerAdvanced
 {
@@ -47,7 +46,7 @@ private GuiButtonSimple kbButton = null;
 /**
  * @param container
  */
-public GuiKeybinds(Container container, GuiContainerAdvanced parent)
+public GuiKeybinds(ContainerBase container, GuiContainerAdvanced parent)
   {
   super(container);
   this.parentGui = parent;

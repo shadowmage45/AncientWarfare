@@ -20,12 +20,17 @@
  */
 package shadowmage.ancient_framework.client.proxy;
 
-import shadowmage.ancient_framework.client.gui.options.GuiClientSettings;
-import shadowmage.ancient_framework.client.gui.options.GuiPerformanceMonitor;
 import shadowmage.ancient_framework.client.gui.options.GuiKeybinds;
+import shadowmage.ancient_framework.client.gui.options.GuiOptions;
+import shadowmage.ancient_framework.client.gui.options.GuiPerformanceMonitor;
+import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
@@ -40,8 +45,11 @@ public ClientProxyCore()
 @Override
 public void registerClientData()
   {
+  
+  AWLog.logDebug("registering client data for core proxy");
   TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
-  GUIHandler.instance().registerGui(Statics.guiOptions, GuiClientSettings.class);
+  KeyBindingRegistry.registerKeyBinding(new KeybindManager());
+  GUIHandler.instance().registerGui(Statics.guiOptions, GuiOptions.class);
   GUIHandler.instance().registerGui(Statics.guiKeybinds, GuiKeybinds.class);
   GUIHandler.instance().registerGui(Statics.guiPerformance, GuiPerformanceMonitor.class);
   }

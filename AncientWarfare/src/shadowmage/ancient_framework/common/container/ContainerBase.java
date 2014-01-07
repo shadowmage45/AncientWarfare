@@ -55,6 +55,12 @@ public final EntityPlayer player;
 public final IEntityContainerSynch entity;
 public IContainerGuiCallback gui;
 
+public ContainerBase(EntityPlayer player, int x, int y, int z)
+  {
+  this.player = player;
+  this.entity = null;  
+  }
+
 public ContainerBase(EntityPlayer openingPlayer, IEntityContainerSynch synch)
   {
   this.player = openingPlayer;

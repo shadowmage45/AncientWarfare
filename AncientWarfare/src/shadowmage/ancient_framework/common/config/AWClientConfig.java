@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.common.config;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class AWClientConfig
@@ -27,20 +28,54 @@ public class AWClientConfig
 
 private static HashMap<String, ClientConfigOption> clientOptions = new HashMap<String, ClientConfigOption>();
 
+
+static
+{
+setBooleanValue("renderOverlay", true);
+setBooleanValue("renderAdvancedOverlay", true);
+setBooleanValue("renderVehicleFirstPerson", true);
+setBooleanValue("renderVehicleNameplates", true);
+setBooleanValue("renderNpcNameplates", true);
+}
+
+public static void initIntValue(String displayName, String name, int value)
+  {
+  clientOptions.put(name, new ClientConfigOption(displayName, name, int.class, value));
+  }
+
+public static void initBooleanValue(String displayName, String name, boolean value)
+  {
+  clientOptions.put(name, new ClientConfigOption(displayName, name, boolean.class, value));
+  }
+
 public static void setIntValue(String name, int value)
   {
-  ClientConfigOption option = new ClientConfigOption();
-  option.dataClass = int.class;
-  option.dataValue = new Integer(value);
-  clientOptions.put(name, option);
+  if(clientOptions.containsKey(name))
+    {
+    ClientConfigOption option = clientOptions.get(name);
+    option.dataClass = int.class;
+    option.dataValue = value;
+    }
+  else
+    {
+    ClientConfigOption option = new ClientConfigOption(name, name, int.class, value);
+    clientOptions.put(name, option);
+    } 
   }
 
 public static void setBooleanValue(String name, boolean value)
   {
-  ClientConfigOption option = new ClientConfigOption();
-  option.dataClass = boolean.class;
-  option.dataValue = new Boolean(value);
-  clientOptions.put(name, option);
+  if(clientOptions.containsKey(name))
+    {
+    ClientConfigOption option = clientOptions.get(name);
+    option.dataClass = boolean.class;
+    option.dataValue = value;
+    }
+  else
+    {
+    ClientConfigOption option = new ClientConfigOption(name, name, boolean.class, value);
+    clientOptions.put(name, option);
+    }  
   }
 
 public static boolean getBooleanValue(String name)
@@ -63,11 +98,25 @@ public static int getIntValue(String name)
   return 0;
   }
 
-private static class ClientConfigOption
+public static class ClientConfigOption
+  {  
+
+  public String displayName;
+  public String optionName;  
+  public Class dataClass;
+  public Object dataValue;
+  public ClientConfigOption(String display, String label, Class clz, Object data)
+    {
+    displayName = display;
+    optionName = label;
+    dataClass = clz;
+    dataValue = data;
+    }
+  }
+
+public static Collection<ClientConfigOption> getClientOptions()
   {
-  String optionName;  
-  Class dataClass;
-  Object dataValue;
+  return clientOptions.values();
   }
 
 }

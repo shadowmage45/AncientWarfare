@@ -21,7 +21,6 @@
 package shadowmage.ancient_framework.client.gui.options;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
@@ -29,6 +28,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.AWClientConfig;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.Packet01ModData;
 
@@ -52,7 +52,7 @@ EntityPlayer player;
 /**
  * @param container
  */
-public GuiClientSettings(EntityPlayer player, Container container)
+public GuiClientSettings(EntityPlayer player, ContainerBase container)
   {
   super(container); 
   this.player = player;
@@ -113,7 +113,7 @@ public void onElementActivated(IGuiElement element)
     break;
     
     case 3:
-    mc.displayGuiScreen(new GuiKeybinds(inventorySlots, this));
+//    mc.displayGuiScreen(new GuiKeybinds(inventorySlots, this));
     break;
     
     case 4:
