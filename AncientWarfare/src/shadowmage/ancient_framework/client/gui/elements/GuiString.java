@@ -92,4 +92,9 @@ public boolean handleKeyInput(char ch, int keyNum)
   return false;
   }
 
+public void setText(String text)
+  {
+  this.text = text;
+  }
+
 }

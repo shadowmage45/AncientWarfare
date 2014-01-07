@@ -57,12 +57,6 @@ public int getYSize()
   }
 
 @Override
-public String getGuiBackGroundTexture()
-  {
-  return Statics.TEXTURE_PATH+"gui/guiBackgroundLarge.png";
-  }
-
-@Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
   int white = 0xffffffff;

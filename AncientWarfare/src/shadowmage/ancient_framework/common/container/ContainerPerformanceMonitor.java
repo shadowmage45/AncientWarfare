@@ -43,9 +43,9 @@ public long vehicleTick;
  * @param openingPlayer
  * @param synch
  */
-public ContainerPerformanceMonitor(EntityPlayer openingPlayer)
+public ContainerPerformanceMonitor(EntityPlayer openingPlayer, int x, int y, int z)
   {
-  super(openingPlayer, null);
+  super(openingPlayer, x, y, z);
   }
 
 @Override

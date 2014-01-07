@@ -20,9 +20,13 @@
  */
 package shadowmage.ancient_framework.client.proxy;
 
+import org.lwjgl.input.Keyboard;
+
 import shadowmage.ancient_framework.client.gui.options.GuiKeybinds;
 import shadowmage.ancient_framework.client.gui.options.GuiOptions;
 import shadowmage.ancient_framework.client.gui.options.GuiPerformanceMonitor;
+import shadowmage.ancient_framework.client.input.IHandleInput;
+import shadowmage.ancient_framework.client.input.Keybind;
 import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_framework.common.config.AWLog;
@@ -34,7 +38,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxyCore extends ClientProxyBase
+public class ClientProxyCore extends ClientProxyBase implements IHandleInput
 {
 
 public ClientProxyCore()
@@ -51,6 +55,49 @@ public void registerClientData()
   KeyBindingRegistry.registerKeyBinding(new KeybindManager());
   GUIHandler.instance().registerGui(Statics.guiOptions, GuiOptions.class);
   GUIHandler.instance().registerGui(Statics.guiKeybinds, GuiKeybinds.class);
-  GUIHandler.instance().registerGui(Statics.guiPerformance, GuiPerformanceMonitor.class);
+  GUIHandler.instance().registerGui(Statics.guiPerformance, GuiPerformanceMonitor.class);  
+//  KeybindManager.addKeybind(new Keybind(this, Keyboard.KEY_A, "Test Keybind A"));
+  }
+
+@Override
+public void onKeyUp(Keybind kb)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onKeyPressed(Keybind kb)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onTickEnd()
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onMouseMoved(int x, int y)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onMouseButtonPressed(int num)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onMouseButtonUp(int num)
+  {
+  // TODO Auto-generated method stub  
+  }
+
+@Override
+public void onMouseWheel(int delta)
+  {
+  // TODO Auto-generated method stub  
   }
 }

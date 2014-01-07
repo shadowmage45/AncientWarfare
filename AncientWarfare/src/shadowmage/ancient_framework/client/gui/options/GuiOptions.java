@@ -39,28 +39,38 @@ import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.client.render.RenderTools;
 import shadowmage.ancient_framework.common.config.AWClientConfig;
 import shadowmage.ancient_framework.common.config.AWClientConfig.ClientConfigOption;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
+import shadowmage.ancient_framework.common.container.ContainerPerformanceMonitor;
 
 public class GuiOptions extends GuiContainerAdvanced
 {
 
 GuiButtonSimple done;
 
-GuiTab options;
+GuiTab optionsTab;
 int optionsTabHeight;
-GuiTab keybinds;
+GuiTab keybindsTab;
 int keybindTabHeight;
+GuiTab performanceTab;
+int performanceTabHeight;
+
 GuiScrollableArea area;
 
 GuiTab activeTab;
 Keybind changingKeybind;
+GuiButtonSimple changingKeybindButton;
 
 private List<GuiElement> optionsTabElements = new ArrayList<GuiElement>();
 private List<GuiElement> keybindTabElements = new ArrayList<GuiElement>();
+private List<GuiElement> performanceTabElements = new ArrayList<GuiElement>();
+
+private ContainerPerformanceMonitor container;
 
 public GuiOptions(ContainerBase container)
   {
   super(container);
+  this.container = (ContainerPerformanceMonitor)container;
   this.shouldCloseOnVanillaKeys = true;
   }
 
@@ -94,20 +104,31 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-
+  this.updatePerformanceOption("memUse", container.memUse);
+  this.updatePerformanceOption("tickTime", container.tickTime);
+  this.updatePerformanceOption("tps", container.tickPerSecond);
+  this.updatePerformanceOption("pathTick", container.pathTimeTickAverage);
+  this.updatePerformanceOption("civicTick", container.civicTick);
+  this.updatePerformanceOption("npcTick", container.npcTick);
+  this.updatePerformanceOption("vehicleTick", container.vehicleTick);  
   }
 
 @Override
 public void setupControls()
-  {  
-  this.options = addGuiTab(1, 8, 0, 120, 16, "Options");
-  this.keybinds = addGuiTab(2, 128, 0, 120, 16, "Keybinds");
-  keybinds.enabled = false;
- 
-  this.area = new GuiScrollableArea(3, this, 8, 8+16, 256-16, 240-16-16, 240-16-16);
-  this.guiElements.put(3, area); 
+  {    
+  this.optionsTab = addGuiTab(2, 8, 0, 75, 16, "Options");
+  this.keybindsTab = addGuiTab(3, 75+8, 0, 75, 16, "Keybinds");
+  this.performanceTab = addGuiTab(4, 75+8+75, 0, 75, 16, "Performance");
+
   
-  activeTab = options;
+  optionsTab.enabled = true;
+  keybindsTab.enabled = false;
+  performanceTab.enabled = false;
+  activeTab = optionsTab;
+ 
+  this.area = new GuiScrollableArea(5, this, 8, 8+16, 256-16, 240-16-16, 240-16-16);
+  this.guiElements.put(5, area); 
+  
   
   Collection<ClientConfigOption> clientOptions = AWClientConfig.getClientOptions();  
   for(ClientConfigOption option : clientOptions)
@@ -124,21 +145,35 @@ public void setupControls()
     keybindTabHeight += 16;
     }
   
+  this.addPerformanceOption("memUse", "Memory Use: ", container.memUse);  
+  this.addPerformanceOption("tickTime", "Average Tick Time:", container.tickTime);  
+  this.addPerformanceOption("tps", "Ticks Per Second", container.tickPerSecond);
+  this.addPerformanceOption("pathTick", "PathFind Tick Time:", container.pathTimeTickAverage);
+  this.addPerformanceOption("civicTick", "Civic Tick Time", container.civicTick);
+  this.addPerformanceOption("npcTick", "Npc Tick Time: ", container.npcTick);
+  this.addPerformanceOption("vehicleTick", "Vehicle Tick Time", container.vehicleTick);
+  
+  
   }
 
 @Override
 public void updateControls()
   {
   area.elements.clear();
-  if(this.activeTab==options)
+  if(this.activeTab==optionsTab)
     {
     area.elements.addAll(optionsTabElements);
     area.updateTotalHeight(optionsTabHeight);
     }
-  else
+  else if(this.activeTab==this.keybindsTab)
     {
     area.elements.addAll(keybindTabElements);
     area.updateTotalHeight(keybindTabHeight);
+    }
+  else if(this.activeTab==this.performanceTab)
+    {
+    area.elements.addAll(performanceTabElements);
+    area.updateTotalHeight(performanceTabHeight);
     }
   }
 
@@ -177,18 +212,41 @@ private void addKeybind(Keybind k, int targetY)
   keybindElementMap.put(button, k);
   }
 
+private HashMap<String, GuiString> performanceDataElements = new HashMap<String, GuiString>();
+
+private void addPerformanceOption(String name, String label, long value)
+  {
+  GuiString guiLabel = new GuiString(performanceDataElements.size(), area, 120, 12, label);
+  guiLabel.updateRenderPos(0, performanceTabHeight);
+  performanceTabElements.add(guiLabel);
+  
+  GuiString guiData = new GuiString(performanceDataElements.size()-1, area, 120, 12, String.valueOf(value));
+  guiData.updateRenderPos(100, performanceTabHeight);
+  performanceTabElements.add(guiData);
+  this.performanceDataElements.put(name, guiData);
+  
+  performanceTabHeight+=14;
+  }
+
+private void updatePerformanceOption(String name, long value)
+  {
+  GuiString data = this.performanceDataElements.get(name);
+  data.setText(String.valueOf(value));
+  }
+
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  if(element==options || element==keybinds)
+  if(element==optionsTab || element==keybindsTab || element == this.performanceTab)
     {
-    options.enabled = element==options;
-    keybinds.enabled = element==keybinds;
+    optionsTab.enabled = element==optionsTab;
+    keybindsTab.enabled = element==keybindsTab;
+    performanceTab.enabled = element==performanceTab;
     this.activeTab = (GuiTab) element;
     this.forceUpdate = true;
     this.changingKeybind = null;
     }
-  else if(this.activeTab==options) 
+  else if(this.activeTab==optionsTab) 
     {
     if(this.optionsElementBooleanMap.containsKey(element))
       {
@@ -201,27 +259,37 @@ public void onElementActivated(IGuiElement element)
       option.dataValue = ((GuiNumberInputLine)element).getIntVal();
       }
     }
-  else
+  else if(this.activeTab==keybindsTab)
     {
     if(this.keybindElementMap.containsKey(element))
       {
       Keybind k = this.keybindElementMap.get(element);
       this.changingKeybind = k;
+      this.changingKeybindButton = (GuiButtonSimple) element;
+      AWLog.logDebug("set changing keybind to: "+this.changingKeybind);
       }
+    }
+  else if(this.activeTab==this.performanceTab)
+    {
+    //NOOP on performance tab
     }
   }
 
 @Override
 protected void keyTyped(char par1, int par2)
   {
+  AWLog.logDebug("key typed..."+par2);
   if(this.changingKeybind==null)
     {
     super.keyTyped(par1, par2);    
     }
   else
     {
+    AWLog.logDebug("set keybind keycode to: "+par2);
     this.changingKeybind.setKeyCode(par2);
+    this.changingKeybindButton.setButtonText(this.changingKeybind.getKeyChar());
     this.changingKeybind = null;
+    this.changingKeybindButton = null;
     }
   }
 

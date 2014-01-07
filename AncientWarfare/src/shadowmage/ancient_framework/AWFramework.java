@@ -37,6 +37,7 @@ import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_framework.common.teams.TeamData;
 import shadowmage.ancient_framework.common.teams.TeamTracker;
+import shadowmage.ancient_framework.common.utils.ServerPerformanceMonitor;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -52,6 +53,8 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 
 
@@ -106,10 +109,10 @@ public void preInit(FMLPreInitializationEvent evt)
   MinecraftForge.EVENT_BUS.register(eventHandler);
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   LanguageLoader.instance().loadLanguageFiles();
-  
+  TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
   this.proxy.registerClientData();
-  GUIHandler.instance().registerContainer(Statics.guiOptions, ContainerDummy.class);
-  GUIHandler.instance().registerContainer(Statics.guiPerformance, ContainerPerformanceMonitor.class);
+  GUIHandler.instance().registerContainer(Statics.guiOptions, ContainerPerformanceMonitor.class);
+//  GUIHandler.instance().registerContainer(Statics.guiPerformance, ContainerPerformanceMonitor.class);
   }
 
 @Override
