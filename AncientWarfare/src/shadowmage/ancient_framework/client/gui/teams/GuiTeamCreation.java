@@ -104,15 +104,15 @@ public void setupControls()
   this.teamNameInput.updateRenderPos(8, targetY);
   targetY+=18;
   
-  this.redInput = this.addNumberField(4, 40, 14, 20, "").setAsIntegerValue().setIntegerValue(0);
+  this.redInput = this.addNumberField(4, 40, 14, 20, "0").setAsIntegerValue().setIntegerValue(0);
   this.redInput.updateRenderPos(60, targetY);
   targetY+=18;
   
-  this.greenInput = this.addNumberField(5, 40, 14, 20, "").setAsIntegerValue().setIntegerValue(0);
+  this.greenInput = this.addNumberField(5, 40, 14, 20, "0").setAsIntegerValue().setIntegerValue(0);
   this.greenInput.updateRenderPos(60, targetY);
   targetY+=18;
   
-  this.blueInput = this.addNumberField(6, 40, 14, 20, "").setAsIntegerValue().setIntegerValue(0);
+  this.blueInput = this.addNumberField(6, 40, 14, 20, "0").setAsIntegerValue().setIntegerValue(0);
   this.blueInput.updateRenderPos(60, targetY);
   targetY+=18;
   }
