@@ -44,7 +44,24 @@ public ContainerTeamControl(EntityPlayer player, int x, int y, int z)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-
+  if(tag.hasKey("newTeam"))
+    {
+    String name = tag.getString("teamName");
+    String player = tag.getString("leaderName");
+    int color = tag.getInteger("color");
+    if(!TeamTracker.instance().createNewTeam(this.player.worldObj, name, player, color))
+      {
+      NBTTagCompound msg = new NBTTagCompound();
+      msg.setBoolean("createFail", true);
+      this.sendDataToGUI(msg);
+      }
+    else
+      {
+      NBTTagCompound msg = new NBTTagCompound();
+      msg.setBoolean("createSuccess", true);
+      this.sendDataToGUI(msg);
+      }
+    }
   }
 
 @Override
@@ -58,5 +75,14 @@ public List<NBTTagCompound> getInitData()
   {
   return Collections.emptyList();
   }
+
+@Override
+public void refreshGui()
+  {
+  this.currentTeamEntry = TeamTracker.instance().getTeamFor(player.worldObj, player.getEntityName());
+  super.refreshGui();
+  }
+
+
 
 }

@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.container.ContainerTeamControl;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
@@ -47,6 +48,21 @@ public void onPlayerLogin(EntityPlayer player)
   if(data==null){return;}
   data.handlePlayerLogin(player.getEntityName());  
   this.sendTeamData(data);
+  }
+
+public boolean createNewTeam(World world, String teamName, String leaderName, int teamColor)
+  {
+  if(world.isRemote)
+    {
+    AWLog.logError("attempt to create new team on client world");
+    }
+  TeamData data = AWGameData.get(world, "AWTeamData", TeamData.class);
+  if(data.createNewTeam(teamName, leaderName, teamColor))
+    {
+    this.sendTeamData(data);
+    return true;
+    }
+  return false;
   }
 
 public boolean isHostileTowards(World world, String offenseTeam, String defenseTeam)
@@ -80,7 +96,7 @@ public void onPlayerChangedDimension(EntityPlayer player){}
 @Override
 public void onPlayerRespawn(EntityPlayer player){}
 
-protected TeamData getTeamData(World world)
+public TeamData getTeamData(World world)
   {
   if(world.isRemote)
     {

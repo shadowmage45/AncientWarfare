@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.common.teams;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -85,6 +86,22 @@ public boolean isHostileTowards(String offenseTeam, String defenseTeam)
   return false;
   }
 
+public boolean createNewTeam(String teamName, String playerName, int teamColor)
+  {
+  if(!"".equals(teamName) && !this.entriesByTeamName.containsKey(teamName))
+    {    
+    TeamEntry originalEntry = entriesByPlayerName.get(playerName);
+    originalEntry.removePlayer(playerName);
+    
+    TeamEntry newTeam = new TeamEntry(teamName, playerName, teamColor);
+    newTeam.addPlayer(playerName, 10);
+    entriesByTeamName.put(teamName, newTeam);
+    entriesByPlayerName.put(playerName, newTeam);    
+    return true;
+    }
+  return false;
+  }
+
 public TeamEntry getTeamFor(String playerName)
   {
   return this.entriesByPlayerName.get(playerName);
@@ -108,6 +125,11 @@ public void handlePlayerLogin(String playerName)
 public void handlePacketData(NBTTagCompound data)
   {
   
+  }
+
+public Collection<TeamEntry> getTeamEntries()
+  {
+  return entriesByTeamName.values();
   }
 
 }

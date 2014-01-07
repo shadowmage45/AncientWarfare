@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.common.teams;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +40,7 @@ HashMap<String, TeamPlayerEntry> playerEntries = new HashMap<String, TeamPlayerE
 Set<String> warringTeams = new HashSet<String>();
 Set<String> alliedTeams = new HashSet<String>();
 
+Set<String> pendingApplicants = new HashSet<String>();
 
 /**
  * nbt-constructor...should immediately read from NBT after construction to ensure things are setup properly
@@ -101,6 +103,11 @@ public void setLeaderName(String playerName)
     }
   }
 
+public Collection<TeamPlayerEntry> getPlayerEntries()
+  {
+  return this.playerEntries.values();
+  }
+
 public int getTeamColor()
   {
   return teamColor;
@@ -138,6 +145,13 @@ public void readFromNBT(NBTTagCompound tag)
     stringTag = (NBTTagString) list.tagAt(i);
     this.alliedTeams.add(stringTag.data);
     }
+  
+  list = tag.getTagList("pendingList");
+  for(int i = 0; i < list.tagCount(); i++)
+    {
+    stringTag = (NBTTagString) list.tagAt(i);
+    this.pendingApplicants.add(stringTag.data);
+    }
   }
 
 public void writeToNBT(NBTTagCompound tag)
@@ -170,6 +184,13 @@ public void writeToNBT(NBTTagCompound tag)
     list.appendTag(new NBTTagString("name", teamName));
     }
   tag.setTag("allyList", list);
+  
+  list = new NBTTagList();
+  for(String teamName : pendingApplicants)
+    {
+    list.appendTag(new NBTTagString("name", teamName));
+    }
+  tag.setTag("pendingList", list);
   }
 
 }

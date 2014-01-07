@@ -52,6 +52,16 @@ public int hashCode()
   return playerName.hashCode();
   }
 
+public String getPlayerName()
+  {
+  return playerName;
+  }
+
+public int getPlayerRank()
+  {
+  return rank;
+  }
+
 @Override
 public boolean equals(Object obj)
   {

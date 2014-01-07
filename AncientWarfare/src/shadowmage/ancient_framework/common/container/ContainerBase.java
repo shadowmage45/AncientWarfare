@@ -28,6 +28,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.interfaces.IContainerGuiCallback;
 import shadowmage.ancient_framework.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
@@ -102,6 +103,7 @@ public void refreshGui()
   {
   if(this.gui!=null)
     {
+    AWLog.logDebug("refreshing gui: "+this.gui);
     this.gui.refreshGui();
     }
   }
