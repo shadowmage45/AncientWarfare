@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.common.teams;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public String teamName;
 String leaderName;
 int teamColor;//RGBA hex color, e.g. 0xff00ffff==purple
 boolean autoAcceptApplications = false;
-Set<String> playerNames = new HashSet<String>();
+HashMap<String, TeamPlayerEntry> playerEntries = new HashMap<String, TeamPlayerEntry>();
 Set<String> warringTeams = new HashSet<String>();
 Set<String> alliedTeams = new HashSet<String>();
 
@@ -54,14 +55,23 @@ public TeamEntry(String teamName, String leaderName, int teamColor)
   this.teamColor = teamColor;
   }
 
-public void addPlayer(String player)
+public int getRankOf(String playerName)
   {
-  playerNames.add(player);
+  return playerEntries.containsKey(playerName) ? playerEntries.get(playerName).rank : 0;
+  }
+
+public void addPlayer(String player, int rank)
+  {
+  playerEntries.put(player, new TeamPlayerEntry(player, rank));
   }
 
 public void removePlayer(String player)
   {
-  playerNames.remove(player);
+  playerEntries.remove(player);
+  if(player.equals(this.leaderName))
+    {
+    this.leaderName = TeamData.defaultLeaderName;
+    }
   }
 
 public void addWarringTeam(String teamName)
@@ -85,7 +95,7 @@ public boolean isHostileTowardsTeam(String teamName)
 
 public void setLeaderName(String playerName)
   {
-  if(this.playerNames.contains(playerName))
+  if(this.playerEntries.containsKey(playerName))
     {
     this.leaderName = playerName;
     }
@@ -104,13 +114,17 @@ public void readFromNBT(NBTTagCompound tag)
   autoAcceptApplications = tag.getBoolean("autoAccept");
   
   NBTTagList list = tag.getTagList("playerList");
-  NBTTagString stringTag;
+  NBTTagCompound entryTag;
+  TeamPlayerEntry entry;
   for(int i = 0; i < list.tagCount(); i++)
     {
-    stringTag = (NBTTagString) list.tagAt(i);
-    this.playerNames.add(stringTag.data);
-    }
-  
+    entryTag = (NBTTagCompound) list.tagAt(i);
+    entry = new TeamPlayerEntry();
+    entry.readFromNBT(entryTag);
+    this.playerEntries.put(entry.playerName, entry);
+    } 
+
+  NBTTagString stringTag;
   list = tag.getTagList("warList");
   for(int i = 0; i < list.tagCount(); i++)
     {
@@ -133,9 +147,13 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("teamColor", teamColor);
   tag.setBoolean("autoAccept", autoAcceptApplications);
   NBTTagList list = new NBTTagList();
-  for(String player : playerNames)
+  
+  NBTTagCompound entryTag;
+  for(TeamPlayerEntry entry : this.playerEntries.values())
     {
-    list.appendTag(new NBTTagString("name", player));
+    entryTag = new NBTTagCompound();
+    entry.writeToNBT(entryTag);
+    list.appendTag(entryTag);
     }
   tag.setTag("playerList", list);
   

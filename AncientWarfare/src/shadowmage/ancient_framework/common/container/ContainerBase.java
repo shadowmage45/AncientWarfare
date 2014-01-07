@@ -98,7 +98,7 @@ protected void addPlayerSlots(EntityPlayer player, int tx, int ty, int gap)
     
   }
 
-protected void refreshGui()
+public void refreshGui()
   {
   if(this.gui!=null)
     {

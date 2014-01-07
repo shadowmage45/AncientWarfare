@@ -34,8 +34,9 @@ public static final boolean DEBUG = true;
 
 public static final int guiOptions = 0;
 public static final int guiTeamControl = 1;
-public static final int guiPerformance = 2;
-public static final int guiKeybinds = 3;
+public static final int guiResearch = 2;
+public static final int guiCrafting = 3;
+public static final int guiInfo = 4;
 
 public static final int guiStructureBuilderCreative = 10;
 public static final int guiStructureScannerCreative = 11;
@@ -46,11 +47,5 @@ public static final int guiVehicleInventory = 20;
 public static final int guiNpcInventory = 30;
 
 public static final int guiCivicInventory = 40;
-
-public static final int guiCrafting = 50;
-
-public static final int guiResearch = 60;
-
-public static final int guiInfo = 70;
 
 }

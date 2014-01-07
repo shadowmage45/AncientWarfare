@@ -46,8 +46,6 @@ import shadowmage.ancient_framework.common.container.ContainerPerformanceMonitor
 public class GuiOptions extends GuiContainerAdvanced
 {
 
-GuiButtonSimple done;
-
 GuiTab optionsTab;
 int optionsTabHeight;
 GuiTab keybindsTab;
@@ -64,6 +62,9 @@ GuiButtonSimple changingKeybindButton;
 private List<GuiElement> optionsTabElements = new ArrayList<GuiElement>();
 private List<GuiElement> keybindTabElements = new ArrayList<GuiElement>();
 private List<GuiElement> performanceTabElements = new ArrayList<GuiElement>();
+private HashMap<GuiElement, ClientConfigOption> optionsElementBooleanMap = new HashMap<GuiElement, ClientConfigOption>();
+private HashMap<GuiElement, ClientConfigOption> optionsElementIntegerMap = new HashMap<GuiElement, ClientConfigOption>();
+private HashMap<GuiElement, Keybind> keybindElementMap = new HashMap<GuiElement, Keybind>();
 
 private ContainerPerformanceMonitor container;
 
@@ -177,9 +178,6 @@ public void updateControls()
     }
   }
 
-private HashMap<GuiElement, ClientConfigOption> optionsElementBooleanMap = new HashMap<GuiElement, ClientConfigOption>();
-private HashMap<GuiElement, ClientConfigOption> optionsElementIntegerMap = new HashMap<GuiElement, ClientConfigOption>();
-private HashMap<GuiElement, Keybind> keybindElementMap = new HashMap<GuiElement, Keybind>();
 
 private void addClientOption(ClientConfigOption option, int targetY)
   {

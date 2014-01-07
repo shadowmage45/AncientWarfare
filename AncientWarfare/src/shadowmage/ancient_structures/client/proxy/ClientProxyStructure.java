@@ -39,10 +39,40 @@ public ClientProxyStructure()
 
 public void registerClientData()
   {
+  }
+
+@Override
+public void registerGuis()
+  {
   GUIHandler.instance().registerGui(Statics.guiStructureBuilderCreative, GuiStructureSelection.class);
   GUIHandler.instance().registerGui(Statics.guiStructureScannerCreative, GuiStructureScanner.class);
   GUIHandler.instance().registerGui(Statics.guiSpawnerPlacer, GuiSpawnerPlacer.class);
+  }
+
+@Override
+public void registerKeybinds()
+  {
+  // TODO Auto-generated method stub
   
+  }
+
+@Override
+public void registerTickHandlers()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void registerRenderers()
+  {
+  // TODO Auto-generated method stub
+  
+  }
+
+@Override
+public void registerEventHandlers()
+  {
   MinecraftForge.EVENT_BUS.register(StructureBoundingBoxRenderer.instance());
   }
 

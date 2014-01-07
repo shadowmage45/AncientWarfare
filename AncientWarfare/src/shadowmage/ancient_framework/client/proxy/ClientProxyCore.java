@@ -20,25 +20,18 @@
  */
 package shadowmage.ancient_framework.client.proxy;
 
-import org.lwjgl.input.Keyboard;
-
-import shadowmage.ancient_framework.client.gui.options.GuiKeybinds;
 import shadowmage.ancient_framework.client.gui.options.GuiOptions;
-import shadowmage.ancient_framework.client.gui.options.GuiPerformanceMonitor;
-import shadowmage.ancient_framework.client.input.IHandleInput;
-import shadowmage.ancient_framework.client.input.Keybind;
+import shadowmage.ancient_framework.client.gui.teams.GuiTeamControl;
 import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxyCore extends ClientProxyBase implements IHandleInput
+public class ClientProxyCore extends ClientProxyBase
 {
 
 public ClientProxyCore()
@@ -48,56 +41,41 @@ public ClientProxyCore()
 
 @Override
 public void registerClientData()
+  {  
+  AWLog.logDebug("registering client data for core proxy");  
+  KeyBindingRegistry.registerKeyBinding(new KeybindManager());
+  super.registerClientData();
+  }
+
+@Override
+public void registerGuis()
+  {
+  GUIHandler.instance().registerGui(Statics.guiOptions, GuiOptions.class);
+  GUIHandler.instance().registerGui(Statics.guiTeamControl, GuiTeamControl.class);
+  }
+
+@Override
+public void registerTickHandlers()
+  {
+  TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
+  }
+
+@Override
+public void registerRenderers()
   {
   
-  AWLog.logDebug("registering client data for core proxy");
-  TickRegistry.registerTickHandler(new TickHandlerClientKeyboard(), Side.CLIENT);
-  KeyBindingRegistry.registerKeyBinding(new KeybindManager());
-  GUIHandler.instance().registerGui(Statics.guiOptions, GuiOptions.class);
-  GUIHandler.instance().registerGui(Statics.guiKeybinds, GuiKeybinds.class);
-  GUIHandler.instance().registerGui(Statics.guiPerformance, GuiPerformanceMonitor.class);  
-//  KeybindManager.addKeybind(new Keybind(this, Keyboard.KEY_A, "Test Keybind A"));
   }
 
 @Override
-public void onKeyUp(Keybind kb)
+public void registerKeybinds()
   {
-  // TODO Auto-generated method stub  
+  
   }
 
 @Override
-public void onKeyPressed(Keybind kb)
+public void registerEventHandlers()
   {
-  // TODO Auto-generated method stub  
+  
   }
 
-@Override
-public void onTickEnd()
-  {
-  // TODO Auto-generated method stub  
-  }
-
-@Override
-public void onMouseMoved(int x, int y)
-  {
-  // TODO Auto-generated method stub  
-  }
-
-@Override
-public void onMouseButtonPressed(int num)
-  {
-  // TODO Auto-generated method stub  
-  }
-
-@Override
-public void onMouseButtonUp(int num)
-  {
-  // TODO Auto-generated method stub  
-  }
-
-@Override
-public void onMouseWheel(int delta)
-  {
-  // TODO Auto-generated method stub  
-  }
 }

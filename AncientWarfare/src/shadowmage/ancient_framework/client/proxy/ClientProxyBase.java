@@ -22,15 +22,15 @@
  */
 package shadowmage.ancient_framework.client.proxy;
 
-import net.minecraft.world.WorldServer;
-import shadowmage.ancient_framework.client.input.TickHandlerClientKeyboard;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_framework.client.input.Keybind;
+import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.registry.TickRegistry;
-import cpw.mods.fml.relauncher.Side;
 
-public class ClientProxyBase extends CommonProxy
+public abstract class ClientProxyBase extends CommonProxy
 {
 
 public ClientProxyBase()
@@ -39,7 +39,13 @@ public ClientProxyBase()
   }
 
 @Override
-public void sendPacketToServer(PacketBase packet)
+public final EntityPlayer getClientPlayer()
+  {
+  return Minecraft.getMinecraft().thePlayer;
+  }
+
+@Override
+public final void sendPacketToServer(PacketBase packet)
   {
   PacketBase[] packets = getPackets(packet);
   for(PacketBase pkt : packets)
@@ -48,5 +54,20 @@ public void sendPacketToServer(PacketBase packet)
     }
   }
 
+@Override
+public void registerClientData()
+  {
+  this.registerGuis();
+  this.registerKeybinds();
+  this.registerRenderers();
+  this.registerTickHandlers();  
+  this.registerEventHandlers();
+  }
+
+public abstract void registerGuis();
+public abstract void registerKeybinds();
+public abstract void registerTickHandlers();
+public abstract void registerRenderers();
+public abstract void registerEventHandlers();
 
 }

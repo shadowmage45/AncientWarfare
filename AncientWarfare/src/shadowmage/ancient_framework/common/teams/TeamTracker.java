@@ -23,7 +23,9 @@ package shadowmage.ancient_framework.common.teams;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.container.ContainerBase;
+import shadowmage.ancient_framework.common.container.ContainerTeamControl;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.network.Packet05Team;
 import cpw.mods.fml.common.IPlayerTracker;
@@ -60,11 +62,11 @@ public boolean isHostileTowards(World world, String offenseTeam, String defenseT
 
 public TeamEntry getTeamFor(World world, String playerName)
   {
-  if(world.isRemote){return clientTeamData!=null ? clientTeamData.entriesByPlayerName.get(playerName) : null;}
+  if(world.isRemote){return clientTeamData!=null ? clientTeamData.getTeamFor(playerName) : null;}
   TeamData data = AWGameData.get(world, "AWTeamData", TeamData.class);
   if(data!=null)
     {
-    return data.entriesByPlayerName.get(playerName);
+    return data.getTeamFor(playerName);
     }
   return null;
   }
@@ -94,6 +96,11 @@ public void handlePacketData(NBTTagCompound tag)
     TeamData data = new TeamData();
     data.readFromNBT(tag.getCompoundTag("teamData"));
     this.clientTeamData = data;
+    EntityPlayer player = AWFramework.instance.proxy.getClientPlayer();
+    if(player!=null && player.openContainer instanceof ContainerTeamControl)
+      {
+      ((ContainerBase)player.openContainer).refreshGui();
+      }
     }
   }
 

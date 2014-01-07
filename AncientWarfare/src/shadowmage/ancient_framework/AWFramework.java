@@ -27,8 +27,8 @@ import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.common.config.AWConfig;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_framework.common.container.ContainerDummy;
 import shadowmage.ancient_framework.common.container.ContainerPerformanceMonitor;
+import shadowmage.ancient_framework.common.container.ContainerTeamControl;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.lang.LanguageLoader;
 import shadowmage.ancient_framework.common.network.GUIHandler;
@@ -112,7 +112,7 @@ public void preInit(FMLPreInitializationEvent evt)
   TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
   this.proxy.registerClientData();
   GUIHandler.instance().registerContainer(Statics.guiOptions, ContainerPerformanceMonitor.class);
-//  GUIHandler.instance().registerContainer(Statics.guiPerformance, ContainerPerformanceMonitor.class);
+  GUIHandler.instance().registerContainer(Statics.guiTeamControl, ContainerTeamControl.class);
   }
 
 @Override

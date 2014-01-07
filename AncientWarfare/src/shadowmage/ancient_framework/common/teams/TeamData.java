@@ -24,13 +24,15 @@ import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.GameData;
 
 public class TeamData extends GameData
 {
 public static String defaultTeamName = "defaultTeam";
-HashMap<String, TeamEntry> entriesByTeamName = new HashMap<String, TeamEntry>();
-HashMap<String, TeamEntry> entriesByPlayerName = new HashMap<String, TeamEntry>();
+public static String defaultLeaderName = "defaultLeader";
+private HashMap<String, TeamEntry> entriesByTeamName = new HashMap<String, TeamEntry>();
+private HashMap<String, TeamEntry> entriesByPlayerName = new HashMap<String, TeamEntry>();
 
 public TeamData()
   {
@@ -48,16 +50,16 @@ public void readFromNBT(NBTTagCompound tag)
   entriesByPlayerName.clear();
   entriesByTeamName.clear();
   NBTTagList entryList = tag.getTagList("entryList");
-  NBTTagCompound entryTag;
+  NBTTagCompound entryTag;  
   for(int i = 0; i < entryList.tagCount(); i++)
     {
     entryTag = (NBTTagCompound) entryList.tagAt(i);
     TeamEntry entry = new TeamEntry();
     entry.readFromNBT(entryTag);
     this.entriesByTeamName.put(entry.teamName, entry);
-    for(String player : entry.playerNames)
+    for(TeamPlayerEntry playerEntry : entry.playerEntries.values())
       {
-      this.entriesByPlayerName.put(player, entry);
+      this.entriesByPlayerName.put(playerEntry.playerName, entry);
       }
     }
   }
@@ -73,6 +75,7 @@ public void writeToNBT(NBTTagCompound tag)
     entry.writeToNBT(entryTag);
     entryList.appendTag(entryTag);
     }
+  tag.setTag("entryList", entryList);
   }
 
 public boolean isHostileTowards(String offenseTeam, String defenseTeam)
@@ -80,6 +83,11 @@ public boolean isHostileTowards(String offenseTeam, String defenseTeam)
   TeamEntry teamA = entriesByTeamName.get(offenseTeam);
   if(teamA!=null){return teamA.isHostileTowardsTeam(defenseTeam);}
   return false;
+  }
+
+public TeamEntry getTeamFor(String playerName)
+  {
+  return this.entriesByPlayerName.get(playerName);
   }
 
 public void handlePlayerLogin(String playerName)  
@@ -91,7 +99,7 @@ public void handlePlayerLogin(String playerName)
       this.entriesByTeamName.put(defaultTeamName, new TeamEntry(defaultTeamName, "__default__", 0xffffffff));            
       }
     TeamEntry defaultTeam = entriesByTeamName.get(defaultTeamName);
-    defaultTeam.addPlayer(playerName);
+    defaultTeam.addPlayer(playerName, 0);
     this.entriesByPlayerName.put(playerName, defaultTeam);
     }    
   }
@@ -99,7 +107,6 @@ public void handlePlayerLogin(String playerName)
 @Override
 public void handlePacketData(NBTTagCompound data)
   {
-  // TODO Auto-generated method stub
   
   }
 

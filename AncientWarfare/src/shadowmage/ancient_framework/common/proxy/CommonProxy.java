@@ -44,6 +44,12 @@ public void registerClientData()
   //NOOP server side
   }
 
+public EntityPlayer getClientPlayer()
+  {
+  //NOOP server side
+  return null;
+  }
+
 public void sendPacketToServer(PacketBase pkt)
   {
   //NOOP server side
