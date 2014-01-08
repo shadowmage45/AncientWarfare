@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBreakable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,10 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.world.BlockEvent;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 
 public class BlockTools
@@ -861,6 +866,14 @@ public static void breakBlockAndDrop(World world, int x, int y, int z)
     }
   int id = world.getBlockId(x, y , z);
   int meta = world.getBlockMetadata(x, y , z);
+  Block block = Block.blocksList[id];
+  if(block==null){return;}
+  BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
+  MinecraftForge.EVENT_BUS.post(event);
+  if(event.isCanceled())
+    {
+    return;
+    }
   if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
     {      
 //    Config.logDebug("setting block to air: "+x+","+y+","+z);
@@ -872,7 +885,15 @@ public static void breakBlockAndDrop(World world, int x, int y, int z)
 public static List<ItemStack> breakBlock(World world, int x, int y, int z, int fortune)
   {
   int id = world.getBlockId(x,y,z);
+  int meta = world.getBlockMetadata(x, y, z);  
   Block block = Block.blocksList[id];
+  if(block==null){return Collections.emptyList();}
+  BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
+  MinecraftForge.EVENT_BUS.post(event);
+  if(event.isCanceled())
+    {
+    return Collections.emptyList();
+    }  
   if(id!=0 && id!= Block.bedrock.blockID && block!=null)
     {
     ArrayList<ItemStack> drops = block.getBlockDropped(world, x,y,z, world.getBlockMetadata(x,y,z), fortune);       

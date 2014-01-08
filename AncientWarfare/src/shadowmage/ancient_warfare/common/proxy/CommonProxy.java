@@ -24,7 +24,9 @@ package shadowmage.ancient_warfare.common.proxy;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.FakePlayerFactory;
 import shadowmage.ancient_warfare.common.network.PacketBase;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -82,6 +84,11 @@ public void sendPacketToPlayer(EntityPlayer player, PacketBase packet)
 public void sendPacketToAllPlayers(PacketBase packet)
   {
   PacketDispatcher.sendPacketToAllPlayers(packet.get250Packet());
+  }
+
+public EntityPlayer getFakePlayer(World world)
+  {
+  return FakePlayerFactory.get(world, "AncientWarfare");
   }
 
 
