@@ -24,6 +24,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -226,32 +227,35 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     }
   
   ItemStack stack = player.inventory.getCurrentItem();
+  
   if(stack==null || stack.getItem()==null)
     {
     return;
     }
+  Item item = stack.getItem();
   int id = stack.itemID;
 
-  if(ItemBuilderBase.isBuilderItem(id))
+  //return id== ItemLoader.structureBuilderDirect.itemID || id == ItemLoader.structureCreativeBuilder.itemID || id == ItemLoader.structureCreativeBuilderTicked.itemID || id==ItemLoader.civicBuilder.itemID || id==ItemLoader.structureGenerator.itemID;
+  if(item==ItemLoader.structureBuilderDirect || item==ItemLoader.structureCreativeBuilder || item==ItemLoader.structureCreativeBuilderTicked || item==ItemLoader.civicBuilder || item==ItemLoader.structureGenerator)
     {
     this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
     }  
-  if(id==ItemLoader.structureBuilderDirect.itemID)
+  if(item==ItemLoader.structureBuilderDirect)
     {
     if(ItemBuilderDirect.isScanning(stack))
       {
       this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks, true);      
       }
     }
-  else if(ItemStructureScanner.isScannerItem(id))
+  else if(item==ItemLoader.structureScanner)
     {
     this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
     }
-  else if(id==ItemLoader.civicPlacer.itemID)
+  else if(item==ItemLoader.civicPlacer)
     {
     this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks, true);
     }
-  else if(id==ItemLoader.gateSpawner.itemID)
+  else if(item==ItemLoader.gateSpawner)
     {
     this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks, false);
     }
