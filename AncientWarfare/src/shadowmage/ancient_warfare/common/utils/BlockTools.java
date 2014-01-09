@@ -30,6 +30,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -858,27 +859,18 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
   }
 
 
-public static void breakBlockAndDrop(World world, int x, int y, int z)
-  {
-  if(!Config.blockDestruction)
+public static void breakBlockAndDrop(World world, int x, int y, int z, int fortune)
+  {   
+  List<ItemStack> drops = breakBlock(world, x, y, z, fortune);
+  for(ItemStack stack : drops)
     {
-    return;
-    }
-  int id = world.getBlockId(x, y , z);
-  int meta = world.getBlockMetadata(x, y , z);
-  Block block = Block.blocksList[id];
-  if(block==null){return;}
-  BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
-  MinecraftForge.EVENT_BUS.post(event);
-  if(event.isCanceled())
-    {
-    return;
-    }
-  if(id!=0 && id!=Block.bedrock.blockID && Block.blocksList[id]!=null)
-    {      
-//    Config.logDebug("setting block to air: "+x+","+y+","+z);
-    Block.blocksList[id].dropBlockAsItem(world, x, y , z, meta, 0);
-    world.setBlock(x, y , z, 0);
+    float f = 0.7F;
+    double d0 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+    double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+    double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+    EntityItem entityitem = new EntityItem(world, (double)x + d0, (double)y + d1, (double)z + d2, stack);
+    entityitem.delayBeforeCanPickup = 10;
+    world.spawnEntityInWorld(entityitem);
     }
   }
 
@@ -887,21 +879,17 @@ public static List<ItemStack> breakBlock(World world, int x, int y, int z, int f
   int id = world.getBlockId(x,y,z);
   int meta = world.getBlockMetadata(x, y, z);  
   Block block = Block.blocksList[id];
-  if(block==null){return Collections.emptyList();}
-  BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
-  MinecraftForge.EVENT_BUS.post(event);
-  if(event.isCanceled())
+  if(block==null  || block==Block.bedrock || block.getBlockHardness(world, x, y, z) <0 )
     {
     return Collections.emptyList();
-    }  
-  if(id!=0 && id!= Block.bedrock.blockID && block!=null)
+    }
+  BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
+  MinecraftForge.EVENT_BUS.post(event);
+  if(!event.isCanceled())
     {
     ArrayList<ItemStack> drops = block.getBlockDropped(world, x,y,z, world.getBlockMetadata(x,y,z), fortune);       
     world.setBlock(x,y,z, 0);
-    if(drops!=null)
-      {
-      return drops;
-      }
+    return drops;
     }  
   return Collections.emptyList();
   }

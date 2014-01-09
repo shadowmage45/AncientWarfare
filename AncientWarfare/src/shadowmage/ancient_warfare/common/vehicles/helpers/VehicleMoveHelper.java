@@ -638,7 +638,7 @@ protected void tearUpGrass()
     int id = vehicle.worldObj.getBlockId(x, y, z);    
     if(isPlant(id))
       {
-      BlockTools.breakBlockAndDrop(vehicle.worldObj, x, y, z);      
+      BlockTools.breakBlockAndDrop(vehicle.worldObj, x, y, z, 0);      
       }    
     //check lower blocks (riding on)
     if (vehicle.worldObj.getBlockId(x, y-1, z) == Block.grass.blockID)

@@ -27,6 +27,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.missiles.DamageType;
@@ -126,10 +127,7 @@ public void doDamageEffects()
         ent.attackEntityFrom(DamageType.batteringDamage, 5+vehicle.vehicleMaterialLevel);
         }
       }
-    if(vehicle.worldObj.getBlockId(pos.x, pos.y, pos.z)!=Block.bedrock.blockID)
-      {
-      vehicle.worldObj.setBlockToAir(pos.x, pos.y, pos.z);
-      }    
+    BlockTools.breakBlockAndDrop(vehicle.worldObj, pos.x, pos.y, pos.z, 0);  
     }
   }
 

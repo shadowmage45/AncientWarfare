@@ -403,10 +403,11 @@ public Collection<ItemStackWrapperCrafting> getResources()
 
 protected void breakBlockAndDrop(World world, int x, int y, int z)
   {
-  if(Config.blockDestruction)
+  if(!Config.blockDestruction)
     {
-    BlockTools.breakBlockAndDrop(world, x, y, z);    
+    return;
     }
+  BlockTools.breakBlockAndDrop(world, x, y, z, 0);    
   }
 
 /**

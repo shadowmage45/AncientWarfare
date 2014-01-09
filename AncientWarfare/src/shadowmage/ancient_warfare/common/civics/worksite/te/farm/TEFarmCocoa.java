@@ -153,16 +153,8 @@ protected void doWork(IWorker npc, WorkPoint p)
         {
         inventory.tryRemoveItems(plantableFilter, 1);        
         worldObj.setBlock(p.x, p.y, p.z, mainBlockID, meta, 3);
-        }
-      else
-        {
-//        Config.logDebug("could not locate jungle log to plant on");
-        }
-      }
-    else
-      {
-//      Config.logDebug("had plant job but no plantables!!");
-      }
+        }    
+      }  
     }    
   }
 
