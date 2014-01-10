@@ -90,6 +90,7 @@ public GuiMEIM(ContainerBase container)
   Keyboard.enableRepeatEvents(true);
   TextureManager.allocateTexture();
   this.gridTexture = new ResourceLocation("ancientwarfare", "meim/test.png");
+  this.container = container;
   }
 
 /**
