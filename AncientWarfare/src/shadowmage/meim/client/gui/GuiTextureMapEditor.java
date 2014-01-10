@@ -16,6 +16,7 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.meim.client.meim_model.MEIMModelBase;
 import shadowmage.meim.client.modelrenderer.MEIMModelRenderer;
+import shadowmage.meim.client.texture.TextureManager;
 import shadowmage.meim.common.config.MEIMConfig;
 
 public class GuiTextureMapEditor extends GuiContainerAdvanced
@@ -117,9 +118,9 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 
 public void renderTextureMap()
   {  
-  GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.imgNum);
+  TextureManager.bindTexture();  
   this.drawTexturedModalRect(width-256-40, 0, 0, 0, 256, 256);
-  mc.renderEngine.resetBoundTexture();
+  TextureManager.resetBoundTexture();
   }
 
 /**
@@ -127,15 +128,14 @@ public void renderTextureMap()
  */
 public void setupMap()
   { 
-  mc.renderEngine.deleteTexture(this.imgNum);
   for(int x = 0; x<256; x++)
     {
     for(int y = 0; y<256; y++)
       {        
       this.img.setRGB(x, y, map.getColorFor(x, y));
       }
-    } 
-  this.imgNum = mc.renderEngine.allocateAndSetupTexture(img);
+    }
+  TextureManager.updateTextureContents(img);
   }
 
 public void initializeTexture()

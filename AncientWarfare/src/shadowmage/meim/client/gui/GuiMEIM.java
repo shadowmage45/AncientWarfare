@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -28,6 +29,7 @@ import shadowmage.meim.client.meim_model.MEIMModelBase;
 import shadowmage.meim.client.model.ModelModel;
 import shadowmage.meim.client.modelrenderer.MEIMModelBox;
 import shadowmage.meim.client.modelrenderer.MEIMModelRenderer;
+import shadowmage.meim.client.texture.TextureManager;
 import shadowmage.meim.common.MEIM;
 import shadowmage.meim.common.config.MEIMConfig;
 
@@ -68,6 +70,7 @@ BufferedImage img;
 int partCopyNum = 1;
 
 ContainerBase container;
+ResourceLocation gridTexture;
 
 public GuiMEIM(ContainerBase container)
   {
@@ -85,7 +88,8 @@ public GuiMEIM(ContainerBase container)
   this.updateViewPos(0,0,0,0);
   this.forceUpdate = true;
   Keyboard.enableRepeatEvents(true);
-  
+  TextureManager.allocateTexture();
+  this.gridTexture = new ResourceLocation("ancientwarfare", "meim/test.png");
   }
 
 /**
@@ -121,7 +125,7 @@ public void handleFileSelection(int selectionType)
     if(f.exists())
       {
       this.img = ImageIO.read(f);
-      this.imgNum = mc.renderEngine.allocateAndSetupTexture(img);
+      TextureManager.updateTextureContents(img);
       }
     break;
     case SELECT_MODEL_LOAD:
@@ -460,36 +464,19 @@ public void renderExtras(int a, int b, float c)
   /**
    * render grid....
    */
-
-  String tex = "/shadowmage/meim/resources/test.png";
-  int texInt = this.mc.renderEngine.getTexture(tex);  
-  GL11.glBindTexture(GL11.GL_TEXTURE_2D, texInt);
-//  this.mc.renderEngine.bindTexture(texInt);
+  
+  this.mc.renderEngine.bindTexture(gridTexture);
   this.gridModel.render();
 
-  /**
-   * rebind tex, render model
-   */
-  if(this.img==null)
-    {
-    tex = "/footex.png";
-    texInt = this.mc.renderEngine.getTexture(tex);
-    }
-  else
-    {
-    texInt = this.imgNum;
-    }
-
-  
-  GL11.glBindTexture(GL11.GL_TEXTURE_2D, texInt);
-//  this.mc.renderEngine.bindTexture(texInt); 
+  TextureManager.bindTexture();
+   
   if(this.model!=null)
     {
     this.model.render();
     } 
   mc.entityRenderer.setupOverlayRendering();
   RenderHelper.disableStandardItemLighting();
-  mc.renderEngine.resetBoundTexture();
+  TextureManager.resetBoundTexture();
   }
 
 @Override
