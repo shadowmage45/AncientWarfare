@@ -48,6 +48,7 @@ public static final boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
+public static boolean fireBlockBreakEvents = true;
 public static boolean globalWarfare = true;
 public static boolean warzonesArePeaceZones = false;
 public static boolean enablePerformanceMonitor = false;
@@ -232,9 +233,11 @@ public void setCoreInfo()
     this.updatedVersion = true;
     config.get("version", "version", VERSION, "The mod version used to last save this config").set(VERSION);
     }
+  
   /**
    * general options
    */
+  this.fireBlockBreakEvents = config.get("a-general-options", "block_break_events", fireBlockBreakEvents, "If true, will fire block-break events for the use of protection mods").getBoolean(fireBlockBreakEvents);
   this.globalWarfare = config.get("a-general-options", "global_warfare", globalWarfare, "If true, Warzones will be disabled, and warfare is global and unchecked.").getBoolean(globalWarfare);
   this.warzonesArePeaceZones = config.get("a-general-options", "warzones_invert", warzonesArePeaceZones, "If true, warzones will be used as no-war zones instead...and warfare can occur anywhere outside those zones.").getBoolean(warzonesArePeaceZones);
   this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();  

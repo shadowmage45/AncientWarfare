@@ -120,7 +120,6 @@ private void addWarzone(Warzone z, int targetY)
 
 private HashMap<GuiButtonSimple, Warzone> removalMap = new HashMap<GuiButtonSimple, Warzone>();
 
-
 @Override
 public void onElementActivated(IGuiElement element)
   {
