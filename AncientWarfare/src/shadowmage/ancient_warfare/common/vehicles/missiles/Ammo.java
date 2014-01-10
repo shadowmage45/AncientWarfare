@@ -45,6 +45,7 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.warzone.WarzoneManager;
 
 public abstract class Ammo implements IAmmoType
 {
@@ -403,7 +404,7 @@ public Collection<ItemStackWrapperCrafting> getResources()
 
 protected void breakBlockAndDrop(World world, int x, int y, int z)
   {
-  if(!Config.blockDestruction)
+  if(!Config.blockDestruction || !WarzoneManager.instance().shouldBreakBlock(world, x, y, z))
     {
     return;
     }
