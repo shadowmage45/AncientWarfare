@@ -96,18 +96,24 @@ public void updateControls()
   for(Warzone z : this.container.zoneList)
     {
     addWarzone(z, totalY);
-    totalY += 18;
+    totalY += 22;
     }  
   this.area.updateTotalHeight(totalY);
   }
 
 private void addWarzone(Warzone z, int targetY)
   {
-  GuiString label = new GuiString(area.elements.size(), area, 120, 12, z.toString());
+  GuiString label = new GuiString(area.elements.size(), area, 120, 12, "Min: "+z.min.toString());
   label.updateRenderPos(0, targetY);
   area.elements.add(label);
+  
+  label = new GuiString(area.elements.size(), area, 120, 12, "Max: "+z.max.toString());
+  label.updateRenderPos(0, targetY+11);
+  area.elements.add(label);
+  
+  
   GuiButtonSimple button = new GuiButtonSimple(area.elements.size(), area, 55, 16, "Remove");
-  button.updateRenderPos(170, targetY);
+  button.updateRenderPos(165, targetY+3);
   area.elements.add(button);  
   this.removalMap.put(button, z);  
   }

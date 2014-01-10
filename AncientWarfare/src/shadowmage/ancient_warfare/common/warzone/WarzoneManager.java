@@ -41,20 +41,14 @@ public void onWorldLoad(World world)
   warData = (WarzoneSaveData) world.mapStorage.loadData(WarzoneSaveData.class, WarzoneSaveData.dataName);
   if(warData==null)
     {
-    Config.logDebug("world returned null warzone data instantiating and setting to world");
     warData = new WarzoneSaveData();
     world.mapStorage.setData(WarzoneSaveData.dataName, warData);
     }  
-  Config.logDebug("loaded warzone data..." + warData);
   }
 
 public void addWarzone(World world, BlockPosition p1, BlockPosition p2)
   {
-  if(warData==null)
-    {
-    Config.logDebug("null war-data..could not add entry.");
-    return;
-    }
+  if(warData==null){return;}
   warData.addNewZone(world, new Warzone(p1, p2));  
   warData.markDirty();
   }
