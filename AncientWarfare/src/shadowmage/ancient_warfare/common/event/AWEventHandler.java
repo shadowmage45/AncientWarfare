@@ -42,9 +42,11 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
+import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
+import shadowmage.ancient_warfare.common.warzone.WarzoneManager;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
@@ -67,6 +69,8 @@ public void onWorldLoad(WorldEvent.Load evt)
   if(evt.world instanceof WorldServer)
     {
     GameDataTracker.instance().handleWorldLoad(evt.world);
+    MailboxData.instance().handleWorldLoad(evt.world);
+    WarzoneManager.instance().onWorldLoad(evt.world);
     }  
   }
 

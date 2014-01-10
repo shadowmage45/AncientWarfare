@@ -44,10 +44,12 @@ public static String configPath = "";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = false;
+public static final boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
+public static boolean globalWarfare = true;
+public static boolean warzonesArePeaceZones = false;
 public static boolean enablePerformanceMonitor = false;
 public static boolean invertShiftClickOnItems = false;
 public static String templateExtension = "aws";
@@ -233,6 +235,8 @@ public void setCoreInfo()
   /**
    * general options
    */
+  this.globalWarfare = config.get("a-general-options", "global_warfare", globalWarfare, "If true, Warzones will be disabled, and warfare is global and unchecked.").getBoolean(globalWarfare);
+  this.warzonesArePeaceZones = config.get("a-general-options", "warzones_invert", warzonesArePeaceZones, "If true, warzones will be used as no-war zones instead...and warfare can occur anywhere outside those zones.").getBoolean(warzonesArePeaceZones);
   this.templateExtension = config.get("a-general-options", "template_extension", "aws", "The extension used by templates, must be a three-digit extension valid on your file system").getString();  
   this.adjustMissilesForAccuracy = config.get("a-general-options", "missile_accuracy", true, "If true, missiles will be adjusted for vehicle and rider accuracy when launched.").getBoolean(true);
   this.blockDestruction = config.get("a-general-options", "missile_destroy_blocks", true, "If true, missiles will be capable of destroying blocks.").getBoolean(true);

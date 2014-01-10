@@ -1,0 +1,8 @@
+Change Log 038 -> 039 (01-04-14)
+
+* FIX -- Fix tooltip double-rendering issue in some GUIs
+* FIX -- Backpacks can no longer contain other backpacks.  This fixes an issue where you could put a backpack inside of itself, 
+    and it would be promptly deleted when the gui was closed.  Any existing packs-in-packs will remain and can be removed safely, 
+    but no new packs can be placed inside of others.
+* FIX -- add default item-stack icon for vehicle spawners for when vehicle item-models are disabled through config.
+* FIX -- Fix death-message translation when a player is killed by an NPC     

@@ -53,6 +53,11 @@ public BlockPosition(double x, double y, double z)
 
 public BlockPosition(NBTTagCompound tag)
   {
+  this.readFromNBT(tag);
+  }
+
+public final void readFromNBT(NBTTagCompound tag)
+  {
   this.x = tag.getInteger("x");
   this.y = tag.getInteger("y");
   this.z = tag.getInteger("z");

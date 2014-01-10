@@ -24,6 +24,7 @@ package shadowmage.ancient_warfare.common.proxy;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.FakePlayerFactory;
@@ -42,6 +43,17 @@ public int serverTPS;
 
 public int sentPacketAvg;
 public int recPacketAvg;
+
+public boolean isPlayerOp(EntityPlayer player)
+  {
+  if(player.worldObj.isRemote){return false;}
+  return isPlayerOp(player.getEntityName());
+  }
+
+private boolean isPlayerOp(String name)
+  {
+  return MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(name);
+  }
 
 public EntityPlayer getClientPlayer()
   {

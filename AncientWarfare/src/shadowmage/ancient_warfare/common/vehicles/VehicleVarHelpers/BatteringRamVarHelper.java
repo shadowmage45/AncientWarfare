@@ -32,6 +32,7 @@ import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;
 import shadowmage.ancient_warfare.common.vehicles.missiles.DamageType;
 import shadowmage.ancient_warfare.common.vehicles.types.VehicleTypeBatteringRam;
+import shadowmage.ancient_warfare.common.warzone.WarzoneManager;
 
 
 public class BatteringRamVarHelper extends VehicleFiringVarsHelper
@@ -127,7 +128,10 @@ public void doDamageEffects()
         ent.attackEntityFrom(DamageType.batteringDamage, 5+vehicle.vehicleMaterialLevel);
         }
       }
-    BlockTools.breakBlockAndDrop(vehicle.worldObj, pos.x, pos.y, pos.z, 0);  
+    if(WarzoneManager.instance().shouldBreakBlock(vehicle.worldObj, pos.x, pos.y, pos.z))
+      {
+      BlockTools.breakBlockAndDrop(vehicle.worldObj, pos.x, pos.y, pos.z, 0);      
+      }  
     }
   }
 

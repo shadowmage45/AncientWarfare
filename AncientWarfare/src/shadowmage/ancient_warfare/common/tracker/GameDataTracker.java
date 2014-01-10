@@ -158,7 +158,6 @@ public void resetAllTrackedData()
 
 public void handleWorldLoad(World world)
   {
-  MailboxData.instance().handleWorldLoad(world);
   if(world.isRemote || this.gameData!=null)
     {
     return;

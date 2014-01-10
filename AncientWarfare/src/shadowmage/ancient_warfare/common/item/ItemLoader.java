@@ -57,6 +57,7 @@ public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote
 public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 24019, "Backpack"));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 24020, "Research book to save research progress"));
 public static final AWItemBase structureGenerator = new ItemStructureGenerator(Config.getItemID("itemSingle.structureGenerator", 24020, "Generates as per world gen"));
+public static final AWItemBase warzoneConfigurator = new ItemWarzoneConfigurator(Config.getItemID("item.single.warzoneConfigurator", 24021, "Configures new warzones"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
 public static final ItemStack wood2 = new ItemStack(componentItem, 1, 1);
@@ -150,7 +151,8 @@ private void loadItems()
     
   this.registerItemSubtyped(researchNotes, "researchNotes");
   this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook.tooltip").setIconTexture("ancientwarfare:misc/researchBook", 0);
-  this.registerItemSingle(structureGenerator, "item.single.structureGenerator", "item.single.structureGenerator.description", "item.single.structureGenerator.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);    
+  this.registerItemSingle(structureGenerator, "WG-StructureGenerator", "Generates structures using world gen settings", "Generates structures using world gen settings").setIconTexture("ancientwarfare:builder/structureScanner1", 0);    
+  this.registerItemSingle(warzoneConfigurator, "item.single.warzoneConfigurator", "item.single.warzoneConfigurator.description", "item.single.warzoneConfigurator.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
   
   /**
    * register main component item (misc random items) 

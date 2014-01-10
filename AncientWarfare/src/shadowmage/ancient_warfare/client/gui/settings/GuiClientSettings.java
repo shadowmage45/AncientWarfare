@@ -23,14 +23,13 @@ package shadowmage.ancient_warfare.client.gui.settings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
-import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
+import shadowmage.ancient_warfare.common.container.ContainerSettings;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 
@@ -48,15 +47,18 @@ GuiCheckBoxSimple enableNpcObjective;
 GuiButtonSimple keyBinds;
 GuiButtonSimple performance;
 GuiButtonSimple entityDump;
+GuiButtonSimple warzoneControl;
 
 EntityPlayer player;
 
+ContainerSettings container;
 /**
  * @param container
  */
 public GuiClientSettings(EntityPlayer player, Container container)
   {
   super(container); 
+  this.container = (ContainerSettings)container;
   this.player = player;
   }
 
@@ -145,6 +147,9 @@ public void onElementActivated(IGuiElement element)
     pkt.sendPacketToServer();   
     break;
     
+    case 12:
+    break;
+    
     default:
     break;   
     }
@@ -165,13 +170,15 @@ public void setupControls()
   this.enableNpcObjective = this.addCheckBox(9, 10, 150, 16, 16).setChecked(Settings.getRenderNpcObjectives());
   this.performance = this.addGuiButton(10, getXSize()-55-10, 50, 55, 16, "Perf.");
   this.entityDump = this.addGuiButton(11, getXSize()-55-10, 50+18, 55, 16, "Ent Dump");
+  this.warzoneControl = this.addGuiButton(12, getXSize()-55-10, 50+18+18, 55, 16, "Warzones");
+  this.warzoneControl.enabled = this.container.isOp;
   }
 
 @Override
 public void updateControls()
   {
-  // TODO Auto-generated method stub
-
+  this.warzoneControl.enabled = this.container.isOp;
   }
+
 
 }
