@@ -27,7 +27,8 @@ import net.minecraft.nbt.NBTTagCompound;
 public class Warzone
 {
 
-BlockPosition min, max;
+public BlockPosition min;
+public BlockPosition max;
 
 public Warzone()
   {
@@ -64,5 +65,16 @@ public void writeToNBT(NBTTagCompound tag)
   posTag = new NBTTagCompound();
   max.writeToNBT(posTag);
   tag.setTag("max", posTag);
+  }
+
+public boolean matches(BlockPosition min, BlockPosition max)
+  {
+  return min.equals(this.min) && max.equals(this.max);
+  }
+
+@Override
+public String toString()
+  {
+  return String.format("WZ: %s -> %s", min, max);
   }
 }

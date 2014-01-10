@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.warzone;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -35,12 +38,14 @@ private WarzoneManager(){}
 
 public void onWorldLoad(World world)
   {
-  warData = (WarzoneSaveData) world.perWorldStorage.loadData(WarzoneSaveData.class, WarzoneSaveData.dataName);
+  warData = (WarzoneSaveData) world.mapStorage.loadData(WarzoneSaveData.class, WarzoneSaveData.dataName);
   if(warData==null)
     {
+    Config.logDebug("world returned null warzone data instantiating and setting to world");
     warData = new WarzoneSaveData();
-    world.perWorldStorage.setData(warData.dataName, warData);
-    }    
+    world.mapStorage.setData(WarzoneSaveData.dataName, warData);
+    }  
+  Config.logDebug("loaded warzone data..." + warData);
   }
 
 public void addWarzone(World world, BlockPosition p1, BlockPosition p2)
@@ -67,6 +72,18 @@ public boolean shouldBreakBlock(World world, int x, int y, int z)
   boolean invertZones = Config.warzonesArePeaceZones;
   boolean insideZone = isPositionInZone(world, x, y, z);
   return (!invertZones && insideZone) || (invertZones && !insideZone);
+  }
+
+public Collection<Warzone> getCurrentWarzones(World world)
+  {
+  if(warData==null){return Collections.emptyList();}
+  return warData.getWarzones(world);
+  }
+
+public void removeWarzone(World world, BlockPosition min, BlockPosition max)
+  {
+  this.warData.removeWarzone(world, min, max);
+  this.warData.markDirty();
   }
 
 }

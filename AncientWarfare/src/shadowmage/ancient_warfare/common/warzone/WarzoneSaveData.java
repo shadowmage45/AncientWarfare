@@ -21,19 +21,22 @@
 package shadowmage.ancient_warfare.common.warzone;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
-import shadowmage.ancient_warfare.common.config.Config;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class WarzoneSaveData extends WorldSavedData
 {
-public static final String dataName = "AWWarzoneData";
+public static final String dataName = "AW_WARZONE_DATA";
 private HashMap<Integer, List<Warzone>> warzones = new HashMap<Integer, List<Warzone>>();
 
 public WarzoneSaveData()
@@ -121,6 +124,29 @@ public void addNewZone(World world, Warzone zone)
     }
   this.warzones.get(world.provider.dimensionId).add(zone);
   Config.logDebug("added warzone to list, it now contains: "+this.warzones.get(world.provider.dimensionId).size() + " warzones");
+  }
+
+public Collection<Warzone> getWarzones(World world)
+  {
+  return (Collection<Warzone>) (this.warzones.containsKey(world.provider.dimensionId) ? this.warzones.get(world.provider.dimensionId) : Collections.emptyList());
+  }
+
+public void removeWarzone(World world, BlockPosition min, BlockPosition max)
+  {
+  Collection<Warzone> worldZones = this.warzones.get(world.provider.dimensionId);
+  if(worldZones==null){return;}
+  Iterator<Warzone> it= worldZones.iterator();
+  Warzone zone;
+  while(it.hasNext())
+    {
+    zone = it.next();
+    if(zone.matches(min, max))
+      {
+      it.remove();
+      break;
+      }    
+    }
+  
   }
 
 }

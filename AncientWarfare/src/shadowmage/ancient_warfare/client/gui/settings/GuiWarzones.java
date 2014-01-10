@@ -20,27 +20,34 @@
  */
 package shadowmage.ancient_warfare.client.gui.settings;
 
+import java.util.HashMap;
+
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerWarzones;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
+import shadowmage.ancient_warfare.common.warzone.Warzone;
 
 public class GuiWarzones extends GuiContainerAdvanced
 {
 
 GuiScrollableArea area;
+GuiButtonSimple done;
+ContainerWarzones container;
 
 public GuiWarzones(Container container)
   {
   super(container);
+  this.container = (ContainerWarzones)container;
   this.shouldCloseOnVanillaKeys = true;
   }
 
-@Override
-public void onElementActivated(IGuiElement element)
-  {
-  }
 
 @Override
 public int getXSize()
@@ -76,9 +83,9 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-  this.area = new GuiScrollableArea(0, this, 8, 8, getXSize()-16, getYSize()-16-16-4, getYSize()-16-16-4);
-  this.addGuiButton(1, this.getXSize()-55-8, 8, "Back"); 
-  
+  this.area = new GuiScrollableArea(0, this, 8, 8+16+4, getXSize()-16, getYSize()-16-16-4, getYSize()-16-16-4);
+  this.guiElements.put(0, area);
+  this.done = this.addGuiButton(1, this.getXSize()-55-8, 8, 55, 16, "Back");  
   }
 
 @Override
@@ -86,9 +93,42 @@ public void updateControls()
   {
   this.area.elements.clear();
   int totalY = 0;
-  
-  
+  for(Warzone z : this.container.zoneList)
+    {
+    addWarzone(z, totalY);
+    totalY += 18;
+    }  
   this.area.updateTotalHeight(totalY);
   }
 
+private void addWarzone(Warzone z, int targetY)
+  {
+  GuiString label = new GuiString(area.elements.size(), area, 120, 12, z.toString());
+  label.updateRenderPos(0, targetY);
+  area.elements.add(label);
+  GuiButtonSimple button = new GuiButtonSimple(area.elements.size(), area, 55, 16, "Remove");
+  button.updateRenderPos(170, targetY);
+  area.elements.add(button);  
+  this.removalMap.put(button, z);  
+  }
+
+private HashMap<GuiButtonSimple, Warzone> removalMap = new HashMap<GuiButtonSimple, Warzone>();
+
+
+@Override
+public void onElementActivated(IGuiElement element)
+  {
+  if(element==done)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.SETTINGS, player, player.worldObj, 0, 0, 0);
+    }
+  else if(removalMap.containsKey(element))
+    {
+    Warzone z = removalMap.get(element);
+    NBTTagCompound removeTag = new NBTTagCompound();
+    removeTag.setBoolean("removal", true);
+    z.writeToNBT(removeTag);
+    this.sendDataToServer(removeTag);
+    }
+  }
 }

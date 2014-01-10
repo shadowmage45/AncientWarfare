@@ -148,6 +148,7 @@ public void onElementActivated(IGuiElement element)
     break;
     
     case 12:
+    GUIHandler.instance().openGUI(GUIHandler.WARZONE_CONTROL, player, player.worldObj, 0, 0, 0);
     break;
     
     default:
