@@ -36,9 +36,7 @@ public class AWGameData extends WorldSavedData
  */
 static final String name = "AW_GAME_DATA";
 
-/**
- * @param par1Str
- */
+
 public AWGameData()
   {
   super(name);
@@ -90,7 +88,7 @@ public void writeToNBT(NBTTagCompound tag)
 
 public static AWGameData get(World world) 
   {
-  AWGameData data = (AWGameData)world.loadItemData(AWGameData.class, name);
+  AWGameData data = (AWGameData)world.mapStorage.loadData(AWGameData.class, name);
   if(data==null) 
     {
     data = new AWGameData();

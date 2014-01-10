@@ -157,12 +157,12 @@ public void resetAllTrackedData()
   }
 
 public void handleWorldLoad(World world)
-  {
-  if(world.isRemote || this.gameData!=null)
+  {  
+  if(world.isRemote)
     {
     return;
     }
-  this.gameData = AWGameData.get(world);
+  AWGameData data = AWGameData.get(world); 
   }
 
 public void handleWorldSave(World world)
