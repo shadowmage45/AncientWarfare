@@ -22,7 +22,6 @@ package shadowmage.ancient_structures.client.gui.structure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;

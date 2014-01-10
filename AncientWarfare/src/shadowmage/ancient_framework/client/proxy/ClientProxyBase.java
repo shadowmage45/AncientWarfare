@@ -24,8 +24,6 @@ package shadowmage.ancient_framework.client.proxy;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import shadowmage.ancient_framework.client.input.Keybind;
-import shadowmage.ancient_framework.client.input.KeybindManager;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import cpw.mods.fml.common.network.PacketDispatcher;

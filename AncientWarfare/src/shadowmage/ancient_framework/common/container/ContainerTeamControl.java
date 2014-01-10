@@ -25,8 +25,6 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_framework.common.teams.TeamEntry;
 import shadowmage.ancient_framework.common.teams.TeamTracker;
 

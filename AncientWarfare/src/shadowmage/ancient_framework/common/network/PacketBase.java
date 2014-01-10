@@ -28,7 +28,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.AWFramework;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 
 import com.google.common.io.ByteArrayDataInput;

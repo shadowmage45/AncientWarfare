@@ -22,7 +22,6 @@
  */
 package shadowmage.ancient_framework.common.network;
 
-import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 
 import com.google.common.io.ByteArrayDataInput;

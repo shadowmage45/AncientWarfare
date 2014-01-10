@@ -20,9 +20,6 @@
  */
 package shadowmage.ancient_framework.common.network;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
-import shadowmage.ancient_framework.common.config.AWLog;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 

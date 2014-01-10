@@ -25,7 +25,6 @@ import java.util.HashMap;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.GameData;
 
 public class TeamData extends GameData

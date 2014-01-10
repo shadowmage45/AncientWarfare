@@ -28,7 +28,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.WorldServer;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.network.Packet00MultiPart;
 import shadowmage.ancient_framework.common.network.PacketBase;
 import cpw.mods.fml.common.network.PacketDispatcher;

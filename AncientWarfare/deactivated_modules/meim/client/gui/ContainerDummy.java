@@ -1,6 +1,6 @@
 /**
-   Copyright 2012-2013 John Cummens (aka Shadowmage, Shadowmage4513)
-   This software is distributed under the terms of the GNU General Public License.
+   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   This software is distributed under the terms of the GNU General Public Licence.
    Please see COPYING for precise license information.
 
    This file is part of Ancient Warfare.
@@ -18,31 +18,35 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_framework.common.container;
+package shadowmage.meim.client.gui;
 
 import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class ContainerDummy extends ContainerBase
 {
 
-public ContainerDummy(EntityPlayer openingPlayer, int x, int y, int z)
+public ContainerDummy(EntityPlayer player, int x, int y, int z)
   {
-  super(openingPlayer, x, y, z);
+  super(player, x, y, z);
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-
+  // TODO Auto-generated method stub
+  
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
+  // TODO Auto-generated method stub
+  
   }
 
 @Override

@@ -24,9 +24,9 @@ import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.network.GUIHandler;
-import shadowmage.ancient_structures.client.gui.structure.GuiStructureSelection;
 import shadowmage.ancient_structures.client.gui.structure.GuiSpawnerPlacer;
 import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
+import shadowmage.ancient_structures.client.gui.structure.GuiStructureSelection;
 import shadowmage.ancient_structures.client.render.StructureBoundingBoxRenderer;
 
 public class ClientProxyStructure extends ClientProxyBase

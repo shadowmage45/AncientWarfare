@@ -28,7 +28,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_framework.common.config.AWLog;
 
 public class GuiScrollableAreaSimple extends GuiElement implements IGuiElementCallback
 {
