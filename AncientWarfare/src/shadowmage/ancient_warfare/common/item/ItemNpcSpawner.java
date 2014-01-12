@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,18 +28,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -73,7 +68,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     NBTTagCompound npcTag = stack.getTagCompound().getCompoundTag("AWNpcSpawner");
     int level = npcTag.getInteger("lev");    
     hit = BlockTools.offsetForSide(hit, side);  
-    Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayerServer(player.getEntityName()));
+    Entity npc = NpcRegistry.getNpcForType(stack.getItemDamage(), world, level, TeamTracker.instance().getTeamForPlayer(player));
     npc.setPosition(hit.x+0.5d, hit.y, hit.z+0.5d);
     if(npc instanceof NpcBase)
       {

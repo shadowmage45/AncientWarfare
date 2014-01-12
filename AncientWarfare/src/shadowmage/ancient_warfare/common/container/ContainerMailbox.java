@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
 
 public class ContainerMailbox extends ContainerMailboxBase

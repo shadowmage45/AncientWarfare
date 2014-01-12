@@ -20,10 +20,8 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import org.lwjgl.opengl.GL11;
-
-import shadowmage.ancient_warfare.common.config.Config;
 import net.minecraft.client.Minecraft;
+import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiButtonSimple extends GuiElement
 {

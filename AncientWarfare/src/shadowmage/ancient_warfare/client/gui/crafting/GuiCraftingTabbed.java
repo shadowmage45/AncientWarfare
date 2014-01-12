@@ -28,12 +28,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 
 import org.lwjgl.input.Keyboard;
 

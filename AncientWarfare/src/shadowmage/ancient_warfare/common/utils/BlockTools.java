@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockBreakable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +39,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;

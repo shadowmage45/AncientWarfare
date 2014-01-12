@@ -22,7 +22,6 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.item.ItemStack;
 
 
 public class ItemVehicleUpgrade extends AWItemBase

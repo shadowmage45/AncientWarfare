@@ -25,7 +25,6 @@ import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.interfaces.IPathableEntity;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;

@@ -21,15 +21,12 @@
 package shadowmage.ancient_warfare.common.vehicles.types;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
 import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.helpers.VehicleFiringVarsHelper;

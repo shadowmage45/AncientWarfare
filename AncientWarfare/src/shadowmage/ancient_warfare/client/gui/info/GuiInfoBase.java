@@ -26,7 +26,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 
 import org.lwjgl.input.Keyboard;
 

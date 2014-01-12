@@ -29,7 +29,6 @@ import org.lwjgl.opengl.GL12;
 
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class GuiItemStack extends GuiElement
 {

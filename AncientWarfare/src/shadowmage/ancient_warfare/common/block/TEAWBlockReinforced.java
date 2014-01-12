@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.block;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -31,6 +29,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class TEAWBlockReinforced extends TileEntity
 {

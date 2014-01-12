@@ -20,15 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.machine.TEMachine;
-import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.utils.BlockTools;
 
 public class ItemEngine extends ItemMachine
 {

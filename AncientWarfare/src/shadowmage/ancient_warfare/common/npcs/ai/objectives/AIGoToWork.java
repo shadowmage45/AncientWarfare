@@ -21,8 +21,6 @@
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_warfare.common.civics.TECivic;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
 import shadowmage.ancient_warfare.common.interfaces.ITargetEntry;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;

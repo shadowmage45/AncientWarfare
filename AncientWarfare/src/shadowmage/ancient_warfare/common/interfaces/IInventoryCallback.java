@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.interfaces;
 
-import java.util.List;
-
 import net.minecraft.inventory.IInventory;
 
 public interface IInventoryCallback

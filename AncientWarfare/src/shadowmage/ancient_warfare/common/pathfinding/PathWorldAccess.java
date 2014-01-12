@@ -27,7 +27,6 @@ import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.TEGateProxy;
 
 public class PathWorldAccess

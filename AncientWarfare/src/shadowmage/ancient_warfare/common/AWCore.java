@@ -26,8 +26,6 @@ package shadowmage.ancient_warfare.common;
 import java.io.IOException;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
@@ -63,8 +61,6 @@ import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

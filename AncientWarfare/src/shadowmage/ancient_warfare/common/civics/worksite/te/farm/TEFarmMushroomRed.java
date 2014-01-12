@@ -20,10 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class TEFarmMushroomRed extends TEWorkSiteFarm
 {

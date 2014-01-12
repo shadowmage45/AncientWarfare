@@ -20,10 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
-import shadowmage.ancient_warfare.common.item.ItemLoader;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 
 public class SlotExcludeBackpack extends Slot
 {

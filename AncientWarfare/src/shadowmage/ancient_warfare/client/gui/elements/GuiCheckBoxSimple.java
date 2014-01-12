@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import org.lwjgl.opengl.GL11;
-
 import shadowmage.ancient_warfare.common.config.Config;
 
 

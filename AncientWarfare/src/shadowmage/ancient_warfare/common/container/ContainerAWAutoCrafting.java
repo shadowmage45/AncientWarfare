@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.container;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

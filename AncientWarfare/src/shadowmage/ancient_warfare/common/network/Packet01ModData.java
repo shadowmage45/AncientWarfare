@@ -23,7 +23,6 @@
 package shadowmage.ancient_warfare.common.network;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.client.input.InputHelper;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -114,10 +113,6 @@ public void execute()
       {
       PlayerTracker.instance().handleClientInit(tag.getCompoundTag("playerData"));
       }
-    if(tag.hasKey("teamData"))
-      {
-      TeamTracker.instance().handleClientInit(tag.getCompoundTag("teamData"));
-      } 
     if(tag.hasKey("config"))
       {
       Config.instance().handleClientInit(tag.getCompoundTag("configData"));
@@ -145,26 +140,13 @@ public void execute()
   if(this.packetData.hasKey("team"))
     {
     tag = packetData.getCompoundTag("team");
-    if(world.isRemote)
-      {      
-      TeamTracker.instance().handleClientUpdate(tag, player);
-      }
-    else
-      {
-      TeamTracker.instance().handleServerUpdate(tag, player);
-      }    
+    TeamTracker.instance().handlePacketData(tag);    
     }  
 
   if(this.packetData.hasKey("tickTime"))
     {
     AWCore.proxy.serverTickTime = packetData.getLong("tick");
     AWCore.proxy.serverTPS = packetData.getInteger("tps");
-    }
-  
-  if(this.packetData.hasKey("packetCount"))
-    {
-    AWCore.proxy.recPacketAvg = packetData.getInteger("r");
-    AWCore.proxy.sentPacketAvg = packetData.getInteger("s");
     }
   
   if(this.packetData.hasKey("research") && player.worldObj.isRemote)

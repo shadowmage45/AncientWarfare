@@ -20,9 +20,9 @@
  */
 package shadowmage.ancient_warfare.common.warzone;
 
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class Warzone
 {

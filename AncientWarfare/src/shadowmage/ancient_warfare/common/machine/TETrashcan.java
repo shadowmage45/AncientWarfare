@@ -20,11 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 
 public class TETrashcan extends TEMachine implements IInventory
 {

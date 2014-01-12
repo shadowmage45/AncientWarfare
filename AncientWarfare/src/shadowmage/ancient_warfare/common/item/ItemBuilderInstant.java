@@ -25,7 +25,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
@@ -36,8 +35,6 @@ import shadowmage.ancient_warfare.common.structures.data.StructureBuildSettings;
 import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenStructureManager;
 
 public class ItemBuilderInstant extends ItemBuilderBase
 {

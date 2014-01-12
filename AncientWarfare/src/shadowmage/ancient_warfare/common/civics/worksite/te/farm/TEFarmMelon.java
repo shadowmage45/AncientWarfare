@@ -20,11 +20,11 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEFarmMelon extends TEWorkSiteFarm
 {

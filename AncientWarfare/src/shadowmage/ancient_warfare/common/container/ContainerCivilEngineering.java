@@ -27,14 +27,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.AWStructureModule;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.crafting.TEAWStructureCraft;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class ContainerCivilEngineering extends ContainerBase

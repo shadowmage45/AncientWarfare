@@ -20,11 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.npcs.ai.tasks;
 
-import net.minecraft.entity.Entity;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAITask;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
 public class AIDismountVehicle extends NpcAITask
 {

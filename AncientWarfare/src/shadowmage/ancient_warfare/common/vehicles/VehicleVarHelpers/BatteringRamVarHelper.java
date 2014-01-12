@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.vehicles.VehicleVarHelpers;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;

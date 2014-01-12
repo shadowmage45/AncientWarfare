@@ -20,17 +20,11 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import shadowmage.ancient_warfare.client.render.RenderTools;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+
+import org.lwjgl.input.Keyboard;
+
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class GuiFakeSlot extends GuiItemStack
 {

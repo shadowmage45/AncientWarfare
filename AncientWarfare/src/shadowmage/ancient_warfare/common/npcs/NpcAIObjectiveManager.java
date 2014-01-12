@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.npcs;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 
 

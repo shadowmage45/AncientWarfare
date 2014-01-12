@@ -23,17 +23,15 @@ package shadowmage.ancient_warfare.common.container;
 import java.util.Collections;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.CourierRoutingInfo;
 
 public class ContainerNpcCourier extends ContainerBase
 {

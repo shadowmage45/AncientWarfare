@@ -21,23 +21,16 @@
 package shadowmage.ancient_warfare.client.render.civic;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.civics.types.Civic;
-import shadowmage.ancient_warfare.common.civics.types.ICivicType;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 

@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import org.lwjgl.opengl.GL11;
 
 public class GuiString extends GuiElement
 {

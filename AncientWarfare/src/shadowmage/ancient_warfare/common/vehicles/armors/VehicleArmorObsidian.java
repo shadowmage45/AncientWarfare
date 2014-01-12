@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.vehicles.armors;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 

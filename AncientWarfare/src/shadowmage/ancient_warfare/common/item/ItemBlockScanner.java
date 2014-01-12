@@ -20,13 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
-import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 

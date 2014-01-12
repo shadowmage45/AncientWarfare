@@ -29,7 +29,6 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;

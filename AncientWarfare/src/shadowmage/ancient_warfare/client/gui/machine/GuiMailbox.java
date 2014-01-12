@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.machine;
 
-import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;

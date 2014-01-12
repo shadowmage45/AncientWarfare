@@ -25,7 +25,6 @@ import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -35,10 +34,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.RotationHelper;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
-import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IInteractable;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 

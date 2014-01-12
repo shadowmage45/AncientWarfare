@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
-import net.minecraft.client.gui.GuiTextField;
 
 public interface IGuiElementCallback
 {

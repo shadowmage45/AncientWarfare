@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
-import java.util.Collections;
 import java.util.PriorityQueue;
 
 import net.minecraft.world.World;

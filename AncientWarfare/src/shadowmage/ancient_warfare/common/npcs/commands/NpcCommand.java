@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public enum NpcCommand

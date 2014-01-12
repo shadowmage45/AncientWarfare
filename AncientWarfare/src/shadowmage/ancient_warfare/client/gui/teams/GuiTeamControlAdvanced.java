@@ -113,10 +113,10 @@ public void onElementActivated(IGuiElement element)
   return;
   
   case 5://add
-  TeamTracker.instance().handleClientHostileTeamChange(player.getEntityName(), (byte) this.entry.teamNum, (byte)numLine.getIntVal(), false);
+  this.sendHostileChange(numLine.getIntVal(), true);
   break;
   case 6://rem
-  TeamTracker.instance().handleClientHostileTeamChange(player.getEntityName(), (byte) this.entry.teamNum, (byte)numLine.getIntVal(), true);
+  this.sendHostileChange(numLine.getIntVal(), false);
   break;
   default:
   break;
@@ -125,33 +125,61 @@ public void onElementActivated(IGuiElement element)
   TeamMemberEntry entry;
   if(this.rankMinusButtons.contains(element))
     {
-    entry = this.entry.memberNames.get(element.getElementNumber()-100);
-    if(entry.getMemberRank()-1 >= 0 && !entry.getMemberName().equals(player.getEntityName()))
-      {
-      TeamTracker.instance().handleClientRankChange(entry.getMemberName(), (byte)this.entry.teamNum, (byte) (entry.getMemberRank()-1));
-      }
+    this.sendRankChange(element.getElementNumber()-100, -1);
     }
   else if(this.rankPlusButtons.contains(element))
-    {
-    entry = this.entry.memberNames.get(element.getElementNumber()-100);
-    if(entry.getMemberRank()+1 < this.entry.getPlayerRank(player.getEntityName()) && !entry.getMemberName().equals(player.getEntityName()))
-      {
-      TeamTracker.instance().handleClientRankChange(entry.getMemberName(), (byte)this.entry.teamNum, (byte) (entry.getMemberRank()+1));
-      }
+    {    
+    this.sendRankChange(element.getElementNumber()-100, 1);
     }
   else if(this.kickMemberButtons.contains(element))
-    {    
-    entry = this.entry.memberNames.get(element.getElementNumber()-100);
-    TeamTracker.instance().handleClientApplyToTeam(entry.getMemberName(), (byte)0);
+    {
+    this.sendKick(element.getElementNumber()-100);    
     }
   else if(this.acceptButtons.contains(element))
     {
-    TeamTracker.instance().handleClientAppAction((byte)this.entry.teamNum, this.entry.applicants.get(element.getElementNumber()-100), true);
+    this.sendAcceptData(element.getElementNumber()-100);
     }
   else if(this.denyButtons.contains(element))
     {
-    TeamTracker.instance().handleClientAppAction((byte)this.entry.teamNum, this.entry.applicants.get(element.getElementNumber()-100), false);    
+    this.sendDenyData(element.getElementNumber()-100);
     }
+  }
+
+protected void sendHostileChange(int team, boolean add)
+  {
+  
+  }
+
+protected void sendRankChange(int entryNum, int change)
+  {
+
+//  entry = this.entry.memberNames.get(element.getElementNumber()-100);
+//  if(entry.getMemberRank()+1 < this.entry.getPlayerRank(player.getEntityName()) && !entry.getMemberName().equals(player.getEntityName()))
+//    {
+//    TeamTracker.instance().handleClientRankChange(entry.getMemberName(), (byte)this.entry.teamNum, (byte) (entry.getMemberRank()+1));
+//    }
+  
+//  entry = this.entry.memberNames.get(element.getElementNumber()-100);
+//  if(entry.getMemberRank()-1 >= 0 && !entry.getMemberName().equals(player.getEntityName()))
+//    {
+//    TeamTracker.instance().handleClientRankChange(entry.getMemberName(), (byte)this.entry.teamNum, (byte) (entry.getMemberRank()-1));
+//    }
+  }
+
+protected void sendKick(int teamNum)
+  {
+//  entry = this.entry.memberNames.get(element.getElementNumber()-100);
+//  TeamTracker.instance().handleClientApplyToTeam(entry.getMemberName(), (byte)0);
+  }
+
+protected void sendAcceptData(int entryNum)
+  {
+//  TeamTracker.instance().handleClientAppAction((byte)this.entry.teamNum, this.entry.applicants.get(element.getElementNumber()-100), true);
+  }
+
+protected void sendDenyData(int entryNum)
+  {
+//  TeamTracker.instance().handleClientAppAction((byte)this.entry.teamNum, this.entry.applicants.get(element.getElementNumber()-100), false);
   }
 
 GuiNumberInputLine numLine;

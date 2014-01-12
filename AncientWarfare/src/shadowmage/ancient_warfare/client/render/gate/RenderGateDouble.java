@@ -20,6 +20,10 @@
  */
 package shadowmage.ancient_warfare.client.render.gate;
 
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.model.ModelGateBasic;
@@ -27,9 +31,6 @@ import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderGateDouble extends Render
 {

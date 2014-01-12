@@ -20,8 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.machine;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -30,7 +28,6 @@ import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
-import shadowmage.ancient_warfare.common.plugins.bc.BCProxy;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.utils.BlockTools;

@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class TETreeFarmJungle extends TETreeFarm

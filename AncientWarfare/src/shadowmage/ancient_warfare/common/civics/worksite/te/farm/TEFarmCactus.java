@@ -20,15 +20,10 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.farm;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TEFarmCactus extends TEWorkSiteFarm
 {

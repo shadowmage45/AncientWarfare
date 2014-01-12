@@ -5,13 +5,14 @@
  
 package shadowmage.ancient_warfare.client.model;
 
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
+
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.render.RenderVehicleHelper;
 import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import shadowmage.ancient_warfare.common.crafting.TEAWVehicleCraft;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
  
  
 public class ModelTable4 extends ModelTEBase

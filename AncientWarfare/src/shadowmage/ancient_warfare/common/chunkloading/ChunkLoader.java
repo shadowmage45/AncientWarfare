@@ -22,14 +22,11 @@ package shadowmage.ancient_warfare.common.chunkloading;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -37,8 +34,6 @@ import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEChunkLoader;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
-
-import com.google.common.collect.ImmutableSet;
 
 public class ChunkLoader implements LoadingCallback, OrderedLoadingCallback
 {

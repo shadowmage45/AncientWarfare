@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.client.gui.machine;
 
 import net.minecraft.inventory.Container;
-import net.minecraft.world.ChunkCoordIntPair;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiRectangle;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;

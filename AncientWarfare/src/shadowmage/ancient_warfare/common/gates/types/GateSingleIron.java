@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.gates.types;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;

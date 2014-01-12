@@ -33,7 +33,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.machine.TEMailBoxBase;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
 import shadowmage.ancient_warfare.common.tracker.entry.BoxData;

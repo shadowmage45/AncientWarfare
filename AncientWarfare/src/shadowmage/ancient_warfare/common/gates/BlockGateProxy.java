@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.gates;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
@@ -31,12 +30,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
-import shadowmage.ancient_warfare.common.item.CreativeTabAW;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class BlockGateProxy extends AWBlockContainer

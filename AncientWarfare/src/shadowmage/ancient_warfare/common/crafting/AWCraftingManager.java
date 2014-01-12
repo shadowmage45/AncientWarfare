@@ -33,7 +33,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;

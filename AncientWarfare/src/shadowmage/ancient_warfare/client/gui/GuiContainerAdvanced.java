@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -37,8 +36,8 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiTab;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElementCallback;
-import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.client.render.AWTextureManager;
+import shadowmage.ancient_warfare.client.render.RenderTools;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.interfaces.IContainerGuiCallback;

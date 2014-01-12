@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.tracker;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -119,6 +118,7 @@ public void onPlayerLogin(EntityPlayer player)
     return;
     }
   StructureManager.instance().handlePlayerLogin(player);  
+  TeamTracker.instance().onPlayerLogin(player);
   if(!playerEntries.containsKey(player.getEntityName()))
     {
     this.createEntryForNewPlayer(player.getEntityName());
@@ -128,11 +128,6 @@ public void onPlayerLogin(EntityPlayer player)
   if(tag!=null)
     {
     initTag.setCompoundTag("playerData", tag);
-    }
-  tag = TeamTracker.instance().getClientInitData();
-  if(tag!=null)
-    {
-    initTag.setCompoundTag("teamData", tag);
     }
   tag = Config.instance().getClientInitData();
   if(tag!=null)
@@ -200,7 +195,6 @@ private void createEntryForNewPlayer(String playerName)
     {
     entry.addCompletedResearch(goal.getGlobalResearchNum());
     }
-  TeamTracker.instance().handleNewPlayerLogin(playerName);  
   GameDataTracker.instance().markGameDataDirty();
   }
 

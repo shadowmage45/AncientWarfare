@@ -22,7 +22,6 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -32,11 +31,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

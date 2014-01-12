@@ -22,9 +22,7 @@ package shadowmage.ancient_warfare.client.gui.elements;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import shadowmage.ancient_warfare.common.config.Config;

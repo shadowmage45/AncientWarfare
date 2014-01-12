@@ -23,10 +23,9 @@ package shadowmage.ancient_warfare.common.container;
 import java.util.ArrayList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.AWCore;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.AWCore;
 
 public class ContainerSettings extends ContainerBase
 {

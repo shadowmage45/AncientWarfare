@@ -21,9 +21,6 @@
 package shadowmage.ancient_warfare.common.npcs.ai.objectives;
 
 import net.minecraft.util.MathHelper;
-import net.minecraft.village.Village;
-import net.minecraft.village.VillageDoorInfo;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.npcs.ai.NpcAIObjective;
 import shadowmage.ancient_warfare.common.npcs.ai.tasks.AIMoveToTarget;

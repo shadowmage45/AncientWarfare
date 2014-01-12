@@ -23,9 +23,7 @@ package shadowmage.ancient_warfare.common.block;
 import java.util.ArrayList;
 import java.util.Random;
 
-import shadowmage.ancient_warfare.common.crafting.TEAWCrafting;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;

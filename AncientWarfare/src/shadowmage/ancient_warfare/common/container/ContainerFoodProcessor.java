@@ -27,7 +27,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.machine.TEFoodProcessor;
 
 public class ContainerFoodProcessor extends ContainerBase

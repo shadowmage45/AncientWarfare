@@ -41,9 +41,6 @@ public class CommonProxy
 public long serverTickTime;
 public int serverTPS;
 
-public int sentPacketAvg;
-public int recPacketAvg;
-
 public boolean isPlayerOp(EntityPlayer player)
   {
   if(player.worldObj.isRemote){return false;}

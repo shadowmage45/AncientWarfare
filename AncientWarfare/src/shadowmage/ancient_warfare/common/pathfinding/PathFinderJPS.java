@@ -26,8 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import shadowmage.ancient_warfare.common.config.Config;
-
 
 /**
  * one more try at a clean implementation of JPS...

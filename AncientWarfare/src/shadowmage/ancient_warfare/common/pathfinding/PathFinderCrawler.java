@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 
 public class PathFinderCrawler

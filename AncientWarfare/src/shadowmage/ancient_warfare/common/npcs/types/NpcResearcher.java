@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.npcs.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;

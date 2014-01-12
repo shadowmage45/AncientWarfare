@@ -25,7 +25,6 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_warfare.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 
 public class ContainerDebugInfo extends ContainerBase

@@ -23,13 +23,11 @@ package shadowmage.ancient_warfare.client.gui.elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class GuiScrollableAreaSimple extends GuiElement implements IGuiElementCallback
 {

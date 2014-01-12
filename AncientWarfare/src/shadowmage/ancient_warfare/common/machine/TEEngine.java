@@ -21,7 +21,6 @@
 package shadowmage.ancient_warfare.common.machine;
 
 import shadowmage.ancient_warfare.common.block.BlockLoader;
-import shadowmage.ancient_warfare.common.config.Config;
 
 public class TEEngine extends TEMachine
 {

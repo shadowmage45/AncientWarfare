@@ -23,7 +23,6 @@ package shadowmage.ancient_warfare.common.civics.types;
 import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.civics.TECivic;

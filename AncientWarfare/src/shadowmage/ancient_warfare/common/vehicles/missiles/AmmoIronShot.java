@@ -20,14 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.vehicles.missiles;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
-import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
+import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
+import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoIronShot extends Ammo
 {

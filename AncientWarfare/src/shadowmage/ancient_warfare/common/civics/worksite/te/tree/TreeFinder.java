@@ -21,15 +21,10 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.tree;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.pathfinding.Node;
 import shadowmage.ancient_warfare.common.utils.Trig;
 

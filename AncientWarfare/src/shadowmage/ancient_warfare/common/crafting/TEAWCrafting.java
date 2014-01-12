@@ -20,12 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.crafting;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.WeakHashMap;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -35,15 +29,9 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.interfaces.ITEWorkSite;
-import shadowmage.ancient_warfare.common.interfaces.IWorker;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;

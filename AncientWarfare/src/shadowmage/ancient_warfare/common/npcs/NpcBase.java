@@ -22,7 +22,6 @@ package shadowmage.ancient_warfare.common.npcs;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
@@ -65,7 +64,6 @@ import shadowmage.ancient_warfare.common.targeting.TargetPosition;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 import shadowmage.ancient_warfare.common.utils.Trig;

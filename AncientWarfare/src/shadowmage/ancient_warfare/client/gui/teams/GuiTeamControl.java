@@ -30,6 +30,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
+import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
@@ -131,7 +132,7 @@ public void onElementActivated(IGuiElement element)
   case 10://apply
     {
     byte num = (byte) teamSelectNumber.getIntVal();
-    TeamTracker.instance().handleClientApplyToTeam(player.getEntityName(), num);    
+    sendApply(player.getEntityName(), num);    
     }
   break;
   
@@ -139,6 +140,17 @@ public void onElementActivated(IGuiElement element)
   default:
   break;
   }
+  }
+
+protected void sendApply(String playerName, int teamNum)
+  {
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("apply", true);
+  tag.setString("name", playerName);
+  tag.setInteger("team", teamNum);  
+  Packet01ModData pkt = new Packet01ModData();
+  pkt.setTeamUpdate(tag);
+  pkt.sendPacketToServer();
   }
 
 GuiButtonSimple advControls;

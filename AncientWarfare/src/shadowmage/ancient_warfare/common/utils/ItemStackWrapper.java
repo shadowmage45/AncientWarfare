@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.common.utils;
 
-import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

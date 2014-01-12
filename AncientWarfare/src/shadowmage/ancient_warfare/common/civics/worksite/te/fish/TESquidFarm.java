@@ -20,14 +20,8 @@
  */
 package shadowmage.ancient_warfare.common.civics.worksite.te.fish;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
-import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
-import shadowmage.ancient_warfare.common.targeting.TargetType;
-import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TESquidFarm extends TEFishery
 {
