@@ -20,11 +20,13 @@
  */
 package shadowmage.ancient_warfare.client.gui.elements;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringTranslate;
-import shadowmage.ancient_warfare.client.render.AWTextureManager;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
@@ -74,7 +76,7 @@ public void drawElement(int mouseX, int mouseY)
     int qty = 0;
     if(this.ammo!=null)
       {
-      AWTextureManager.bindTexture("/gui/items.png");
+      Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationItemsTexture);
       qty = vehicle.ammoHelper.getCountOf(ammo);
       this.renderItemIcon(guiLeftOffset+2+this.renderPosX, guiTopOffset+2+this.renderPosY, ammo.getDisplayIcon(), 16, 16);
       }

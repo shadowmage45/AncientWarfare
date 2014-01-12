@@ -1,8 +1,6 @@
 TODO
-* loot generation, don't add disabled items
 * structure generation -- when checking structures for intersection, need to expand search area by the size of largest structure ever generated.
 
-* fix rescale normal on giant trebuchet, need to disable after render
 * npcs like to swim far too much
 * gates immune to all but battering rams config/toggle for premade matches
 
