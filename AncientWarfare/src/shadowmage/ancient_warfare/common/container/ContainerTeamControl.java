@@ -23,33 +23,53 @@ package shadowmage.ancient_warfare.common.container;
 import java.util.Collections;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ContainerTeamControl extends ContainerBase
 {
 
-/**
- * @param openingPlayer
- * @param synch
- */
 public ContainerTeamControl(EntityPlayer openingPlayer)
   {
   super(openingPlayer, null); 
   }
 
-public void rebuildTeamList()
-  {
-//  Config.logDebug("sending rebuild to gui");
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setBoolean("rebuild", true);
-  this.gui.handleDataFromContainer(tag);
-  }
-
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
- 
+  if(tag.hasKey("apply"))
+    {
+    String name = tag.getString("name");
+    int team = tag.getInteger("team");
+    TeamTracker.instance().handlePlayerApplication(name, team);
+    }
+  if(tag.hasKey("kick"))
+    {
+    String name = tag.getString("name");
+    TeamTracker.instance().handleKickAction(name);
+    }
+  if(tag.hasKey("accept"))
+    {
+    boolean accept = tag.getBoolean("accept");
+    String name = tag.getString("name");
+    int team = tag.getInteger("team");
+    TeamTracker.instance().handleAccept(name, team, accept);
+    }
+  if(tag.hasKey("hostile"))
+    {
+    boolean add = tag.getBoolean("hostile");
+    int team = tag.getInteger("team");
+    int hostTeam = tag.getInteger("hostTeam");
+    TeamTracker.instance().handleHostileChange(team, hostTeam, add);
+    }
+  if(tag.hasKey("rank"))
+    {
+    String name = tag.getString("name");
+    int rank = tag.getInteger("rank");
+    TeamTracker.instance().setPlayerRank(name, rank);
+    }
   }
 
 @Override

@@ -30,6 +30,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
+import shadowmage.ancient_warfare.common.command.CommandTeam;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.event.AWEventHandler;
@@ -65,6 +66,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -203,13 +205,20 @@ public void load(FMLPostInitializationEvent evt)
   }
 
 @EventHandler
-public void serverStarting(FMLServerStoppingEvent evt)
+public void serverStarting(FMLServerStartingEvent evt)
+  {
+  evt.registerServerCommand(new CommandTeam());
+  }
+
+@EventHandler
+public void serverStopping(FMLServerStoppingEvent evt)
   {
   if(MinecraftServer.getServer().worldServers[0]!=null)
     {
     MinecraftServer.getServer().worldServers[0].mapStorage.saveAllData();
     GameDataTracker.instance().resetAllTrackedData();
     }
+  
   }
 
 }

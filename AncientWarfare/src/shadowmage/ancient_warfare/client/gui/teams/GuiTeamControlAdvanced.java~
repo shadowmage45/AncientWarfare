@@ -54,7 +54,7 @@ public GuiTeamControlAdvanced(GuiTeamControl parent, Container container)
   {
   super(container);
   this.parent = parent;
-  this.entry = parent.entry;
+//  this.entry = parent.entry;
   this.shouldCloseOnVanillaKeys = false;
   this.prevMemberCount = entry.memberNames.size();
   }

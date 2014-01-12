@@ -4,6 +4,9 @@
 # major to-do areas:
 # guiStrings (lots and lots..and even more...)
 
+# commands
+commands.awteam.usage=Valid commands are list, listteam (teamnum), setteam (teamnum playername), setrank (teamnum playername)
+
 # entities
 entity.npc=Ancient Warfare NPC
 entity.vehicle=Ancient Warfare Vehicle

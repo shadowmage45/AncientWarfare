@@ -35,6 +35,11 @@ public TeamData(){this(dataName);}
 public TeamData(String par1Str)
   {
   super(par1Str);
+  for(int i = 0; i < teamEntries.length; i++)
+    {
+	teamEntries[i] = new TeamEntry();
+	teamEntries[i].teamNum = i;
+    }
   }
 
 @Override
@@ -67,17 +72,77 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setTag("tL", teamList);
   }
 
-public void changePlayerTeam(String playerName, int newTeam){}
+public void setPlayerTeam(String playerName, int newTeam)
+  {
+  TeamEntry t = this.getEntryForPlayer(playerName);
+  t.removePlayer(playerName);
+  this.teamEntries[newTeam].addNewPlayer(playerName, this.teamEntries[newTeam].memberNames.size()==0 ? newTeam==0 ? (byte)0 : (byte)10 : (byte)0);
+  }
 
-public int getTeamForPlayer(String name){return 0;}
+public void setPlayerRank(String playerName, int newRank)
+  {
+  TeamEntry t = this.getEntryForPlayer(playerName);
+  t.getEntryFor(playerName).setMemberRank((byte) newRank);
+  }
 
-public TeamEntry getEntryForPlayer(String name){return null;}
+public int getTeamForPlayer(String name)
+  {
+  for(int i = 0;i < this.teamEntries.length; i++)
+    {
+    if(this.teamEntries[i].containsPlayer(name))
+      {
+      return i;
+      }
+    }
+  return 0;
+  }
 
-public void handlePlayerKick(String name){}
+public TeamEntry getEntryForPlayer(String name)  
+  {
+  for(int i = 0;i < this.teamEntries.length; i++)
+    {
+    if(this.teamEntries[i].containsPlayer(name))
+      {
+      return teamEntries[i];
+      }
+    }
+  return teamEntries[0];
+  }
 
-public void handlePlayerAccept(String name, int team){}
+public void handlePlayerApply(String name, int team)
+  {
+  this.teamEntries[team].addApplicant(name);
+  }
 
-public void handlePlayerDeny(String name, int team){}
+public void handlePlayerKick(String name)
+  {
+  this.getEntryForPlayer(name).removePlayer(name);
+  this.setPlayerTeam(name, 0);
+  }
 
-public void changePlayerRank(String name, int newRank){}
+public void handlePlayerAccept(String name, int team)
+  {
+  TeamEntry t = teamEntries[team];
+  t.applicants.remove(name);
+  t.addNewPlayer(name, (byte)0);
+  }
+
+public void handlePlayerDeny(String name, int team)
+  {
+  TeamEntry t = teamEntries[team];
+  t.applicants.remove(name);
+  }
+
+public void handleHostileChange(int team, int hostTeam, boolean add)
+  {
+  TeamEntry t = teamEntries[team];
+  if(add)
+    {
+    t.nonHostileTeams.add(hostTeam);
+    }
+  else
+    {
+    t.nonHostileTeams.remove(Integer.valueOf(hostTeam));
+    }
+  }
 }

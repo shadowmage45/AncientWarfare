@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.common.command;
 
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
+import shadowmage.ancient_warfare.common.utils.StringTools;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import shadowmage.ancient_warfare.common.utils.StringTools;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class CommandTeam extends CommandBase
 {
@@ -48,12 +51,70 @@ public String getCommandUsage(ICommandSender icommandsender)
 @Override
 public void processCommand(ICommandSender icommandsender, String[] astring)
   {
-  if(astring.length<=2){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
+  if(astring.length<=0){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
   String command = astring [0];
-  int team = StringTools.safeParseInt(astring[1]);
-  String targetPlayer = astring[2];
-  
-  
+  if(command.equals("list"))
+    {
+    EntityPlayer player = getCommandSenderAsPlayer(icommandsender);
+    listCurrentTeam(player);
+    }
+  else if(command.equals("listteam"))
+    {
+    if(astring.length<=1){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
+    EntityPlayer player = getCommandSenderAsPlayer(icommandsender);
+    int teamNum = StringTools.safeParseInt(astring[1]);
+    listTeam(player, teamNum);
+    }
+  else if(command.equals("setteam"))
+    {
+    if(astring.length<=2){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
+    String name = astring[1];
+    int teamNum = StringTools.safeParseInt(astring[2]);
+    setTeam(name, teamNum);
+    if (icommandsender instanceof EntityPlayerMP)
+      {
+      //add chat message 
+      }
+    else
+      {
+      //notify admins
+      }
+    }
+  else if(command.equals("setrank"))
+    {
+    if(astring.length<=2){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
+    String name = astring[1];
+    int teamNum = StringTools.safeParseInt(astring[2]);
+    setRank(name, teamNum);
+    if(icommandsender instanceof EntityPlayerMP)
+      {
+      //add chat message 
+      }
+    else
+      {
+      //notify admins
+      }
+    }    
+  }
+
+private void listCurrentTeam(EntityPlayer player)
+  {
+  //TODO
+  }
+
+private void listTeam(EntityPlayer player, int teamNum)
+  {
+  //TODO
+  }
+
+private void setTeam(String playerName, int teamNum)
+  {
+  TeamTracker.instance().setPlayerTeam(playerName, teamNum);
+  }
+
+private void setRank(String playerName, int newRank)
+  {
+  TeamTracker.instance().setPlayerRank(playerName, newRank);
   }
 
 }

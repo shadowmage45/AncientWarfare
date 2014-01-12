@@ -22,18 +22,19 @@ package shadowmage.ancient_warfare.client.gui.teams;
 
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
-import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 
-public class GuiTeamControl extends GuiContainerAdvanced
+public class GuiTeamView extends GuiContainerAdvanced
 {
 
-GuiScrollableArea area;
-
-public GuiTeamControl(Container container)
+/**
+ * @param container
+ */
+public GuiTeamView(Container container)
   {
   super(container);
+  // TODO Auto-generated constructor stub
   }
 
 @Override
@@ -81,10 +82,10 @@ public void updateControls()
   // TODO Auto-generated method stub
 
   }
-
 @Override
 public void onElementActivated(IGuiElement element)
   {
+  // TODO Auto-generated method stub
 
   }
 }

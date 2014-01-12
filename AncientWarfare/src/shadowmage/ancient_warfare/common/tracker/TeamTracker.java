@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 
@@ -33,7 +34,7 @@ public class TeamTracker
 static int NPC_FRIENDLY = 16;
 static int NPC_HOSTILE = 17;
 
-public static TeamTracker instance(){return null;}
+public static TeamTracker instance(){return instance;}
 private static TeamTracker instance = new TeamTracker();
 
 private TeamData teamData;
@@ -73,7 +74,7 @@ public void onPlayerLogin(EntityPlayer player)
     }
   }
 
-public void handleNewPlayerLogin(String playerName)
+private void handleNewPlayerLogin(String playerName)
   {
   this.teamData.teamEntries[0].addNewPlayer(playerName, (byte)0);
   this.teamData.markDirty();
@@ -87,14 +88,7 @@ public int getTeamForPlayer(EntityPlayer player)
 public TeamEntry getTeamEntryFor(EntityPlayer player)
   {
   TeamData data = player.worldObj.isRemote? clientData : teamData;
-  for(int i = 0; i < data.teamEntries.length; i++)
-    {
-    if(data.teamEntries[i].containsPlayer(player.getEntityName()))
-      {
-      return data.teamEntries[i];
-      }
-    }  
-  return data.teamEntries[0];
+  return data.getEntryForPlayer(player.getEntityName());  
   }
 
 public boolean areTeamsMutuallyFriendly(World world, int teamA, int teamB)
@@ -149,11 +143,8 @@ public void handlePacketData(NBTTagCompound tag)//client/server entry method
   {
   if(tag.hasKey("clientData"))
     {
+    Config.logDebug("receiving client-side teams data");
     this.readClientData(tag.getCompoundTag("clientData"));
-    }
-  else
-    {
-    this.handleServerInput(tag);
     }
   }
 
@@ -162,16 +153,6 @@ private void readClientData(NBTTagCompound tag)//client-side blind read-method
   this.clientData = new TeamData();
   this.clientData.readFromNBT(tag);
   }
-
-private void handleServerInput(NBTTagCompound tag)
-  {
-  if(tag.hasKey("apply"))
-    {
-    this.handleApply(tag);
-    }
-  this.teamData.markDirty();
-  this.sendTeamDatas();
-  } 
 
 private void sendTeamDatas()
   {
@@ -195,11 +176,78 @@ private void sendToPlayer(EntityPlayer player)
   pkt.sendPacketToPlayer(player);
   }
 
-private void handleApply(NBTTagCompound tag){}
-private void handleRankChange(NBTTagCompound tag){}
-private void handleAccept(NBTTagCompound tag){}
-private void handleDeny(NBTTagCompound tag){}
-private void handleKick(NBTTagCompound tag){}
-private void handleHostileChange(NBTTagCompound tag){}
+/**
+ * server side only
+ * @param player
+ * @param team
+ */
+public void setPlayerTeam(String player, int team)
+  {
+  teamData.setPlayerTeam(player, team);  
+  this.sendTeamDatas();
+  }
+
+/**
+ * server side only
+ * @param player
+ * @param rank
+ */
+public void setPlayerRank(String player, int rank)
+  {
+  teamData.setPlayerRank(player, rank);  
+  this.sendTeamDatas();
+  }
+
+/**
+ * server side only
+ * @param player
+ * @param team
+ */
+public void handlePlayerApplication(String player, int teamNum)
+  {
+  teamData.handlePlayerApply(player, teamNum);  
+  this.sendTeamDatas();
+  }
+
+/**
+ * server side only
+ * @param player
+ */
+public void handleKickAction(String player)
+  {
+  teamData.handlePlayerKick(player);  
+  this.sendTeamDatas();
+  }
+
+/**
+ * server side only
+ * @param player
+ * @param team
+ * @param accept
+ */
+public void handleAccept(String player, int team, boolean accept)
+  {
+  if(accept)
+    {
+    teamData.handlePlayerAccept(player, team);    
+    }
+  else
+    {
+    teamData.handlePlayerDeny(player, team);
+    }  
+  this.sendTeamDatas();
+  }
+
+/**
+ * server side only
+ * @param team
+ * @param hostTeam
+ * @param add should add or remove from allied teams list
+ */
+public void handleHostileChange(int team, int hostTeam, boolean add)
+  {
+  teamData.handleHostileChange(team, hostTeam, add);  
+  this.sendTeamDatas();
+  }
 
 }

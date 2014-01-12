@@ -21,8 +21,10 @@
 package shadowmage.ancient_warfare.common.tracker.entry;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -38,9 +40,9 @@ public class TeamEntry implements INBTTaggable
 
 public int teamNum;
 public List<TeamMemberEntry> memberNames = new ArrayList<TeamMemberEntry>();
-public List<String> applicants = new ArrayList<String>();
+public Set<String> applicants = new HashSet<String>();
 
-public List<Integer> nonHostileTeams = new ArrayList<Integer>();
+public Set<Integer> nonHostileTeams = new HashSet<Integer>();
 
 public void addNewPlayer(String name, byte rank)
   {
@@ -111,7 +113,7 @@ public void removeApplicant(String name)
   this.applicants.remove(name);
   }
 
-public List<String> getApplicantList()
+public Set<String> getApplicantList()
   {
   return this.applicants;
   }
@@ -140,10 +142,12 @@ public NBTTagCompound getNBTTag()
   tag.setTag("teamMembers", namesList);
   
   int[] nonHost = new int[this.nonHostileTeams.size()];
-  for(int i = 0; i < this.nonHostileTeams.size(); i++)
+  int index = 0;
+  for(Integer i : this.nonHostileTeams)
     {
-    nonHost[i] = this.nonHostileTeams.get(i);
-    }
+    nonHost[index]=i;
+    index++;
+    }  
   tag.setIntArray("nonHost", nonHost);  
   return tag;
   }
