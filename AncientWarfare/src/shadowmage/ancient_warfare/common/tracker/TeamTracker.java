@@ -61,8 +61,7 @@ public void onWorldLoad(World world)
 
 public void onPlayerLogin(EntityPlayer player)
   {
-  boolean newPlayer = false;
-  //TODO check if new player, use new-player add-path
+  boolean newPlayer = teamData.getEntryForPlayer(player.getEntityName())==null;
   if(newPlayer)
     {
     handleNewPlayerLogin(player.getEntityName());
