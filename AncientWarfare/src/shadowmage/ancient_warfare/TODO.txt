@@ -2,7 +2,16 @@ TODO
 * loot generation, don't add disabled items
 * structure generation -- when checking structures for intersection, need to expand search area by the size of largest structure ever generated.
 
+* fix rescale normal on giant trebuchet, need to disable after render
+* npcs like to swim far too much
+* gates immune to all but battering rams config/toggle for premade matches
 
+ideas from pvp matches:
+team chat commands
+--pvp mini-game
+--rts-style buildings for warfare/resource control
+--number of npcs available to a team dependant upon resources/buildings
+--uses structure generation system with block-break events to detect structure damage/health/etc
 
 
 

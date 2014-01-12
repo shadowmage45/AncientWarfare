@@ -879,7 +879,7 @@ public static List<ItemStack> breakBlock(World world, int x, int y, int z, int f
   int id = world.getBlockId(x,y,z);
   int meta = world.getBlockMetadata(x, y, z);  
   Block block = Block.blocksList[id];
-  if(block==null  || block==Block.bedrock || block.getBlockHardness(world, x, y, z) <0 )
+  if(block==null  || block.getBlockHardness(world, x, y, z) <0 )
     {
     return Collections.emptyList();
     }

@@ -45,6 +45,13 @@ public List<Integer> nonHostileTeams = new ArrayList<Integer>();
 
 public void addNewPlayer(String name, byte rank)
   {
+  for(TeamMemberEntry entry : this.memberNames)
+    {
+    if(entry.memberName.equals(name))
+      {
+      return;
+      }
+    }
   this.memberNames.add(new TeamMemberEntry(name, rank));
   }
 
