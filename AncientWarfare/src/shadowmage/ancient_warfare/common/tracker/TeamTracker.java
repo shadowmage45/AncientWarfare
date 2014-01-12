@@ -42,7 +42,7 @@ private TeamData clientData;
 public void loadOldData(NBTTagCompound tag)
   {
   World world = MinecraftServer.getServer().worldServers[0];
-  if(world==null){}//wtf..throw an exception or something
+  if(world==null){return;}//wtf..throw an exception or something
   TeamData data = new TeamData();
   data.readFromNBT(tag);
   world.mapStorage.setData(TeamData.dataName, data);
