@@ -68,10 +68,13 @@ public GuiNumberInputLine setAsIntegerValue()
   return this;
   }
 
-public void setIntegerValue(int value)
+public GuiNumberInputLine setIntegerValue(int value)
   {
+  if(value<this.minVal){value = (int) this.minVal;}
+  if(value>this.maxVal){value = (int) this.maxVal;}
   this.floatVal = value;
   this.text = formatterNoDec.format(floatVal);
+  return this;
   }
 
 public GuiNumberInputLine setMinMax(float min, float max)

@@ -20,10 +20,11 @@
  */
 package shadowmage.ancient_warfare.client.gui.teams;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
@@ -33,18 +34,21 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
-public class GuiTeamView extends GuiContainerAdvanced
+public class GuiTeamChange extends GuiContainerAdvanced
 {
 
-GuiButtonSimple admin;
-GuiButtonSimple change;
+GuiButtonSimple prev;
+GuiButtonSimple next;
+GuiNumberInputLine inputBox;
+
+GuiButtonSimple select;
 GuiButtonSimple done;
 GuiScrollableArea area;
-TeamEntry entry;
 
 ContainerTeamControl container;
 
-public GuiTeamView(Container container)
+
+public GuiTeamChange(Container container)
   {
   super(container);
   this.container = (ContainerTeamControl)container;
@@ -84,29 +88,29 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-  this.entry = TeamTracker.instance().getTeamEntryFor(player);
-  this.done = this.addGuiButton(0, getXSize()-55-8, 8, 55, 16, "Done");
-  this.change = this.addGuiButton(1, 8, 8, 75, 16, "Change Teams");
-  this.admin = this.addGuiButton(2, 8+75+4, 8, 55, 16, "Admin");
-  this.admin.hidden = true;
-  this.area = new GuiScrollableArea(3, this, 8, 8+16+4, getXSize()-16, getYSize()-16-16-4, 0);
-  this.guiElements.put(3, area);
+  this.done = this.addGuiButton(0, getXSize()-40-8, 8, 40, 16, "Back");
+  this.select = this.addGuiButton(1, 8, 8, 40, 16, "Apply");
+  this.prev = this.addGuiButton(2, 8+40+4, 8, 40, 16, "Prev");
+  this.next = this.addGuiButton(3, getXSize()-40-8-4-40, 8, 40, 16, "Next");
+  this.inputBox = this.addNumberField(4, 64, 12, 3, "0").setAsIntegerValue().setMinMax(0, 15).setIntegerValue(0);
+  this.inputBox.updateRenderPos(8+40+4+40+4, 10);
+  this.area = new GuiScrollableArea(5, this, 8, 8+16+4, getXSize()-16, getYSize()-16-16-4, 0);
+  this.guiElements.put(5, area);
   }
 
 @Override
 public void updateControls()
   {
+  int teamNum = this.inputBox.getIntVal();
+  teamNum = teamNum<0 ? 0 : teamNum> 15 ? 15 : teamNum;
+  this.inputBox.setIntegerValue(teamNum);
+  
+  TeamEntry entry = TeamTracker.instance().getTeamEntryFor(player.worldObj, teamNum);
   this.area.elements.clear();
   
-  this.entry = TeamTracker.instance().getTeamEntryFor(player);
-  int rank = entry.getPlayerRank(player.getEntityName());
-  this.admin.hidden = rank < 7;
-  
   int targetY = 0;
-  
-  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team: "+entry.teamNum + " Your Rank: "+rank).updateRenderPos(0, targetY));
-  targetY+=14;
-  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Members:").updateRenderPos(0, targetY));
+    
+  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Members for team "+teamNum+":").updateRenderPos(0, targetY));
   targetY+=16;
   
   for(TeamMemberEntry member : entry.memberNames)
@@ -124,17 +128,55 @@ protected void addTeamMemberEntry(String name, int targetY)
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  if(element==done)
+  if(element==prev)
     {
-    this.closeGUI();
+    int num = this.inputBox.getIntVal();
+    if(num==0)
+      {
+      num=15;
+      }
+    else
+      {
+      num--;
+      }
+    this.inputBox.setIntegerValue(num);
+    this.refreshGui();
     }
-  else if(element==change)
+  else if(element==next)
     {
-    mc.displayGuiScreen(new GuiTeamChange(this.container));
+    int num = this.inputBox.getIntVal();
+    if(num==15)
+      {
+      num=0;
+      }
+    else
+      {
+      num++;
+      }
+    this.inputBox.setIntegerValue(num);
+    this.refreshGui();
     }
-  else if(element==admin)
+  else if(element==done)
     {
-    mc.displayGuiScreen(new GuiTeamControl(this.container));
+    mc.displayGuiScreen(new GuiTeamView(container));
+    }
+  else if(element==select)
+    {
+    NBTTagCompound tag = new NBTTagCompound();    
+    tag.setBoolean("apply", true);
+    tag.setString("name", player.getEntityName());
+    tag.setInteger("team", this.inputBox.getIntVal());
+    this.sendDataToServer(tag);
+    player.addChatMessage("Sent team application to team: "+this.inputBox.getIntVal());
+    mc.displayGuiScreen(new GuiTeamView(container));
+    }
+  else if(element==this.inputBox)
+    {
+    int num = this.inputBox.getIntVal();
+    if(num>15){num = 0;}
+    if(num<0){num = 15;}
+    this.inputBox.setIntegerValue(num);//reseat value to re-normalize, if needed
+    this.refreshGui();
     }
   }
 

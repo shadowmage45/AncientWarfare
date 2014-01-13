@@ -24,7 +24,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 
@@ -48,6 +50,7 @@ public void loadOldData(NBTTagCompound tag)
   data.readFromNBT(tag);
   world.mapStorage.setData(TeamData.dataName, data);
   this.teamData = data;  
+  this.teamData.markDirty();
   }
 
 public void onWorldLoad(World world)
@@ -89,6 +92,12 @@ public TeamEntry getTeamEntryFor(EntityPlayer player)
   {
   TeamData data = player.worldObj.isRemote? clientData : teamData;
   return data.getEntryForPlayer(player.getEntityName());  
+  }
+
+public TeamEntry getTeamEntryFor(World world, int teamNum)
+  {
+  TeamData data = world.isRemote? clientData : teamData;
+  return data.teamEntries[teamNum];  
   }
 
 public boolean areTeamsMutuallyFriendly(World world, int teamA, int teamB)
@@ -143,7 +152,11 @@ public void handlePacketData(NBTTagCompound tag)//client/server entry method
   {
   if(tag.hasKey("clientData"))
     {
-    Config.logDebug("receiving client-side teams data");
+    EntityPlayer player = AWCore.proxy.getClientPlayer();
+    if(player!=null && player.openContainer instanceof ContainerTeamControl)
+      {
+      ((ContainerTeamControl)player.openContainer).refreshGui();
+      }
     this.readClientData(tag.getCompoundTag("clientData"));
     }
   }

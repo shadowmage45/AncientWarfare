@@ -23,8 +23,8 @@ package shadowmage.ancient_warfare.common.container;
 import java.util.Collections;
 import java.util.List;
 
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -40,9 +40,10 @@ public ContainerTeamControl(EntityPlayer openingPlayer)
 public void handlePacketData(NBTTagCompound tag)
   {
   if(tag.hasKey("apply"))
-    {
+    {    
     String name = tag.getString("name");
     int team = tag.getInteger("team");
+    Config.logDebug("rec. apply request for: "+name + " to: "+team);
     TeamTracker.instance().handlePlayerApplication(name, team);
     }
   if(tag.hasKey("kick"))

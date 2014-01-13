@@ -57,7 +57,7 @@ import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
 import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
 import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
-import shadowmage.ancient_warfare.client.gui.teams.GuiTeamControl;
+import shadowmage.ancient_warfare.client.gui.teams.GuiTeamView;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleInventory;
 import shadowmage.ancient_warfare.common.AWCore;
@@ -433,7 +433,7 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   return new GuiClientSettings(player, new ContainerSettings(player));
   
   case TEAM_CONTROL:
-  return new GuiTeamControl(new ContainerTeamControl(player));
+  return new GuiTeamView(new ContainerTeamControl(player));
   
   case NPC_COMMAND_BATON:
   return new GuiCommandBaton(new ContainerCommandBaton(player));

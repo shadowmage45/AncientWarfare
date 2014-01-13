@@ -59,6 +59,7 @@ public void readFromNBT(NBTTagCompound tag)
     {
     Config.logDebug("loading team data");
     TeamTracker.instance().loadOldData(tag.getCompoundTag("teamData"));
+//    tag.removeTag("teamData");//TODO re-enable this once I'm sure things are working
     }
   if(tag.hasKey("builders"))
     {

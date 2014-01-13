@@ -106,12 +106,25 @@ public TeamEntry getEntryForPlayer(String name)
       return teamEntries[i];
       }
     }
-  return teamEntries[0];
+  return null;
   }
 
 public void handlePlayerApply(String name, int team)
   {
-  this.teamEntries[team].addApplicant(name);
+  if(team==0)
+    {
+    this.setPlayerTeam(name, 0);
+    this.setPlayerRank(name, 0);
+    }
+  else if(this.teamEntries[team].memberNames.size()==0)
+    {
+    this.setPlayerTeam(name, team);
+    this.setPlayerRank(name, 10);
+    }
+  else
+    {
+    this.teamEntries[team].addApplicant(name);    
+    }
   }
 
 public void handlePlayerKick(String name)
