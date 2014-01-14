@@ -23,6 +23,7 @@ package shadowmage.ancient_warfare.common.vehicles.missiles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -31,8 +32,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
@@ -497,7 +503,33 @@ protected void createExplosion(World world, MissileBase missile, float x, float 
   {
   boolean destroyBlocks = Config.blockDestruction;
   boolean fires = Config.blockFires;
-  Explosion e = world.newExplosion(missile, x, y, z, power, fires, destroyBlocks);
+  
+  Explosion explosion = new Explosion(missile.worldObj, missile, x, y, z, power);
+  explosion.isFlaming = fires;
+  explosion.isSmoking = destroyBlocks;
+  
+  explosion.doExplosionA();
+  
+  Iterator<ChunkPosition> it = explosion.affectedBlockPositions.iterator();
+  ChunkPosition cp;
+  int ix, iy, iz;
+  while(it.hasNext())
+    {
+    cp = it.next();
+    ix = MathHelper.floor_float(x);
+    iy = MathHelper.floor_float(y);
+    iz = MathHelper.floor_float(z);
+    Block block = Block.blocksList[missile.worldObj.getBlockId(ix, iy, iz)];
+    if(block==null){continue;}
+    int meta = missile.worldObj.getBlockMetadata(ix, iy, iz);
+    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(ix, iy, iz, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
+    MinecraftForge.EVENT_BUS.post(event);
+    if(event.isCanceled())
+      {
+      it.remove();
+      }
+    }
+  explosion.doExplosionB(true);  
   }
 
 protected void spawnGroundBurst(World world, float x, float y, float z, float maxVelocity, IAmmoType type, int count, float minPitch, int sideHit, Entity shooter)

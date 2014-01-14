@@ -112,6 +112,10 @@ public void onLaunchingUpdate()
 
 public void doDamageEffects()
   {
+  if(vehicle.worldObj.isRemote)
+    {
+    return;
+    }
   BlockPosition[] effectedPositions = VehicleTypeBatteringRam.getEffectedPositions(vehicle);
   AxisAlignedBB bb;
   List<Entity> hitEntities;
