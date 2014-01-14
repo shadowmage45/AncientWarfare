@@ -44,6 +44,7 @@ public int ownerTeam = 0;
  */
 public TEAWBlockReinforced()
   {
+  
   // TODO Auto-generated constructor stub
   }
 
@@ -105,5 +106,10 @@ public void onExploded(Explosion expl)
     }
   }
 
+@Override
+public boolean canUpdate()
+  {
+  return false;
+  }
 
 }
