@@ -1,8 +1,5 @@
 TODO
-* structure generation -- when checking structures for intersection, need to expand search area by the size of largest structure ever generated.
-
 * npcs like to swim far too much
-* gates immune to all but battering rams config/toggle for premade matches
 
 ideas from pvp matches:
 team chat commands
