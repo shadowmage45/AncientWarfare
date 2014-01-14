@@ -510,25 +510,28 @@ protected void createExplosion(World world, MissileBase missile, float x, float 
   
   explosion.doExplosionA();
   
-  Iterator<ChunkPosition> it = explosion.affectedBlockPositions.iterator();
-  ChunkPosition cp;
-  int ix, iy, iz;
-  while(it.hasNext())
+  if(Config.fireBlockBreakEvents)
     {
-    cp = it.next();
-    ix = MathHelper.floor_float(x);
-    iy = MathHelper.floor_float(y);
-    iz = MathHelper.floor_float(z);
-    Block block = Block.blocksList[missile.worldObj.getBlockId(ix, iy, iz)];
-    if(block==null){continue;}
-    int meta = missile.worldObj.getBlockMetadata(ix, iy, iz);
-    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(ix, iy, iz, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
-    MinecraftForge.EVENT_BUS.post(event);
-    if(event.isCanceled())
+    Iterator<ChunkPosition> it = explosion.affectedBlockPositions.iterator();
+    ChunkPosition cp;
+    int ix, iy, iz;
+    while(it.hasNext())
       {
-      it.remove();
+      cp = it.next();
+      ix = MathHelper.floor_float(x);
+      iy = MathHelper.floor_float(y);
+      iz = MathHelper.floor_float(z);
+      Block block = Block.blocksList[missile.worldObj.getBlockId(ix, iy, iz)];
+      if(block==null){continue;}
+      int meta = missile.worldObj.getBlockMetadata(ix, iy, iz);
+      BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(ix, iy, iz, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
+      MinecraftForge.EVENT_BUS.post(event);
+      if(event.isCanceled())
+        {
+        it.remove();
+        }
       }
-    }
+    }  
   explosion.doExplosionB(true);  
   }
 
