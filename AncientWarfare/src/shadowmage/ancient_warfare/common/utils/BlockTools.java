@@ -874,6 +874,11 @@ public static void breakBlockAndDrop(World world, int x, int y, int z, int fortu
 
 public static List<ItemStack> breakBlock(World world, int x, int y, int z, int fortune)
   {
+  return breakBlock(world, "AncientWarfare", x, y, z, fortune);
+  }
+
+public static List<ItemStack> breakBlock(World world, String playerName, int x, int y, int z, int fortune)
+  {
   int id = world.getBlockId(x,y,z);
   int meta = world.getBlockMetadata(x, y, z);  
   Block block = Block.blocksList[id];
@@ -884,7 +889,7 @@ public static List<ItemStack> breakBlock(World world, int x, int y, int z, int f
   boolean dropBlock = true;
   if(Config.fireBlockBreakEvents)
     {
-    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
+    BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, block, meta, AWCore.instance.proxy.getFakePlayer(world, playerName));
     MinecraftForge.EVENT_BUS.post(event);
     if(event.isCanceled())
       {
@@ -899,5 +904,6 @@ public static List<ItemStack> breakBlock(World world, int x, int y, int z, int f
     }  
   return Collections.emptyList();
   }
+
 
 }

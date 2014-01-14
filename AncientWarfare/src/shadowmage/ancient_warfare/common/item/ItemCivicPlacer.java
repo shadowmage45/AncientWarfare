@@ -201,7 +201,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         }
       if(placeBlock)
         {  
-        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage(), TeamTracker.instance().getTeamForPlayer(player));
+        placeCivicBlock(world, hit, pos1, pos2,  stack.getItemDamage(), TeamTracker.instance().getTeamForPlayer(player), player.getEntityName());
         ItemStack item = player.getCurrentEquippedItem();
         if(item!=null && item.itemID == ItemLoader.civicPlacer.itemID)
           {
@@ -236,7 +236,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   return true;
   }
 
-public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type, int team)
+public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1, BlockPosition pos2, int type, int team, String playerName)
   {
   if(hit==null || pos1==null || pos2==null || world==null)
     {
@@ -248,6 +248,7 @@ public void placeCivicBlock(World world,  BlockPosition hit, BlockPosition pos1,
   TECivic te = (TECivic) world.getBlockTileEntity(hit.x, hit.y, hit.z);
   te.setBounds(min.x, min.y, min.z, max.x, max.y, max.z);
   te.setTeamNum(team);
+  te.setOwnerName(playerName);
   world.markBlockForUpdate(hit.x, hit.y, hit.z);
   }
 

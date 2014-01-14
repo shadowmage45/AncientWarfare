@@ -172,7 +172,7 @@ protected void doWork(IWorker npc, WorkPoint p)
   {
   if(p.work==TargetType.TREE_CHOP)
     {
-    List<ItemStack> drops = BlockTools.breakBlock(worldObj, p.x, p.y, p.z, 0);   
+    List<ItemStack> drops = BlockTools.breakBlock(worldObj, getOwnerName(), p.x, p.y, p.z, 0);   
     for(ItemStack item : drops)
       {      
       if(this.resourceFilterContains(item))

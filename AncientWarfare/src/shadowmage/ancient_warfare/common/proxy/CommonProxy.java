@@ -97,7 +97,12 @@ public void sendPacketToAllPlayers(PacketBase packet)
 
 public EntityPlayer getFakePlayer(World world)
   {
-  return FakePlayerFactory.get(world, "AncientWarfare");
+  return getFakePlayer(world, "AncientWarfare");
+  }
+
+public EntityPlayer getFakePlayer(World world, String name)
+  {
+  return FakePlayerFactory.get(world, name);
   }
 
 

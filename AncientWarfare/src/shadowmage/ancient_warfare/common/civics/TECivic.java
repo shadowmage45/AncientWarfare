@@ -76,6 +76,7 @@ public int maxX;
 public int maxY;
 public int maxZ;
 protected int teamNum = 0;
+private String ownerName = "AncientWarfare";
 protected boolean isWorkSite = false;
 protected boolean renderBounds = false;
 public boolean broadcastWork = true;//user toggle...spawned NPC buildings will auto-broadcast
@@ -549,6 +550,14 @@ protected void readCivicDataFromNBT(NBTTagCompound tag)
     {
     this.broadcastWork = tag.getBoolean("broad");
     }
+  if(tag.hasKey("owner"))
+    {
+    this.setOwnerName(tag.getString("owner"));
+    }
+  else
+    {
+    this.setOwnerName("AncientWarfare");
+    }
   }
 
 @Override
@@ -572,6 +581,7 @@ public void writeToNBT(NBTTagCompound tag)
     }
   tag.setInteger("team", this.teamNum);
   tag.setBoolean("broad", broadcastWork);
+  tag.setString("owner", getOwnerName());
   }
 
 @Override
@@ -771,6 +781,16 @@ public boolean isInvNameLocalized()
 public boolean isItemValidForSlot(int i, ItemStack itemstack)
   {  
   return true;
+  }
+
+public String getOwnerName()
+  {
+  return ownerName;
+  }
+
+public void setOwnerName(String ownerName)
+  {
+  this.ownerName = ownerName;
   }
 
 }

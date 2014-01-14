@@ -136,7 +136,7 @@ public boolean handleBlockBreak(IWorker npc, int x, int y, int z)
       }
     }
 
-  List<ItemStack> drops = BlockTools.breakBlock(worldObj, x, y, z, 0);
+  List<ItemStack> drops = BlockTools.breakBlock(worldObj, getOwnerName(), x, y, z, 0);
   if(drops!=null)
     {
     drops.addAll(invDrops);
