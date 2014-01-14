@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.civics.worksite.te.mine;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class MineLevelQuarry extends MineLevel
@@ -53,8 +54,11 @@ protected void scanLevel(TEMine mine, World world)
       byte ladderMeta = 0;
       if(x==this.minX && z==this.minZ + this.zSize/2)
         {
-        addLadder = true;
-        ladderMeta = 5;
+        if(world.isBlockSolidOnSide(x-1, minY, z, ForgeDirection.EAST))
+          {
+          addLadder = true;
+          ladderMeta = 5;
+          }
         id = world.getBlockId(x-1, minY, z);
         if(needsFilled(id))
           {
@@ -63,8 +67,11 @@ protected void scanLevel(TEMine mine, World world)
         }
       else if(x==this.minX+this.xSize-1 && z==this.minZ + this.zSize/2)
         {
-        addLadder = true;
-        ladderMeta = 4;
+        if(world.isBlockSolidOnSide(x+1, minY, z, ForgeDirection.WEST))
+          {
+          addLadder = true;
+          ladderMeta = 4;
+          }
         id = world.getBlockId(x+1, minY, z);
         if(needsFilled(id))
           {
@@ -73,8 +80,11 @@ protected void scanLevel(TEMine mine, World world)
         }
       else if(z==this.minZ && x==this.minX + this.xSize/2)
         {
-        addLadder = true;
-        ladderMeta = 3;
+        if(world.isBlockSolidOnSide(x, minY, z-1, ForgeDirection.NORTH))
+          {
+          addLadder = true;
+          ladderMeta = 3;
+          }
         id = world.getBlockId(x, minY, z-1);
         if(needsFilled(id))
           {
@@ -82,9 +92,12 @@ protected void scanLevel(TEMine mine, World world)
           }
         }
       else if(z==this.minZ + this.zSize-1 && x==this.minX+this.xSize/2)
-        {
-        addLadder = true;
-        ladderMeta = 2;
+        {        
+        if(world.isBlockSolidOnSide(x, minY, z+1, ForgeDirection.SOUTH))
+          {
+          addLadder = true;
+          ladderMeta = 2;
+          }        
         id = world.getBlockId(x, minY, z+1);
         if(needsFilled(id))
           {
