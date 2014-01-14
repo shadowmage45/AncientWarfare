@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemLoader
 {
@@ -202,7 +203,7 @@ private void loadDebugItems()
 public Description registerItemSubtyped(AWItemBase item, String baseName)
   {
   Description d = DescriptionRegistry2.instance().registerItem(item, false);
-//  GameRegistry.registerItem(item, baseName);
+  GameRegistry.registerItem(item, baseName);
   return d;
   }
 
@@ -212,7 +213,7 @@ public Description registerItemSingle(Item item, String name, String desc, Strin
   d.setName(name, 0);
   d.setDescription(desc, 0);
   d.addTooltip(tip, 0);  
-//  GameRegistry.registerItem(item, name);
+  GameRegistry.registerItem(item, name);
   return d;
   }
 
