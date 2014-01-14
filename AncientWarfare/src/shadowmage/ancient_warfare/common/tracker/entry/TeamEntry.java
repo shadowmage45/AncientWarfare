@@ -28,6 +28,7 @@ import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 
 /**
@@ -39,26 +40,26 @@ public class TeamEntry implements INBTTaggable
 {
 
 public int teamNum;
-public List<TeamMemberEntry> memberNames = new ArrayList<TeamMemberEntry>();
+public List<TeamMemberEntry> members = new ArrayList<TeamMemberEntry>();
 public Set<String> applicants = new HashSet<String>();
 
 public Set<Integer> nonHostileTeams = new HashSet<Integer>();
 
 public void addNewPlayer(String name, byte rank)
   {
-  for(TeamMemberEntry entry : this.memberNames)
+  for(TeamMemberEntry entry : this.members)
     {
     if(entry.memberName.equals(name))
       {
       return;
       }
     }
-  this.memberNames.add(new TeamMemberEntry(name, rank));
+  this.members.add(new TeamMemberEntry(name, rank));
   }
 
 public TeamMemberEntry getEntryFor(String name)
   {
-  for(TeamMemberEntry entry : this.memberNames)
+  for(TeamMemberEntry entry : this.members)
     {
     if(entry.getMemberName().equals(name))
       {
@@ -70,7 +71,7 @@ public TeamMemberEntry getEntryFor(String name)
 
 public void removePlayer(String name)
   {
-  Iterator<TeamMemberEntry> it = memberNames.iterator();
+  Iterator<TeamMemberEntry> it = members.iterator();
   TeamMemberEntry entry;
   while(it.hasNext())
     {
@@ -85,7 +86,7 @@ public void removePlayer(String name)
 
 public byte getPlayerRank(String name)
   {
-  for(TeamMemberEntry entry : memberNames)
+  for(TeamMemberEntry entry : members)
     {
     if(entry.getMemberName().equals(name))
       {
@@ -131,9 +132,9 @@ public NBTTagCompound getNBTTag()
   tag.setInteger("num", this.teamNum);
   NBTTagList namesList = new NBTTagList();
   TeamMemberEntry entry;
-  for(int i = 0; i < this.memberNames.size(); i++)
+  for(int i = 0; i < this.members.size(); i++)
     {    
-    entry = this.memberNames.get(i);
+    entry = this.members.get(i);
     NBTTagCompound memberTag = new NBTTagCompound();
     memberTag.setString("name", entry.getMemberName());
     memberTag.setByte("rank", entry.getMemberRank());
@@ -149,13 +150,20 @@ public NBTTagCompound getNBTTag()
     index++;
     }  
   tag.setIntArray("nonHost", nonHost);  
+  
+  NBTTagList applicantsList = new NBTTagList();
+  for(String name : applicants)
+    {
+    applicantsList.appendTag(new NBTTagString("name", name));
+    }
+  tag.setTag("applicants", applicantsList);
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  this.memberNames.clear();
+  this.members.clear();
   this.teamNum = tag.getInteger("num");
   NBTTagList namesList = tag.getTagList("teamMembers");
   for(int i = 0; i < namesList.tagCount(); i++)
@@ -163,7 +171,7 @@ public void readFromNBT(NBTTagCompound tag)
     NBTTagCompound memberTag = (NBTTagCompound) namesList.tagAt(i);
     String name = memberTag.getString("name");
     byte rank = memberTag.getByte("rank");
-    this.memberNames.add(new TeamMemberEntry(name, rank));
+    this.members.add(new TeamMemberEntry(name, rank));
     }  
   int[] nonHost = tag.getIntArray("nonHost");
   this.nonHostileTeams.clear();
@@ -171,6 +179,16 @@ public void readFromNBT(NBTTagCompound tag)
     {
     this.nonHostileTeams.add(nonHost[i]);
     }  
+  if(tag.hasKey("applicants"))
+    {
+    namesList = tag.getTagList("applicants");
+    NBTTagString applicant;
+    for(int i = 0; i < namesList.tagCount(); i++)
+      {
+      applicant = (NBTTagString) namesList.tagAt(i);
+      this.applicants.add(applicant.data);
+      }
+    }
   }
 
 public boolean isHostileTowards(int num)

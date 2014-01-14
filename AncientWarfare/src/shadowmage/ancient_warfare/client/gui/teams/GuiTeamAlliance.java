@@ -20,10 +20,11 @@
  */
 package shadowmage.ancient_warfare.client.gui.teams;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
@@ -33,18 +34,21 @@ import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
-public class GuiTeamView extends GuiContainerAdvanced
+public class GuiTeamAlliance extends GuiContainerAdvanced
 {
 
-GuiButtonSimple admin;
-GuiButtonSimple change;
+GuiButtonSimple prev;
+GuiButtonSimple next;
+GuiButtonSimple select;
+GuiNumberInputLine inputBox;
 GuiButtonSimple done;
 GuiScrollableArea area;
+
 TeamEntry entry;
 
 ContainerTeamControl container;
 
-public GuiTeamView(Container container)
+public GuiTeamAlliance(Container container)
   {
   super(container);
   this.container = (ContainerTeamControl)container;
@@ -86,11 +90,13 @@ public void setupControls()
   {
   this.entry = TeamTracker.instance().getTeamEntryFor(player);
   this.done = this.addGuiButton(0, getXSize()-55-8, 8, 55, 16, "Back");
-  this.change = this.addGuiButton(1, 8, 8, 75, 16, "Change Teams");
-  this.admin = this.addGuiButton(2, 8+75+4, 8, 55, 16, "Admin");
-  this.admin.hidden = true;
-  this.area = new GuiScrollableArea(3, this, 8, 8+16+4, getXSize()-16, getYSize()-16-16-4, 0);
-  this.guiElements.put(3, area);
+   
+  this.prev = this.addGuiButton(2, 8+40+4, 8, 40, 16, "Prev");
+  this.next = this.addGuiButton(3, getXSize()-40-8-4-40, 8, 40, 16, "Next");
+  this.inputBox = this.addNumberField(4, 64, 12, 3, "0").setAsIntegerValue().setMinMax(0, 15).setIntegerValue(0);
+  this.inputBox.updateRenderPos(8+40+4+40+4, 10);
+  this.area = new GuiScrollableArea(5, this, 8, 8+16+4, getXSize()-16, getYSize()-16-16-4, 0);
+  this.guiElements.put(5, area);
   }
 
 @Override
@@ -100,42 +106,80 @@ public void updateControls()
   
   this.entry = TeamTracker.instance().getTeamEntryFor(player);
   int rank = entry.getPlayerRank(player.getEntityName());
-  this.admin.hidden = rank < 7;
+ 
+  String selectName = entry.nonHostileTeams.contains(inputBox.getIntVal()) ? "Remove" : "Add";
+  this.select = this.addGuiButton(1, 8, 8, 40, 16, selectName);
+  select.updateRenderPos(guiLeft+8, guiTop+8);
   
   int targetY = 0;
   
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team: "+entry.teamNum + " Your Rank: "+rank).updateRenderPos(0, targetY));
   targetY+=14;
-  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Members:").updateRenderPos(0, targetY));
+  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Allied Teams:").updateRenderPos(0, targetY));
   targetY+=16;
   
-  for(TeamMemberEntry member : entry.members)
+  for(Integer i : entry.nonHostileTeams)
     {
-    addTeamMemberEntry(member.getMemberName(), targetY);
+    area.elements.add(new GuiString(0, area, getXSize()-16-12, 10, "Allied Team: "+String.valueOf(i)).updateRenderPos(0, targetY));
     targetY+=12;
-    }  
+    }
   }
 
-protected void addTeamMemberEntry(String name, int targetY)
-  {
-  area.elements.add(new GuiString(0, area, getXSize()-16-12, 10, name).updateRenderPos(0, targetY));
-  }
+
 
 @Override
 public void onElementActivated(IGuiElement element)
   {
   if(element==done)
     {
-    this.closeGUI();
-    }
-  else if(element==change)
-    {
-    mc.displayGuiScreen(new GuiTeamChange(this.container));
-    }
-  else if(element==admin)
-    {
     mc.displayGuiScreen(new GuiTeamControl(this.container));
     }
+  else if(element==prev)
+    {
+    int num = this.inputBox.getIntVal();
+    if(num==0)
+      {
+      num=15;
+      }
+    else
+      {
+      num--;
+      }
+    this.inputBox.setIntegerValue(num);
+    this.refreshGui();
+    }
+  else if(element==next)
+    {
+    int num = this.inputBox.getIntVal();
+    if(num==15)
+      {
+      num=0;
+      }
+    else
+      {
+      num++;
+      }
+    this.inputBox.setIntegerValue(num);
+    this.refreshGui();
+    }  
+  else if(element==inputBox)
+    {
+    int num = this.inputBox.getIntVal();
+    if(num>15){num = 0;}
+    if(num<0){num = 15;}
+    this.inputBox.setIntegerValue(num);//reseat value to re-normalize, if needed
+    this.refreshGui();
+    }
+  else if(element==select)
+    {
+    boolean present = entry.nonHostileTeams.contains(this.inputBox.getIntVal());
+    
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setBoolean("hostile", !present);
+    tag.setInteger("hostTeam", inputBox.getIntVal());
+    tag.setInteger("team", entry.teamNum);
+    this.sendDataToServer(tag);    
+    }  
   }
 
 }

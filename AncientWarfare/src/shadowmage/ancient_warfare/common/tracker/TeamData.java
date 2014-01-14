@@ -23,7 +23,9 @@ package shadowmage.ancient_warfare.common.tracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSavedData;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
+import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
 public class TeamData extends WorldSavedData
 {
@@ -75,15 +77,58 @@ public void writeToNBT(NBTTagCompound tag)
 
 public void setPlayerTeam(String playerName, int newTeam)
   {
-  TeamEntry t = this.getEntryForPlayer(playerName);
-  t.removePlayer(playerName);
-  this.teamEntries[newTeam].addNewPlayer(playerName, this.teamEntries[newTeam].memberNames.size()==0 ? newTeam==0 ? (byte)0 : (byte)10 : (byte)0);
+  /**
+   * catch an error where a team would be left without a leader
+   */
+  TeamEntry t = getEntryForPlayer(playerName);  
+  if(t!=null)
+    {
+
+    int rank = t.getPlayerRank(playerName);
+    t.removePlayer(playerName);
+    if(rank==10)
+      {
+      TeamMemberEntry highestFound = null;
+      for(TeamMemberEntry member : t.members)
+        {
+        if(highestFound==null || member.getMemberRank()>highestFound.getMemberRank())
+          {
+          highestFound = member;
+          }
+        }
+      if(highestFound!=null)
+        {
+        highestFound.setMemberRank((byte) 10);
+        }
+      //else if highestFound==null there were no other memembers, so it doesn't matter
+      }  
+    }    
+  this.teamEntries[newTeam].addNewPlayer(playerName, this.teamEntries[newTeam].members.size()==0 ? newTeam==0 ? (byte)0 : (byte)10 : (byte)0);
   this.markDirty();
   }
 
 public void setPlayerRank(String playerName, int newRank)
   {
   TeamEntry t = this.getEntryForPlayer(playerName);
+  int rank = t.getPlayerRank(playerName);
+  if(rank==10)
+    {
+    TeamMemberEntry highestFound = null;
+    for(TeamMemberEntry member : t.members)
+      {
+      if(!member.getMemberName().equals(playerName) && (highestFound==null || member.getMemberRank()>highestFound.getMemberRank()))
+        {
+        highestFound = member;
+        }
+      }
+    if(highestFound!=null)
+      {
+      highestFound.setMemberRank((byte) 10);
+      }
+    //else if highestFound==null there were no other memembers, so it doesn't matter
+    }    
+  if(newRank<0){newRank = 0;}
+  if(newRank>15){newRank = 15;}
   t.getEntryFor(playerName).setMemberRank((byte) newRank);
   this.markDirty();
   }
@@ -119,7 +164,7 @@ public void handlePlayerApply(String name, int team)
     this.setPlayerTeam(name, 0);
     this.setPlayerRank(name, 0);
     }
-  else if(this.teamEntries[team].memberNames.size()==0)
+  else if(this.teamEntries[team].members.size()==0)
     {
     this.setPlayerTeam(name, team);
     this.setPlayerRank(name, 10);
@@ -132,17 +177,17 @@ public void handlePlayerApply(String name, int team)
   }
 
 public void handlePlayerKick(String name)
-  {
-  this.getEntryForPlayer(name).removePlayer(name);
+  {  
   this.setPlayerTeam(name, 0);
   this.markDirty();
   }
 
-public void handlePlayerAccept(String name, int team)
-  {
+public void handlePlayerAccept(String name, int team)  
+  { 
+  this.setPlayerTeam(name, team);
+  this.setPlayerRank(name, 0);
   TeamEntry t = teamEntries[team];
   t.applicants.remove(name);
-  t.addNewPlayer(name, (byte)0);
   this.markDirty();
   }
 

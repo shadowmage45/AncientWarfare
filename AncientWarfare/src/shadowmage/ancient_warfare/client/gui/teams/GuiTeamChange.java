@@ -113,7 +113,7 @@ public void updateControls()
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Members for team "+teamNum+":").updateRenderPos(0, targetY));
   targetY+=16;
   
-  for(TeamMemberEntry member : entry.memberNames)
+  for(TeamMemberEntry member : entry.members)
     {
     addTeamMemberEntry(member.getMemberName(), targetY);
     targetY+=12;

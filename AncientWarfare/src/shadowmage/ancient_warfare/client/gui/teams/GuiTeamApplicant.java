@@ -20,10 +20,13 @@
  */
 package shadowmage.ancient_warfare.client.gui.teams;
 
-import net.minecraft.client.Minecraft;
+import java.util.HashMap;
+
 import net.minecraft.inventory.Container;
+import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiElement;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
@@ -31,20 +34,17 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
-import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
-public class GuiTeamView extends GuiContainerAdvanced
+public class GuiTeamApplicant extends GuiContainerAdvanced
 {
 
-GuiButtonSimple admin;
-GuiButtonSimple change;
 GuiButtonSimple done;
 GuiScrollableArea area;
 TeamEntry entry;
 
 ContainerTeamControl container;
 
-public GuiTeamView(Container container)
+public GuiTeamApplicant(Container container)
   {
   super(container);
   this.container = (ContainerTeamControl)container;
@@ -86,9 +86,6 @@ public void setupControls()
   {
   this.entry = TeamTracker.instance().getTeamEntryFor(player);
   this.done = this.addGuiButton(0, getXSize()-55-8, 8, 55, 16, "Back");
-  this.change = this.addGuiButton(1, 8, 8, 75, 16, "Change Teams");
-  this.admin = this.addGuiButton(2, 8+75+4, 8, 55, 16, "Admin");
-  this.admin.hidden = true;
   this.area = new GuiScrollableArea(3, this, 8, 8+16+4, getXSize()-16, getYSize()-16-16-4, 0);
   this.guiElements.put(3, area);
   }
@@ -100,25 +97,38 @@ public void updateControls()
   
   this.entry = TeamTracker.instance().getTeamEntryFor(player);
   int rank = entry.getPlayerRank(player.getEntityName());
-  this.admin.hidden = rank < 7;
-  
   int targetY = 0;
   
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team: "+entry.teamNum + " Your Rank: "+rank).updateRenderPos(0, targetY));
   targetY+=14;
-  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Members:").updateRenderPos(0, targetY));
+  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Applicants:").updateRenderPos(0, targetY));
   targetY+=16;
   
-  for(TeamMemberEntry member : entry.members)
+  for(String name: entry.applicants)
     {
-    addTeamMemberEntry(member.getMemberName(), targetY);
-    targetY+=12;
+    addTeamMemberEntry(name, targetY);
+    targetY+=14;
     }  
   }
+
+private HashMap<GuiElement, String> acceptButtons = new HashMap<GuiElement, String>();
+private HashMap<GuiElement, String> denyButtons = new HashMap<GuiElement, String>();
 
 protected void addTeamMemberEntry(String name, int targetY)
   {
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 10, name).updateRenderPos(0, targetY));
+  
+  GuiButtonSimple button;
+  
+  button = new GuiButtonSimple(0, area, 40, 12, "Accept");
+  button.updateRenderPos(120, targetY);
+  acceptButtons.put(button, name);
+  area.elements.add(button);
+  
+  button = new GuiButtonSimple(0, area, 40, 12, "Deny");
+  button.updateRenderPos(120+40+4, targetY);
+  denyButtons.put(button, name);
+  area.elements.add(button);
   }
 
 @Override
@@ -126,16 +136,36 @@ public void onElementActivated(IGuiElement element)
   {
   if(element==done)
     {
-    this.closeGUI();
+    mc.displayGuiScreen(new GuiTeamControl(container));
     }
-  else if(element==change)
+  else if(acceptButtons.containsKey(element))
     {
-    mc.displayGuiScreen(new GuiTeamChange(this.container));
+    handleAcceptPress(acceptButtons.get(element));
     }
-  else if(element==admin)
+  else if(denyButtons.containsKey(element))
     {
-    mc.displayGuiScreen(new GuiTeamControl(this.container));
+    handleDenyPress(denyButtons.get(element));
     }
+  }
+
+private void handleAcceptPress(String name)
+  {
+  handleAcceptAction(name, true);
+  }
+
+private void handleDenyPress(String name)
+  {
+  handleAcceptAction(name, false);
+  }
+
+private void handleAcceptAction(String name, boolean accept)
+  {
+  int team = entry.teamNum;
+  NBTTagCompound tag = new NBTTagCompound();
+  tag.setBoolean("accept", accept);
+  tag.setInteger("team", team);
+  tag.setString("name", name);
+  this.sendDataToServer(tag);
   }
 
 }

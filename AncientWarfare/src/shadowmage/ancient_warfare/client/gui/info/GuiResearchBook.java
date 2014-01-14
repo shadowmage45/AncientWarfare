@@ -366,7 +366,7 @@ protected void addMainInfo()
   displayText.add("Welcome to Ancient Warfare.");  
   displayText.add("");
   displayText.add("Current Team: " + TeamTracker.instance().getTeamForPlayer(player));
-  displayText.add("Players on Team: " +TeamTracker.instance().getTeamEntryFor(player).memberNames.size());
+  displayText.add("Players on Team: " +TeamTracker.instance().getTeamEntryFor(player).members.size());
   displayText.add("Known Research: "+entry.getKnownResearch().size());
   displayText.add("Unkown Research: "+entry.getUnknwonResearch().size());
 

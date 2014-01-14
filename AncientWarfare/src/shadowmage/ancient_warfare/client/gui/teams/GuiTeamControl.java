@@ -112,9 +112,10 @@ public void updateControls()
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team: "+entry.teamNum + " Your Rank: "+adminRank).updateRenderPos(0, targetY));
   targetY+=14;
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Team Members:").updateRenderPos(0, targetY));
+  area.elements.add(new GuiString(0, area, getXSize()-16-12, 12, "Rank:").updateRenderPos(130, targetY));
   targetY+=16;
   
-  for(TeamMemberEntry member : entry.memberNames)
+  for(TeamMemberEntry member : entry.members)
     {
     addTeamMemberEntry(member.getMemberName(), targetY);
     targetY+=14;
@@ -129,6 +130,7 @@ protected void addTeamMemberEntry(String name, int targetY)
   {
   int memberRank = this.entry.getPlayerRank(name);
   area.elements.add(new GuiString(0, area, getXSize()-16-12, 10, name).updateRenderPos(0, targetY));
+  area.elements.add(new GuiString(0, area, getXSize()-16-12, 10, String.valueOf(memberRank)).updateRenderPos(140, targetY));
   
   GuiButtonSimple button;
   if(memberRank<adminRank)
@@ -166,11 +168,11 @@ public void onElementActivated(IGuiElement element)
     }
   else if(element==applicants)
     {
-    
+    mc.displayGuiScreen(new GuiTeamApplicant(this.container));
     }
   else if(element==alliances)
     {
-    
+    mc.displayGuiScreen(new GuiTeamAlliance(this.container));
     }
   else if(rankDownButtons.containsKey(element))
     {
