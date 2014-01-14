@@ -71,14 +71,6 @@ public void processCommand(ICommandSender icommandsender, String[] astring)
         }
       } 
     }
-  else if(command.equals("listteam"))
-    {
-    if(astring.length<=1){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}    
-    if (icommandsender instanceof EntityPlayerMP)
-      {
-      EntityPlayer player = getCommandSenderAsPlayer(icommandsender);      
-      }    
-    }
   else if(command.equals("set"))
     {
     if(astring.length<=2){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}    
