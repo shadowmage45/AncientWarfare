@@ -85,7 +85,7 @@ public void updateScreenContents()
 public void setupControls()
   {
   this.entry = TeamTracker.instance().getTeamEntryFor(player);
-  this.done = this.addGuiButton(0, getXSize()-55-8, 8, 55, 16, "Done");
+  this.done = this.addGuiButton(0, getXSize()-55-8, 8, 55, 16, "Back");
   this.change = this.addGuiButton(1, 8, 8, 75, 16, "Change Teams");
   this.admin = this.addGuiButton(2, 8+75+4, 8, 55, 16, "Admin");
   this.admin.hidden = true;

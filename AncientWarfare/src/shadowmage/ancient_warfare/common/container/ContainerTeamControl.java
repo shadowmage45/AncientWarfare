@@ -43,7 +43,6 @@ public void handlePacketData(NBTTagCompound tag)
     {    
     String name = tag.getString("name");
     int team = tag.getInteger("team");
-    Config.logDebug("rec. apply request for: "+name + " to: "+team);
     TeamTracker.instance().handlePlayerApplication(name, team);
     }
   if(tag.hasKey("kick"))

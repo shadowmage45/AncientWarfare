@@ -37,8 +37,8 @@ public TeamData(String par1Str)
   super(par1Str);
   for(int i = 0; i < teamEntries.length; i++)
     {
-	teamEntries[i] = new TeamEntry();
-	teamEntries[i].teamNum = i;
+    teamEntries[i] = new TeamEntry();
+    teamEntries[i].teamNum = i;
     }
   }
 
@@ -55,6 +55,7 @@ public void readFromNBT(NBTTagCompound tag)
     entry.readFromNBT(teamTag);
     teamEntries[entry.teamNum]=entry;
     }
+  this.markDirty();
   }
 
 @Override
@@ -77,12 +78,14 @@ public void setPlayerTeam(String playerName, int newTeam)
   TeamEntry t = this.getEntryForPlayer(playerName);
   t.removePlayer(playerName);
   this.teamEntries[newTeam].addNewPlayer(playerName, this.teamEntries[newTeam].memberNames.size()==0 ? newTeam==0 ? (byte)0 : (byte)10 : (byte)0);
+  this.markDirty();
   }
 
 public void setPlayerRank(String playerName, int newRank)
   {
   TeamEntry t = this.getEntryForPlayer(playerName);
   t.getEntryFor(playerName).setMemberRank((byte) newRank);
+  this.markDirty();
   }
 
 public int getTeamForPlayer(String name)
@@ -125,12 +128,14 @@ public void handlePlayerApply(String name, int team)
     {
     this.teamEntries[team].addApplicant(name);    
     }
+  this.markDirty();
   }
 
 public void handlePlayerKick(String name)
   {
   this.getEntryForPlayer(name).removePlayer(name);
   this.setPlayerTeam(name, 0);
+  this.markDirty();
   }
 
 public void handlePlayerAccept(String name, int team)
@@ -138,12 +143,14 @@ public void handlePlayerAccept(String name, int team)
   TeamEntry t = teamEntries[team];
   t.applicants.remove(name);
   t.addNewPlayer(name, (byte)0);
+  this.markDirty();
   }
 
 public void handlePlayerDeny(String name, int team)
   {
   TeamEntry t = teamEntries[team];
   t.applicants.remove(name);
+  this.markDirty();
   }
 
 public void handleHostileChange(int team, int hostTeam, boolean add)
@@ -157,5 +164,6 @@ public void handleHostileChange(int team, int hostTeam, boolean add)
     {
     t.nonHostileTeams.remove(Integer.valueOf(hostTeam));
     }
+  this.markDirty();
   }
 }
