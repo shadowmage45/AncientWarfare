@@ -39,6 +39,7 @@ import shadowmage.ancient_warfare.client.gui.crafting.GuiEngineeringStation;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiNpcCraft;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiResearch;
 import shadowmage.ancient_warfare.client.gui.crafting.GuiVehicleCrafting;
+import shadowmage.ancient_warfare.client.gui.gate.GuiGateControl;
 import shadowmage.ancient_warfare.client.gui.info.GuiResearchBook;
 import shadowmage.ancient_warfare.client.gui.machine.GuiChunkloaderDeluxe;
 import shadowmage.ancient_warfare.client.gui.machine.GuiFoodProcessor;
@@ -80,6 +81,7 @@ import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerFoodProcessor;
+import shadowmage.ancient_warfare.common.container.ContainerGateControl;
 import shadowmage.ancient_warfare.common.container.ContainerMailbox;
 import shadowmage.ancient_warfare.common.container.ContainerMailboxIndustrial;
 import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
@@ -140,6 +142,7 @@ public static final int CHUNKLOADER = 18;//TODO
 public static final int CHUNKLOADER_DEULXE = 19;
 public static final int FOOD_PROCESSOR = 20;
 public static final int WARZONE_CONTROL = 21;
+public static final int GATE_CONTROL = 22;
 
 public static final int BACKPACK = 39;
 public static final int INFO = 40;
@@ -175,6 +178,9 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   TileEntity te;
   switch(ID)
   {
+  case GATE_CONTROL:
+  return new ContainerGateControl(player, x);
+  
   case WARZONE_CONTROL:
   return new ContainerWarzones(player);
   
@@ -411,6 +417,9 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   NpcBase npc;
   switch(ID)
   {
+  case GATE_CONTROL:
+  return new GuiGateControl(new ContainerGateControl(player, x));
+  
   case WARZONE_CONTROL:
   return new GuiWarzones(new ContainerWarzones(player));
   

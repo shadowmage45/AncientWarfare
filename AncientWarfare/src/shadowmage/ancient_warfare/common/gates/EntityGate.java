@@ -21,7 +21,9 @@
 package shadowmage.ancient_warfare.common.gates;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
@@ -31,6 +33,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.interfaces.IEntityPacketHandler;
 import shadowmage.ancient_warfare.common.machine.TEGateLock;
+import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet06Entity;
 import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -99,6 +102,17 @@ public void setGateType(Gate type)
 protected void entityInit()
   {
   
+  }
+
+public void repackEntity()
+  {
+  if(worldObj.isRemote){return;}
+  ItemStack item = Gate.getItemToConstruct(this.gateType.getGlobalID());
+  EntityItem entity = new EntityItem(worldObj);
+  entity.setEntityItemStack(item);
+  entity.setPosition(posX, posY+0.5d, posZ);
+  this.worldObj.spawnEntityInWorld(entity);
+  this.setDead();
   }
 
 protected void setOpeningStatus(byte op)
@@ -210,7 +224,12 @@ public boolean interactFirst(EntityPlayer par1EntityPlayer)
     return false;
     }
   int pNum = TeamTracker.instance().getTeamForPlayer(par1EntityPlayer);
-  if(!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum))
+  boolean canInteract = this.teamNum == TeamTracker.instance().getTeamForPlayer(par1EntityPlayer);//!TeamTracker.instance().isHostileTowards(worldObj, pNum, teamNum) && !TeamTracker.instance().isHostileTowards(worldObj, teamNum, pNum);
+  if(par1EntityPlayer.isSneaking() && canInteract)
+    {
+    GUIHandler.instance().openGUI(GUIHandler.GATE_CONTROL, par1EntityPlayer, worldObj, this.entityId, 0, 0);
+    }
+  else if(canInteract)
     {
     if(!isLocked)
       {
