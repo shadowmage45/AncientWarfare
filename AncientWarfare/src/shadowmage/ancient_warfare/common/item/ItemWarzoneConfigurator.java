@@ -51,6 +51,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   serverData.loadFromItem(stack);
   if(player.isSneaking())
     {
+    player.addChatMessage("Clearing warzone data from item.");
     serverData.clearData();
     serverData.saveToItem(stack);
     return true;
@@ -64,13 +65,16 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     }
   else if(serverData.hasPos1)
     {
+    
     //set pos 2
     serverData.setPos2(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+    player.addChatMessage("Set second position.  Right click once more to finalize, or shift-right click to clear");
     }
   else
     {
     //set pos1
     serverData.setPos1(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY), MathHelper.floor_double(player.posZ));
+    player.addChatMessage("Set first position.  Right click again to set second position, or shift-right click to clear");
     }
   serverData.saveToItem(stack);
   return true;
