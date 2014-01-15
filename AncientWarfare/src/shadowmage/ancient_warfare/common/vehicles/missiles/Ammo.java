@@ -504,7 +504,7 @@ protected void createExplosion(World world, MissileBase missile, float x, float 
   boolean destroyBlocks = Config.blockDestruction;
   boolean fires = Config.blockFires;
   
-  Explosion explosion = new Explosion(missile.worldObj, missile, x, y, z, power);
+  Explosion explosion = new Explosion(world, missile, x, y, z, power);
   explosion.isFlaming = fires;
   explosion.isSmoking = destroyBlocks;
   
@@ -521,9 +521,9 @@ protected void createExplosion(World world, MissileBase missile, float x, float 
       ix = MathHelper.floor_float(x);
       iy = MathHelper.floor_float(y);
       iz = MathHelper.floor_float(z);
-      Block block = Block.blocksList[missile.worldObj.getBlockId(ix, iy, iz)];
+      Block block = Block.blocksList[world.getBlockId(ix, iy, iz)];
       if(block==null){continue;}
-      int meta = missile.worldObj.getBlockMetadata(ix, iy, iz);
+      int meta = world.getBlockMetadata(ix, iy, iz);
       BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(ix, iy, iz, world, block, meta, AWCore.instance.proxy.getFakePlayer(world));
       MinecraftForge.EVENT_BUS.post(event);
       if(event.isCanceled())
