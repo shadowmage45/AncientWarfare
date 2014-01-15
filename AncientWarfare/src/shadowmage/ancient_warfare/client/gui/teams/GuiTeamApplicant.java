@@ -151,11 +151,13 @@ public void onElementActivated(IGuiElement element)
 private void handleAcceptPress(String name)
   {
   handleAcceptAction(name, true);
+  player.addChatMessage("Accepted application for: "+name);
   }
 
 private void handleDenyPress(String name)
   {
   handleAcceptAction(name, false);
+  player.addChatMessage("Denied application for: "+name);
   }
 
 private void handleAcceptAction(String name, boolean accept)

@@ -172,11 +172,12 @@ public void onElementActivated(IGuiElement element)
     }
   else if(element==select)
     {
-    boolean present = entry.nonHostileTeams.contains(this.inputBox.getIntVal());
-    
+    int team = this.inputBox.getIntVal();
+    boolean present = entry.nonHostileTeams.contains(team);
+    player.addChatMessage(present? "Removed " + team +" from allied teams." : "Added "+team+ " to allied teams.");
     NBTTagCompound tag = new NBTTagCompound();
     tag.setBoolean("hostile", !present);
-    tag.setInteger("hostTeam", inputBox.getIntVal());
+    tag.setInteger("hostTeam", team);
     tag.setInteger("team", entry.teamNum);
     this.sendDataToServer(tag);    
     }  

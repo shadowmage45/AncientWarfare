@@ -25,6 +25,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
+import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
@@ -79,11 +82,12 @@ public void processCommand(ICommandSender icommandsender, String[] astring)
     setTeam(name, teamNum);
     if (icommandsender instanceof EntityPlayerMP)
       {
-      //add chat message 
+      EntityPlayer player = (EntityPlayer)icommandsender;
+      player.addChatMessage("Set: "+name+ " to team: "+teamNum + " at rank 0");
       }
     else
       {
-      //notify admins
+      notifyAdmins("Set: "+name+ " to team: "+teamNum + " at rank 0" + " via remote command");
       }
     }
   else if(command.equals("setrank"))
@@ -94,13 +98,27 @@ public void processCommand(ICommandSender icommandsender, String[] astring)
     setRank(name, newRank);
     if(icommandsender instanceof EntityPlayerMP)
       {
-      //add chat message 
+      EntityPlayer player = (EntityPlayer)icommandsender;
+      player.addChatMessage("Set: "+name+ " to rank: "+newRank);
       }
     else
       {
-      //notify admins
+      notifyAdmins("Set: "+name+ " to rank: "+newRank + " via remote command");
       }
     }    
+  }
+
+private void notifyAdmins(String message)
+  {
+  EntityPlayer player;
+  for(Object playerObj : MinecraftServer.getServer().getConfigurationManager().playerEntityList)
+    {
+    player = (EntityPlayer)playerObj;
+    if(AWCore.instance.proxy.isPlayerOp(player))
+      {
+      player.addChatMessage(message);
+      }
+    }
   }
 
 private void listCurrentTeam(EntityPlayer player)

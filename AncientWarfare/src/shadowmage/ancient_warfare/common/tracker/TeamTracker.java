@@ -248,6 +248,12 @@ public void handleAccept(String player, int team, boolean accept)
     {
     teamData.handlePlayerDeny(player, team);
     }  
+  EntityPlayer playerEntity = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(player);
+  if(playerEntity!=null)
+    {
+    String accMsg = accept? "You have been accepted to team: "+team : "Your application to team: "+team +" has been denied";
+    playerEntity.addChatMessage(accMsg);
+    }
   this.sendTeamDatas();
   }
 
