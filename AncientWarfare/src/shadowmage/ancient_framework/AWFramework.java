@@ -58,14 +58,14 @@ import cpw.mods.fml.relauncher.Side;
 
 
 
-@Mod( modid = "AncientWarfareCore", name="Ancient Warfare", version=Statics.FRAMEWORK_VERSION)
+@Mod( modid = "AncientWarfareCore", name="Ancient Warfare", version=Statics.VERSION)
 @NetworkMod
 (
-clientSideRequired = true,
-serverSideRequired = true,
+clientSideRequired = false,
+serverSideRequired = false,
 packetHandler = PacketHandler.class,
 channels = {"AW_mod", "AW_gui"},
-versionBounds="["+Statics.FRAMEWORK_VERSION+",)"
+versionBounds="["+Statics.VERSION+",)"
 )
 
 public class AWFramework extends AWMod
@@ -91,7 +91,7 @@ public static boolean loadedAutomation = false;
 @Override
 public void loadConfiguration(File config, Logger log)
   {  
-  this.config = new AWConfig(config, log, Statics.FRAMEWORK_VERSION);
+  this.config = new AWConfig(config, log, Statics.VERSION);
   objectRegistry = new ObjectRegistry(this.config);
   AWLog.setLogger(log);
   }
@@ -101,7 +101,7 @@ public void loadConfiguration(File config, Logger log)
 public void preInit(FMLPreInitializationEvent evt)
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
-  AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.FRAMEWORK_VERSION);  
+  AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.VERSION);  
   gameData = new AWGameData();
   gameData.addDataClass("AWTeamData", TeamData.class);
   eventHandler = new shadowmage.ancient_framework.common.event.EventHandler();

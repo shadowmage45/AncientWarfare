@@ -62,12 +62,12 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 
-@Mod( modid = "AncientStructures", name="Ancient Structures", version=Statics.STRUCTURE_VERSION, dependencies="required-after:AncientWarfareCore")
+@Mod( modid = "AncientStructures", name="Ancient Structures", version=Statics.VERSION, dependencies="required-after:AncientWarfareCore")
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
-versionBounds="["+Statics.STRUCTURE_VERSION+",)"
+versionBounds="["+Statics.VERSION+",)"
 )
 
 public class AWStructures extends AWMod implements IPlayerTracker
@@ -83,14 +83,14 @@ public StructurePluginManager pluginManager;
 @Override
 public void loadConfiguration(File config, Logger log)
   {
-  this.config = new AWStructureStatics(config, log, Statics.STRUCTURE_VERSION);
+  this.config = new AWStructureStatics(config, log, Statics.VERSION);
   }
 
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {  
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
-  AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Statics.STRUCTURE_VERSION);
+  AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Statics.VERSION);
   AWFramework.loadedStructures = true;
   pluginManager = new StructurePluginManager();   
   String path = evt.getModConfigurationDirectory().getAbsolutePath();

@@ -18,32 +18,54 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_framework.common.config;
+package shadowmage.ancient_vehicles.client.proxy;
 
-public class Statics
+import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
+
+public class ClientProxyVehicle extends ClientProxyBase
 {
 
-public static final String CONFIG_PATH = "";
-public static final String ASSETS_PATH = "";
-public static final String TEXTURE_PATH = "textures/";
-public static final String MOD_PREFIX = "ancientwarfare";
-public static final String VERSION = "2.2.038-beta-MC164";
-public static final boolean DEBUG = true;
+/**
+ * 
+ */
+public ClientProxyVehicle()
+  {
+  // TODO Auto-generated constructor stub
+  }
 
-public static final int guiOptions = 0;
-public static final int guiTeamControl = 1;
-public static final int guiResearch = 2;
-public static final int guiCrafting = 3;
-public static final int guiInfo = 4;
+@Override
+public void registerGuis()
+  {
+  // TODO Auto-generated method stub
 
-public static final int guiStructureBuilderCreative = 10;
-public static final int guiStructureScannerCreative = 11;
-public static final int guiSpawnerPlacer = 12;
+  }
 
-public static final int guiVehicleInventory = 20;
+@Override
+public void registerKeybinds()
+  {
+  // TODO Auto-generated method stub
 
-public static final int guiNpcInventory = 30;
+  }
 
-public static final int guiCivicInventory = 40;
+@Override
+public void registerTickHandlers()
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void registerRenderers()
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void registerEventHandlers()
+  {
+  // TODO Auto-generated method stub
+
+  }
 
 }

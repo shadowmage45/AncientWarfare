@@ -122,9 +122,6 @@ public void handlePacketData(NBTTagCompound tag)
 
 public void sendTeamData(TeamData data)
   {
-  /**
-   * TODO clean this up..only send changes?
-   */
   Packet05Team pkt = new Packet05Team();
   NBTTagCompound tag = new NBTTagCompound();  
   data.writeToNBT(tag);

@@ -38,15 +38,24 @@ static int texNum = -1;
 static int prevTexNum = -1;
 private static IntBuffer texNumber = BufferUtils.createIntBuffer(1);
 private static IntBuffer dataBuffer = BufferUtils.createIntBuffer(1024*2048);
-private static int[] inBuff = new int[1024*2048];
-private static int[] outBuff = new int[1024*2048];
-private static int[] blendBuff = new int[1024*2048];
-private static int bufferSize = 1024*2048;
+private static int[] inBuff = new int[256*256];
+private static int[] outBuff = new int[256*256];
+private static int[] blendBuff = new int[256*256];
+private static int bufferSize = 256*256;
 
 public static void allocateTexture()
   {
+  if(texNum>=0)
+    {
+    GL11.glDeleteTextures(texNum);
+    }
   texNum = GL11.glGenTextures();
   bindTexture();    
+  for(int i =0; i < 256*256 ; i++)
+    {
+    dataBuffer.put(i, 0xfffffff); 
+    }
+  dataBuffer.rewind();
   GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
   GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
   GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR); //GL11.GL_NEAREST);
@@ -65,8 +74,6 @@ public static void resetBoundTexture()
   {
   GL11.glBindTexture(GL11.GL_TEXTURE_2D, prevTexNum);
   }
-
-
 
 public static void updateTextureContents(BufferedImage image)
   {

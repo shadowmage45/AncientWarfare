@@ -205,9 +205,6 @@ public void swapParts(MEIMModelRenderer newPart)
   return;
   }
 
-
-
-
 @Override
 public void onGuiClosed()
   {
