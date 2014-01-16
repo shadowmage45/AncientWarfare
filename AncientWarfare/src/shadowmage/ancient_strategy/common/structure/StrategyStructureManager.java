@@ -51,10 +51,22 @@ public void addStructure(World world, StrategyStructure structure)
   data.addStructure(world, structure);
   }
 
+public void removeStructure(World world, UUID id)
+  {
+  StrategyStructureData data = AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
+  data.removeStructure(world, id);
+  }
+
+public void removeStructureClient(World world, UUID id)
+  {
+  StrategyStructureData data = AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
+  data.removeStructureClient(world, id);
+  }
+
 public void handlePacketData(World world, NBTTagCompound tag)
   {
   /**
-   * server->client comms regarding new structures/etc
+   * server->client comms regarding new structures/removals/etc
    */
   }
 
