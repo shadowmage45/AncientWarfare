@@ -44,5 +44,6 @@ int ammoSize;
 
 boolean canSoldiersPilot;
 
-
+Object model;//
+Object renderer;//
 }
