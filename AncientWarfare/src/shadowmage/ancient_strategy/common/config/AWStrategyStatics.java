@@ -18,23 +18,31 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_vehicles.common.vehicle;
+package shadowmage.ancient_strategy.common.config;
 
-/**
- * the current/max stats for a vehicle.
- * calculated from base stats + any modifiers from upgrades
- * @author Shadowmage
- *
- */
-public class VehicleStats
+import java.io.File;
+import java.util.logging.Logger;
+
+import shadowmage.ancient_framework.common.config.ModConfiguration;
+
+public class AWStrategyStatics extends ModConfiguration
 {
 
-float health;
-float mass;
-float thrust;
-float firePower;
+public AWStrategyStatics(File configFile, Logger log, String version)
+  {
+  super(configFile, log, version);
+  }
 
+@Override
+public void initializeCategories()
+  {
 
+  }
 
+@Override
+public void initializeValues()
+  {
+
+  }
 
 }

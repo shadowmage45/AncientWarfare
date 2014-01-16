@@ -18,37 +18,54 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_vehicles.common.vehicle;
+package shadowmage.ancient_strategy.client.proxy;
 
-/**
- * data-container class for a single vehicle type
- * @author Shadowmage
- */
-public class VehicleDefinition
+import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
+
+public class ClientProxyStrategy extends ClientProxyBase
 {
 
-String vehicleTypeName;//unique registered vehicle name
-String texture;//ref to the texture for this vehicle
-Object model;//ref to the model for this vehicle
-Object renderer;//ref to the model-renderer for this vehicle
-
-float boundingBoxSize;
-float boundingBoxHeight;
-int health;
-float mass;
-float thrust;//together, mass and thrust determine the max speed and acceleration of a vehicle
-Object movementType;//will be a ref to the movement handler for this vehicle
-
 /**
- * inventory sizes for storage, armor, upgrades, and ammo
+ * 
  */
-int inventorySize;
-int armorSize;
-int upgradeSize;
-int ammoSize;
+public ClientProxyStrategy()
+  {
+  // TODO Auto-generated constructor stub
+  }
 
-float firePower;//the acceleration force that this engine exerts on any projectiles that it fires
+@Override
+public void registerGuis()
+  {
+  // TODO Auto-generated method stub
 
-boolean canSoldiersPilot;
+  }
+
+@Override
+public void registerKeybinds()
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void registerTickHandlers()
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void registerRenderers()
+  {
+  // TODO Auto-generated method stub
+
+  }
+
+@Override
+public void registerEventHandlers()
+  {
+  // TODO Auto-generated method stub
+
+  }
 
 }
