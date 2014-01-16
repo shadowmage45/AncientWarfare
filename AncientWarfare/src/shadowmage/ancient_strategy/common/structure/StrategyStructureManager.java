@@ -20,14 +20,11 @@
  */
 package shadowmage.ancient_strategy.common.structure;
 
-import java.util.HashMap;
 import java.util.UUID;
 
-import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
 
 public class StrategyStructureManager
 {

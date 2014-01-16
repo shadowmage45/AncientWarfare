@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.utils.DamageType;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 
 public class AmmoBallistaBoltExplosive extends Ammo

@@ -34,6 +34,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.registry.entry.Description;
+import shadowmage.ancient_framework.common.teams.TeamTracker;
 import shadowmage.ancient_framework.common.utils.BlockTools;
 import shadowmage.ancient_framework.common.utils.ItemStackWrapperCrafting;
 import shadowmage.ancient_vehicles.common.vehicles.VehicleBase;

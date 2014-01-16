@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 
 public abstract class ItemBase extends Item

@@ -23,10 +23,18 @@ package shadowmage.ancient_strategy;
 import java.io.File;
 import java.util.logging.Logger;
 
+import shadowmage.ancient_framework.AWMod;
+import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_framework.common.network.PacketHandler;
+import shadowmage.ancient_framework.common.proxy.CommonProxy;
+import shadowmage.ancient_strategy.common.network.Packet08Strategy;
+import shadowmage.ancient_strategy.common.structure.StrategyStructureData;
+import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -36,15 +44,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import shadowmage.ancient_framework.AWMod;
-import shadowmage.ancient_framework.common.config.Statics;
-import shadowmage.ancient_framework.common.gamedata.AWGameData;
-import shadowmage.ancient_framework.common.network.PacketHandler;
-import shadowmage.ancient_framework.common.proxy.CommonProxy;
-import shadowmage.ancient_strategy.common.network.Packet08Strategy;
-import shadowmage.ancient_strategy.common.structure.StrategyStructureData;
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
 
 @Mod( modid = "AncientStrategy", name="Ancient Strategy", version=Statics.VERSION, dependencies="required-after:AncientWarfareCore;required-after:AncientStructures")
 @NetworkMod

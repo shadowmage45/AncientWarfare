@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
+import shadowmage.ancient_vehicles.common.vehicles.VehicleAmmoEntry;
 import shadowmage.ancient_vehicles.common.vehicles.VehicleBase;
 import shadowmage.ancient_vehicles.common.vehicles.missiles.IAmmoType;
 import shadowmage.ancient_vehicles.common.vehicles.missiles.MissileBase;

@@ -49,24 +49,24 @@ public static AmmoRegistry instance()
 
 public void registerAmmoTypes()
   {
-  AWEntityRegistry.registerEntity(MissileBase.class, "entity.missile", 165, 5, true);  
-  
-  /**
-   * debug..these will need to use the itemRegistry method..
-   */
-  for(Ammo ammo : Ammo.ammoTypes)
-    {
-    if(ammo!=null)
-      {
-      ammo.setEnabled(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".enabled", ammo.isEnabled()).getBoolean(ammo.isEnabled()));
-      if(ammo.isEnabled())
-        {
-        ammo.setEntityDamage(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".ent_damage", ammo.getEntityDamage()).getInt(ammo.getEntityDamage()));
-        ammo.setVehicleDamage(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".veh_damage", ammo.getVehicleDamage()).getInt(ammo.getVehicleDamage()));
-        this.registerAmmoTypeWithItem(ammo);      
-        }
-      }
-    }
+//  AWEntityRegistry.registerEntity(MissileBase.class, "entity.missile", 165, 5, true);  
+//  
+//  /**
+//   * debug..these will need to use the itemRegistry method..
+//   */
+//  for(Ammo ammo : Ammo.ammoTypes)
+//    {
+//    if(ammo!=null)
+//      {
+//      ammo.setEnabled(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".enabled", ammo.isEnabled()).getBoolean(ammo.isEnabled()));
+//      if(ammo.isEnabled())
+//        {
+//        ammo.setEntityDamage(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".ent_damage", ammo.getEntityDamage()).getInt(ammo.getEntityDamage()));
+//        ammo.setVehicleDamage(AWCore.instance.config.getConfig().get("f_ammo_config", ammo.getConfigName()+".veh_damage", ammo.getVehicleDamage()).getInt(ammo.getVehicleDamage()));
+//        this.registerAmmoTypeWithItem(ammo);      
+//        }
+//      }
+//    }
   }
 
 public List<IAmmoType> getAmmoTypes()
@@ -95,38 +95,16 @@ public IAmmoType getAmmoEntry(int type)
 
 public void registerAmmoTypeWithItem(IAmmoType ammo)
   {
-  AWItemBase item = ItemLoaderCore.ammoItem; 
-  List<String> tips = ammo.getDisplayTooltip();  
-  Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName());
-  for(String tip : tips)
-    {
-    d.addTooltip(tip, ammo.getAmmoType());
-    }
-//  d.addTooltip("Weight: "+ammo.getAmmoWeight(), ammo.getAmmoType());
-//  d.addTooltip("Entity Damage: "+ammo.getEntityDamage(), ammo.getAmmoType());
-//  d.addTooltip("Vehicle Damage: "+ammo.getVehicleDamage(), ammo.getAmmoType());
-//  if(ammo.isFlaming())
+//  AWItemBase item = ItemLoaderCore.ammoItem; 
+//  List<String> tips = ammo.getDisplayTooltip();  
+//  Description d = ItemLoaderCore.instance().addSubtypeInfoToItem(item, ammo.getAmmoType(), ammo.getDisplayName());
+//  for(String tip : tips)
 //    {
-//    d.addTooltip("Flaming -- ignites targets when hit", ammo.getAmmoType());
+//    d.addTooltip(tip, ammo.getAmmoType());
 //    }
-//  if(ammo.isProximityAmmo())
-//    {
-//    d.addTooltip("Proximity -- detonates near targets", ammo.getAmmoType());
-//    }
-//  if(ammo.isPenetrating())
-//    {
-//    d.addTooltip("Penetrating -- does not stop on impact", ammo.getAmmoType());
-//    }
-//  if(ammo.getSecondaryAmmoType() != null && ammo.getSecondaryAmmoTypeCount()>0)
-//    {
-//    d.addTooltip("Cluster ammunition, spawns "+ammo.getSecondaryAmmoTypeCount()+" submunitions", ammo.getAmmoType());
-//    IAmmoType t = ammo.getSecondaryAmmoType();
-//    d.addTooltip("Submunition Entity Damage: "+t.getEntityDamage(), ammo.getAmmoType());
-//    d.addTooltip("Submunition Vehicle Damage: "+t.getVehicleDamage(), ammo.getAmmoType());
-//    }
-  d.addDisplayStack(ammo.getDisplayStack());
-  d.setIconTexture(ammo.getIconTexture(), ammo.getAmmoType());
-  this.registerAmmoType(ammo);
+//  d.addDisplayStack(ammo.getDisplayStack());
+//  d.setIconTexture(ammo.getIconTexture(), ammo.getAmmoType());
+//  this.registerAmmoType(ammo);
   }
 
 public void registerAmmoType(IAmmoType ammo)
@@ -140,10 +118,10 @@ public void registerAmmoType(IAmmoType ammo)
 
 public IAmmoType getAmmoForStack(ItemStack stack)
   {
-  if(stack==null || stack.itemID != ItemLoaderCore.ammoItem.itemID)
-    {
-    return null;
-    }
+//  if(stack==null || stack.itemID != ItemLoaderCore.ammoItem.itemID)
+//    {
+//    return null;
+//    }
   return this.ammoInstances.get(stack.getItemDamage());
   }
 

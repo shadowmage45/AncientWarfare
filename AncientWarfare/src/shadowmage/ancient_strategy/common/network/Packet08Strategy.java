@@ -22,11 +22,11 @@ package shadowmage.ancient_strategy.common.network;
 
 import java.util.UUID;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-
 import shadowmage.ancient_framework.common.network.PacketBase;
 import shadowmage.ancient_strategy.common.structure.StrategyStructureManager;
+
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteArrayDataOutput;
 
 public class Packet08Strategy extends PacketBase
 {

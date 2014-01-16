@@ -33,6 +33,7 @@ import shadowmage.ancient_framework.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_vehicles.common.registry.AmmoRegistry;
 import shadowmage.ancient_vehicles.common.registry.ArmorRegistry;
 import shadowmage.ancient_vehicles.common.registry.VehicleUpgradeRegistry;
+import shadowmage.ancient_vehicles.common.vehicles.VehicleAmmoEntry;
 import shadowmage.ancient_vehicles.common.vehicles.VehicleBase;
 import shadowmage.ancient_vehicles.common.vehicles.armors.IVehicleArmorType;
 import shadowmage.ancient_vehicles.common.vehicles.missiles.IAmmoType;

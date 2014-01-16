@@ -27,9 +27,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_framework.common.utils.DamageType;
 import shadowmage.ancient_vehicles.common.vehicles.VehicleBase;
 import shadowmage.ancient_vehicles.common.vehicles.helpers.VehicleFiringVarsHelper;
-import shadowmage.ancient_vehicles.common.vehicles.missiles.DamageType;
 import shadowmage.ancient_vehicles.common.vehicles.types.VehicleTypeBatteringRam;
 
 

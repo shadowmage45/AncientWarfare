@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.utils.DamageType;
 
 public class AmmoSoldierArrow extends Ammo
 {

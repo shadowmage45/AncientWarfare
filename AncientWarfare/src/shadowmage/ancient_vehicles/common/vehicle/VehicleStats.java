@@ -1,5 +1,5 @@
 /**
-   Copyright 2012 John Cummens (aka Shadowmage, Shadowmage4513)
+   Copyright 2012-2013 John Cummens (aka Shadowmage, Shadowmage4513)
    This software is distributed under the terms of the GNU General Public License.
    Please see COPYING for precise license information.
 
@@ -18,19 +18,21 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_warfare.common.registry.entry;
+package shadowmage.ancient_vehicles.common.vehicle;
 
-import shadowmage.ancient_warfare.common.vehicles.missiles.IAmmoType;
-
-public class VehicleAmmoEntry
+/**
+ * client & server container for current vehicle statistics
+ * will have an update method to be called when vehicle inventory is changed
+ * to propagate any needed data to client(s)
+ * @author Shadowmage
+ *
+ */
+public class VehicleStats
 {
 
-public IAmmoType baseAmmoType;
-public int ammoCount;
-
-public VehicleAmmoEntry(IAmmoType ammo)
+public VehicleStats()
   {
-  this.baseAmmoType = ammo;
+  // TODO Auto-generated constructor stub
   }
 
 }

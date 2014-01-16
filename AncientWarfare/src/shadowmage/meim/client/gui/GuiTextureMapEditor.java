@@ -8,12 +8,9 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.opengl.GL11;
-
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
-import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.meim.client.meim_model.MEIMModelBase;
 import shadowmage.meim.client.modelrenderer.MEIMModelRenderer;
 import shadowmage.meim.client.texture.TextureManager;

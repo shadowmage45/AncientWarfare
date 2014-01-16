@@ -28,11 +28,11 @@ import java.util.List;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import shadowmage.ancient_framework.common.interfaces.INBTTaggable;
+import shadowmage.ancient_framework.common.utils.DamageType;
 import shadowmage.ancient_vehicles.common.registry.ArmorRegistry;
 import shadowmage.ancient_vehicles.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_vehicles.common.vehicles.VehicleBase;
 import shadowmage.ancient_vehicles.common.vehicles.armors.IVehicleArmorType;
-import shadowmage.ancient_vehicles.common.vehicles.missiles.DamageType;
 import shadowmage.ancient_vehicles.common.vehicles.upgrades.IVehicleUpgradeType;
 
 public class VehicleUpgradeHelper implements INBTTaggable
