@@ -30,7 +30,6 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.chunkloading.ChunkLoader;
-import shadowmage.ancient_warfare.common.command.CommandTeam;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.event.AWEventHandler;
@@ -207,7 +206,7 @@ public void load(FMLPostInitializationEvent evt)
 @EventHandler
 public void serverStarting(FMLServerStartingEvent evt)
   {
-  evt.registerServerCommand(new CommandTeam());
+//  evt.registerServerCommand(new CommandTeam());
   }
 
 @EventHandler
