@@ -21,34 +21,20 @@
 package shadowmage.ancient_vehicles.common.vehicle;
 
 /**
- * data-container class for a single vehicle type
+ * the current/max stats for a vehicle.
+ * calculated from base stats + any modifiers from upgrades
  * @author Shadowmage
+ *
  */
-public class VehicleDefinition
+public class VehicleStats
 {
 
-String vehicleTypeName;//unique registered vehicle name
-String texture;//ref to the texture for this vehicle
-Object model;//ref to the model for this vehicle
-Object renderer;//ref to the model-renderer for this vehicle
-
-float boundingBoxSize;
-float boundingBoxHeight;
-int health;
+float health;
 float mass;
-float thrust;//together, mass and thrust determine the max speed and acceleration of a vehicle
-Object movementType;//will be a ref to the movement handler for this vehicle
+float thrust;
+float firePower;
 
-/**
- * inventory sizes for storage, armor, upgrades, and ammo
- */
-int inventorySize;
-int armorSize;
-int upgradeSize;
-int ammoSize;
 
-float firePower;//the acceleration force that this engine exerts on any projectiles that it fires
 
-boolean canSoldiersPilot;
 
 }
