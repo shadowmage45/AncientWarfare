@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_vehicles.common.vehicles.missiles;
+package shadowmage.ancient_framework.common.utils;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

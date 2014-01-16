@@ -32,6 +32,7 @@ import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
+import shadowmage.ancient_framework.common.utils.BlockPosition;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
@@ -41,6 +42,7 @@ import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.network.Packet06StructureData;
+import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
@@ -134,38 +136,23 @@ public void postInit(FMLPostInitializationEvent evt)
 
 @Override
 @EventHandler
-public void serverPreStart(FMLServerAboutToStartEvent evt)
-  {
-  
-  }
+public void serverPreStart(FMLServerAboutToStartEvent evt){}
 
 @Override
 @EventHandler
-public void serverStarting(FMLServerStartingEvent evt)
-  {
-  
-  }
+public void serverStarting(FMLServerStartingEvent evt){}
 
 @Override
 @EventHandler
-public void serverStarted(FMLServerStartedEvent evt)
-  {
-  
-  }
+public void serverStarted(FMLServerStartedEvent evt){}
 
 @Override
 @EventHandler
-public void serverStopping(FMLServerStoppingEvent evt)
-  {
-  
-  }
+public void serverStopping(FMLServerStoppingEvent evt){}
 
 @Override
 @EventHandler
-public void serverStopped(FMLServerStoppedEvent evt)
-  {
-  
-  }
+public void serverStopped(FMLServerStoppedEvent evt){}
 
 @Override
 public void onPlayerLogin(EntityPlayer player)
@@ -177,22 +164,24 @@ public void onPlayerLogin(EntityPlayer player)
   }
 
 @Override
-public void onPlayerLogout(EntityPlayer player)
-  {
-  
-  }
+public void onPlayerLogout(EntityPlayer player){}
 
 @Override
-public void onPlayerChangedDimension(EntityPlayer player)
-  {
-  
-  }
+public void onPlayerChangedDimension(EntityPlayer player){}
 
 @Override
-public void onPlayerRespawn(EntityPlayer player)
-  {
-  
-  }
+public void onPlayerRespawn(EntityPlayer player){}
 
+//protected void rotateTest()
+//  {
+//  BlockPosition min, max;
+//  min = new BlockPosition(10,10,10);
+//  max = new BlockPosition(20,20,20);
+//  
+//  StructureBB bb = new StructureBB(min, max);
+//  
+//  BlockPosition pos = bb.getPositionInTemplate(10, 10, 10, 1);
+//  this.config.log("rotated pos: "+pos + " (should be 10, 0, 0)");
+//  }
 
 }

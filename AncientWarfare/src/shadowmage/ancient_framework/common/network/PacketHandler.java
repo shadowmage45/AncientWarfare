@@ -48,7 +48,7 @@ public static final int TILE = 4;//used by any tile-entity based communication
 public static final int TEAM = 5;//dest. teamTracker
 public static final int STRUCTURE = 6;//dest. structureManager
 public static final int RESEARCH = 7;//dest researchTracker
-
+public static final int STRATEGY = 8;
 
 private static Map<Integer, Class<? extends PacketBase>> packetTypes = new HashMap<Integer, Class<? extends PacketBase>>();
 
@@ -62,6 +62,7 @@ packetTypes.put(TILE, Packet04TE.class);
 packetTypes.put(TEAM, Packet05Team.class);
 //6 registered from structure module
 //7 TODO
+//8 registered from strategy module
 }
 
 public PacketHandler()  

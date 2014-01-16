@@ -95,6 +95,14 @@ public final StructureBB setFromStructure(int x, int y, int z, int face, int xSi
   return this;
   }
 
+public BlockPosition getPositionInTemplate(int x, int y, int z, int face)
+  {
+  BlockPosition pos = new BlockPosition(x-min.x, y-min.y, z-min.z);
+  int turns = ( face + 2 ) % 4;
+  BlockTools.rotateInArea(pos, this.getXSize(), this.getZSize(), turns);  
+  return pos;
+  }
+
 public StructureBB(BlockPosition pos1, BlockPosition pos2)
   {
   this.min = BlockTools.getMin(pos1, pos2);
@@ -292,6 +300,11 @@ public BlockPosition getRRCorner(int face, BlockPosition out)
   return out.reassign(max.x, min.y, max.z);  
   }
   return out;
+  }
+
+public boolean isPositionInBoundingBox(int x, int y, int z)
+  {
+  return x>=min.x && x<=max.x && y>=min.y && y<=max.y && z>=min.z && z<=max.z;
   }
 
 }

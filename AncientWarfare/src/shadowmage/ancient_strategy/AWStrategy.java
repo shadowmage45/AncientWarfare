@@ -38,11 +38,15 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
+import shadowmage.ancient_strategy.common.network.Packet08Strategy;
+import shadowmage.ancient_strategy.common.structure.StrategyStructureData;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
 
-@Mod( modid = "AncientStrategy", name="Ancient Strategy", version=Statics.VERSION, dependencies="required-after:AncientWarfareCore")
+@Mod( modid = "AncientStrategy", name="Ancient Strategy", version=Statics.VERSION, dependencies="required-after:AncientWarfareCore;required-after:AncientStructures")
 @NetworkMod
 (
 clientSideRequired = true,
@@ -67,7 +71,8 @@ public void loadConfiguration(File config, Logger log)
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
-
+  PacketHandler.registerPacketType(8, Packet08Strategy.class);
+  AWGameData.addDataClass(StrategyStructureData.dataName, StrategyStructureData.class);
   }
 
 @Override
