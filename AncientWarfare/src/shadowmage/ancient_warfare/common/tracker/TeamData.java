@@ -110,6 +110,10 @@ public void setPlayerTeam(String playerName, int newTeam)
 public void setPlayerRank(String playerName, int newRank)
   {
   TeamEntry t = this.getEntryForPlayer(playerName);
+  if(t!=null && t.teamNum==0)
+    {
+    return;//do not set rank for team0 players.  there will be no admin for that team
+    }
   int rank = t.getPlayerRank(playerName);
   if(rank==10)
     {

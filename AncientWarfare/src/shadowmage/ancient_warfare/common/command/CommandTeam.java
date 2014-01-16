@@ -20,14 +20,16 @@
  */
 package shadowmage.ancient_warfare.common.command;
 
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
@@ -39,6 +41,12 @@ public class CommandTeam extends CommandBase
 public CommandTeam()
   {
 
+  }
+
+@Override
+public int getRequiredPermissionLevel()
+  {
+  return 2;
   }
 
 @Override
@@ -54,8 +62,59 @@ public String getCommandUsage(ICommandSender icommandsender)
   }
 
 @Override
+public boolean isUsernameIndex(String[] str, int par2)
+  {
+  if(str[0].equals("list")){return false;}
+  if(str[0].equals("set")){return par2==2;}
+  if(str[0].equals("setrank")){return par2==1;}
+  return false;
+  }
+
+@Override
+public List addTabCompletionOptions(ICommandSender cmd, String[] str)
+  {
+  if(str.length==1)
+    {
+    return getListOfStringsMatchingLastWord(str, new String[] {"set", "setrank", "list"});
+    }
+  else if(str.length==2)
+    {
+    if(str[0].equals("set"))
+      {
+      return null;//would match vs team numbers
+      }
+    else if(str[0].equals("setrank"))
+      {
+      return getListOfStringsMatchingLastWord(str, this.getListOfPlayerUsernames());
+      }
+    else if(str[0].equals("list"))
+      {
+      return null;//would match vs team numbers
+      }    
+    }
+  else if(str.length==3)
+    {
+    if(str[0].equals("set"))
+      {
+      return getListOfStringsMatchingLastWord(str, this.getListOfPlayerUsernames());
+      }
+    else
+      {
+      return null;//setrank, would match vs team numbers
+      }
+    }
+  return null;
+  }
+
+protected String[] getListOfPlayerUsernames()
+  {
+  return MinecraftServer.getServer().getAllUsernames();
+  }
+
+@Override
 public void processCommand(ICommandSender icommandsender, String[] astring)
   {
+  Config.logDebug("processing team command..."+icommandsender);
   if(astring.length<=0){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
   String command = astring [0];
   if(command.equals("list"))
