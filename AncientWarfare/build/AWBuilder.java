@@ -120,6 +120,12 @@ private static void replaceVersionNumber(String inputFile, String versionNumber)
 
 private static void buildFiles(String mcpPath)
   {
+  /**
+   * TODO
+   * build a batch file to call
+   * insert the relevant cd commands/etc
+   * should allow for the call-path to be correct for calling the mcp-recompile.bat
+   */
   mcpPath = mcpPath.replace('/', '\\');
   Process p = null;
   try
