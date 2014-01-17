@@ -106,11 +106,6 @@ public void onExploded(Explosion expl)
     }
   }
 
-public void onDamaged(EntityPlayer player)
-  {
-  
-  }
-
 @Override
 public boolean canUpdate()
   {
