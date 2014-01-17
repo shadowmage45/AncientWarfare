@@ -22,49 +22,91 @@ package shadowmage.ancient_strategy.common.structure;
 
 import java.util.UUID;
 
+import cpw.mods.fml.common.IPlayerTracker;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
+import shadowmage.ancient_strategy.common.network.Packet08Strategy;
 
-public class StrategyStructureManager
+public class StrategyStructureManager implements IPlayerTracker
 {
 
+private StrategyStructureManager(){}
+private static StrategyStructureManager instance = new StrategyStructureManager();
 public static StrategyStructureManager instance(){return null;}
 
-public StrategyStructureManager()
-  {
-  
-  }
+StrategyStructureData clientData;
 
 public StrategyStructure getStructureByID(World world, UUID id)
   {
-  StrategyStructureData data = AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
+  StrategyStructureData data = world.isRemote? clientData : AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
   return data==null ? null : data.getStructureByID(world, id);
   }
 
 public void addStructure(World world, StrategyStructure structure)
   {
-  StrategyStructureData data = AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
+  StrategyStructureData data = world.isRemote? clientData : AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
   data.addStructure(world, structure);
+  if(!world.isRemote)
+    {
+    /**
+     * send add packet
+     */
+    }
   }
 
 public void removeStructure(World world, UUID id)
   {
-  StrategyStructureData data = AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
+  StrategyStructureData data = world.isRemote? clientData : AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
   data.removeStructure(world, id);
-  }
-
-public void removeStructureClient(World world, UUID id)
-  {
-  StrategyStructureData data = AWGameData.get(world, StrategyStructureData.dataName, StrategyStructureData.class);
-  data.removeStructureClient(world, id);
+  if(!world.isRemote)
+    {
+    /**
+     * send remove packet
+     */
+    }
   }
 
 public void handlePacketData(World world, NBTTagCompound tag)
   {
-  /**
-   * server->client comms regarding new structures/removals/etc
-   */
+  if(tag.hasKey("clientInit"))
+    {
+    this.clientData = new StrategyStructureData();
+    this.clientData.readFromNBT(tag.getCompoundTag("clientInit"));
+    }
+  else if(tag.hasKey("add"))
+    {
+    //read the client structure from an inner tag
+    }
+  else if(tag.hasKey("remove"))
+    {
+    //read the uuid msb/lsb, construct an uuid, and remove by key
+    }
   }
+
+//********************************************************************PLAYER TRACKER METHODS******************************************************************************//
+@Override
+public void onPlayerLogin(EntityPlayer player)
+  {  
+  if(player.worldObj.isRemote){return;}
+  NBTTagCompound tag = new NBTTagCompound();
+  StrategyStructureData data = AWGameData.get(player.worldObj, StrategyStructureData.dataName, StrategyStructureData.class);
+  data.writeToNBT(tag);
+  
+  Packet08Strategy pkt = new Packet08Strategy();
+  pkt.packetData.setCompoundTag("clientInit", tag);
+  pkt.sendPacketToPlayer(player);
+  }
+
+@Override
+public void onPlayerLogout(EntityPlayer player){}
+
+@Override
+public void onPlayerChangedDimension(EntityPlayer player){}
+
+@Override
+public void onPlayerRespawn(EntityPlayer player){}
 
 }

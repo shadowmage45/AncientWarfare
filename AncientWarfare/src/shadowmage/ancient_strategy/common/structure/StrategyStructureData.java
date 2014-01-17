@@ -30,8 +30,7 @@ import shadowmage.ancient_framework.common.gamedata.GameData;
 public class StrategyStructureData extends GameData
 {
 
-HashMap<Integer, StrategyStructureDimensionList> existingServerStructures = new HashMap<Integer, StrategyStructureDimensionList>();
-HashMap<Integer, StrategyStructureDimensionList> existingClientStructures = new HashMap<Integer, StrategyStructureDimensionList>();
+HashMap<Integer, StrategyStructureDimensionList> structuresByDimension = new HashMap<Integer, StrategyStructureDimensionList>();
 
 public static String dataName = "AW_STRATEGY_DATA";
 
@@ -65,42 +64,28 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
   }
 
 public StrategyStructure getStructureByID(World world, UUID id)
-  {
-  StrategyStructureDimensionList list = world.isRemote ? existingClientStructures.get(world.provider.dimensionId) : existingServerStructures.get(world.provider.dimensionId);
-  return list == null ? null : list.structuresByID.get(id);
+  {  
+  if(!structuresByDimension.containsKey(world.provider.dimensionId))
+    {
+    return null;
+    }
+  return structuresByDimension.get(world.provider.dimensionId).structuresByID.get(id);
   }
 
 public void addStructure(World world, StrategyStructure structure)
   {
-  if(!this.existingServerStructures.containsKey(world.provider.dimensionId))
+  if(!this.structuresByDimension.containsKey(world.provider.dimensionId))
     {
-    this.existingServerStructures.put(world.provider.dimensionId, new StrategyStructureDimensionList());
+    this.structuresByDimension.put(world.provider.dimensionId, new StrategyStructureDimensionList());
     }
-  this.existingServerStructures.get(world.provider.dimensionId).structuresByID.put(structure.id, structure);
-  }
-
-public void addStructureClient(World world, StrategyStructure structure)
-  {
-  if(!this.existingClientStructures.containsKey(world.provider.dimensionId))
-    {
-    this.existingClientStructures.put(world.provider.dimensionId, new StrategyStructureDimensionList());
-    }
-  this.existingClientStructures.get(world.provider.dimensionId).structuresByID.put(structure.id, structure);  
+  this.structuresByDimension.get(world.provider.dimensionId).structuresByID.put(structure.id, structure);
   }
 
 public void removeStructure(World world, UUID id)
   {
-  if(this.existingServerStructures.containsKey(world.provider.dimensionId))
+  if(this.structuresByDimension.containsKey(world.provider.dimensionId))
     {
-    this.existingServerStructures.get(world.provider.dimensionId).structuresByID.remove(id);
-    }
-  }
-
-public void removeStructureClient(World world, UUID id)
-  {
-  if(this.existingClientStructures.containsKey(world.provider.dimensionId))
-    {
-    this.existingClientStructures.get(world.provider.dimensionId).structuresByID.remove(id);
+    this.structuresByDimension.get(world.provider.dimensionId).structuresByID.remove(id);
     }
   }
 
