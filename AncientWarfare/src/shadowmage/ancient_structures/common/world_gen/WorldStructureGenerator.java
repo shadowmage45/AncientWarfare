@@ -34,6 +34,7 @@ import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
@@ -52,25 +53,26 @@ public static HashSet<String> defaultTargetBlocks = new HashSet<String>();
 
 static
 {
-skippableWorldGenBlocks.add(Block.cactus.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.vine.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.tallGrass.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.wood.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.plantRed.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.plantYellow.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.deadBush.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.leaves.getUnlocalizedName());
-skippableWorldGenBlocks.add(Block.snow.getUnlocalizedName());
 
-defaultTargetBlocks.add(Block.dirt.getUnlocalizedName());
-defaultTargetBlocks.add(Block.grass.getUnlocalizedName());
-defaultTargetBlocks.add(Block.stone.getUnlocalizedName());
-defaultTargetBlocks.add(Block.sand.getUnlocalizedName());
-defaultTargetBlocks.add(Block.gravel.getUnlocalizedName());
-defaultTargetBlocks.add(Block.sandStone.getUnlocalizedName());
-defaultTargetBlocks.add(Block.blockClay.getUnlocalizedName());
-defaultTargetBlocks.add(Block.oreIron.getUnlocalizedName());
-defaultTargetBlocks.add(Block.oreCoal.getUnlocalizedName());
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.cactus));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.vine));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.tallGrass));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.wood));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.plantRed));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.plantYellow));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.deadBush));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.leaves));
+skippableWorldGenBlocks.add(BlockDataManager.getBlockName(Block.snow));
+
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.dirt));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.grass));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.stone));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.sand));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.gravel));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.sandStone));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.blockClay));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.oreIron));
+defaultTargetBlocks.add(BlockDataManager.getBlockName(Block.oreCoal));
 }
 
 
@@ -146,7 +148,7 @@ public static int getTargetY(World world, int x, int z, boolean skipWater)
     if(id==0){continue;}
     block = Block.blocksList[id];
     if(block==null){continue;}
-    if(skippableWorldGenBlocks.contains(block.getUnlocalizedName())){continue;}
+    if(skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block))){continue;}
     if(skipWater && (id==Block.waterMoving.blockID || id==Block.waterStill.blockID)){continue;}
     return y;
     }

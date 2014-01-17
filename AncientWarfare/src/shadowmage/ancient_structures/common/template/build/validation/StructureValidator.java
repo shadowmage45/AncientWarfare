@@ -37,6 +37,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
@@ -419,9 +420,9 @@ protected boolean validateBlockType(World world, int x, int y, int z, Set<String
     AWLog.logDebug("rejected for non-matching block: air" + " at: "+x+","+y+","+z);
     return false;
     }
-  if(!validBlocks.contains(block.getUnlocalizedName()))
+  if(!validBlocks.contains(BlockDataManager.getBlockName(block)))
     {
-    AWLog.logDebug("rejected for non-matching block: "+block.getUnlocalizedName() + " at: "+x+","+y+","+z);
+    AWLog.logDebug("rejected for non-matching block: "+BlockDataManager.getBlockName(block) + " at: "+x+","+y+","+z);
     return false;
     }
   return true;  
@@ -487,7 +488,7 @@ protected void borderLeveling(World world, int x, int z, StructureTemplate templ
     }
   int y = bb.min.y + template.yOffset + step - 1;
   Block block = Block.blocksList[world.getBlockId(x, y, z)];
-  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
     {
     world.setBlock(x, y, z, fillBlockID);
     }  
@@ -509,7 +510,7 @@ protected void borderFill(World world, int x, int z, StructureTemplate template,
   for(int y = maxFillY; y>1; y--)
     {
     block = Block.blocksList[world.getBlockId(x, y, z)];
-    if(block==null || WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) || (block==Block.waterStill || block==block.waterMoving))
+    if(block==null || WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==block.waterMoving))
       {
       world.setBlock(x, y, z, fillBlockID);
       }

@@ -51,7 +51,7 @@ public int buildPass = 0;
 public TemplateRuleVanillaBlocks(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
-  this.blockName = block.getUnlocalizedName();
+  this.blockName = BlockDataManager.getBlockName(block);
   this.meta = BlockDataManager.getRotatedMeta(block, meta, turns);
   this.buildPass = BlockDataManager.getBlockPriority(block.blockID, meta);
   }
@@ -72,7 +72,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
 @Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
-  return block!=null && blockName.equals(block.getUnlocalizedName()) && BlockDataManager.getRotatedMeta(block, meta, turns) == this.meta;
+  return block!=null && blockName.equals(BlockDataManager.getBlockName(block)) && BlockDataManager.getRotatedMeta(block, meta, turns) == this.meta;
   }
 
 @Override

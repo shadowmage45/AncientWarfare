@@ -35,6 +35,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.common.config.Statics;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
 public class GuiBlockSelection extends GuiContainerAdvanced
 {
@@ -103,7 +104,7 @@ public void setupControls()
 
 private void addBlock(int elementNum, int y, int x, Block block)
   {
-  GuiString label = new GuiString(elementNum, area, 100, 12, block.getUnlocalizedName());
+  GuiString label = new GuiString(elementNum, area, 100, 12, BlockDataManager.getBlockName(block));
   label.updateRenderPos(x, y);
   area.elements.add(label);
   
@@ -138,7 +139,7 @@ public void onElementActivated(IGuiElement element)
       {
       if(box.checked)
         {
-        selectedBlocks.add(this.blockBoxes.get(box).getUnlocalizedName());
+        selectedBlocks.add(BlockDataManager.getBlockName(this.blockBoxes.get(box)));
         }
       }
     parent.onBlockSelectionCallback(selectedBlocks);

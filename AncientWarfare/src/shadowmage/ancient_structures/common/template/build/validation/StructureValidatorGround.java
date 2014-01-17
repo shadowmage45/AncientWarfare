@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
@@ -40,7 +41,7 @@ public StructureValidatorGround()
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
-  if(block==null || !validTargetBlocks.contains(block.getUnlocalizedName())){return false;}
+  if(block==null || !validTargetBlocks.contains(BlockDataManager.getBlockName(block))){return false;}
   return true;
   }
 
@@ -130,21 +131,21 @@ private void doStructurePrePlacementBlockPlace(World world, int x, int z, Struct
     block = Block.blocksList[id];
     if(leveling>0 && y >= minLevelY)
       {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && validTargetBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
         }
       }
     else if(leveling>0 && y==minLevelY-1)
       {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()) && validTargetBlocks.contains(block.getUnlocalizedName()))
+      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);        
         }
       }
     if(fill>0 && y<=maxFillY)
       {
-      if(block==null || !WorldStructureGenerator.skippableWorldGenBlocks.contains(block.getUnlocalizedName()))
+      if(block==null || !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
         {
         chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
         }
