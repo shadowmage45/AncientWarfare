@@ -239,35 +239,7 @@ public static int getRotatedMeta(Block block, int meta, int rotationAmt)
 
 public static Block getBlockByName(String name)
   {
-  Block block = foundBlockMap.get(name);
-  if(block==null && !notFoundBlocks.contains(name))
-    {
-    for(int i = 0; i < Block.blocksList.length; i++)
-      {
-      block = Block.blocksList[i];
-      if(block!=null && name.equals(block.getUnlocalizedName()))
-        {
-        foundBlockMap.put(name, block);
-        break;
-        }
-      }
-    }
-  return block;
-  }
-
-public static Set<Block> getBlocksByName(String[] names, Set<Block> in)
-  {
-  Block block;
-  for(String st : names)
-    {
-    if(st==null){continue;}
-    block = BlockDataManager.getBlockByName(st);
-    if(block!=null)
-      {
-      in.add(block);
-      }
-    }
-  return in;
+  return blocksBy17Name.get(name);
   }
 
 public static String getBlockName(Block block)
