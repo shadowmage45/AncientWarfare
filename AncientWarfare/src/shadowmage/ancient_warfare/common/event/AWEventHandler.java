@@ -21,20 +21,27 @@
 package shadowmage.ancient_warfare.common.event;
 
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import shadowmage.ancient_warfare.common.block.TEAWBlockReinforced;
 import shadowmage.ancient_warfare.common.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
@@ -131,5 +138,33 @@ public void onItemUsed(PlayerInteractEvent evt)
       }    
     }  
   }
+
+@ForgeSubscribe
+public void onBlockBreak(BlockEvent.BreakEvent evt)
+  {
+  if(evt.isCanceled() || evt.getPlayer()==null){return;}
+  Chunk chunk = evt.world.getChunkFromBlockCoords(evt.x, evt.z);
+  int teamNum = TeamTracker.instance().getTeamForPlayer(evt.getPlayer());
+  Map<Object, TileEntity> chunkMap = chunk.chunkTileEntityMap;
+  for(TileEntity e : chunkMap.values())
+    {
+    if(e instanceof TEAWBlockReinforced)
+      {
+      //pull up the TE, grabe the reinforcedChunk data
+      TEAWBlockReinforced te = (TEAWBlockReinforced)e;
+      if(te.ownerTeam!=teamNum)
+        {
+        evt.setCanceled(true);
+        te.damageRemaining--;
+        if(te.damageRemaining<=0)
+          {
+          evt.world.setBlock(te.xCoord, te.yCoord, te.zCoord, 0);
+          }
+        }
+      break;
+      }
+    } 
+  }
+
 
 }

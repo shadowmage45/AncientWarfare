@@ -85,6 +85,7 @@ private void handleNewPlayerLogin(String playerName)
 
 public int getTeamForPlayer(EntityPlayer player)
   {
+  if("AncientWarfare".equals(player.getEntityName())){return -1;}
   return getTeamEntryFor(player).teamNum;
   }
 

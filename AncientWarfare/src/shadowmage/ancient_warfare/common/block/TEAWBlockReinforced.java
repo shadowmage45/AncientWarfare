@@ -36,7 +36,7 @@ public class TEAWBlockReinforced extends TileEntity
 {
 
 public int baseBlockID;
-int damageRemaining = 16;
+public int damageRemaining = 16;
 public int ownerTeam = 0;
 
 /**
@@ -104,6 +104,11 @@ public void onExploded(Explosion expl)
     {
     worldObj.setBlockToAir(xCoord, yCoord, zCoord);    
     }
+  }
+
+public void onDamaged(EntityPlayer player)
+  {
+  
   }
 
 @Override
