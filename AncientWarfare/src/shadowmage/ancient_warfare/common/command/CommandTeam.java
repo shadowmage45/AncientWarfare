@@ -114,7 +114,6 @@ protected String[] getListOfPlayerUsernames()
 @Override
 public void processCommand(ICommandSender icommandsender, String[] astring)
   {
-  Config.logDebug("processing team command..."+icommandsender);
   if(astring.length<=0){throw new WrongUsageException(getCommandUsage(icommandsender), new Object[0]);}
   String command = astring [0];
   if(command.equals("list"))
