@@ -239,7 +239,7 @@ public static int getRotatedMeta(Block block, int meta, int rotationAmt)
 
 public static Block getBlockByName(String name)
   {
-  return blocksBy17Name.get(name);
+  return blocksBy17Name.containsKey(name)? blocksBy17Name.get(name) : Block.stone;
   }
 
 public static String getBlockName(Block block)
