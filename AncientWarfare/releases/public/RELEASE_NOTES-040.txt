@@ -1,0 +1,23 @@
+Change Log 039 -> 040 (01-17-14)
+
+* NEW -- Added / commands for team manipulation. These commands should be available to all server ops and via command blocks.     
+    /awteam set [teamNum playerName]
+    /awteam setrank [playerName newRank]
+    /awteam list
+    /awteam list [teamNum]
+* NEW -- New/updated Team control GUI.  Littl bit cleaner formatting, easier to understand/use.
+* NEW -- Block-Break event support.  Mostly for use by protection mods.  Known to support MyTown, and many others should work.
+* NEW -- Warzones system -- a _very_ basic built-in block-protection mechanism.  Default is for it to be disabled, and no change from previous functionality)
+* NEW -- New config options to enable/disable firing of block-break events, and to enable/disable/invert warzones.
+* CHANGE -- Civics store placing-player name for use in block-break/protection events.  Civics will break blocks as if they _are_ the player that placed them.
+* FIX -- Team system back-end code has been rewritten.  Should resolve many issues with duplicate entries, erroneous teams, and improper ranks.
+* CHANGE -- minor change in the handling/storing of team-data.  It is no longer stored in AWGameData, but no has its own data file (AW_TEAM_DATA.dat)
+* FIX -- fix translation/death message when killed directly by an NPC (missiles were fixed previously)
+* FIX -- fix registration of items to prevent log-spam of 'this item will not survive an upgrade to 1.7'
+* FIX -- Reinforced blocks no longer think that they can update on-tick.
+* FIX -- Quarry will now validate blocks before placing ladders.  Will not _fill_ empty blocks, but will no longer place ladders where it should not.
+* FIX -- Icons should once again render properly in the ammo-selection gui for vehicles.
+* FIX -- resolve a _potential_ crash that would result when item-ids are not set properly. (this doesn't fix people messing up their item-ids, merely a crash that could occur when they were messed up..)
+ 
+    
+   
