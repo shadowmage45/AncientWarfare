@@ -3,41 +3,39 @@
 <!--<?xml version="1.0" encoding="UTF-8" ?>-->
 
 <project name="AW" default="build">
-	
-	<!--base directory variable-->
+
 	<dirname property="imported.basedir" file="${ant.file.AW}"/>
-	
-	<!--build directory variable-->
-	<property name="build.dir" value="build"/>
-	
-	<!--base source file directory variable-->
-    <property name="src.dir" value="${imported.basedir}/src/shadowmage"/>
-	
-	<!--base language file directory variable-->
-	<property name="lang.dir" value="${imported.basedir}/src/lang"/>
-	
-	<!--base assets file directory variable-->
-	<property name="resources.dir" value="${imported.basedir}/src/assets"/>
-	
-	<property name="mc.version" value="1.6.2"/>	
-	<property name="forge.version" value="9.10.1.871"/>
-    <property name="download.dir" value="${imported.basedir}/download"/>
 
-    <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir" value="bin"/>
+	<property name="dir.home" value="c:/antbuilds"/>
+	<property name="dir.build" value="${dir.home}/awbuild"/>
+	<property name="dir.build.forge" value="${dir.build}/forge"/>
+	<property name="dir.build.mcp" value="${dir.build.forge}/mcp"/>
+	<property name="dir.build.download" value="${dir.build}/download"/>
+	<property name="dir.build.src" value="${dir.build.mcp}/src/minecraft"/>
+    <property name="dir.build.lang" value ="${dir.build.src}/lang"/>
+	<property name="dir.build.assets" value ="${dir.build.src}/assets"/>
+	<property name="dir.build.reobf" value ="${dir.build.mcp}/reobf/minecraft"/>
+	<property name="dir.build.output" value="${dir.build}/output"/>	
+	
+	<property name="dir.src" value="${imported.basedir}"/>
+	<property name="dir.src.dummy" value="${imported.basedir}/dummy"/>
+	<property name="dir.src.main" value="${imported.basedir}/src"/>
+	<property name="dir.src.lang" value="${imported.basedir}/src/lang"/>
+	<property name="dir.src.assets" value="${imported.basedir}/src/assets"/>
+	<property name="dir.src.resources" value="${imported.basedir}/src/shadowmage/ancient_warfare/resources"/>
+			
+	<property name="version.mc" value="1.6.4"/>	
+	<property name="version.forge" value="9.11.1.965"/>
+	    	
+	<property name="forge.name" value="forge-${version.mc}-${version.forge}-src.zip"/>
+	
+	<available property="forge-exists" file="${dir.download}/${forge.name}"/>
 
-    <property name="forge.dir" value="${build.dir}/forge"/>
-    <property name="mcp.dir" value="${forge.dir}/mcp"/>
-	
-	<property name="forge.name" value="minecraftforge-src-${mc.version}-${forge.version}.zip"/>
-	
-	<available property="forge-exists" file="${download.dir}/${forge.name}"/>
-	
     <condition property="out-of-date">
         <not>
             <and>
                 <isset property="forge-exists"/>
-                <available file="${mcpsrc.dir}"/>
+                <available file="${dir.build.src}"/>
             </and>
         </not>
     </condition>
@@ -47,72 +45,98 @@
 
     <!-- Download forge (if it doesn't exist) -->
     <target name="download-forge" unless="forge-exists">
-        <get src="http://files.minecraftforge.net/${forge.name}" dest="${download.dir}" usetimestamp="True"/>
+    	<mkdir dir="${dir.home}"/>
+    	<mkdir dir="${dir.build}"/>
+    	<mkdir dir="${dir.build.download}"/>
+        <get src="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${version.mc}-${version.forge}/${forge.name}" dest="${dir.build.download}" usetimestamp="True"/>
+    </target>
+	
+	<target name="update_version">
+	    <propertyfile file="${dir.src.main}/version.properties">
+	           <entry key="build" type="int" operation="+" default="1" />          
+	    </propertyfile> 
+		<property file="${dir.src.main}/version.properties"/>
     </target>
 
     <!-- Setup mcp and forge -->
     <target name="setup" depends="download-files" if="out-of-date">
 
-        <unzip dest="${forge.dir}/.." src="${download.dir}/${forge.name}"/>
+        <unzip dest="${dir.build.forge}/.." src="${dir.build.download}/${forge.name}"/>
 
         <!-- Fix executable permissions -->
-        <chmod dir="${forge.dir}" perm="ugo+rx" includes="**.sh"/>
+        <chmod dir="${dir.build.forge}" perm="ugo+rx" includes="**.sh"/>
 
         <!-- Install forge -->
-        <exec dir="${forge.dir}" executable="cmd" osfamily="windows">
+        <exec dir="${dir.build.forge}" executable="cmd" osfamily="windows">
             <arg line="/c install.cmd"/>
         </exec>
 
-        <exec dir="${forge.dir}" executable="sh" osfamily="unix">
+        <exec dir="${dir.build.forge}" executable="sh" osfamily="unix">
             <arg value="install.sh"/>
         </exec>
 
-    </target>
-			
-    <target name="build" depends="setup">
-        <!--
-        <delete dir="output" />
-        <delete dir="reobf/minecraft" />
-        
-        <copy todir="src/minecraft">        
-        <fileset dir="c:/git_source/git/AncientWarfare/AncientWarfare/src"/>  
-        <fileset dir="c:/git_source/git/BuildCraft/common"/>  
-        </copy>
-        
-        <mkdir dir="output" />
-        <mkdir dir="output/pack" />
+    </target>	
+    <target name="build" depends="setup,update_version">
+        <echo message="version read: ${version}   build read: ${build}"/>
+        <delete dir="${dir.build.mcp}/reobf/minecraft" />
+        <delete dir="${dir.build.output}"/>
+    	<mkdir dir="${dir.build.output}"/>
     	
-        <exec executable="recompile.bat" dir="." resolveexecutable="true" osfamily="windows"></exec>
+        <copy todir="${dir.build.src}">        
+        <fileset dir="${dir.src.main}"/>  
+        <fileset dir="${dir.src.dummy}"/> 
+            <filterset>
+            	   <filter token="VERSION" value="${version}" />
+        	</filterset>
+        </copy>
+    	
+        <exec dir="${dir.build.mcp}" executable="cmd" resolveexecutable="true" osfamily="windows">
+        	<arg line="/c recompile.bat"/>
+        </exec>
         
-        <exec executable="reobfuscate_srg.bat" dir="." resolveexecutable="true" osfamily="windows"></exec>
+        <exec dir="${dir.build.mcp}" executable="cmd"  resolveexecutable="true" osfamily="windows">
+        	<arg line="/c reobfuscate_srg.bat"/>
+        </exec>
         
-        <exec executable="recompile.sh" dir="." resolveexecutable="true" osfamily="unix"></exec>
+        <exec executable="${dir.build.mcp}/recompile.sh" dir="." resolveexecutable="true" osfamily="unix">
+        	<arg value="recompile.sh"/>
+        </exec>
         
-        <exec executable="reobfuscate_srg.sh" dir="." resolveexecutable="true" osfamily="unix"></exec>
+        <exec executable="${dir.build.mcp}/reobfuscate_srg.sh" dir="." resolveexecutable="true" osfamily="unix">
+        	<arg value="reobfuscate_srg.sh"/>
+        </exec>
     
-    	<copy todir="output/pack/shadowmage">
-    	<fileset dir="reobf/minecraft/shadowmage"/>
+    	<copy todir="${dir.build.output}/shadowmage">
+    	<fileset dir="${dir.build.reobf}/shadowmage"/>
     	</copy>
     	
-    	<copy todir="output/pack/assets">
-		<fileset dir="c:/git_source/git/AncientWarfare/AncientWarfare/src/assets"/>
+    	<copy todir="${dir.build.output}/assets">
+		<fileset dir="${dir.src.assets}"/>
 		</copy>
         
-    	<copy todir="output/pack/lang">
-        <fileset dir="c:/git_source/git/AncientWarfare/AncientWarfare/src/lang"/>
-    	</copy>
+    	<copy todir="${dir.build.output}/lang">
+        <fileset dir="${dir.src.lang}"/>
+    	</copy>    	
     	
-    	<copy todir="output/pack">
-        <fileset file="c:/git_source/git/AncientWarfare/AncientWarfare/src/mcmod.info"/>
+    	<copy todir="${dir.build.output}/shadowmage/ancient_warfare/resources">
+        <fileset dir="${dir.src.resources}"/>
         </copy>
     	
-        <jar destfile="output/TestMod_1.1.jar">            
-        <fileset dir="output/pack" />            
+    	<copy todir="${dir.build.output}">
+        <fileset file="${dir.src.main}/mcmod.info"/>
+    	    <filterset>
+    	        <filter token="VERSION" value="${version}" />
+    		</filterset>
+        </copy>
+    	
+    	<jar destfile="${dir.build.output}/AW-${version}-${build}.jar">            
+        <fileset dir="${dir.build.output}" />            
         </jar>
+    	
+    	<delete dir="${dir.build.src}/buildcraft"/>
+    	<delete dir="${dir.build.src}/shadowmage"/>
+        
+    </target>	
+	
 
-        <delete dir="src/minecraft/shadowmage"/>
-    	<delete dir="src/minecraft/buildcraft"/>
-    	-->
-    </target>
-    
 </project>
