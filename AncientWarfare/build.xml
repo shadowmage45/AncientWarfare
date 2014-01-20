@@ -5,8 +5,10 @@
 <project name="AW" default="build">
 
 	<dirname property="imported.basedir" file="${ant.file.AW}"/>
-
-	<property name="dir.home" value="c:/antbuilds"/>
+	
+	<!--<property name="dir.home" value="c:/antbuilds"/>-->
+	<property name="dir.home" value="${user.home}"/>
+	
 	<property name="dir.build" value="${dir.home}/awbuild"/>
 	<property name="dir.build.forge" value="${dir.build}/forge"/>
 	<property name="dir.build.mcp" value="${dir.build.forge}/mcp"/>
