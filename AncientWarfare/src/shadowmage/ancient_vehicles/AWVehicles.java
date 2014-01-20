@@ -23,6 +23,7 @@ package shadowmage.ancient_vehicles;
 import java.io.File;
 import java.util.logging.Logger;
 
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
@@ -66,56 +67,36 @@ public void loadConfiguration(File config, Logger log)
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
-
+  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  AWFramework.loadedVehicles = true;
   }
 
 @Override
 @EventHandler
-public void init(FMLInitializationEvent evt)
-  {
-
-  }
+public void init(FMLInitializationEvent evt){}
 
 @Override
 @EventHandler
-public void postInit(FMLPostInitializationEvent evt)
-  {
-
-  }
+public void postInit(FMLPostInitializationEvent evt){}
 
 @Override
 @EventHandler
-public void serverPreStart(FMLServerAboutToStartEvent evt)
-  {
-
-  }
+public void serverPreStart(FMLServerAboutToStartEvent evt){}
 
 @Override
 @EventHandler
-public void serverStarting(FMLServerStartingEvent evt)
-  {
-
-  }
+public void serverStarting(FMLServerStartingEvent evt){}
 
 @Override
 @EventHandler
-public void serverStarted(FMLServerStartedEvent evt)
-  {
-
-  }
+public void serverStarted(FMLServerStartedEvent evt){}
 
 @Override
 @EventHandler
-public void serverStopping(FMLServerStoppingEvent evt)
-  {
-
-  }
+public void serverStopping(FMLServerStoppingEvent evt){}
 
 @Override
 @EventHandler
-public void serverStopped(FMLServerStoppedEvent evt)
-  {
-
-  }
+public void serverStopped(FMLServerStoppedEvent evt){}
 
 }

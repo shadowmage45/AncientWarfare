@@ -32,16 +32,23 @@ public class EntityVehicle extends Entity implements IEntityAdditionalSpawnData
 {
 
 private VehicleType vehicleType;
+private Object firingHelper;
 
 public EntityVehicle(World par1World)
   {
   super(par1World);
   }
 
-public EntityVehicle(World world, VehicleType type)
+public EntityVehicle setVehicleType(VehicleType type)
   {
-  this(world);
   this.vehicleType = type;
+  return this;
+  }
+
+public EntityVehicle setFiringHelper(Object firingHelper)
+  {
+  this.firingHelper = firingHelper;
+  return this;
   }
 
 public VehicleType getVehicleType()
@@ -58,25 +65,34 @@ protected void entityInit()
 @Override
 protected void readEntityFromNBT(NBTTagCompound tag)
   {
-
+  String typeName = tag.getString("vehicleType");
+  this.setVehicleType(VehicleType.getVehicleType(typeName));
+  this.setFiringHelper(this.getVehicleType().getNewFiringHelper(this));
+  NBTTagCompound firingVars = tag.getCompoundTag("firingVars");
+  //TODO have firing helper read from nbt
+  //TODO finish reading vehicle from nbt -- e.g. vehicleStats
   }
 
 @Override
 protected void writeEntityToNBT(NBTTagCompound tag)
   {
-
+  tag.setString("vehicleType", this.getVehicleType().getName());
+  tag.setCompoundTag("firingVars", null);//TODO this will crash...blah..need to make firingVars class
+  //TODO have firing helper write out to NBT
   }
 
 @Override
 public void writeSpawnData(ByteArrayDataOutput data)
   {
-  
+  //TODO create an NBTTag of spawn data
+  //write that tag onto stream
   }
 
 @Override
 public void readSpawnData(ByteArrayDataInput data)
   {
-  
+  //read nbt tag from stream
+  //read vars from tag...will need to mimic readEntityFromNBT
   }
 
 }

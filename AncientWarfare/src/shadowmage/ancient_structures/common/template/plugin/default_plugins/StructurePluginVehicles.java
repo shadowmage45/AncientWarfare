@@ -25,31 +25,28 @@ import java.util.List;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityLogic;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
+import shadowmage.ancient_vehicles.common.vehicle.EntityVehicle;
 
 public class StructurePluginVehicles extends StructureContentPlugin
 {
 
-/**
- * 
- */
 public StructurePluginVehicles()
   {
-  // TODO Auto-generated constructor stub
+  
   }
 
 @Override
 public void addHandledBlocks(StructurePluginManager manager)
   {
-  // TODO Auto-generated method stub
 
   }
 
 @Override
 public void addHandledEntities(StructurePluginManager manager)
   {
-  // TODO Auto-generated method stub
-
+  manager.registerEntityHandler("ancientWarfareVehicle", EntityVehicle.class, TemplateRuleEntityLogic.class);
   }
 
 public static void load()
@@ -57,5 +54,4 @@ public static void load()
   AWStructures.instance.pluginManager.addPlugin(new StructurePluginVehicles());
   }
 
-public static TemplateRuleEntity parseVehicleRule(List<String> lines){return null;}
 }

@@ -20,7 +20,10 @@
  */
 package shadowmage.ancient_vehicles.common.vehicle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+
+import net.minecraft.world.World;
 
 public class VehicleType
 {
@@ -29,6 +32,7 @@ public static HashMap<String, VehicleType> vehicleTypes = new HashMap<String, Ve
 
 String name;//translation key/unique registered name for this vehicle type
 Object movementType;//enum / flag for movement type for this vehicle
+Class firingHelper;//reference to the firing helper type for this vehicle, for constructing new vehicle entities
 int maxHealth;//max health for this vehicle type
 float mass;//un-adjusted mass for this vehicle
 float thrust;//used with mass to determine acceleration/handling for this vehicle
@@ -49,4 +53,52 @@ public static final VehicleType getVehicleType(String name)
   return vehicleTypes.get(name);
   }
 
+public String getName(){return name;}
+
+public Object getNewFiringHelper(EntityVehicle vehicle)
+  {
+  try
+    {
+    return firingHelper.getDeclaredConstructor(EntityVehicle.class).newInstance(vehicle);
+    } 
+  catch (InstantiationException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } 
+  catch (IllegalAccessException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } 
+  catch (IllegalArgumentException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } 
+  catch (InvocationTargetException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } 
+  catch (NoSuchMethodException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    } 
+  catch (SecurityException e)
+    {
+    // TODO Auto-generated catch block
+    e.printStackTrace();
+    }
+  return null;
+  }
+
+public static EntityVehicle createVehicle(World world, String typeName)
+  {
+  VehicleType type = VehicleType.getVehicleType(typeName);  
+  EntityVehicle entity = new EntityVehicle(world).setVehicleType(type);
+  entity.setFiringHelper(type.getNewFiringHelper(entity));
+  return entity;
+  }
 }

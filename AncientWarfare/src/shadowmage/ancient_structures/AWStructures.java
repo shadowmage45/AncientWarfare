@@ -170,16 +170,4 @@ public void onPlayerChangedDimension(EntityPlayer player){}
 @Override
 public void onPlayerRespawn(EntityPlayer player){}
 
-//protected void rotateTest()
-//  {
-//  BlockPosition min, max;
-//  min = new BlockPosition(10,10,10);
-//  max = new BlockPosition(20,20,20);
-//  
-//  StructureBB bb = new StructureBB(min, max);
-//  
-//  BlockPosition pos = bb.getPositionInTemplate(10, 10, 10, 1);
-//  this.config.log("rotated pos: "+pos + " (should be 10, 0, 0)");
-//  }
-
 }
