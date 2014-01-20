@@ -22,10 +22,11 @@ package shadowmage.ancient_vehicles.common.vehicle;
 
 import java.util.HashMap;
 
-import net.minecraft.world.World;
-
 public class VehicleRegistry
 {
+
+private static HashMap<String, Class> firingHelpers = new HashMap<String, Class>();
+private static HashMap<String, Object> moveTypes = new HashMap<String, Object>();
 
 /**
  * should be called from pre/init to load vehicle types from definition file
@@ -34,6 +35,16 @@ public class VehicleRegistry
 public static void loadVehicles()
   {
   
+  }
+
+public static Class getFiringHelperClass(String name)
+  {
+  return firingHelpers.get(name);
+  }
+
+public static Object getMoveType(String name)
+  {
+  return moveTypes.get(name);
   }
 
 

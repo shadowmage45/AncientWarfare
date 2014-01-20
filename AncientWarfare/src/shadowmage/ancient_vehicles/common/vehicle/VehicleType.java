@@ -23,6 +23,7 @@ package shadowmage.ancient_vehicles.common.vehicle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
+import shadowmage.ancient_framework.AWFramework;
 import net.minecraft.world.World;
 
 public class VehicleType
@@ -42,7 +43,7 @@ String renderId;//used by rendering to..well..render
 String modelTexture;//used by rendering to bind the proper texture
 String modelId;//used by rendering to select the proper model
 
-public VehicleType(int id, String name)
+public VehicleType(String name)
   {
   this.name = name;
   vehicleTypes.put(name, this);
@@ -100,5 +101,31 @@ public static EntityVehicle createVehicle(World world, String typeName)
   EntityVehicle entity = new EntityVehicle(world).setVehicleType(type);
   entity.setFiringHelper(type.getNewFiringHelper(entity));
   return entity;
+  }
+
+public static VehicleType parseFromCSV(String[] csv)
+  {
+  if(csv==null || csv.length<6)
+    {
+    throw new IllegalArgumentException("Could not parse vehicle type from:\n+"+csv+"\ndid not contain enough elements to parse");
+    }
+  VehicleType type = null;
+  String name = csv[0];
+  String model = csv[1];
+  String render = csv[2];
+  String texture = csv[3];
+  String fireHelper = csv[4];
+  String moveType = csv[5];
+  
+  type = new VehicleType(name);
+  type.firingHelper = VehicleRegistry.getFiringHelperClass(fireHelper);
+  type.modelId = model;
+  type.renderId = render;
+  type.modelTexture = texture;
+  type.movementType = VehicleRegistry.getMoveType(moveType);
+  /**
+   * TODO read the rest of vehicle-type stats (need to determine what the stats will be)
+   */
+  return type;
   }
 }
