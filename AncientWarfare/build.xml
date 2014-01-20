@@ -24,7 +24,6 @@
 	<property name="dir.src.main" value="${imported.basedir}/src"/>
 	<property name="dir.src.lang" value="${imported.basedir}/src/lang"/>
 	<property name="dir.src.assets" value="${imported.basedir}/src/assets"/>
-	<property name="dir.src.resources" value="${imported.basedir}/src/shadowmage/ancient_warfare/resources"/>
 			
 	<property name="version.mc" value="1.6.4"/>	
 	<property name="version.forge" value="9.11.1.965"/>
@@ -119,11 +118,7 @@
     	<copy todir="${dir.build.output}/lang">
         <fileset dir="${dir.src.lang}"/>
     	</copy>    	
-    	
-    	<copy todir="${dir.build.output}/shadowmage/ancient_warfare/resources">
-        <fileset dir="${dir.src.resources}"/>
-        </copy>
-    	
+    	    	
     	<copy todir="${dir.build.output}">
         <fileset file="${dir.src.main}/mcmod.info"/>
     	    <filterset>

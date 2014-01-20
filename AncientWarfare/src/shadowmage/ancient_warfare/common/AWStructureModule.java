@@ -73,7 +73,7 @@ public class AWStructureModule implements ITickHandler, INBTTaggable
 /**
  * used to grab streams of resources from inside the jar/zip/whatever....
  */
-private static final String defaultTemplateDirectory = "/shadowmage/ancient_warfare/resources/templates/";
+private static final String defaultTemplateDirectory = "/assets/ancientwarfare/resources/templates/";
 
 
 /**

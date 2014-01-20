@@ -366,7 +366,7 @@ private void copyDefaultFile(String fileName)
   byte[] byteBuffer;
   try
     {
-    is = this.getClass().getResourceAsStream("/shadowmage/ancient_warfare/resources/config/AWWorldGen.cfg");
+    is = this.getClass().getResourceAsStream("/assets/ancientwarfare/resources/config/AWWorldGen.cfg");
     if(is==null)
       {
       return;
