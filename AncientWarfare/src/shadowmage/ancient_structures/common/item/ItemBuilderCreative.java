@@ -54,16 +54,16 @@ public ItemBuilderCreative(int itemID)
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {  
-  if(!world.isRemote && hit!=null && Statics.DEBUG && player.isSneaking())
-    {
-    int id = world.getBlockId(hit.x, hit.y, hit.z);
-    int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
-    Block block = Block.blocksList[id];
-    if(block!=null && Statics.DEBUG)
-      {
-      player.addChatMessage("block hit is: "+id+" :: "+meta + " :: "+block.getUnlocalizedName());      
-      }
-    } 
+//  if(!world.isRemote && hit!=null && Statics.DEBUG && player.isSneaking())
+//    {
+//    int id = world.getBlockId(hit.x, hit.y, hit.z);
+//    int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
+//    Block block = Block.blocksList[id];
+//    if(block!=null && Statics.DEBUG)
+//      {
+//      player.addChatMessage("block hit is: "+id+" :: "+meta + " :: "+block.getUnlocalizedName());      
+//      }
+//    } 
   if(!world.isRemote && !player.isSneaking())
     {
     GUIHandler.instance().openGUI(Statics.guiStructureBuilderCreative, player, 0, 0, 0);    

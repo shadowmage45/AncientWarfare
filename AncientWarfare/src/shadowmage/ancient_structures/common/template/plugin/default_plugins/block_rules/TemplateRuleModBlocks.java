@@ -39,7 +39,7 @@ public int meta;
 public TemplateRuleModBlocks(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
-  this.blockName = block.getUnlocalizedName();
+  this.blockName = BlockDataManager.getBlockName(block);
   this.meta = meta;
   }
 
@@ -51,7 +51,7 @@ public TemplateRuleModBlocks()
 @Override
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {
-  return block.getUnlocalizedName().equals(blockName) && meta==this.meta;
+  return BlockDataManager.getBlockName(block).equals(blockName) && meta==this.meta;
   }
 
 @Override

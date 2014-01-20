@@ -26,6 +26,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
@@ -48,8 +49,10 @@ public StructureValidatorHarbor()
   validTargetBlocksRear = new HashSet<String>();
   validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
   validTargetBlocksSide.addAll(WorldStructureGenerator.defaultTargetBlocks);
-  validTargetBlocksRear.add(Block.waterMoving.getUnlocalizedName());  
-  validTargetBlocksSide.add(Block.waterMoving.getUnlocalizedName());
+  validTargetBlocksRear.add(BlockDataManager.getBlockName(Block.waterStill));  
+  validTargetBlocksRear.add(BlockDataManager.getBlockName(Block.waterMoving));
+  validTargetBlocksSide.add(BlockDataManager.getBlockName(Block.waterMoving));
+  validTargetBlocksSide.add(BlockDataManager.getBlockName(Block.waterStill));
   }
 
 @Override
@@ -67,7 +70,7 @@ public boolean shouldIncludeForSelection(World world, int x, int y, int z, int f
    * or at an acceptable level difference
    */
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];  
-  if(block!=null && validTargetBlocks.contains(block.getUnlocalizedName()))
+  if(block!=null && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
     {
     testMin.reassign(x, y, z);
     testMin.moveForward(face, template.zOffset);

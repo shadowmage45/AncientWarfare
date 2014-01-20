@@ -28,6 +28,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
@@ -113,7 +114,7 @@ public void preGeneration(World world, int x, int y, int z, int face,  Structure
       for(int by = bb.min.y-1; by>0; by--)
         {        
         block = Block.blocksList[world.getBlockId(bx, by, bz)];
-        if(block!=null && validTargetBlocks.contains(block.getUnlocalizedName()))
+        if(block!=null && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
           {
           break;
           }

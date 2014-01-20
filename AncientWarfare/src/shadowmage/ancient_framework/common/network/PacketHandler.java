@@ -207,7 +207,6 @@ public void handleMPPacket(Packet00MultiPart pkt)
       realPacket.world = pkt.player.worldObj;    
       realPacket.readDataStream(data);
       realPacket.execute();
-      this.partialPackets.remove(pkt.uniquePacketID);
       } 
     catch (InstantiationException e)
       {

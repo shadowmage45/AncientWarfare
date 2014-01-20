@@ -35,7 +35,7 @@ import shadowmage.ancient_structures.common.template.build.StructureBB;
 public class StrategyStructure
 {
 
-UUID id;
+public UUID id;//un-public this after testing
 String templateName;
 int buildFace;
 StructureBB bb;
@@ -44,6 +44,24 @@ StrategyStructureDefinition structureType;
 float currentHealth;
 float perBlockDamage;
 
+public StrategyStructure(int x, int y, int z, int face, StructureTemplate template, StrategyStructureDefinition type)
+  {
+  this.templateName = template.name;
+  this.buildFace = face;
+  this.bb = new StructureBB(x, y, z, face, template);
+  this.structureType = type;
+  this.id = UUID.randomUUID();
+  currentHealth = structureType.maxHealth;
+  
+  }
+
+/**
+ * NBT-constructor, should load from nbt immediately after construction
+ */
+public StrategyStructure()
+  {
+  
+  }
 
 public boolean isPositionInStructure(int x, int y, int z)
   {

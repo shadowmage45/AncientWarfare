@@ -239,35 +239,181 @@ public static int getRotatedMeta(Block block, int meta, int rotationAmt)
 
 public static Block getBlockByName(String name)
   {
-  Block block = foundBlockMap.get(name);
-  if(block==null && !notFoundBlocks.contains(name))
-    {
-    for(int i = 0; i < Block.blocksList.length; i++)
-      {
-      block = Block.blocksList[i];
-      if(block!=null && name.equals(block.getUnlocalizedName()))
-        {
-        foundBlockMap.put(name, block);
-        break;
-        }
-      }
-    }
-  return block;
+  return blocksBy17Name.containsKey(name)? blocksBy17Name.get(name) : Block.stone;
   }
 
-public static Set<Block> getBlocksByName(String[] names, Set<Block> in)
+public static String getBlockName(Block block)
   {
-  Block block;
-  for(String st : names)
-    {
-    if(st==null){continue;}
-    block = BlockDataManager.getBlockByName(st);
-    if(block!=null)
-      {
-      in.add(block);
-      }
-    }
-  return in;
+  return namesFor17.containsKey(block) ? namesFor17.get(block) : block.getUnlocalizedName();
+  }
+
+private static HashMap<Block, String> namesFor17 = new HashMap<Block, String>();
+private static HashMap<String, Block> blocksBy17Name = new HashMap<String, Block>();
+
+private static void load17names()
+  {
+  add17NameMaping(Block.stone, "stone");
+  add17NameMaping(Block.grass, "grass");
+  add17NameMaping(Block.dirt, "dirt");
+  add17NameMaping(Block.cobblestone, "cobblestone");
+  add17NameMaping(Block.planks, "planks");
+  add17NameMaping(Block.sapling, "sapling");
+  add17NameMaping(Block.bedrock, "bedrock");
+  add17NameMaping(Block.waterMoving, "flowing_water");
+  add17NameMaping(Block.waterStill, "water");
+  add17NameMaping(Block.lavaMoving, "flowing_lava");
+  add17NameMaping(Block.lavaStill, "lava");
+  add17NameMaping(Block.sand, "sand");
+  add17NameMaping(Block.gravel, "gravel");
+  add17NameMaping(Block.oreGold, "gold_ore");
+  add17NameMaping(Block.oreIron, "iron_ore");
+  add17NameMaping(Block.oreCoal, "coal_ore");
+  add17NameMaping(Block.wood, "log");
+  add17NameMaping(Block.leaves, "leaves");
+  add17NameMaping(Block.sponge, "sponge");
+  add17NameMaping(Block.glass, "glass");
+  add17NameMaping(Block.oreLapis, "lapis_ore");
+  add17NameMaping(Block.blockLapis, "lapis_block");
+  add17NameMaping(Block.dispenser, "dispenser");
+  add17NameMaping(Block.sandStone, "sandstone");
+  add17NameMaping(Block.music, "noteblock");
+  add17NameMaping(Block.bed, "bed");
+  add17NameMaping(Block.railPowered, "golden_rail");
+  add17NameMaping(Block.railDetector, "detector_rail");
+  add17NameMaping(Block.pistonStickyBase, "sticky_piston");
+  add17NameMaping(Block.web, "web");
+  add17NameMaping(Block.tallGrass, "tallgrass");
+  add17NameMaping(Block.deadBush, "deadbush");
+  add17NameMaping(Block.pistonBase, "piston");
+  add17NameMaping(Block.pistonExtension, "piston_head");
+  add17NameMaping(Block.cloth, "wool");
+  add17NameMaping(Block.pistonMoving, "piston_extension");
+  add17NameMaping(Block.plantYellow, "yellow_flower");
+  add17NameMaping(Block.plantRed, "red_flower");
+  add17NameMaping(Block.mushroomBrown, "brown_mushroom");
+  add17NameMaping(Block.mushroomRed, "red_mushroom");
+  add17NameMaping(Block.blockGold, "gold_block");
+  add17NameMaping(Block.blockIron, "iron_block");
+  add17NameMaping(Block.stoneDoubleSlab, "double_stone_slab");
+  add17NameMaping(Block.stoneSingleSlab, "stone_slab");
+  add17NameMaping(Block.brick, "brick");
+  add17NameMaping(Block.tnt, "tnt");
+  add17NameMaping(Block.bookShelf, "bookshelf");
+  add17NameMaping(Block.cobblestoneMossy, "mossy_cobblestone");
+  add17NameMaping(Block.obsidian, "obsidian");
+  add17NameMaping(Block.torchWood, "torch");
+  add17NameMaping(Block.fire, "fire");
+  add17NameMaping(Block.mobSpawner, "mob_spawner");
+  add17NameMaping(Block.stairsWoodOak, "oak_stairs");
+  add17NameMaping(Block.redstoneWire, "redstone_wire");
+  add17NameMaping(Block.oreDiamond, "diamond_ore");
+  add17NameMaping(Block.blockDiamond, "diamond_block");
+  add17NameMaping(Block.workbench, "crafting_table");
+  add17NameMaping(Block.crops, "wheat");
+  add17NameMaping(Block.tilledField, "farmland");
+  add17NameMaping(Block.furnaceIdle, "furnace");
+  add17NameMaping(Block.furnaceBurning, "lit_furnace");
+  add17NameMaping(Block.signPost, "standing_sign");
+  add17NameMaping(Block.doorWood, "wooden_door");
+  add17NameMaping(Block.ladder, "ladder");
+  add17NameMaping(Block.rail, "rail");
+  add17NameMaping(Block.stairsCobblestone, "stone_stairs");
+  add17NameMaping(Block.signWall, "wall_sign");
+  add17NameMaping(Block.lever, "lever");
+  add17NameMaping(Block.pressurePlatePlanks, "wooden_pressure_plate");
+  add17NameMaping(Block.oreRedstone, "redstone_ore");
+  add17NameMaping(Block.oreRedstoneGlowing, "lit_redstone_ore");
+  add17NameMaping(Block.torchRedstoneIdle, "unlit_redstone_torch");
+  add17NameMaping(Block.torchRedstoneActive, "redstone_torch");
+  add17NameMaping(Block.stoneButton, "stone_button");
+  add17NameMaping(Block.snow, "snow_layer");
+  add17NameMaping(Block.ice, "ice");
+  add17NameMaping(Block.blockSnow, "snow");
+  add17NameMaping(Block.cactus, "cactus");
+  add17NameMaping(Block.blockClay, "clay");
+  add17NameMaping(Block.reed, "reeds");
+  add17NameMaping(Block.jukebox, "jukebox");
+  add17NameMaping(Block.fence, "fence");
+  add17NameMaping(Block.pumpkin, "pumpkin");
+  add17NameMaping(Block.netherrack, "netherrack");
+  add17NameMaping(Block.slowSand, "soul_sand");
+  add17NameMaping(Block.glowStone, "glowstone");
+  add17NameMaping(Block.portal, "portal");
+  add17NameMaping(Block.pumpkinLantern, "lit_pumpkin");
+  add17NameMaping(Block.redstoneRepeaterIdle, "unpowered_repeater");
+  add17NameMaping(Block.redstoneRepeaterActive, "powered_repeater");
+  //"stained_glass replaces locked chest??
+  add17NameMaping(Block.trapdoor, "trapdoor");
+  add17NameMaping(Block.silverfish, "monster_egg");
+  add17NameMaping(Block.stoneBrick, "stonebrick");
+  add17NameMaping(Block.mushroomCapBrown, "brown_mushroom_block");
+  add17NameMaping(Block.mushroomCapRed, "red_mushroom_block");
+  add17NameMaping(Block.fenceIron, "iron_bars");
+  add17NameMaping(Block.thinGlass, "glass_pane");
+  add17NameMaping(Block.melon, "melon_block");
+  add17NameMaping(Block.pumpkinStem, "pumpkin_stem");
+  add17NameMaping(Block.melonStem, "melon_stem");
+  add17NameMaping(Block.vine, "vine");
+  add17NameMaping(Block.fenceGate, "fence_gate");
+  add17NameMaping(Block.stairsStoneBrick, "stone_brick_stairs");
+  add17NameMaping(Block.mycelium, "mycelium");
+  add17NameMaping(Block.waterlily, "waterlily");
+  add17NameMaping(Block.netherBrick, "nether_brick");
+  add17NameMaping(Block.netherFence, "nether_brick_fence");
+  add17NameMaping(Block.stairsNetherBrick, "nether_brick_stairs");
+  add17NameMaping(Block.netherStalk, "nether_wart");
+  add17NameMaping(Block.enchantmentTable, "enchanting_table");
+  add17NameMaping(Block.brewingStand, "brewing_stand");
+  add17NameMaping(Block.endPortal, "end_portal");
+  add17NameMaping(Block.endPortalFrame, "end_portal_frame");
+  add17NameMaping(Block.whiteStone, "end_stone");
+  add17NameMaping(Block.dragonEgg, "dragon_egg");
+  add17NameMaping(Block.redstoneLampIdle, "redstone_lamp");
+  add17NameMaping(Block.redstoneLampActive, "lit_redstone_lamp");
+  add17NameMaping(Block.woodDoubleSlab, "double_wooden_slab");
+  add17NameMaping(Block.woodSingleSlab, "wooden_slab");
+  add17NameMaping(Block.cocoaPlant, "cocoa");
+  add17NameMaping(Block.stairsSandStone, "sandstone_stairs");
+  add17NameMaping(Block.oreEmerald, "emerald_ore");
+  add17NameMaping(Block.enderChest, "ender_chest");
+  add17NameMaping(Block.tripWireSource, "tripwire_hook");
+  add17NameMaping(Block.tripWire, "tripwire");
+  add17NameMaping(Block.blockEmerald, "emerald_block");
+  add17NameMaping(Block.stairsWoodSpruce, "spruce_stairs");
+  add17NameMaping(Block.stairsWoodBirch, "birch_stairs");
+  add17NameMaping(Block.stairsWoodJungle, "jungle_stairs");
+  add17NameMaping(Block.commandBlock, "command_block");
+  add17NameMaping(Block.beacon, "beacon");
+  add17NameMaping(Block.cobblestoneWall, "cobblestone_wall");
+  add17NameMaping(Block.flowerPot, "flower_pot");
+  add17NameMaping(Block.carrot, "carrots");
+  add17NameMaping(Block.potato, "potatoes");
+  add17NameMaping(Block.woodenButton, "wooden_button");
+  add17NameMaping(Block.skull, "skull");
+  add17NameMaping(Block.anvil, "anvil");
+  add17NameMaping(Block.chestTrapped, "trapped_chest");
+  add17NameMaping(Block.pressurePlateGold, "light_weighted_pressure_plate");
+  add17NameMaping(Block.pressurePlateIron, "heavy_weighted_pressure_plate");
+  add17NameMaping(Block.redstoneComparatorIdle, "unpowered_comparator");
+  add17NameMaping(Block.redstoneComparatorActive, "powered_comparator");
+  add17NameMaping(Block.daylightSensor, "daylight_detector");
+  add17NameMaping(Block.blockRedstone, "redstone_block");
+  add17NameMaping(Block.oreNetherQuartz, "quartz_ore");
+  add17NameMaping(Block.hopperBlock, "hopper");
+  add17NameMaping(Block.blockNetherQuartz, "quartz_block");
+  add17NameMaping(Block.stairsNetherQuartz, "quartz_stairs");
+  add17NameMaping(Block.railActivator, "activator_rail");
+  add17NameMaping(Block.stainedClay, "stained_hardened_clay");
+  add17NameMaping(Block.hay, "hay_block");
+  add17NameMaping(Block.carpet, "carpet");
+  add17NameMaping(Block.hardenedClay, "hardened_clay");
+  add17NameMaping(Block.coalBlock, "coal_block");
+  }
+
+private static void add17NameMaping(Block block, String name)
+  {
+  namesFor17.put(block, name);
+  blocksBy17Name.put(name, block);
   }
 
 }
