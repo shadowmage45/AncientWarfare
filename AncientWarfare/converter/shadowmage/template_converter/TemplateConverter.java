@@ -20,25 +20,65 @@
  */
 package shadowmage.template_converter;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.block.Block;
+import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 
 public class TemplateConverter
 {
 
-HashMap<Integer, String> blockIDToName = new HashMap<Integer, String>();
+private static HashMap<Integer, String> blockIDToName = new HashMap<Integer, String>();
+private static HashSet<Integer> specialHandledBlocks = new HashSet<Integer>();//just a temp cache to keep track of what blocks to not register with blanket block rule
+private static HashMap<String, List<String>> specialBlockDataTags = new HashMap<String, List<String>>();
+private static HashMap<String, String> blockNameToPluginName = new HashMap<String, String>();
 
-File in;
-File out;
+short[] templateData = null;
+int xSize = 0, ySize = 0, zSize = 0;
+int xOffset = 0, yOffset = 0, zOffset = 0;
+
+List<String> groupedLines = new ArrayList<String>();
+List<ParsedRule> parsedRules = new ArrayList<ParsedRule>();
+int parsedLayers = 0;
+int readSizeParams = 0;
+int highestRuleNumber = 0;
+
+private File in;
+private File out;
 
 static
 {
+addSpecialHandledBlock(63, "wall_sign", "vanillaSign");
+addSpecialHandledBlock(68, "standing_sign", "vanillaSign");
+addSpecialHandledBlock(64, "wooden_door", "vanillaDoors");
+addSpecialHandledBlock(71, "iron_door", "vanillaDoors");
+addSpecialHandledBlock(137, "command_block", "vanillaLogic");
+addSpecialHandledBlock(52, "monster_spawner", "vanillaLogic");
+addSpecialHandledBlock(61, "furnace", "vanillaLogic");
+addSpecialHandledBlock(62, "lit_furnace", "vanillaLogic");
+addSpecialHandledBlock(144, "skull", "vanillaLogic");
+addSpecialHandledBlock(117, "brewing_stand", "vanillaLogic");
+addSpecialHandledBlock(138, "beacon", "vanillaLogic");
+addSpecialHandledBlock(54, "chest", "vanillaInventory");
+addSpecialHandledBlock(158, "dropper", "vanillaInventory");
+addSpecialHandledBlock(23, "dispenser", "vanillaInventory");
+addSpecialHandledBlock(154, "hopper", "vanillaInventory");
+
 add17NameMaping(1, "stone");
 add17NameMaping(2, "grass");
 add17NameMaping(3, "dirt");
@@ -210,9 +250,89 @@ add17NameMaping(173, "coal_block");
 add17NameMaping(174, "packed_ice");
 add17NameMaping(175, "double_plant");
 
+try
+  {
+  loadDataTags();
+  } 
+catch (IOException e)
+  {
+  e.printStackTrace();
+  throw new IllegalArgumentException("ERROR LOADING BUILT-IN DATA TAG FILE");
+  }
 }
 
-private static void add17NameMaping(int id, String name){}
+private static void add17NameMaping(int id, String name)
+  {
+  blockIDToName.put(id, name);
+  }
+
+private static void addSpecialHandledBlock(int id, String name, String plugin)
+  {
+  specialHandledBlocks.add(id);
+  blockNameToPluginName.put(name, plugin);
+  }
+
+private static void loadDataTags() throws IOException
+  {
+  InputStream is = Converter.class.getResourceAsStream("/shadowmage/template_converter/dataTags.dat");
+  BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+  
+  List<String> groupedLines = new ArrayList<String>();
+  
+  String line;
+  while((line = reader.readLine())!=null)
+    {
+    if(line.startsWith("#")){continue;}
+    else if(line.startsWith("entry:"))
+      {
+      groupedLines.add(line);
+      while((line = reader.readLine())!=null)
+        {
+        groupedLines.add(line);
+        if(line.toLowerCase().startsWith(":endentry"))
+          {
+          break;
+          }
+        }
+      parseDataTag(groupedLines);
+      groupedLines.clear();
+      }
+    }  
+  is.close();
+  reader.close();
+  }
+
+private static void parseDataTag(List<String> lines)
+  {
+  String name = null;
+  
+  List<String> dataLines = new ArrayList<String>();
+  Iterator<String> it = lines.iterator();
+  String line;
+  
+  while(it.hasNext() && (line = it.next())!=null)
+    {
+    if(line.toLowerCase().startsWith("name="))
+      {
+      name = line.split("=")[1];
+      }
+    else if(line.startsWith("data:"))
+      {
+      while(it.hasNext() && (line = it.next())!=null)
+        {
+        if(line.startsWith(":enddata"))
+          {
+          break;
+          }
+        dataLines.add(line);
+        }
+      }
+    }
+  if(name!=null && !name.equals(""))
+    {
+    specialBlockDataTags.put(name, dataLines);
+    }
+  }
 
 public TemplateConverter(File in, File out)
   {
@@ -220,15 +340,345 @@ public TemplateConverter(File in, File out)
   this.out = out;
   }
 
+private List<String> getTemplateLines(File file) throws IOException
+  {
+  BufferedReader reader = new BufferedReader(new FileReader(file));
+  List<String> lines = new ArrayList<String>();
+  String line;
+  while((line = reader.readLine())!=null)
+    {
+    lines.add(line);
+    }
+  reader.close();
+  return lines;
+  }
+
 public void doConversion() throws IOException
   {
-  if(!out.exists()){out.createNewFile();}
-  List<String> lines = Files.readAllLines(in.toPath(), Charset.forName("UTF-8"));
-  for(String line : lines)
+  this.parseTemplate();
+  this.writeTemplate();  
+  }
+
+private List<String> parseTag(String tag, Iterator<String> it, List<String> output)
+  {
+  String line;
+  while(it.hasNext() && (line = it.next())!=null)
     {
-    System.out.println(line);
+    if(line.toLowerCase().startsWith(":end"+tag))
+      {
+      break;
+      }
+    output.add(line);
+    }
+  return output;
+  }
+
+private void parseLayer(List<String> lines, short[] templateData, int yLayer, int xSize, int ySize, int zSize)
+  {
+  if(templateData==null){throw new IllegalArgumentException("cannot fill data into null template data array");}
+  int z = 0;
+  for(String st : lines)
+    {
+    if(st.startsWith("layer:") || st.startsWith(":endlayer"))
+      {
+      continue;
+      }
+    short[] data = StringTools.parseShortArray(st);
+    for(int x = 0; x < xSize && x < data.length; x++)
+      {
+      templateData[StructureTemplate.getIndex(x, yLayer, z, xSize, ySize, zSize)] = data[x];
+      }
+    z++;
     }  
   }
 
+private void parseTemplate() throws IOException
+  {
+  if(!out.exists()){out.createNewFile();}
+  List<String> lines = getTemplateLines(in);    
+  Iterator<String> it = lines.iterator();
+  String line;
+  
+  boolean preserveBlocks;
+  int ruleNumber = 0;
+  
+  while(it.hasNext() && (line=it.next())!=null)
+    {
+    if(line.toLowerCase().startsWith("xsize="))
+      {
+      xSize = StringTools.safeParseInt("=", line);
+      readSizeParams++;
+      if(readSizeParams==3)
+        {
+        templateData = new short[xSize*ySize*zSize];
+        }
+      }
+    else if(line.toLowerCase().startsWith("ysize="))
+      {
+      ySize = StringTools.safeParseInt("=", line);
+      readSizeParams++;
+      if(readSizeParams==3)
+        {
+        templateData = new short[xSize*ySize*zSize];
+        }
+      }
+    else if(line.toLowerCase().startsWith("zsize="))
+      {
+      zSize = StringTools.safeParseInt("=", line);
+      readSizeParams++;
+      if(readSizeParams==3)
+        {
+        templateData = new short[xSize*ySize*zSize];
+        }
+      }
+    else if(line.toLowerCase().startsWith("verticaloffset="))
+      {
+      yOffset = (StringTools.safeParseInt("=", line));
+      }
+    else if(line.toLowerCase().startsWith("xoffset="))
+      {
+      xOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("zoffset"))
+      {
+      zOffset = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("layer:"))
+      {
+      parseTag("layer", it, groupedLines);
+      parseLayer(groupedLines, templateData, parsedLayers, xSize, ySize, zSize);
+      parsedLayers++;
+      groupedLines.clear();
+      }
+    else if(line.toLowerCase().startsWith("rule:"))
+      {
+      parseTag("rule", it, groupedLines);
+      ParsedRule rule = parseOldBlockRule(groupedLines);
+      if(rule!=null)
+        {
+        if(rule.ruleNumber > highestRuleNumber)
+          {
+          highestRuleNumber = rule.ruleNumber;
+          }        
+        parsedRules.add(rule);
+        }
+      groupedLines.clear();
+      }
+    } 
+  if(xSize==0 || ySize==0 || zSize==0 || parsedLayers==0 || parsedRules.size()==0)
+    {
+    throw new IllegalArgumentException("Not enough data to construct a template!! ::" + String.format("x: %s, y: %s, z:%s, layers:%s, rules:%s", xSize, ySize, zSize, parsedLayers, parsedRules.size()));
+    }
+  }
+
+private ParsedRule parseOldBlockRule(List<String> lines)
+  {
+  int number = 0;
+  int id = 0;
+  int meta = 0;
+  int buildPass = 0;
+  for(String line : lines)
+    {
+    if(line.toLowerCase().startsWith("number="))
+      {
+      number = StringTools.safeParseInt("=", line);
+      }
+    else if(line.toLowerCase().startsWith("blocks="))
+      {
+      String[] blockLines = StringTools.safeParseString("=", line).split(",");
+      String[] blockData = blockLines[0].split("-");
+      id = StringTools.safeParseInt(blockData[0]);
+      meta = StringTools.safeParseInt(blockData[1]);
+      }
+    else if(line.toLowerCase().startsWith("order="))
+      {
+      buildPass = StringTools.safeParseInt("=", line);
+      }    
+    }
+  
+  String blockName = blockIDToName.get(id);
+  if(blockName==null)
+    {
+    return null;
+    }  
+  else if(specialHandledBlocks.contains(id))
+    {
+    return parseSpecialBlockRule(number, blockName, id, meta, buildPass);
+    }
+  else
+    {
+    return new ParsedRule(number, blockName, meta, buildPass, "vanillaBlocks");
+    }
+  }
+
+private ParsedRule parseSpecialBlockRule(int ruleNumber, String blockName, int id, int meta, int buildPass)
+  {
+  List<String> ruleData = specialBlockDataTags.get(blockName);
+  if(ruleData!=null)
+    {
+    ParsedRule rule = new ParsedRule(ruleNumber, blockName, meta, buildPass, blockNameToPluginName.get(blockName));
+    rule.setData(ruleData);
+    return rule;
+    }
+  return null;
+  }
+
+private void writeTemplate() throws IOException
+  {
+  String message = String.format("writing template...layers: %s, rules: %s", parsedLayers, parsedRules.size());
+  System.out.println(message);
+  
+  Calendar cal = Calendar.getInstance();
+  BufferedWriter writer = new BufferedWriter(new FileWriter(out));
+  writer.write("# Ancient Warfare Structure Template File");
+  writer.newLine();
+  writer.write("# Converted from old template format on: "+(cal.get(cal.MONTH)+1)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND));
+  writer.newLine();
+  writer.write("# Lines beginning with # denote comments");
+  writer.newLine();
+  writer.newLine();
+  writer.write("header:");
+  writer.newLine();
+  writer.write("version=2.0");
+  writer.newLine();    
+  writer.write("name="+out.getName().substring(0, out.getName().length()-4));
+  writer.newLine();
+  writer.write("size="+xSize+","+ySize+","+zSize);
+  writer.newLine();
+  writer.write("offset="+xOffset+","+yOffset+","+zOffset);
+  writer.newLine();
+  writer.write(":endheader");
+  writer.newLine();
+  
+  writer.newLine();
+  writer.write("#### VALIDATION ####");    
+  writer.newLine(); 
+  writer.write("validation:");
+  writer.newLine();
+  writer.write("type=ground");
+  writer.newLine();
+  writer.write("worldGenEnabled=false");
+  writer.newLine();
+  writer.write("unique=false");
+  writer.newLine();
+  writer.write("preserveBlocks=false");
+  writer.newLine();
+  writer.write("selectionWeight=1");
+  writer.newLine();
+  writer.write("clusterValue=1");
+  writer.newLine();
+  writer.write("minDuplicateDistance=1");
+  writer.newLine();
+  writer.write("dimensionWhiteList=false");
+  writer.newLine();
+  writer.write("dimensionList=");
+  writer.newLine();
+  writer.write("biomeWhiteList=false");
+  writer.newLine();
+  writer.write("biomeList=");
+  writer.newLine();
+  writer.write("leveling=0");
+  writer.newLine();
+  writer.write("fill=0");
+  writer.newLine();
+  writer.write("border=0");
+  writer.newLine();
+  writer.write("validTargetBlocks=grass,sand,clay,dirt,stone,gravel,sandstone,iron_ore,coal_ore");
+  writer.newLine();
+  writer.write("data:");
+  writer.newLine();
+  writer.write(":enddata");
+  writer.newLine();
+  writer.write(":endvalidation");
+  writer.newLine(); 
+  
+  writer.newLine();
+  writer.write("#### LAYERS ####");
+  writer.newLine();
+  for(int y = 0; y< ySize; y++)
+    {
+    writer.write("layer: "+y);
+    writer.newLine();
+    for(int z = 0 ; z<zSize; z++)
+      {
+      for(int x = 0; x < xSize; x++)
+        {        
+        short data = templateData[getIndex(x,y,z, xSize,ySize,zSize)];          
+        writer.write(String.valueOf(data));
+        if(x < xSize-1)
+          {
+          writer.write(",");
+          }
+        }
+      writer.newLine();
+      }
+    writer.write(":endlayer");
+    writer.newLine();
+    writer.newLine();
+    }
+  
+  writer.write("#### RULES ####");
+  writer.newLine();
+  for(ParsedRule rule : this.parsedRules)
+    {
+    for(String line : rule.getRuleLines())
+      {
+      writer.write(line);
+      writer.newLine();
+      }
+    writer.newLine();
+    }
+  
+  writer.newLine();
+  writer.write("#### ENTITIES ####");  
+  writer.newLine();
+  writer.close();
+  }
+
+private static int getIndex(int x, int y, int z, int xSize, int ySize, int zSize)
+  {
+  return (y * xSize * zSize) + (z * xSize) + x; 
+  }
+
+private static class ParsedRule
+{
+int ruleNumber;
+String blockName;
+int meta;
+int buildPass;
+String pluginHandlerType;
+List<String> data = new ArrayList<String>();
+
+public ParsedRule(int ruleNumber, String blockName, int meta, int buildPass, String pluginName)
+  {
+  this.ruleNumber = ruleNumber;
+  this.blockName = blockName;
+  this.meta = meta;
+  this.buildPass = buildPass;
+  this.pluginHandlerType = pluginName;
+  }
+
+public void setData(List<String> data)
+  {
+  this.data.clear();
+  this.data.addAll(data);
+  }
+
+public List<String> getRuleLines()
+  {
+  List<String> lines = new ArrayList<String>();
+  lines.add("rule:");
+  lines.add("plugin="+pluginHandlerType);
+  lines.add("number="+ruleNumber);
+  lines.add("data:");
+  lines.add("TAG=8=blockName{"+blockName+"}");
+  lines.add("TAG=3=meta{"+meta+"}");
+  lines.add("TAG=3=buildPass{"+buildPass+"}");
+  lines.addAll(data);
+  lines.add(":enddata");
+  lines.add(":endrule");  
+  return lines;
+  }
+}
 
 }

@@ -167,7 +167,20 @@ private Converter(File file)
       if(inputFile!=null && outputFile!=null)
         {
         doConversion();
-        display.dispose();
+        inputFile = null;
+        outputFile = null;
+        
+        outputBrowse.setVisible(false);
+        outputBrowse.pack();
+        
+        outputName.setText("No Selection!!");
+        outputName.pack();
+        
+        selectionName.setText("No selection!!");
+        selectionName.pack();
+        
+        convert.setVisible(false);
+        convert.pack();
         }
       }
     @Override
