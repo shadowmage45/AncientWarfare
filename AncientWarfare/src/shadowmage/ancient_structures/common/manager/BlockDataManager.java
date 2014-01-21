@@ -305,6 +305,7 @@ private static void load17names()
   add17NameMaping(Block.fire, "fire");
   add17NameMaping(Block.mobSpawner, "mob_spawner");
   add17NameMaping(Block.stairsWoodOak, "oak_stairs");
+  add17NameMaping(Block.chest, "chest");
   add17NameMaping(Block.redstoneWire, "redstone_wire");
   add17NameMaping(Block.oreDiamond, "diamond_ore");
   add17NameMaping(Block.blockDiamond, "diamond_block");
@@ -319,7 +320,9 @@ private static void load17names()
   add17NameMaping(Block.rail, "rail");
   add17NameMaping(Block.stairsCobblestone, "stone_stairs");
   add17NameMaping(Block.signWall, "wall_sign");
-  add17NameMaping(Block.lever, "lever");
+  add17NameMaping(Block.lever, "lever");  
+  add17NameMaping(Block.pressurePlateStone, "stone_pressure_plate");
+  add17NameMaping(Block.doorIron, "iron_door");  
   add17NameMaping(Block.pressurePlatePlanks, "wooden_pressure_plate");
   add17NameMaping(Block.oreRedstone, "redstone_ore");
   add17NameMaping(Block.oreRedstoneGlowing, "lit_redstone_ore");
@@ -340,6 +343,7 @@ private static void load17names()
   add17NameMaping(Block.glowStone, "glowstone");
   add17NameMaping(Block.portal, "portal");
   add17NameMaping(Block.pumpkinLantern, "lit_pumpkin");
+  add17NameMaping(Block.cake, "cake");
   add17NameMaping(Block.redstoneRepeaterIdle, "unpowered_repeater");
   add17NameMaping(Block.redstoneRepeaterActive, "powered_repeater");
   //"stained_glass replaces locked chest??
@@ -355,6 +359,7 @@ private static void load17names()
   add17NameMaping(Block.melonStem, "melon_stem");
   add17NameMaping(Block.vine, "vine");
   add17NameMaping(Block.fenceGate, "fence_gate");
+  add17NameMaping(Block.stairsBrick, "brick_stairs");
   add17NameMaping(Block.stairsStoneBrick, "stone_brick_stairs");
   add17NameMaping(Block.mycelium, "mycelium");
   add17NameMaping(Block.waterlily, "waterlily");
@@ -403,6 +408,7 @@ private static void load17names()
   add17NameMaping(Block.blockNetherQuartz, "quartz_block");
   add17NameMaping(Block.stairsNetherQuartz, "quartz_stairs");
   add17NameMaping(Block.railActivator, "activator_rail");
+  add17NameMaping(Block.dropper, "dropper");
   add17NameMaping(Block.stainedClay, "stained_hardened_clay");
   add17NameMaping(Block.hay, "hay_block");
   add17NameMaping(Block.carpet, "carpet");
