@@ -36,10 +36,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
-
 public class TemplateConverter
 {
 
@@ -383,10 +379,10 @@ private void parseLayer(List<String> lines, short[] templateData, int yLayer, in
       {
       continue;
       }
-    short[] data = StringTools.parseShortArray(st);
+    short[] data = parseShortArray(st);
     for(int x = 0; x < xSize && x < data.length; x++)
       {
-      templateData[StructureTemplate.getIndex(x, yLayer, z, xSize, ySize, zSize)] = data[x];
+      templateData[getIndex(x, yLayer, z, xSize, ySize, zSize)] = data[x];
       }
     z++;
     }  
@@ -406,7 +402,7 @@ private void parseTemplate() throws IOException
     {
     if(line.toLowerCase().startsWith("xsize="))
       {
-      xSize = StringTools.safeParseInt("=", line);
+      xSize = safeParseInt("=", line);
       readSizeParams++;
       if(readSizeParams==3)
         {
@@ -415,7 +411,7 @@ private void parseTemplate() throws IOException
       }
     else if(line.toLowerCase().startsWith("ysize="))
       {
-      ySize = StringTools.safeParseInt("=", line);
+      ySize = safeParseInt("=", line);
       readSizeParams++;
       if(readSizeParams==3)
         {
@@ -424,7 +420,7 @@ private void parseTemplate() throws IOException
       }
     else if(line.toLowerCase().startsWith("zsize="))
       {
-      zSize = StringTools.safeParseInt("=", line);
+      zSize = safeParseInt("=", line);
       readSizeParams++;
       if(readSizeParams==3)
         {
@@ -433,15 +429,15 @@ private void parseTemplate() throws IOException
       }
     else if(line.toLowerCase().startsWith("verticaloffset="))
       {
-      yOffset = (StringTools.safeParseInt("=", line));
+      yOffset = (safeParseInt("=", line));
       }
     else if(line.toLowerCase().startsWith("xoffset="))
       {
-      xOffset = StringTools.safeParseInt("=", line);
+      xOffset = safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("zoffset"))
       {
-      zOffset = StringTools.safeParseInt("=", line);
+      zOffset = safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("layer:"))
       {
@@ -471,6 +467,50 @@ private void parseTemplate() throws IOException
     }
   }
 
+private static int safeParseInt(String num)
+  {  
+  try
+    {
+    return Integer.parseInt(num.trim());
+    }
+  catch(NumberFormatException e)
+    {
+    
+    }
+  return 0;
+  }
+
+public static int safeParseInt(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return Integer.parseInt(split[1].trim());
+    }  
+  return 0;
+  }
+
+public static short[] parseShortArray(String csv)
+  {
+  String[] splits = csv.split(",");
+  short[] array = new short[splits.length];
+  for(int i = 0; i< splits.length; i++)
+    {    
+    array[i]=Short.parseShort(splits[i].trim());
+    }
+  return array;
+  }
+
+public static String safeParseString(String regex, String test)
+  {
+  String[] split = test.split(regex);
+  if(split.length>1)
+    {
+    return split[1];
+    }  
+  return "";
+  }
+
 private ParsedRule parseOldBlockRule(List<String> lines)
   {
   int number = 0;
@@ -481,18 +521,18 @@ private ParsedRule parseOldBlockRule(List<String> lines)
     {
     if(line.toLowerCase().startsWith("number="))
       {
-      number = StringTools.safeParseInt("=", line);
+      number = safeParseInt("=", line);
       }
     else if(line.toLowerCase().startsWith("blocks="))
       {
-      String[] blockLines = StringTools.safeParseString("=", line).split(",");
+      String[] blockLines = safeParseString("=", line).split(",");
       String[] blockData = blockLines[0].split("-");
-      id = StringTools.safeParseInt(blockData[0]);
-      meta = StringTools.safeParseInt(blockData[1]);
+      id = safeParseInt(blockData[0]);
+      meta = safeParseInt(blockData[1]);
       }
     else if(line.toLowerCase().startsWith("order="))
       {
-      buildPass = StringTools.safeParseInt("=", line);
+      buildPass = safeParseInt("=", line);
       }    
     }
   
