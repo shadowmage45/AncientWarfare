@@ -182,6 +182,8 @@ public static void loadBlockList()
   
   id = Block.grass.blockID;
   BlockInfo.setInventoryBlock(id, 0, Block.dirt.blockID, 0, 1);  
+  
+  load17names();
   }
 
 public static int getBlockPriority(int id, int meta)
@@ -361,7 +363,7 @@ private static void load17names()
   add17NameMaping(Block.fenceGate, "fence_gate");
   add17NameMaping(Block.stairsBrick, "brick_stairs");
   add17NameMaping(Block.stairsStoneBrick, "stone_brick_stairs");
-  add17NameMaping(Block.mycelium, "mycelium");
+  add17NameMaping(Block.mycelium, "mycelium");  
   add17NameMaping(Block.waterlily, "waterlily");
   add17NameMaping(Block.netherBrick, "nether_brick");
   add17NameMaping(Block.netherFence, "nether_brick_fence");
@@ -369,6 +371,7 @@ private static void load17names()
   add17NameMaping(Block.netherStalk, "nether_wart");
   add17NameMaping(Block.enchantmentTable, "enchanting_table");
   add17NameMaping(Block.brewingStand, "brewing_stand");
+  add17NameMaping(Block.cauldron, "cauldron");
   add17NameMaping(Block.endPortal, "end_portal");
   add17NameMaping(Block.endPortalFrame, "end_portal_frame");
   add17NameMaping(Block.whiteStone, "end_stone");

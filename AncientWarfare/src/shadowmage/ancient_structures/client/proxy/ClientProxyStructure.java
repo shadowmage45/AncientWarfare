@@ -37,10 +37,6 @@ public ClientProxyStructure()
   
   }
 
-public void registerClientData()
-  {
-  }
-
 @Override
 public void registerGuis()
   {

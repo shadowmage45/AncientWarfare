@@ -81,6 +81,7 @@ public void addHandledBlocks(StructurePluginManager manager)
   specialHandledBlocks.add(Block.chest);
   specialHandledBlocks.add(Block.dropper);
   specialHandledBlocks.add(Block.hopperBlock);
+  specialHandledBlocks.add(Block.beacon);
     
   Block block;
   for(int i = 0; i < 256; i++)
@@ -104,6 +105,7 @@ public void addHandledBlocks(StructurePluginManager manager)
   manager.registerBlockHandler("vanillaLogic", Block.skull, TemplateRuleBlockLogic.class);
   manager.registerBlockHandler("vanillaLogic", Block.furnaceBurning, TemplateRuleBlockLogic.class);
   manager.registerBlockHandler("vanillaLogic", Block.furnaceIdle, TemplateRuleBlockLogic.class);
+  manager.registerBlockHandler("vanillaLogic", Block.beacon, TemplateRuleBlockLogic.class);
   manager.registerBlockHandler("vanillaInventory", Block.dispenser, TemplateRuleBlockInventory.class);
   manager.registerBlockHandler("vanillaInventory", Block.chest, TemplateRuleBlockInventory.class);
   manager.registerBlockHandler("vanillaInventory", Block.dropper, TemplateRuleBlockInventory.class);
