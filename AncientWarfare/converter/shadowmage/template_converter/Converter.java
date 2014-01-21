@@ -20,8 +20,17 @@
  */
 package shadowmage.template_converter;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -41,9 +50,9 @@ private Display display;
 private Shell shell;
 
 public static void main(String[] args)
-  {
+  {  
   converter = new Converter(args.length==0 ? null : new File(args[0]));
-  converter.mainUpdateLoop();  
+  converter.mainUpdateLoop();    
   }
 
 File inputFile;

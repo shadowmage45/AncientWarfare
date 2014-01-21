@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="/org.eclipse.swt/swt.jar" sourcepath="/org.eclipse.swt/src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="http://help.eclipse.org/stable/nftopic/org.eclipse.platform.doc.isv/reference/api/"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="org.eclipse.swt"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="converter"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
@@ -9,11 +15,5 @@
 	<classpathentry kind="lib" path="/Minecraft/jars/libraries/com/google/guava/guava/14.0/guava-14.0.jar" sourcepath="/Minecraft/jars/libraries/com/google/guava/guava/14.0/guava-14.0-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BuildCraft"/>
 	<classpathentry kind="lib" path="/Minecraft/jars/libraries/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0.jar" sourcepath="/Minecraft/jars/libraries/org/lwjgl/lwjgl/lwjgl_util/2.9.0/lwjgl_util-2.9.0-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/org.eclipse.swt/swt.jar" sourcepath="/org.eclipse.swt/src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="http://help.eclipse.org/stable/nftopic/org.eclipse.platform.doc.isv/reference/api/"/>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="org.eclipse.swt"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
