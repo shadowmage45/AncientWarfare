@@ -437,7 +437,7 @@ private void parseTemplate() throws IOException
       }
     else if(line.toLowerCase().startsWith("zoffset"))
       {
-      zOffset = safeParseInt("=", line);
+      zOffset = safeParseInt("=", line);      
       }
     else if(line.toLowerCase().startsWith("layer:"))
       {
@@ -461,6 +461,7 @@ private void parseTemplate() throws IOException
       groupedLines.clear();
       }
     } 
+  zOffset = zSize - 1 - zOffset;
   if(xSize==0 || ySize==0 || zSize==0 || parsedLayers==0 || parsedRules.size()==0)
     {
     throw new IllegalArgumentException("Not enough data to construct a template!! ::" + String.format("x: %s, y: %s, z:%s, layers:%s, rules:%s", xSize, ySize, zSize, parsedLayers, parsedRules.size()));
@@ -711,10 +712,14 @@ public List<String> getRuleLines()
   lines.add("plugin="+pluginHandlerType);
   lines.add("number="+ruleNumber);
   lines.add("data:");
+  lines.add("tag:");
+  lines.add("TAG=10={");
   lines.add("TAG=8=blockName{"+blockName+"}");
   lines.add("TAG=3=meta{"+meta+"}");
   lines.add("TAG=3=buildPass{"+buildPass+"}");
   lines.addAll(data);
+  lines.add("}");
+  lines.add(":endtag");
   lines.add(":enddata");
   lines.add(":endrule");  
   return lines;
