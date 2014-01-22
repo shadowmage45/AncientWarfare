@@ -28,6 +28,8 @@ import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
 import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
+import shadowmage.ancient_vehicles.common.item.AWVehiclesItemLoader;
+import shadowmage.ancient_vehicles.common.vehicle.VehicleRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -67,17 +69,29 @@ public void loadConfiguration(File config, Logger log)
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
+  log("Ancient Warfare Vehicles Pre-Init started.");
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWFramework.loadedVehicles = true;
+  AWVehiclesItemLoader.instance().registerItems();
+  VehicleRegistry.loadVehicles();
+  log("Ancient Warfare Vehicles Pre-Init finished.");
   }
 
 @Override
 @EventHandler
-public void init(FMLInitializationEvent evt){}
+public void init(FMLInitializationEvent evt)
+  {
+  log("Ancient Warfare Vehicles Init started.");
+  log("Ancient Warfare Vehicles Init finished.");
+  }
 
 @Override
 @EventHandler
-public void postInit(FMLPostInitializationEvent evt){}
+public void postInit(FMLPostInitializationEvent evt)
+  {
+  log("Ancient Warfare Vehicles Post-Init started.");
+  log("Ancient Warfare Vehicles Post-Init finished.");
+  }
 
 @Override
 @EventHandler

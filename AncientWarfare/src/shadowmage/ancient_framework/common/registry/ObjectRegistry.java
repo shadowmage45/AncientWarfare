@@ -24,6 +24,8 @@ import java.util.HashMap;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.block.AWBlockBase;
 import shadowmage.ancient_framework.common.config.ModConfiguration;
 import shadowmage.ancient_framework.common.item.AWItemBase;
@@ -185,6 +187,29 @@ protected void registerObject(String name, ObjectRegistration reg, int id)
   registrationByNumber.put(id, reg);
   registrationByName.put(name, reg);
   LanguageRegistry.instance().addName(reg.obj, name);
+  }
+
+public Description registerItemSubtyped(AWItemBase item, String baseName)
+  {  
+  Description d = AWFramework.instance.objectRegistry.registerItem(baseName, item);
+  return d;
+  }
+
+public Description addDescription(AWItemBase item, String regName, int itemDamage, String tooltipKey, String itemIcon)
+  {
+  Description d = getDescriptionFor(item.itemID);
+  if(d==null)
+    {
+    d=registerItem(regName, item);
+    }
+  if(d!=null)
+    {
+    d.setName(regName, itemDamage);
+    d.addTooltip(tooltipKey, itemDamage);
+    d.addDisplayStack(new ItemStack(item, 1, itemDamage));
+    d.setIconTexture(itemIcon, itemDamage);
+    }
+  return d;
   }
 
 private class ObjectRegistration

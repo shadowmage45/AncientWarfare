@@ -55,36 +55,12 @@ public static AWItemBase structureBuilderCreative = registry.createItem("item.st
 public static AWItemBase spawnerPlacer = registry.createItem("item.spawnerplacer", ItemSpawnerPlacer.class);
 public static AWItemBase structureGenerator = registry.createItem("item.structuregenerator", ItemStructureGenerator.class);
 
-
 public void registerItems()
   {
-  addDescription(structureScanner, "item.structurescanner",  0, "item.structurescanner.tooltip", "ancientwarfare:builder/structureScanner1");
-  addDescription(structureBuilderCreative, "item.structurebuilder", 0, "item.structurebuilder.tooltip", "ancientwarfare:builder/structureBuilder1");
-  addDescription(spawnerPlacer, "item.spawnerplacer", 0, "item.spawnerplacer.tooltip", "ancientwarfare:builder/structureBuilder1");
-  addDescription(structureGenerator, "item.structuregenerator", 0, "item.structuregenerator.tooltip", "ancientwarfare:builder/structureBuilder1");
-  }
-
-public Description registerItemSubtyped(AWItemBase item, String baseName)
-  {  
-  Description d = AWFramework.instance.objectRegistry.registerItem(baseName, item);
-  return d;
-  }
-
-public Description addDescription(AWItemBase item, String regName, int itemDamage, String tooltipKey, String itemIcon)
-  {
-  Description d = registry.getDescriptionFor(item.itemID);
-  if(d==null)
-    {
-    d=registry.registerItem(regName, item);
-    }
-  if(d!=null)
-    {
-    d.setName(regName, itemDamage);
-    d.addTooltip(tooltipKey, itemDamage);
-    d.addDisplayStack(new ItemStack(item, 1, itemDamage));
-    d.setIconTexture(itemIcon, itemDamage);
-    }
-  return d;
+  registry.addDescription(structureScanner, "item.structurescanner",  0, "item.structurescanner.tooltip", "ancientwarfare:builder/structureScanner1");
+  registry.addDescription(structureBuilderCreative, "item.structurebuilder", 0, "item.structurebuilder.tooltip", "ancientwarfare:builder/structureBuilder1");
+  registry.addDescription(spawnerPlacer, "item.spawnerplacer", 0, "item.spawnerplacer.tooltip", "ancientwarfare:builder/structureBuilder1");
+  registry.addDescription(structureGenerator, "item.structuregenerator", 0, "item.structuregenerator.tooltip", "ancientwarfare:builder/structureBuilder1");
   }
 
 }

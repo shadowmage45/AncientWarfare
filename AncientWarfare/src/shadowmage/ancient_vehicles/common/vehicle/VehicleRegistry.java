@@ -20,7 +20,16 @@
  */
 package shadowmage.ancient_vehicles.common.vehicle;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+
+import shadowmage.ancient_vehicles.AWVehicles;
 
 public class VehicleRegistry
 {
@@ -28,13 +37,10 @@ public class VehicleRegistry
 private static HashMap<String, Class> firingHelpers = new HashMap<String, Class>();
 private static HashMap<String, Object> moveTypes = new HashMap<String, Object>();
 
-/**
- * should be called from pre/init to load vehicle types from definition file
- * will then register the necessary stuff with language/item/descriptions/etc
- */
 public static void loadVehicles()
   {
-  
+  List<VehicleType> types = loadFromDefinition("/assets/ancientwarfare/definitions/vehicles.def");
+  AWVehicles.instance.logDebug("loaded: "+types.size() + " vehicle definitions");
   }
 
 public static Class getFiringHelperClass(String name)
@@ -47,6 +53,42 @@ public static Object getMoveType(String name)
   return moveTypes.get(name);
   }
 
-
+private static List<VehicleType> loadFromDefinition(String path)
+  {
+  InputStream is = AWVehicles.instance.getClass().getResourceAsStream(path);
+  if(is==null){return Collections.emptyList();}  
+  List<VehicleType> types = new ArrayList<VehicleType>();
+  BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+  String line;
+  String[] lineBits;
+  VehicleType type;
+  //#name, model, render, texture, firingHelper, moveType, <other stats--movement, inventory size, etc>
+  try
+    {
+    while((line = reader.readLine())!=null)
+      {
+      if(line.startsWith("#")){continue;}
+      lineBits = line.split(",", -1);
+      type = VehicleType.parseFromCSV(lineBits);
+      if(type!=null)
+        {
+        types.add(type);
+        }
+      }
+    } 
+  catch (IOException e1)
+    {
+    e1.printStackTrace();
+    }  
+  try
+    {
+    reader.close();
+    } 
+  catch (IOException e)
+    {
+    e.printStackTrace();
+    }
+  return types;
+  }
 
 }
