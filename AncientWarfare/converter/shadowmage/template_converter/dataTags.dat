@@ -1,6 +1,10 @@
 # data-tags storage file
 # #denotes comment line
 # entries are open and closed by entry: and :endentry
+# these are the default NBT tags for various tile-entities
+# not including the x,y,z tags.  some are custom tag formats
+# such as for signs, chests, other inventoried blocks.
+# but most are the actual TE nbt-data
 
 entry:
 name=wall_sign
@@ -51,10 +55,7 @@ TAG=9=Items{
 }
 TAG=8=id{Furnace}
 TAG=2=BurnTime{0}
-TAG=3=z{4}
 TAG=2=CookTime{0}
-TAG=3=y{72}
-TAG=3=x{4}
 }
 :enddata
 :endentry
@@ -67,10 +68,7 @@ TAG=9=Items{
 }
 TAG=8=id{Furnace}
 TAG=2=BurnTime{0}
-TAG=3=z{4}
 TAG=2=CookTime{0}
-TAG=3=y{72}
-TAG=3=x{4}
 }
 :enddata
 :endentry
@@ -83,9 +81,6 @@ TAG=8=Command{}
 TAG=8=id{Control}
 TAG=8=CustomName{@}
 TAG=3=SuccessCount{0}
-TAG=3=z{4}
-TAG=3=y{72}
-TAG=3=x{5}
 }
 :enddata
 :endentry
@@ -111,10 +106,7 @@ TAG=2=MaxNearbyEntities{6}
 TAG=2=MaxSpawnDelay{800}
 TAG=2=SpawnRange{4}
 TAG=2=SpawnCount{4}
-TAG=3=z{5}
 TAG=8=EntityId{Pig}
-TAG=3=y{72}
-TAG=3=x{5}
 }
 :enddata
 :endentry
@@ -126,10 +118,7 @@ TAG=10=teData{
 TAG=3=Levels{0}
 TAG=8=id{Beacon}
 TAG=3=Primary{0}
-TAG=3=z{6}
-TAG=3=y{72}
 TAG=3=Secondary{0}
-TAG=3=x{4}
 }
 :enddata
 :endentry

@@ -46,14 +46,15 @@ public class Converter
 {
 
 private static Converter converter;
-private Display display;
-private Shell shell;
 
 public static void main(String[] args)
   {  
   converter = new Converter(args.length==0 ? null : new File(args[0]));
   converter.mainUpdateLoop();    
   }
+
+private Display display;
+private Shell shell;
 
 File inputFile;
 File outputFile;
@@ -70,7 +71,7 @@ private Button outputBrowse;
 
 private Button convert;
 
-private FileDialog d;
+private FileDialog fileSelectionGui;
 
 private Converter(File file)
   {
@@ -105,12 +106,12 @@ private Converter(File file)
     @Override
     public void mouseDown(MouseEvent e)
       {
-      if(d==null)
+      if(fileSelectionGui==null)
         {
         selection = 0;
-        d = new FileDialog(shell);
-        d.open();
-        handleFileSelection(new File(d.getFilterPath(), d.getFileName()));
+        fileSelectionGui = new FileDialog(shell);
+        fileSelectionGui.open();
+        handleFileSelection(new File(fileSelectionGui.getFilterPath(), fileSelectionGui.getFileName()));
         }
       }
     
@@ -140,12 +141,12 @@ private Converter(File file)
     @Override
     public void mouseDown(MouseEvent e)
       {
-      if(d==null)
+      if(fileSelectionGui==null)
         {
         selection = 1;
-        d = new FileDialog(shell);
-        d.open();
-        handleFileSelection(new File(d.getFilterPath(), d.getFileName()));
+        fileSelectionGui = new FileDialog(shell);
+        fileSelectionGui.open();
+        handleFileSelection(new File(fileSelectionGui.getFilterPath(), fileSelectionGui.getFileName()));
         }
       }
     
@@ -213,10 +214,13 @@ public void handleFileSelection(File file)
   {
   if(selection==0)
     {
-    outputBrowse.setVisible(file!=null);
-    inputFile = file;
-    selectionName.setText(file==null ? "No Selection!!" : file.getName());
-    selectionName.pack();
+    if(file!=null && file.exists())
+      {
+      outputBrowse.setVisible(true);
+      inputFile = file;
+      selectionName.setText(file.getName());
+      selectionName.pack();
+      }    
     }
   else
     {
@@ -225,7 +229,7 @@ public void handleFileSelection(File file)
     outputName.pack();
     }
   convert.setVisible(outputFile!=null && inputFile!=null);
-  d=null;
+  fileSelectionGui=null;
   }
 
 private void doConversion()
