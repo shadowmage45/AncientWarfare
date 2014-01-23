@@ -1,12 +1,16 @@
-buildscript {
-    repositories {
+buildscript 
+{
+    repositories 
+    {
         mavenCentral()
-        maven {
+        maven 
+        {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
     }
-    dependencies {
+    dependencies 
+    {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
     }
 }
@@ -23,16 +27,26 @@ sourceSets.main
   {
     srcDirs 'src'
   }
+  resources
+  {
+    srcDirs 'resources'
+  }
+  
 }
 
-minecraft {
+minecraft 
+{
 	version = "1.6.4-9.11.1.964"
 }
 
 processResources
-{         
-    // copy everything else, thats not the mcmod.info
+{      
+    
     from(sourceSets.main.java.srcDirs) 
+    {
+   
+    }
+    from(sourceSets.main.resources.srcDirs)
     {
    
     }
