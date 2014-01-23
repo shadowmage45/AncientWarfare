@@ -1,0 +1,35 @@
+****************************
+ Powered By MCP:            
+ http://mcp.ocean-labs.de/  
+ Searge, ProfMobius, Fesh0r,
+ R4wk, ZeuX, IngisKahn      
+ MCP Data version : unknown
+****************************
+:downloadClient SKIPPED
+:downloadServer SKIPPED
+:extractUserDev
+:mergeJars SKIPPED
+:applyBinPatches SKIPPED
+:downloadMcpTools UP-TO-DATE
+:genSrgs UP-TO-DATE
+:deobfBinJar UP-TO-DATE
+:compileApiJava UP-TO-DATE
+:processApiResources UP-TO-DATE
+:apiClasses UP-TO-DATE
+:sourceMainJava UP-TO-DATE
+:compileJava UP-TO-DATE
+:processResources
+:classes
+:jar
+:reobf
+:assemble
+:compileTestJava UP-TO-DATE
+:processTestResources UP-TO-DATE
+:testClasses UP-TO-DATE
+:test UP-TO-DATE
+:check UP-TO-DATE
+:build
+
+BUILD SUCCESSFUL
+
+Total time: 10.209 secs

@@ -1,0 +1,39 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+version = "1.0"
+group = "shadowmage" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "ancientwarfare"
+
+sourceSets.main
+{
+  java
+  {
+    srcDirs 'src'
+  }
+}
+
+minecraft {
+	version = "1.6.4-9.11.1.964"
+}
+
+processResources
+{         
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.java.srcDirs) 
+    {
+   
+    }
+}
