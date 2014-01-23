@@ -15,11 +15,17 @@ buildscript
     }
 }
 
-apply plugin: 'forge'
-
-version = "1.0"
-group = "shadowmage" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "ancientwarfare"
+allprojects
+{
+  apply plugin: 'forge'
+  minecraft
+  {
+    version = "1.6.4-9.11.1.964"
+  }
+  version = "1.0"
+  group = "shadowmage" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+  archivesBaseName = "ancientwarfare"
+}
 
 sourceSets.main
 {
@@ -30,14 +36,9 @@ sourceSets.main
   resources
   {
     srcDirs 'resources'
-  }
-  
+  }  
 }
 
-minecraft 
-{
-	version = "1.6.4-9.11.1.964"
-}
 
 processResources
 {      
