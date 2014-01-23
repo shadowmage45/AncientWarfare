@@ -2,3 +2,5 @@
 /libs
 /build
 /eclipse
+*.bin
+/.gradle
