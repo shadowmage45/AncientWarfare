@@ -12,7 +12,7 @@ buildscript
     dependencies 
     {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
-    }
+    }    
 }
 
 allprojects
@@ -22,17 +22,18 @@ allprojects
   {
     version = "1.6.4-9.11.1.964"
   }
-  version = "1.0"
+  version = project.version
   group = "shadowmage" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
   archivesBaseName = "ancientwarfare"
 }
 
 sourceSets.main
-{
+{ 
   java
   {
     srcDirs 'src'
   }
+  
   resources
   {
     srcDirs 'resources'
@@ -40,15 +41,23 @@ sourceSets.main
 }
 
 
+
+task updateVersion(type:Copy){
+  
+}
+
+compileJava.dependsOn updateVersion
+
 processResources
-{      
+{   
+  from(sourceSets.main.java.srcDirs)
+  {    
+    include 'mcmod.info'
+    expand ('version':project.version)
+    expand ('mcversion':project.minecraft.version)
+  } 
+  from(sourceSets.main.resources.srcDirs)
+  {
     
-    from(sourceSets.main.java.srcDirs) 
-    {
-   
-    }
-    from(sourceSets.main.resources.srcDirs)
-    {
-   
-    }
+  }
 }

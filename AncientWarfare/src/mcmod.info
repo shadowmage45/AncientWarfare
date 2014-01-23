@@ -2,7 +2,7 @@
 {
   "modid": "AncientStructures",
   "name": "Ancient Warfare Structures",
-  "version": "2.0.001-alpha-MC164",
+  "version": "${version}",
   "mcversion": "1.6.4",
   "description": "Adds World generation and creative-mode copy/paste/edit tools through a highly configurable template system.",
   "credits": "me2005, jodi850, MohawkyMagoo",
@@ -17,7 +17,7 @@
 {
   "modid": "AncientWarfareCore",
   "name": "Ancient Warfare Mod Framework",
-  "version": "2.0.001-alpha-MC164",
+  "version": "${version}",
   "mcversion": "1.6.4",
   "description": "Core framework for Ancient Warfare mods (guis framework, shared code)",
   "credits": "shadowmage",

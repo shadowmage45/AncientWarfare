@@ -27,7 +27,7 @@ public static final String CONFIG_PATH = "";
 public static final String ASSETS_PATH = "";
 public static final String TEXTURE_PATH = "textures/";
 public static final String MOD_PREFIX = "ancientwarfare";
-public static final String VERSION = "2.0.001-alpha-MC164";
+public static final String VERSION="${version}";
 public static final boolean DEBUG = true;
 
 public static final int guiOptions = 0;
