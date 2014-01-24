@@ -23,6 +23,7 @@ package shadowmage.ancient_vehicles.common.vehicle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
+import shadowmage.ancient_framework.common.utils.StringTools;
 import net.minecraft.world.World;
 
 public class VehicleType
@@ -31,6 +32,8 @@ public class VehicleType
 public static HashMap<String, VehicleType> vehicleTypes = new HashMap<String, VehicleType>();
 
 String name;//translation key/unique registered name for this vehicle type
+boolean survival;//available in survival through crafting (forces creative=true)
+boolean creative;//available in creative in menu for ops/admins/creative play (loaded, but no recipe)
 Object movementType;//enum / flag for movement type for this vehicle
 Class firingHelper;//reference to the firing helper type for this vehicle, for constructing new vehicle entities
 int maxHealth;//max health for this vehicle type
@@ -54,6 +57,9 @@ public static final VehicleType getVehicleType(String name)
   }
 
 public String getName(){return name;}
+public boolean isSuvivalEnabled(){return survival;}
+public boolean isCreativeEnabled(){return creative;}
+
 
 public Object getNewFiringHelper(EntityVehicle vehicle)
   {
@@ -104,24 +110,20 @@ public static EntityVehicle createVehicle(World world, String typeName)
 
 public static VehicleType parseFromCSV(String[] csv)
   {
-  if(csv==null || csv.length<6)
+  if(csv==null || csv.length<8)
     {
     throw new IllegalArgumentException("Could not parse vehicle type from:\n+"+csv+"\ndid not contain enough elements to parse");
     }
   VehicleType type = null;
-  String name = csv[0];
-  String model = csv[1];
-  String render = csv[2];
-  String texture = csv[3];
-  String fireHelper = csv[4];
-  String moveType = csv[5];
-  
-  type = new VehicleType(name);
-  type.firingHelper = VehicleRegistry.getFiringHelperClass(fireHelper);
-  type.modelId = model;
-  type.renderId = render;
-  type.modelTexture = texture;
-  type.movementType = VehicleRegistry.getMoveType(moveType);
+  type = new VehicleType(csv[0]);
+  type.modelId = csv[1];
+  type.renderId = csv[2];
+  type.modelTexture = csv[3];
+  type.firingHelper = VehicleRegistry.getFiringHelperClass(csv[4]);
+  type.movementType = VehicleRegistry.getMoveType(csv[5]);
+  type.survival = StringTools.safeParseBoolean(csv[6]);
+  type.creative = StringTools.safeParseBoolean(csv[7]);
+   
   /**
    * TODO read the rest of vehicle-type stats (need to determine what the stats will be)
    */

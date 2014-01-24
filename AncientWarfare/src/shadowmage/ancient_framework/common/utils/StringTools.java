@@ -262,6 +262,17 @@ public static boolean safeParseBoolean(String regex, String test)
   return false;
   }
 
+/**
+ * returns the value after a split at regex, or false
+ * @param regex
+ * @param test
+ * @return
+ */
+public static boolean safeParseBoolean(String test)
+  {
+  return Boolean.parseBoolean(test);
+  }
+
 public static boolean safeParseIntAsBoolean(String regex, String test)
   {
   String[] split = test.split(regex);

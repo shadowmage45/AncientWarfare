@@ -24,7 +24,7 @@ public class Statics
 {
 
 public static final String CONFIG_PATH = "";
-public static final String ASSETS_PATH = "";
+public static final String ASSETS_PATH = "/assets/ancientwarfare";
 public static final String TEXTURE_PATH = "textures/";
 public static final String MOD_PREFIX = "ancientwarfare";
 public static final String VERSION="@VERSION@";

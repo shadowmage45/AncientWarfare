@@ -27,14 +27,27 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import shadowmage.ancient_vehicles.client.model.ModelVehicleBase;
 import shadowmage.ancient_vehicles.common.vehicle.EntityVehicle;
+import shadowmage.ancient_vehicles.common.vehicle.VehicleType;
 
 public class RenderVehicleProxy extends RenderEntity
 {
 
+//vehicle renderers by vehicleType.name
 private static HashMap<String, RenderEntity> vehicleRenders = new HashMap<String, RenderEntity>();
+//vehicle models by vehicleType.name
 private static HashMap<String, ModelVehicleBase> vehicleModels = new HashMap<String, ModelVehicleBase>();
+//vehicle textures by vehicleType.name
 private static HashMap<String, ResourceLocation> vehicleTextures = new HashMap<String, ResourceLocation>();
 
+public static void registerRenderers()
+  {
+  
+  }
+
+public static void registerVehicleType(VehicleType type)
+  {
+  
+  }
 
 @Override
 public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTick)

@@ -21,6 +21,8 @@
 package shadowmage.ancient_vehicles.client.proxy;
 
 import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
+import shadowmage.ancient_vehicles.client.render.RenderVehicleProxy;
+import shadowmage.ancient_vehicles.common.vehicle.VehicleType;
 
 public class ClientProxyVehicle extends ClientProxyBase
 {
@@ -57,8 +59,14 @@ public void registerTickHandlers()
 @Override
 public void registerRenderers()
   {
-  // TODO Auto-generated method stub
-
+  RenderVehicleProxy.registerRenderers();
+  for(VehicleType type : VehicleType.vehicleTypes.values())
+    {
+    if(type.isSuvivalEnabled() || type.isCreativeEnabled())
+      {
+      RenderVehicleProxy.registerVehicleType(type);
+      }
+    } 
   }
 
 @Override

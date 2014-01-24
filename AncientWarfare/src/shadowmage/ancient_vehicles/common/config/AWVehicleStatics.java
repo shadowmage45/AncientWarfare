@@ -24,9 +24,12 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import shadowmage.ancient_framework.common.config.ModConfiguration;
+import shadowmage.ancient_framework.common.config.Statics;
 
 public class AWVehicleStatics extends ModConfiguration
 {
+
+public static final String vehicleDefinitionsFile = Statics.ASSETS_PATH +"/definitions/vehicles.def";
 
 public AWVehicleStatics(File configFile, Logger log, String version)
   {

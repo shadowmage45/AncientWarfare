@@ -29,7 +29,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.item.AWItemBase;
+import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_vehicles.AWVehicles;
+import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
+import shadowmage.ancient_vehicles.common.item.AWVehiclesItemLoader;
 
 public class VehicleRegistry
 {
@@ -39,8 +44,29 @@ private static HashMap<String, Object> moveTypes = new HashMap<String, Object>()
 
 public static void loadVehicles()
   {
-  List<VehicleType> types = loadFromDefinition("/assets/ancientwarfare/definitions/vehicles.def");
+  List<VehicleType> types = loadFromDefinition(AWVehicleStatics.vehicleDefinitionsFile);
   AWVehicles.instance.logDebug("loaded: "+types.size() + " vehicle definitions");
+  for(VehicleType t : types)
+    {
+    if(t.isSuvivalEnabled())
+      {
+      //reg recipes and items
+      AWItemBase item = AWVehiclesItemLoader.vehicleSpawner;
+      ObjectRegistry reg = AWFramework.instance.objectRegistry;
+      //reg.addDescription(item, t.name, itemDamage, tooltipKey, itemIcon);
+      /**
+       * TODO -- I don't think I need to really reg-the extra types, merely add the display stacks for creative (if reg for creative)
+       * and in the item, I need to override getName() to return the name from the nbt-tag
+       * 
+       * should probably add a helper method into the vehicleType to return a properly formatted itemStack for that vehicle type
+       * to use in display stacks/recipe results/etc
+       */
+      }
+    else if(t.isSuvivalEnabled())
+      {
+      //reg only items
+      }
+    }
   }
 
 public static Class getFiringHelperClass(String name)
