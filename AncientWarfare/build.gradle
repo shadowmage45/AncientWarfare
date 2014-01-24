@@ -32,7 +32,7 @@ sourceSets.main
 { 
   java
   {
-    srcDirs 'build/filtered'
+    srcDirs 'src'
   }
   
   resources
@@ -41,14 +41,14 @@ sourceSets.main
   }  
 }
 
-
+compileJava.source = sourceSets.main.java
 
 task updateVersion(type:Copy){
   from('src')
   {
     exclude 'mcmod.info'    
   }  
-  into 'build/filtered'
+  into 'build/sources/java'
   filter(ReplaceTokens, tokens: [VERSION: project.version])
 }
 
