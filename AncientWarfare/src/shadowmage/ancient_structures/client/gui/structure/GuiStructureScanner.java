@@ -186,8 +186,6 @@ public void updateControls()
   typeButtonMap.clear();
   checkBoxNameMap.clear();
   numberInputNameMap.clear();
-  int w = getXSize() - 16 - 20;
-  int h = 16;
   int totalHeight = 0;
   
   area.elements.add(new GuiString(-1, area, 100, 10, "Validation Type: " + currentValidationType.getName()));
@@ -354,7 +352,6 @@ private void sendExportDataToServer()
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  ContainerStructureScanner container =null;
   switch(element.getElementNumber())
   {
   case 0://done

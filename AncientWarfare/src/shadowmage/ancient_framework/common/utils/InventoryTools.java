@@ -100,7 +100,7 @@ public static NBTTagCompound getTagForCompactInventory(List<ItemStackWrapper> it
   return tag;
   }
 
-public static List<ItemStackWrapper> getCompactedInventory(IInventory inv, Comparator sorter)
+public static List<ItemStackWrapper> getCompactedInventory(IInventory inv, Comparator<ItemStackWrapper> sorter)
   {
   ArrayList<ItemStackWrapper> stacks = new ArrayList<ItemStackWrapper>();
   ItemStack fromInv;
@@ -343,7 +343,6 @@ public static ItemStack getItems(IInventory inv, ItemStack filter, int max, int 
   if(filter==null|| inv.getSizeInventory()==0){ return null;}
   ItemStack toReturn = null;
   ItemStack fromSlot = null;
-  ItemStack tempCopy = null;
   max = max > filter.getMaxStackSize() ? filter.getMaxStackSize() : max;
   firstSlot = firstSlot < 0 ? 0 : firstSlot >= inv.getSizeInventory() ? inv.getSizeInventory() - 1 : firstSlot;
   lastSlot = lastSlot<0 ? 0 : lastSlot>=inv.getSizeInventory() ? inv.getSizeInventory() - 1 : lastSlot;
@@ -707,7 +706,7 @@ public static List<ItemStack> getCompactedItemList(Collection<ItemStack> items)
     boolean found = false;
     for(ItemStack test : foundStacks)
       {
-      if(stack.itemID==test.itemID && stack.getItemDamage()==test.getItemDamage() && stack.areItemStackTagsEqual(stack, test))
+      if(stack.itemID==test.itemID && stack.getItemDamage()==test.getItemDamage() && ItemStack.areItemStackTagsEqual(stack, test))
         {        
         test.stackSize += stack.stackSize;
         found = true;

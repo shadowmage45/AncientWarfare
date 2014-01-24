@@ -115,7 +115,7 @@ private static void writeHeader(StructureTemplate template, BufferedWriter write
   Calendar cal = Calendar.getInstance();
   writer.write("# Ancient Warfare Structure Template File");
   writer.newLine();
-  writer.write("# auto-generated structure file. created on: "+(cal.get(cal.MONTH)+1)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND));
+  writer.write("# auto-generated structure file. created on: "+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH)+"/"+cal.get(Calendar.YEAR)+ " at: "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND));
   writer.newLine();
   writer.write("# Lines beginning with # denote comments");
   writer.newLine();
@@ -147,7 +147,7 @@ private static void writeLayers(StructureTemplate template, BufferedWriter write
       {
       for(int x = 0; x<template.xSize; x++)
         {
-        short data = template.getTemplateData()[template.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];          
+        short data = template.getTemplateData()[StructureTemplate.getIndex(x, y, z, template.xSize, template.ySize, template.zSize)];          
         writer.write(String.valueOf(data));
         if(x<template.xSize-1)
           {

@@ -22,11 +22,9 @@ package shadowmage.ancient_structures.common.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_framework.common.registry.ObjectRegistry;
-import shadowmage.ancient_framework.common.registry.entry.Description;
 
 public class AWStructuresItemLoader
 {

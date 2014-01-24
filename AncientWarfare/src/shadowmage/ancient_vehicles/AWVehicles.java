@@ -90,6 +90,9 @@ public void init(FMLInitializationEvent evt)
 public void postInit(FMLPostInitializationEvent evt)
   {
   log("Ancient Warfare Vehicles Post-Init started.");
+  
+
+  config.saveConfig();
   log("Ancient Warfare Vehicles Post-Init finished.");
   }
 

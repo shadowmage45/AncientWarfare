@@ -261,12 +261,6 @@ public void writeToNBT(NBTTagCompound nbttagcompound)
   }
 }//end structure X Map
 
-private StructureEntry getEntryFor(int x, int y, int z, int face, StructureTemplate template)
-  {
-  StructureEntry entry = new StructureEntry(x, y, z, face, template);  
-  return entry;
-  }
-
 @Override
 public void handlePacketData(NBTTagCompound data)
   {

@@ -510,7 +510,7 @@ protected void borderFill(World world, int x, int z, StructureTemplate template,
   for(int y = maxFillY; y>1; y--)
     {
     block = Block.blocksList[world.getBlockId(x, y, z)];
-    if(block==null || WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==block.waterMoving))
+    if(block==null || WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==Block.waterMoving))
       {
       world.setBlock(x, y, z, fillBlockID);
       }

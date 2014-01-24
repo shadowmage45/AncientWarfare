@@ -43,7 +43,7 @@ public void setRenderColor(int color)
 @Override
 public void drawElement(int mouseX, int mouseY)
   {
-  this.drawRect(this.guiLeft+this.renderPosX, this.guiTop+this.renderPosY, this.guiLeft+this.renderPosX+this.width, this.guiTop+this.renderPosY+this.height, this.color);
+  drawRect(this.guiLeft+this.renderPosX, this.guiTop+this.renderPosY, this.guiLeft+this.renderPosX+this.width, this.guiTop+this.renderPosY+this.height, this.color);
   }
 
 @Override

@@ -511,7 +511,7 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
     GL11.glEnable(GL11.GL_BLEND);
     GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_COLOR);
     }
-  this.itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, stack, x, y);//render item
+  itemRenderer.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, stack, x, y);//render item
   if(useAlpha)
     {
     GL11.glDisable(GL11.GL_BLEND);
@@ -519,7 +519,7 @@ public void renderItemStack(ItemStack stack, int x, int y, int mouseX, int mouse
   if(renderOverlay)
     {
     String stackSize = stack.stackSize > 999 ? ">1k" : String.valueOf(stack.stackSize);
-    this.itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, stack, x, y, stackSize);
+    itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, stack, x, y, stackSize);
     }
   itemRenderer.zLevel = 0.0F;
   GL11.glDisable(GL11.GL_LIGHTING);
@@ -571,10 +571,8 @@ protected void renderTooltip(int x, int y, List<String> info)
     return;
     }  
   int widestLength = 0;
-  int testLength;
   while(it.hasNext())
     {
-    int lineLen;
     line = it.next();
     if (this.fontRenderer.getStringWidth(line) > widestLength)
       {

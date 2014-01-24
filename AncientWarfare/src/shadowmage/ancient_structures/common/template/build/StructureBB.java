@@ -43,7 +43,6 @@ public StructureBB(int x, int y, int z, int face, int xSize, int ySize, int zSiz
 public final StructureBB setFromStructure(int x, int y, int z, int face, int xSize, int ySize, int zSize, int xOffset, int yOffset, int zOffset)
   {
   int destXSize = xSize;
-  int destYSize = ySize;
   int destZSize = zSize;
   
   int turns = ((face+2)%4);

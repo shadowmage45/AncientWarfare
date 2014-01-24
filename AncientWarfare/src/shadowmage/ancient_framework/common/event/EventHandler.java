@@ -25,7 +25,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.WorldEvent;
-import shadowmage.ancient_framework.AWFramework;
+import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 
@@ -37,7 +37,7 @@ public void onWorlLoad(WorldEvent.Load evt)
   {
   if(evt.world instanceof WorldServer)
     {
-    AWFramework.instance.gameData.handleWorldLoad(evt.world);
+    AWGameData.handleWorldLoad(evt.world);
     }  
   }
 

@@ -28,7 +28,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -394,10 +393,7 @@ private void parseTemplate() throws IOException
   List<String> lines = getTemplateLines(in);    
   Iterator<String> it = lines.iterator();
   String line;
-  
-  boolean preserveBlocks;
-  int ruleNumber = 0;
-  
+    
   while(it.hasNext() && (line=it.next())!=null)
     {
     if(line.toLowerCase().startsWith("xsize="))
@@ -573,7 +569,7 @@ private void writeTemplate() throws IOException
   BufferedWriter writer = new BufferedWriter(new FileWriter(out));
   writer.write("# Ancient Warfare Structure Template File");
   writer.newLine();
-  writer.write("# Converted from old template format on: "+(cal.get(cal.MONTH)+1)+"/"+cal.get(cal.DAY_OF_MONTH)+"/"+cal.get(cal.YEAR)+ " at: "+cal.get(cal.HOUR_OF_DAY)+":"+cal.get(cal.MINUTE)+":"+cal.get(cal.SECOND));
+  writer.write("# Converted from old template format on: "+(cal.get(Calendar.MONTH)+1)+"/"+cal.get(Calendar.DAY_OF_MONTH)+"/"+cal.get(Calendar.YEAR)+ " at: "+cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND));
   writer.newLine();
   writer.write("# Lines beginning with # denote comments");
   writer.newLine();

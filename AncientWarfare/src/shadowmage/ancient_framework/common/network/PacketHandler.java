@@ -84,7 +84,7 @@ public void onPacketData(INetworkManager manager, Packet250CustomPayload packet,
   PacketBase realPacket = null;
   try 
     {
-    realPacket = this.constructPacket(packetType);
+    realPacket = constructPacket(packetType);
     } 
   catch (InstantiationException e) 
     {
@@ -147,19 +147,12 @@ public static void handleMultiPartPacketReceipt(Packet00MultiPart pkt, EntityPla
 
 private static class MPPacketEntry
 {
-
-int uniquePacketID;//used to determine which packets to combine
-int packetType;//the destination packet type this MP packet represents
-int totalLength;//the total length of byte-array data to be reconstructed for this destination packet
 byte[] fullData;//the byte-array of datas for this destination packet
 int receivedChunks;//how many chunks have been receieved from this packet?
 int totalChunks;//total number of chunks that make up this destination packet
 
 public MPPacketEntry(Packet00MultiPart pkt)
-  {
-  this.packetType = pkt.sourcePacketType;
-  this.uniquePacketID = pkt.uniquePacketID;
-  this.totalLength = pkt.totalLength;
+  { 
   this.fullData = new byte[pkt.totalLength];  
   this.totalChunks = pkt.totalChunks;
   }

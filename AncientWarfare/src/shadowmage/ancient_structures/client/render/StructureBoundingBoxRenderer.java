@@ -78,7 +78,7 @@ ItemStructureSettings settings = new ItemStructureSettings();
 
 private void renderScannerBoundingBox(EntityPlayer player, ItemStack stack, float delta)
   {
-  settings.getSettingsFor(stack, settings);
+  ItemStructureSettings.getSettingsFor(stack, settings);
   BlockPosition pos1, pos2, min, max;
   if(settings.hasPos1())
     {
@@ -107,7 +107,7 @@ private void renderScannerBoundingBox(EntityPlayer player, ItemStack stack, floa
 
 private void renderBuildBoundingBox(EntityPlayer player, ItemStack stack, float delta)
   {
-  settings.getSettingsFor(stack, settings);
+  ItemStructureSettings.getSettingsFor(stack, settings);
   if(!settings.hasName()){return;}
   String name = settings.name();
   StructureTemplateClient structure = StructureTemplateManager.instance().getClientTemplate(name);

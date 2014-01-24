@@ -109,7 +109,7 @@ public void setupViewport()
   GL11.glPushMatrix();
   ScaledResolution scaledRes = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
   int guiScale = scaledRes.getScaleFactor();
-  float vAspect = (float)this.mc.displayWidth/(float)this.mc.displayHeight;
+//  float vAspect = (float)this.mc.displayWidth/(float)this.mc.displayHeight;
   float w = this.width * guiScale;
   float h = height * guiScale;
   float x = guiLeft*guiScale + renderPosX*guiScale;
@@ -269,10 +269,8 @@ public void updateScrollPos(int x, int y)
     {
     y = this.totalHeight-this.height;
     }
-  boolean updated = false;
   if(x !=this.scrollPosX || y !=this.scrollPosY)
     {
-    updated = true;
     this.scrollPosX = x;
     this.scrollPosY = y;
     }

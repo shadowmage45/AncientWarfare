@@ -112,7 +112,7 @@ public void handlePacketData(NBTTagCompound tag)
     TeamData data = new TeamData();
     data.readFromNBT(tag.getCompoundTag("teamData"));
     this.clientTeamData = data;
-    EntityPlayer player = AWFramework.instance.proxy.getClientPlayer();
+    EntityPlayer player = AWFramework.proxy.getClientPlayer();
     if(player!=null && player.openContainer instanceof ContainerTeamControl)
       {
       ((ContainerBase)player.openContainer).refreshGui();

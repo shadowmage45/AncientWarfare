@@ -186,7 +186,7 @@ protected void registerObject(String name, ObjectRegistration reg, int id)
   {
   registrationByNumber.put(id, reg);
   registrationByName.put(name, reg);
-  LanguageRegistry.instance().addName(reg.obj, name);
+  LanguageRegistry.addName(reg.obj, name);
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)

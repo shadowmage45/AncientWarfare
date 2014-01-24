@@ -68,7 +68,6 @@ public static MovingObjectPosition getPlayerTarget(EntityPlayer player, float ra
 public static MovingObjectPosition tracePath(World world, float x, float y, float z, float tx, float ty, float tz, float borderSize, HashSet<Entity> excluded)
   {
   Vec3 startVec = Vec3.fakePool.getVecFromPool(x, y, z);
-  Vec3 lookVec = Vec3.fakePool.getVecFromPool(tx-x, ty-y, tz-z);
   Vec3 endVec = Vec3.fakePool.getVecFromPool(tx, ty, tz);
   float minX = x < tx ? x : tx;
   float minY = y < ty ? y : ty;
@@ -104,7 +103,7 @@ public static MovingObjectPosition tracePath(World world, float x, float y, floa
         if(intercept!=null)
           {
           currentHit = (float) intercept.hitVec.distanceTo(startVec);
-          if(currentHit < closestHit || currentHit==0)
+          if(currentHit <= maxDistance && (currentHit < closestHit || currentHit==0))
             {            
             closestHit = currentHit;
             closestHitEntity = ent;

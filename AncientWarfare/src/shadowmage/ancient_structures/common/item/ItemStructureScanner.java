@@ -57,7 +57,10 @@ public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlaye
   super.addInformation(par1ItemStack, par2EntityPlayer, list, par4);  
   if(par1ItemStack!=null)
     {
-    viewSettings.getSettingsFor(par1ItemStack, viewSettings);
+    ItemStructureSettings.getSettingsFor(par1ItemStack, viewSettings);
+    /**
+     * TODO add info to tooltip from nbt-tag
+     */
     NBTTagCompound tag;
     if(par1ItemStack.hasTagCompound() && par1ItemStack.getTagCompound().hasKey("structData"))
       {
@@ -115,18 +118,15 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack,  B
     {
     return true;
     }
-  scanSettings.getSettingsFor(stack, scanSettings);
+  ItemStructureSettings.getSettingsFor(stack, scanSettings);
   if(player.isSneaking())
     {
     scanSettings.clearSettings();
-    scanSettings.setSettingsFor(stack, scanSettings);
+    ItemStructureSettings.setSettingsFor(stack, scanSettings);
     }
   else if(scanSettings.hasPos1() && scanSettings.hasPos2() && scanSettings.hasBuildKey())
     {
-    BlockPosition pos1 = scanSettings.pos1;
-    BlockPosition pos2 = scanSettings.pos2;
     BlockPosition key = scanSettings.key;
-    int face = scanSettings.buildFace;
     if(player.getDistance(key.x+0.5d, key.y, key.z+0.5d) > 10)
       {
       player.addChatMessage("You are too far away to scan that building, move closer to chosen build-key position");
@@ -149,13 +149,12 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
   if(!MinecraftServer.getServer().getConfigurationManager().isPlayerOpped(player.getEntityName()))
     {
     return true;
-    }
-  NBTTagCompound tag;
+    } 
   if(hit!=null && player.isSneaking())
     {
     hit.offsetForMCSide(side);
     }
-  scanSettings.getSettingsFor(stack, scanSettings);
+  ItemStructureSettings.getSettingsFor(stack, scanSettings);
   if(scanSettings.hasPos1() && scanSettings.hasPos2() && scanSettings.hasBuildKey())
     {
     player.addChatMessage("Right Click to Process");
@@ -175,7 +174,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     scanSettings.setBuildKey(hit.x, hit.y, hit.z, BlockTools.getPlayerFacingFromYaw(player.rotationYaw));
     player.addChatMessage("Setting Scan Build Position and Facing (Step 3/4)");
     }
-  scanSettings.setSettingsFor(stack, scanSettings);
+  ItemStructureSettings.setSettingsFor(stack, scanSettings);
   return true;
   }
 

@@ -95,7 +95,7 @@ public void preInit(FMLPreInitializationEvent evt)
   pluginManager = new StructurePluginManager();   
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
   TemplateLoader.instance().initializeAndExportDefaults(path);  
-  BlockDataManager.instance().loadBlockList();
+  BlockDataManager.loadBlockList();
   AWStructuresItemLoader.instance().registerItems();
   PacketHandler.registerPacketType(6, Packet06StructureData.class);
   GameRegistry.registerPlayerTracker(instance);

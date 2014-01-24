@@ -50,7 +50,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     return false;
     }
-  buildSettings.getSettingsFor(stack, buildSettings);
+  ItemStructureSettings.getSettingsFor(stack, buildSettings);
   if(buildSettings.hasName())
     {
     StructureTemplate template = StructureTemplateManager.instance().getTemplate(buildSettings.name);

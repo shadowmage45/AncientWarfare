@@ -313,7 +313,6 @@ public static BlockPosition getBlockClickedOn(EntityPlayer player, World world, 
     }
 
   Vec3 var25 = player.getLook(scaleFactor);
-  boolean var26 = false;
   float var27 = 1.0F;
   List entitiesPossiblyHitByVector = world.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox.addCoord(var25.xCoord * reachLength, var25.yCoord * reachLength, var25.zCoord * reachLength).expand(var27, var27, var27));
   Iterator entityIterator = entitiesPossiblyHitByVector.iterator();

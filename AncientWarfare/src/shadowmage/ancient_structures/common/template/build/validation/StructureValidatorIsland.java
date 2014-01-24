@@ -82,7 +82,6 @@ protected void setDefaultSettings(StructureTemplate template)
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
-  int id;
   int water = 0;
   int startY = y-1;
   y = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
@@ -104,8 +103,7 @@ public boolean validatePlacement(World world, int x, int y, int z, int face,  St
 
 @Override
 public void preGeneration(World world, int x, int y, int z, int face,  StructureTemplate template, StructureBB bb)
-  {
-  int id;  
+  { 
   Block block;
   for(int bx = bb.min.x; bx<=bb.max.x; bx++)
     {

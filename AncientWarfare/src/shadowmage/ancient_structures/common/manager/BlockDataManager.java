@@ -21,8 +21,6 @@
 package shadowmage.ancient_structures.common.manager;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -30,9 +28,6 @@ import shadowmage.ancient_structures.common.utils.BlockInfo;
 
 public class BlockDataManager
 {
-
-private static HashMap<String, Block> foundBlockMap = new HashMap<String, Block>();
-private static Set<String> notFoundBlocks = new HashSet<String>();
 
 private static BlockDataManager INSTANCE;
 private BlockDataManager(){}

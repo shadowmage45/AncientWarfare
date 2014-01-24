@@ -54,7 +54,6 @@ public StructureTemplate parseTemplate(File file)
     List<String> templateLines = new ArrayList<String>();
     reader = new FileReader(file);
     scan = new Scanner(reader);
-    String line;
     while(scan.hasNextLine())
       {
       templateLines.add(scan.nextLine());

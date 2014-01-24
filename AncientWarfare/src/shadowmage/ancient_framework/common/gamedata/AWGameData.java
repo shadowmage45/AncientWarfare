@@ -33,6 +33,8 @@ public class AWGameData
 private static HashMap<String, GameData> gameDatas = new HashMap<String, GameData>();
 private static HashMap<String, Class<? extends GameData>> datasToLoad = new HashMap<String, Class<? extends GameData>>();
 
+
+
 public static void addDataClass(String name, Class<? extends GameData> clz)
   {
   datasToLoad.put(name, clz);

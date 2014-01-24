@@ -23,7 +23,6 @@ package shadowmage.ancient_vehicles.common.vehicle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import shadowmage.ancient_framework.AWFramework;
 import net.minecraft.world.World;
 
 public class VehicleType

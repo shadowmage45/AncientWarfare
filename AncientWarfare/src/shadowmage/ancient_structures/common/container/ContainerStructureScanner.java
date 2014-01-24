@@ -58,7 +58,7 @@ public ContainerStructureScanner(EntityPlayer openingPlayer, int x, int y, int z
     {
     return;
     } 
-  settings.getSettingsFor(builderItem, settings);
+  ItemStructureSettings.getSettingsFor(builderItem, settings);
   }
 
 @Override
@@ -111,7 +111,7 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     {
     return;
     }
-  settings.setSettingsFor(builderItem, settings); 
+  ItemStructureSettings.setSettingsFor(builderItem, settings); 
   }
 
 @Override

@@ -22,12 +22,9 @@ package shadowmage.ancient_structures.common.template.build.validation;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
-import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public class StructureValidatorGround extends StructureValidator
 {
@@ -60,98 +57,98 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
   prePlacementUnderfill(world, template, bb);
   }
 
-private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
-  {
-  StructureBB bb = new StructureBB(x, y, z, face, template);  
-  for(int bx = bb.min.x-borderSize; bx<= bb.max.x+borderSize; bx++)
-    {
-    for(int bz = bb.min.z-borderSize; bz<= bb.max.z+borderSize; bz++)
-      {
-      if(bx<bb.min.x || bx>bb.max.x || bz<bb.min.z || bz>bb.max.z)
-        {//is border block, do border clear/fill
-        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, true);
-        }
-      else
-        {//is structure block, do structure clear/fill
-        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, false);
-        }
-      }
-    }  
-  }
+//private void doStructurePrePlacement(World world, int x, int y, int z, int face, StructureTemplate template)
+//  {
+//  StructureBB bb = new StructureBB(x, y, z, face, template);  
+//  for(int bx = bb.min.x-borderSize; bx<= bb.max.x+borderSize; bx++)
+//    {
+//    for(int bz = bb.min.z-borderSize; bz<= bb.max.z+borderSize; bz++)
+//      {
+//      if(bx<bb.min.x || bx>bb.max.x || bz<bb.min.z || bz>bb.max.z)
+//        {//is border block, do border clear/fill
+//        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, true);
+//        }
+//      else
+//        {//is structure block, do structure clear/fill
+//        doStructurePrePlacementBlockPlace(world, bx, bz, template, bb, false);
+//        }
+//      }
+//    }  
+//  }
 
-private void doStructurePrePlacementBlockPlace(World world, int x, int z, StructureTemplate template, StructureBB bb, boolean border)
-  {
-  int leveling = maxLeveling;
-  int fill = maxFill;
-  
-  /**
-   * most of this is just to try and minimize the total Y range that is examined for clear/fill
-   */
-  int minFillY = getMinFillY(template, bb);
-  int maxFillY = getMaxFillY(template, bb);  
-  int minLevelY = getMinLevelingY(template, bb);
-  int maxLevelY = getMaxLevelingY(template, bb);
-  
-  int minY = minFillY < minLevelY ? minFillY : minLevelY;
-  if(!border)
-    {
-    if(fill>0)
-      {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0    
-      int topEmptyBlockY = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
-      minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
-      }    
-    }  
-  else
-    {
-    int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
-    int stepHeight = fill / borderSize;
-    maxFillY -= step*stepHeight;
-    minLevelY += step*stepHeight;
-    minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
-    }
-  
-  minY = minY<=0 ? 1 : minY;
-  int maxY = maxFillY> maxLevelY ? maxFillY : maxLevelY;
-  
-  int xInChunk = x&15;
-  int zInChunk = z&15;  
-  Chunk chunk = world.getChunkFromBlockCoords(x, z);
-  
-  int id;
-  Block block;
-  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
-  int fillBlockID = Block.grass.blockID;
-  if(biome!=null && biome.topBlock>=1)
-    {
-    fillBlockID = biome.topBlock;
-    }
-  for(int y = minY; y <=maxY; y++)
-    {    
-    id = world.getBlockId(x, y, z);
-    block = Block.blocksList[id];
-    if(leveling>0 && y >= minLevelY)
-      {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
-        }
-      }
-    else if(leveling>0 && y==minLevelY-1)
-      {
-      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);        
-        }
-      }
-    if(fill>0 && y<=maxFillY)
-      {
-      if(block==null || !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
-        {
-        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
-        }
-      }
-    }
-  }
+//private void doStructurePrePlacementBlockPlace(World world, int x, int z, StructureTemplate template, StructureBB bb, boolean border)
+//  {
+//  int leveling = maxLeveling;
+//  int fill = maxFill;
+//  
+//  /**
+//   * most of this is just to try and minimize the total Y range that is examined for clear/fill
+//   */
+//  int minFillY = getMinFillY(template, bb);
+//  int maxFillY = getMaxFillY(template, bb);  
+//  int minLevelY = getMinLevelingY(template, bb);
+//  int maxLevelY = getMaxLevelingY(template, bb);
+//  
+//  int minY = minFillY < minLevelY ? minFillY : minLevelY;
+//  if(!border)
+//    {
+//    if(fill>0)
+//      {//for inside-structure bounds, we want to fill down to whatever is existing if fill is>0    
+//      int topEmptyBlockY = WorldStructureGenerator.getTargetY(world, x, z, true)+1;
+//      minY = minY< topEmptyBlockY ? minY : topEmptyBlockY;
+//      }    
+//    }  
+//  else
+//    {
+//    int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);
+//    int stepHeight = fill / borderSize;
+//    maxFillY -= step*stepHeight;
+//    minLevelY += step*stepHeight;
+//    minY = minFillY < minLevelY ? minFillY : minLevelY;//reset minY from change to minLevelY
+//    }
+//  
+//  minY = minY<=0 ? 1 : minY;
+//  int maxY = maxFillY> maxLevelY ? maxFillY : maxLevelY;
+//  
+//  int xInChunk = x&15;
+//  int zInChunk = z&15;  
+//  Chunk chunk = world.getChunkFromBlockCoords(x, z);
+//  
+//  int id;
+//  Block block;
+//  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
+//  int fillBlockID = Block.grass.blockID;
+//  if(biome!=null && biome.topBlock>=1)
+//    {
+//    fillBlockID = biome.topBlock;
+//    }
+//  for(int y = minY; y <=maxY; y++)
+//    {    
+//    id = world.getBlockId(x, y, z);
+//    block = Block.blocksList[id];
+//    if(leveling>0 && y >= minLevelY)
+//      {
+//      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
+//        {
+//        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, 0, 0);        
+//        }
+//      }
+//    else if(leveling>0 && y==minLevelY-1)
+//      {
+//      if(block!=null && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
+//        {
+//        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);        
+//        }
+//      }
+//    if(fill>0 && y<=maxFillY)
+//      {
+//      if(block==null || !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
+//        {
+//        chunk.setBlockIDWithMetadata(xInChunk, y, zInChunk, fillBlockID, 0);
+//        }
+//      }
+//    }
+//  }
 
 
 @Override

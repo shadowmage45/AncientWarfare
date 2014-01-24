@@ -73,7 +73,6 @@ protected void write(BufferedWriter out) throws IOException
 @Override
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
-  int id;
   int water = 0;
   int startY = y;
   y = WorldStructureGenerator.getTargetY(world, x, z, true)+1;

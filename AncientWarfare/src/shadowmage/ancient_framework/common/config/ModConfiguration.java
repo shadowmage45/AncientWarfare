@@ -122,7 +122,7 @@ public int getKeyBindID(String name, int defaultID, String comment)
 
 public boolean updatedVersion()
   {
-  return this.updatedVersion;
+  return updatedVersion;
   }
 
 public boolean autoExportOnUpdate()

@@ -203,7 +203,7 @@ private void createDirectory(File file)
 
 private void locateStructureFiles()
   {
-  this.recursiveScan(new File(this.includeDirectory), probableStructureFiles, AWStructureStatics.templateExtension);
+  this.recursiveScan(new File(includeDirectory), probableStructureFiles, AWStructureStatics.templateExtension);
   }
 
 private void recursiveScan(File directory, List<File> fileList, String extension)

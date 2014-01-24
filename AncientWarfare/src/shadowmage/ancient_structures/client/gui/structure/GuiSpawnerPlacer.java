@@ -101,7 +101,6 @@ public void setupControls()
   area = new GuiScrollableArea(1, this, 8, 8+18+4, getXSize()-16, getYSize()-16-18-8, names.size()*16);
   this.guiElements.clear();
   this.guiElements.put(1, area);
-  int y = 0;
   
   Iterator<String> it= names.iterator();
   String name;

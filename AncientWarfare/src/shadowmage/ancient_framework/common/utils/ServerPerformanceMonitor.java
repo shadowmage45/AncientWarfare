@@ -87,7 +87,7 @@ public void count()
   {
   if(!AWConfig.enableServerPerformanceMonitor){return;}
   long total = 0;
-  long totalInterval = 0;
+//  long totalInterval = 0;
   long totalPathTime = 0;
   long totalNpcTime = 0;
   long totalCivicTime = 0;
@@ -95,16 +95,16 @@ public void count()
   for(int i = 0; i < 20; i++)
     {
     total += this.tickTimes[i];
-    totalInterval += this.tickIntervals[i];
+//    totalInterval += this.tickIntervals[i];
     totalPathTime += this.pathTickTimes[i];
     totalNpcTime += this.npcTickTimes[i];
     totalCivicTime += this.civicTickTimes[i];
     totalVehicleTime += this.vehicleTickTimes[i];
     }   
   long avg = total/20;
-  long avgInterval = totalInterval/20;
+//  long avgInterval = totalInterval/20;
   long tms = (avg/1000000)+1;
-  long tmsI = (avgInterval/1000000)+1; 
+//  long tmsI = (avgInterval/1000000)+1; 
   int tps = (int)(1000/tms);  
   tickTime = avg;
   tickPerSecond = tps;

@@ -22,7 +22,6 @@ package shadowmage.ancient_structures.common.item;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -81,7 +80,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     {
     return false;
     }
-  buildSettings.getSettingsFor(stack, buildSettings);
+  ItemStructureSettings.getSettingsFor(stack, buildSettings);
   if(buildSettings.hasName())
     {
     StructureTemplate template = StructureTemplateManager.instance().getTemplate(buildSettings.name);
@@ -109,7 +108,7 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   {
   super.addInformation(stack, player, list, par4);
   String structure = "none";
-  viewSettings.getSettingsFor(stack, viewSettings);
+  ItemStructureSettings.getSettingsFor(stack, viewSettings);
   if(viewSettings.hasName())
     {
     structure = viewSettings.name;

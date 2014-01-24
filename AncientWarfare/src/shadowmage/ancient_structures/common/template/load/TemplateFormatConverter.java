@@ -22,33 +22,11 @@ package shadowmage.ancient_structures.common.template.load;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.EntityBoat;
-import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.entity.item.EntityMinecartChest;
-import net.minecraft.entity.item.EntityMinecartEmpty;
-import net.minecraft.entity.item.EntityMinecartFurnace;
-import net.minecraft.entity.item.EntityMinecartHopper;
-import net.minecraft.entity.item.EntityMinecartTNT;
-import net.minecraft.entity.item.EntityPainting;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntitySnowman;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
@@ -58,25 +36,17 @@ import net.minecraft.tileentity.TileEntityDropper;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySkull;
-import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.config.AWLog;
-import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginAutomation;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockDoors;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockInventory;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockSign;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityHanging;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleEntityLogic;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleVanillaEntity;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
@@ -129,8 +99,6 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   short[] templateData = null;
   int xSize = 0, ySize = 0, zSize = 0;
   int xOffset = 0, yOffset = 0, zOffset = 0;
-  boolean preserveBlocks;
-  int ruleNumber = 0;  
   
   String name = file.getName();
   if(name.length()>=4)
@@ -143,7 +111,6 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   int parsedLayers = 0;
   int readSizeParams = 0;
   int highestRuleNumber = 0;
-  int highestEntityRuleNumber =0;
   while(it.hasNext() && (line = it.next())!=null)
     {    
     if(line.toLowerCase().startsWith("xsize="))

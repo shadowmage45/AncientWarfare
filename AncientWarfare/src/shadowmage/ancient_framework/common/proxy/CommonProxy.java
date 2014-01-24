@@ -36,8 +36,6 @@ import cpw.mods.fml.common.network.Player;
 public class CommonProxy
 {
 
-private PacketBase[] singlePacketArray = new PacketBase[1];
-
 public void registerClientData()
   {
   //NOOP server side

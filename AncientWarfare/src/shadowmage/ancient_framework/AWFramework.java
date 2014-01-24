@@ -77,7 +77,6 @@ public static AWFramework instance;
 public static CommonProxy proxy;
 
 public ObjectRegistry objectRegistry;
-public AWGameData gameData;
 public shadowmage.ancient_framework.common.event.EventHandler eventHandler;
 
 /**
@@ -102,15 +101,14 @@ public void preInit(FMLPreInitializationEvent evt)
   {
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWLog.log("Ancient Warfare Core Starting Loading.  Version: "+Statics.VERSION);  
-  gameData = new AWGameData();
-  gameData.addDataClass("AWTeamData", TeamData.class);
+  AWGameData.addDataClass("AWTeamData", TeamData.class);
   eventHandler = new shadowmage.ancient_framework.common.event.EventHandler();
   GameRegistry.registerPlayerTracker(TeamTracker.instance());
   MinecraftForge.EVENT_BUS.register(eventHandler);
   NetworkRegistry.instance().registerGuiHandler(this, GUIHandler.instance());
   LanguageLoader.instance().loadLanguageFiles();
   TickRegistry.registerTickHandler(new ServerPerformanceMonitor(), Side.SERVER);
-  this.proxy.registerClientData();
+  proxy.registerClientData();
   GUIHandler.instance().registerContainer(Statics.guiOptions, ContainerPerformanceMonitor.class);
   GUIHandler.instance().registerContainer(Statics.guiTeamControl, ContainerTeamControl.class);
   }

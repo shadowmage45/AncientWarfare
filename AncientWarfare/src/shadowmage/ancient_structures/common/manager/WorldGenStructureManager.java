@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -111,13 +110,9 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   distancesFound.clear();
   StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
   if(map==null){return null;}
-  int cx, cz, foundValue, chunkDistance;
+  int foundValue, chunkDistance;
   float foundDistance, mx, mz;
-  Block borderTargetBlock = Block.blocksList[world.getBlockId(x, y-1, z)];
-  Block borderTargetBlockRear = null;
-  Block baseTargetBlock = null;
-  cx = x << 4;
-  cz = z << 4;
+   
   String biomeName = world.getBiomeGenForCoords(x, z).biomeName.toLowerCase();
   Collection<StructureEntry> genEntries = map.getEntriesNear(world, x, z, chunkSearchRange, false, searchCache);
   
@@ -150,12 +145,10 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   if(potentialStructures==null || potentialStructures.isEmpty()){return null;}
   StructureValidator settings;
   int dim = world.provider.dimensionId;
-  int minLevel = 0;
   for(StructureTemplate template : potentialStructures)//loop through initial structures, only adding to 2nd list those which meet biome, unique, value, and minDuplicate distance settings
     {
     settings = template.getValidationSettings();
      
-    boolean dimensionFound = false;
     boolean dimensionMatch = !settings.isDimensionWhiteList();
     for(int i = 0; i < settings.getAcceptedDimensions().length; i++)
       {
