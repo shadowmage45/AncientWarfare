@@ -69,7 +69,6 @@ public class NBTTools
 
 public static NBTTagCompound readNBTFrom(List<String> lines)
   {
-  List<String> output = new ArrayList<String>();
   Iterator<String> it = lines.iterator();  
   String leadLine = it.next();
   NBTTagCompound tag = parseCompoundTag(leadLine, it);

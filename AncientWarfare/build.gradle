@@ -1,3 +1,4 @@
+import org.apache.tools.ant.filters.ReplaceTokens
 buildscript 
 {
     repositories 
@@ -31,7 +32,7 @@ sourceSets.main
 { 
   java
   {
-    srcDirs 'src'
+    srcDirs 'build/filtered'
   }
   
   resources
@@ -43,7 +44,12 @@ sourceSets.main
 
 
 task updateVersion(type:Copy){
-  
+  from('src')
+  {
+    exclude 'mcmod.info'    
+  }  
+  into 'build/filtered'
+  filter(ReplaceTokens, tokens: [VERSION: project.version])
 }
 
 compileJava.dependsOn updateVersion
