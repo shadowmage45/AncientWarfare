@@ -62,13 +62,18 @@ public void onWorldLoad(World world)
     {
     Config.log("loaded new data set for research data");
     world.mapStorage.setData(ResearchData.dataName, new ResearchData(ResearchData.dataName));
+    data = (ResearchData) world.mapStorage.loadData(ResearchData.class, ResearchData.dataName);
     }
   }
 
 public void loadOldData(NBTTagCompound tag)
   {
+  World world = MinecraftServer.getServer().worldServers[0];
+  if(world==null){return;}//wtf..throw an exception or something
   data = new ResearchData(ResearchData.dataName);
   data.readFromNBT(tag);
+  world.mapStorage.setData(ResearchData.dataName, data);
+  data.markDirty();
   }
 
 public PlayerEntry getClientEntry()
