@@ -4,3 +4,16 @@
 /eclipse
 *.bin
 /.gradle
+banned-ips.txt
+banned-players.txt
+ForgeModLoader-client*.*
+ForgeModLoader-server*.*
+/world
+/stats
+/saves
+server.log
+output-client.*
+ops.txt
+server.properties
+white-list.txt
+server.log.*
