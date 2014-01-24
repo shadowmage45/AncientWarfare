@@ -22,8 +22,10 @@ package shadowmage.ancient_warfare.common.item;
 
 import java.util.List;
 
+import net.minecraft.client.gui.ChatClickData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
@@ -57,13 +59,13 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {  
   IResearchGoal goal = ResearchGoal.getGoalByID(stack.getItemDamage());
-  if(goal!=null && !ResearchTracker.instance().getEntryFor(player).hasDoneResearch(goal))
+  if(world.isRemote)
     {
-    if(world.isRemote)
-      {      
-      player.addChatMessage("Learning research from notes: " + StatCollector.translateToLocal(goal.getDisplayName()));
-      return false;
-      }    
+    player.addChatMessage("Learning research from notes: " + StatCollector.translateToLocal(goal.getDisplayName()));
+    return true;
+    }   
+  if(goal!=null && !ResearchTracker.instance().getEntryFor(player).hasDoneResearch(goal))
+    {    
     ResearchTracker.instance().addResearchToPlayer(world, player.getEntityName(), goal.getGlobalResearchNum());
     if(!player.capabilities.isCreativeMode)
       {
@@ -72,10 +74,10 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
         {
         player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
         }
-      return false;
+      return true;
       }    
     }
-  return false;
+  return true;
   }
 
 @Override
