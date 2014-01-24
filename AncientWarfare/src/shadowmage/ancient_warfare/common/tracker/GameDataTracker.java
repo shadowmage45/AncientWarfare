@@ -142,7 +142,6 @@ public void clearLivingEntries(int team)
 
 public void resetAllTrackedData()
   {
-  PlayerTracker.instance().clearAllData();
   AWStructureModule.instance().clearAllData();
   WorldGenManager.resetMap();
   AWCraftingManager.instance().resetClientData();

@@ -28,7 +28,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class ItemResearchNote extends AWItemClickable
@@ -57,14 +57,14 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {  
   IResearchGoal goal = ResearchGoal.getGoalByID(stack.getItemDamage());
-  if(goal!=null && !PlayerTracker.instance().getEntryFor(player).hasDoneResearch(goal))
+  if(goal!=null && !ResearchTracker.instance().getEntryFor(player).hasDoneResearch(goal))
     {
     if(world.isRemote)
       {      
       player.addChatMessage("Learning research from notes: " + StatCollector.translateToLocal(goal.getDisplayName()));
       return false;
       }    
-    PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), goal.getGlobalResearchNum());
+    ResearchTracker.instance().addResearchToPlayer(world, player.getEntityName(), goal.getGlobalResearchNum());
     if(!player.capabilities.isCreativeMode)
       {
       stack.stackSize--;

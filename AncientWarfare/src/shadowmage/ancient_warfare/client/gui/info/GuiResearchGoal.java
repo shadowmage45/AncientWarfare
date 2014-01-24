@@ -35,7 +35,7 @@ import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
 
 public class GuiResearchGoal extends GuiInfoBase
@@ -115,7 +115,7 @@ public void setupControls()
   String timeLabel = minutes + "m " + seconds + "."+ticks+"s";
   
   List<String> newLines = new ArrayList<String>();  
-  if(PlayerTracker.instance().getClientEntry().hasDoneResearch(goal))
+  if(ResearchTracker.instance().getClientEntry().hasDoneResearch(goal))
     {
     newLines.add("Known Research");
     }

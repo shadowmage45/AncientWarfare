@@ -21,20 +21,15 @@
 package shadowmage.ancient_warfare.common.tracker;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
-import shadowmage.ancient_warfare.common.research.IResearchGoal;
-import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import cpw.mods.fml.common.IPlayerTracker;
 
@@ -56,16 +51,6 @@ public static PlayerTracker instance()
   }
 private static PlayerTracker INSTANCE;
 
-/**
- * server-side list of all player entries
- */
-private Map<String, PlayerEntry> playerEntries = new HashMap<String, PlayerEntry>();
-
-/**
- * player entry used by thePlayer client-side
- */
-private PlayerEntry clientEntry = new PlayerEntry();
-
 private HashMap<String, Boolean> playerControlKeys = new HashMap<String, Boolean>();
 
 public boolean isControlPressed(EntityPlayer player)
@@ -83,33 +68,6 @@ public void handleControlInput(String name, boolean down)
   this.playerControlKeys.put(name, down);
   }
 
-public PlayerEntry getClientEntry()
-  {
-  return clientEntry;
-  }
-
-public PlayerEntry getEntryFor(String name)
-  {
-  if(!this.playerEntries.containsKey(name))
-    {
-    this.createEntryForNewPlayer(name);
-    }
-  return this.playerEntries.get(name);
-  }
-
-public PlayerEntry getEntryFor(EntityPlayer player)
-  {
-  if(player.worldObj.isRemote && player.getEntityName().equals(clientEntry.playerName))
-    {
-    return clientEntry;
-    }
-  else if(player.worldObj.isRemote)
-    {
-    return null;
-    }
-  return this.playerEntries.get(player.getEntityName());
-  }
-
 @Override
 public void onPlayerLogin(EntityPlayer player)
   {
@@ -119,10 +77,7 @@ public void onPlayerLogin(EntityPlayer player)
     }
   StructureManager.instance().handlePlayerLogin(player);  
   TeamTracker.instance().onPlayerLogin(player);
-  if(!playerEntries.containsKey(player.getEntityName()))
-    {
-    this.createEntryForNewPlayer(player.getEntityName());
-    }    
+  ResearchTracker.instance().onPlayerLogin(player);
   NBTTagCompound initTag = new NBTTagCompound();
   NBTTagCompound tag = this.getClientInitData(player);
   if(tag!=null)
@@ -139,63 +94,20 @@ public void onPlayerLogin(EntityPlayer player)
   AWCore.proxy.sendPacketToPlayer(player, init);  
   }
 
-public void addResearchToPlayer(World world, String name, int goal)
-  {
-  if(world.isRemote)
-    {
-    if(this.clientEntry.playerName.equals(name))
-      {
-      this.clientEntry.addCompletedResearch(goal);
-      }
-    }
-  else if(this.playerEntries.containsKey(name))
-    {
-    this.playerEntries.get(name).addCompletedResearch(goal);
-    EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(name);
-    if(player!=null)
-      {
-      Packet01ModData pkt = new Packet01ModData();
-      NBTTagCompound tag = new NBTTagCompound();
-      tag.setBoolean("research", true);
-      tag.setInteger("new", goal);
-      pkt.packetData = tag;
-      pkt.sendPacketToPlayer(player);
-      }
-    GameDataTracker.instance().markGameDataDirty();
-    }
-  }
-
 public void handleClientInit(NBTTagCompound tag)
   {
-  this.clientEntry = new PlayerEntry();
-  this.clientEntry.readFromNBT(tag);
+  ResearchTracker.instance().clientEntry = new PlayerEntry();
+  ResearchTracker.instance().clientEntry.readFromNBT(tag);
   }
 
 private NBTTagCompound getClientInitData(EntityPlayer player)
   {
-  PlayerEntry ent = this.playerEntries.get(player.getEntityName());
+  PlayerEntry ent = ResearchTracker.instance().getEntryFor(player);
   if(ent!=null)
     {
     return ent.getNBTTag();
     }
   return null;
-  }
-
-/**
- * create a new entry for a player, set team to 0,
- * and relay new player/team info to all logged in players
- */
-private void createEntryForNewPlayer(String playerName)
-  { 
-  PlayerEntry entry = new PlayerEntry();
-  entry.playerName = String.valueOf(playerName);  
-  this.playerEntries.put(String.valueOf(playerName), entry);
-  IResearchGoal[] knownResearch = ResearchGoal.getDefaultKnownResearch();
-  for(IResearchGoal goal : knownResearch)
-    {
-    entry.addCompletedResearch(goal.getGlobalResearchNum());
-    }
-  GameDataTracker.instance().markGameDataDirty();
   }
 
 @Override
@@ -217,35 +129,15 @@ public void onPlayerRespawn(EntityPlayer player)
 public NBTTagCompound getNBTTag()
   {
   NBTTagCompound tag = new NBTTagCompound();
-  NBTTagCompound entryTag;
-  NBTTagList list = new NBTTagList();  
-  for(String name : this.playerEntries.keySet())
-    {
-    PlayerEntry ent = this.playerEntries.get(name);
-    list.appendTag(ent.getNBTTag());
-    }
-  tag.setTag("list", list);
+ 
   return tag;
   }
 
 @Override
 public void readFromNBT(NBTTagCompound tag)
   {
-  this.playerEntries.clear();
-  NBTTagList list = tag.getTagList("list");
-  for(int i = 0; i < list.tagCount(); i++)
-    {
-    NBTTagCompound entTag = (NBTTagCompound) list.tagAt(i);
-    PlayerEntry ent = new PlayerEntry();
-    ent.readFromNBT(entTag);
-    this.playerEntries.put(ent.playerName, ent);
-    }
+ 
   }
 
-public void clearAllData()
-  {
-  this.clientEntry = new PlayerEntry();
-  this.playerEntries.clear();
-  }
 
 }

@@ -32,7 +32,7 @@ import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 
 public class TEAWResearch extends TEAWCraftingWorkSite
 {
@@ -115,7 +115,7 @@ protected boolean tryFinishCrafting()
     this.workProgressMax = 0;
     return false;
     }
-  PlayerTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());
+  ResearchTracker.instance().addResearchToPlayer(worldObj, workingPlayerName, goal.getGlobalResearchNum());
   if(!this.researchQueue.isEmpty())
     {
     this.recipe = null;

@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_warfare.client.gui.teams;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.Container;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;

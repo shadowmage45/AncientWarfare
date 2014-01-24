@@ -50,7 +50,7 @@ import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.vehicles.IVehicleType;
@@ -89,7 +89,7 @@ EnumSet recipeTypes = null;
 public GuiResearchBook(EntityPlayer player)
   {
   super(new ContainerDummy());
-  this.entry = PlayerTracker.instance().getClientEntry();
+  this.entry = ResearchTracker.instance().getClientEntry();
   this.shouldCloseOnVanillaKeys = true;
   }
 
@@ -537,7 +537,7 @@ protected void handleSearchBoxUpdate(EnumSet<RecipeType> recipeTypes)
   this.recipes.clear();
   this.area.elements.clear();
   this.sorterFilter.setFilterText(text);
-  PlayerEntry entry = PlayerTracker.instance().getClientEntry();
+  PlayerEntry entry = ResearchTracker.instance().getClientEntry();
   if(recipeTypes!=null)
     {
     this.addRecipeButtons(AWCraftingManager.instance().getRecipesContaining(entry, text, recipeTypes, true), sorterFilter);      

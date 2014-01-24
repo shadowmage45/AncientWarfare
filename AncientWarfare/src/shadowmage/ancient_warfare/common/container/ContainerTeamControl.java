@@ -23,10 +23,9 @@ package shadowmage.ancient_warfare.common.container;
 import java.util.Collections;
 import java.util.List;
 
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 
 public class ContainerTeamControl extends ContainerBase
 {

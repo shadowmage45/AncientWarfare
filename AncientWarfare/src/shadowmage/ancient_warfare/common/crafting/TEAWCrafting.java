@@ -32,7 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
@@ -280,7 +280,7 @@ public void readFromNBT(NBTTagCompound tag)
   if(tag.hasKey("name"))
     {
     this.workingPlayerName = tag.getString("name");
-    this.workingPlayerEntry = PlayerTracker.instance().getEntryFor(workingPlayerName);
+    this.workingPlayerEntry = ResearchTracker.instance().getEntryFor(workingPlayerName);
     }
   if(tag.hasKey("inv") && this.inventory!=null)
     {
@@ -423,7 +423,7 @@ public void onInventoryChanged()
         if(this.workingPlayerName==null || !this.workingPlayerName.equals(name))
           {
           this.workingPlayerName = name;
-          this.workingPlayerEntry = PlayerTracker.instance().getEntryFor( workingPlayerName); 
+          this.workingPlayerEntry = ResearchTracker.instance().getEntryFor( workingPlayerName); 
           this.stopAndClear();
           }
         }    

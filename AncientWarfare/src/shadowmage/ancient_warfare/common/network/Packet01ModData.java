@@ -27,6 +27,7 @@ import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.EntityDataDump;
 
@@ -151,7 +152,7 @@ public void execute()
   
   if(this.packetData.hasKey("research") && player.worldObj.isRemote)
     {
-    PlayerTracker.instance().addResearchToPlayer(world, player.getEntityName(), this.packetData.getInteger("new"));
+    ResearchTracker.instance().addResearchToPlayer(world, player.getEntityName(), this.packetData.getInteger("new"));
     }
   
   if(this.packetData.hasKey("entityDump"))

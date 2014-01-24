@@ -32,7 +32,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry;
-import shadowmage.ancient_warfare.common.tracker.entry.TeamEntry.TeamMemberEntry;
 
 public class GuiTeamAlliance extends GuiContainerAdvanced
 {

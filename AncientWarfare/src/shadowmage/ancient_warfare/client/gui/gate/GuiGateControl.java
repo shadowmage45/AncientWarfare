@@ -25,7 +25,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.container.ContainerGateControl;
 
 public class GuiGateControl extends GuiContainerAdvanced
 {

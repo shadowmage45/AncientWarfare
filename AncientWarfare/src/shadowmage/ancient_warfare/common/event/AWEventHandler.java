@@ -28,7 +28,6 @@ import net.minecraft.entity.ai.EntityAIAttackOnCollide;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
@@ -36,7 +35,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent;
@@ -46,6 +44,7 @@ import shadowmage.ancient_warfare.common.item.AWItemClickable;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.tracker.GameDataTracker;
 import shadowmage.ancient_warfare.common.tracker.MailboxData;
+import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.warzone.WarzoneManager;
@@ -67,11 +66,12 @@ public static AWEventHandler instance()
 public void onWorldLoad(WorldEvent.Load evt)
   {
   if(evt.world instanceof WorldServer)
-    {
+    {    
     GameDataTracker.instance().handleWorldLoad(evt.world);
     MailboxData.instance().handleWorldLoad(evt.world);
     TeamTracker.instance().onWorldLoad(evt.world);
     WarzoneManager.instance().onWorldLoad(evt.world);
+    ResearchTracker.instance().onWorldLoad(evt.world);
     }  
   }
 
