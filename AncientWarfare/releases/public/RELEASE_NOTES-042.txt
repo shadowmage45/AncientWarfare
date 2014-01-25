@@ -1,0 +1,4 @@
+Change Log 040 -> 042 (01-25-14)
+
+* FIX -- fix an issue that would cause loss of research data when server is shut-down / game is exited.
+* FIX -- Research notes should no longer double-spam the chat message when learned from right-click.
