@@ -139,32 +139,32 @@ public void onItemUsed(PlayerInteractEvent evt)
     }  
   }
 
-@ForgeSubscribe
-public void onBlockBreak(BlockEvent.BreakEvent evt)
-  {
-  if(evt.isCanceled() || evt.getPlayer()==null){return;}
-  Chunk chunk = evt.world.getChunkFromBlockCoords(evt.x, evt.z);
-  int teamNum = TeamTracker.instance().getTeamForPlayer(evt.getPlayer());
-  Map<Object, TileEntity> chunkMap = chunk.chunkTileEntityMap;
-  for(TileEntity e : chunkMap.values())
-    {
-    if(e instanceof TEAWBlockReinforced)
-      {
-      //pull up the TE, grabe the reinforcedChunk data
-      TEAWBlockReinforced te = (TEAWBlockReinforced)e;
-      if(te.ownerTeam!=teamNum)
-        {
-        evt.setCanceled(true);
-        te.damageRemaining--;
-        if(te.damageRemaining<=0)
-          {
-          evt.world.setBlock(te.xCoord, te.yCoord, te.zCoord, 0);
-          }
-        }
-      break;
-      }
-    } 
-  }
+//@ForgeSubscribe
+//public void onBlockBreak(BlockEvent.BreakEvent evt)
+//  {
+//  if(evt.isCanceled() || evt.getPlayer()==null){return;}
+//  Chunk chunk = evt.world.getChunkFromBlockCoords(evt.x, evt.z);
+//  int teamNum = TeamTracker.instance().getTeamForPlayer(evt.getPlayer());
+//  Map<Object, TileEntity> chunkMap = chunk.chunkTileEntityMap;
+//  for(TileEntity e : chunkMap.values())
+//    {
+//    if(e instanceof TEAWBlockReinforced)
+//      {
+//      //pull up the TE, grabe the reinforcedChunk data
+//      TEAWBlockReinforced te = (TEAWBlockReinforced)e;
+//      if(te.ownerTeam!=teamNum)
+//        {
+//        evt.setCanceled(true);
+//        te.damageRemaining--;
+//        if(te.damageRemaining<=0)
+//          {
+//          evt.world.setBlock(te.xCoord, te.yCoord, te.zCoord, 0);
+//          }
+//        }
+//      break;
+//      }
+//    } 
+//  }
 
 
 }
