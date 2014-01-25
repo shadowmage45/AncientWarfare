@@ -37,7 +37,7 @@ private ResearchTracker(){}
 private static ResearchTracker instance = new ResearchTracker(){};
 public static ResearchTracker instance()
   {  
-  return null;
+  return instance;
   }
 
 ResearchData data;
@@ -48,10 +48,7 @@ public void onPlayerLogin(EntityPlayer player)
   {
   if(!this.data.playerEntries.containsKey(player.getEntityName()))
     {
-    PlayerEntry entry = new PlayerEntry();
-    entry.playerName = player.getEntityName();    
-    this.data.playerEntries.put(player.getEntityName(), entry);
-    this.data.markDirty();
+	this.createEntryForNewPlayer(player.getEntityName());
     }
   }
 
@@ -147,6 +144,6 @@ private void createEntryForNewPlayer(String playerName)
     {
     entry.addCompletedResearch(goal.getGlobalResearchNum());
     }
-  GameDataTracker.instance().markGameDataDirty();
+  this.data.markDirty();
   }
 }
