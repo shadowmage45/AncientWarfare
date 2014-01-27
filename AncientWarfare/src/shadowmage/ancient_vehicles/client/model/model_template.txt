@@ -20,5 +20,7 @@ piece=foopiece2,foopiece,0,2,0,0,0,0
 box=foopiece2,0,0,0,1,1,1,0,0,0,0,0
 box=foopiece2,0,1,0,1,1,1,0,0,0,0,1
 
-#any number of piece and box entries may be present, as long as each piece's parent is properly declared
-#and each boxes owner is also properly declared 
+# any number of piece and box entries may be present, as long as each piece's parent is properly declared
+# and each boxes owner is also properly declared
+# parent pieces must be declared prior to their children
+# all of this will be taken care of automatically if using MEIM for model creation 
