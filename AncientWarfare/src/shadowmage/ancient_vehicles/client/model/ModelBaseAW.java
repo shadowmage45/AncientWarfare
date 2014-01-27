@@ -32,6 +32,9 @@ public class ModelBaseAW
 
 private static float ratio = 0.0625f;//possibly not needed?
 
+int textureWidth;
+int textureHeight;
+
 private HashMap<String, ModelPiece> pieces = new HashMap<String, ModelPiece>();
 private List<ModelPiece> basePieces = new ArrayList<ModelPiece>();
 
@@ -57,24 +60,49 @@ protected void addPiece(ModelPiece piece)
     }
   }
 
+public void setPieceRotation(String name, float x, float y, float z)
+  {
+  ModelPiece piece = this.getPiece(name);
+  if(piece==null){return;}
+  piece.rx = x;
+  piece.ry = y;
+  piece.rz = z;
+  }
+
 protected ModelPiece getPiece(String name)
   {
   return this.pieces.get(name);
   }
 
+/**
+ * A single piece of a model.  A piece is a discrete static component of the model.  Pieces may be rotated and moved
+ * relative to other pieces in the model (in contrast to boxes, which may not be altered).  All animation is done
+ * by moving pieces relative to each-other and the model origin.
+ * 
+ * Each piece has a box list for the boxes of that piece, as well as a children list for sub-pieces
+ *  (pieces which rotate/move relative to this piece, but may also need to rotate independently)
+ * Each piece may have multiple boxes and multiple sub-pieces.
+ * @author Shadowmage
+ *
+ */
 private static class ModelPiece
 {
 
 String pieceName;
-float x, y, z;//manipulatable coordinates for this piece
-float rx, ry, rz;//manipulatable rotation for this piece
+boolean visible = true;
+float x, y, z;//manipulatable coordinates for this piece, relative to either model origin or parent-piece origin (if base piece or has parent)
+float rx, ry, rz;//manipulatable rotation for this piece, relative to either model rotation or parent-piece rotation (if base piece or has parent)
 int displayListNum = -1;//display list for the boxes that make up this piece
-private boolean isBasePiece;//if this is a base-piece or not
+private boolean isBasePiece;//if this is a base-piece or not, set during parsing by reading if this piece has a parent
 private List<ModelPiece> children = new ArrayList<ModelPiece>();//the children of this piece
 private List<Box> boxes = new ArrayList<Box>();//the list of boxes that make up this piece, really only used during first construction of display list
 
 public void render()
   {
+  if(!visible)
+    {
+    return;
+    }
   GL11.glPushMatrix();
   if(x!=0 || y!=0 || z!=0)
     {
@@ -111,12 +139,18 @@ public void render()
   }
 }
 
-
+/**
+ * A single box from a model.  Each box is a discrete static component.
+ * Boxes do not change position/rotation relative to other boxes in the
+ * same piece.
+ * @author Shadowmage
+ *
+ */
 private static class Box
 {
 
-float x1, y1, z1, x2, y2, z2;//extents of the box
-float rx, ry, rz;
+float x1, y1, z1, x2, y2, z2;//extents of the box, relative to piece origin
+float rx, ry, rz;//rotation of this box, relative to the piece rotation
 float tx, ty;//texture offsets, in texture space (0->1)
 
 private void render()
