@@ -37,6 +37,7 @@ public static int randomChance = 75;
 public static int randomRange = 1000;
 public static int spawnProtectionRange = 0;
 
+private static String worldGenCategory = "a_world-gen_settings";
 
 /**
  * @param configFile
@@ -51,13 +52,21 @@ public AWStructureStatics(File configFile, Logger log, String version)
 @Override
 public void initializeCategories()
   {
-
+  this.config.addCustomCategoryComment(worldGenCategory, "Settings that effect all world-structure-generation.");
   }
 
 @Override
 public void initializeValues()
   {
- 
+  templateExtension = config.get(worldGenCategory, "template_extension", "aws").getString();
+  enableVillageGen = config.get(worldGenCategory, "enable_village_generation", enableVillageGen).getBoolean(enableVillageGen);
+  enableStructureGeneration = config.get(worldGenCategory, "enable_structure_generation", enableStructureGeneration).getBoolean(enableStructureGeneration);
+  chunkSearchRadius = config.get(worldGenCategory, "validation_chunk_radius", chunkSearchRadius).getInt(chunkSearchRadius);
+  maxClusterValue = config.get(worldGenCategory, "max_cluster_value", maxClusterValue).getInt(maxClusterValue);
+  randomChance = config.get(worldGenCategory, "random_chance", randomChance).getInt(randomChance);
+  randomRange = config.get(worldGenCategory, "random_range", randomRange).getInt(randomRange);
+  spawnProtectionRange = config.get(worldGenCategory, "spawn_protection_chunk_radius", spawnProtectionRange).getInt(spawnProtectionRange);  
+  this.config.save();
   }
 
 }
