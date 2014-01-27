@@ -18,31 +18,36 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_vehicles.common.vehicle;
+package shadowmage.ancient_vehicles.client.model;
 
-/**
- * client & server container for current vehicle statistics
- * will have an update method to be called when vehicle inventory is changed
- * to propagate any needed data to client(s)
- * @author Shadowmage
- *
- */
-public class VehicleStats
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+
+public class ModelRendererVehicle extends ModelRenderer
 {
 
-public float wheelAngle;
-public float wheelSpeed;
-public float turretYaw;
-public float turretYawSpeed;
-public float turretPitch;
-public float turretPitchSpeed;
+public ModelRenderer parent = null;
 
-public float yawSpeed;//how fast the vehicle is rotating
-
-
-public VehicleStats()
+public ModelRendererVehicle(ModelBase par1ModelBase)
   {
-  // TODO Auto-generated constructor stub
+  super(par1ModelBase);
+  }
+
+public ModelRendererVehicle(ModelBase par1ModelBase, String par2Str)
+  {
+  super(par1ModelBase, par2Str);
+  }
+
+public ModelRendererVehicle(ModelBase par1ModelBase, int par2, int par3)
+  {
+  super(par1ModelBase, par2, par3);
+  }
+
+//not an override..but a...overload?
+public void addChild(ModelRendererVehicle model)
+  {
+  super.addChild(model);
+  model.parent = this;
   }
 
 }

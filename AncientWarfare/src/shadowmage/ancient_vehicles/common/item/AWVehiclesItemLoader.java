@@ -49,7 +49,7 @@ public static final AWItemBase vehicleSpawner = registry.createItem("item.vehicl
 
 public void registerItems()
   {
-  registry.addDescription(vehicleSpawner, "item.vehicleSpawner", 0, "item.vehicleSpawner.tooltip", "ancientwarfare:items/testIcon1");
+  registry.addDescription(vehicleSpawner, "item.vehicleSpawner", 0, "item.vehicleSpawner.tooltip", "ancientwarfare:testIcon1");
   }
 
 }

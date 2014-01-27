@@ -20,21 +20,62 @@
  */
 package shadowmage.ancient_vehicles.client.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_framework.common.utils.Trig;
 
 public abstract class ModelVehicleBase extends ModelBase
 {
 
+HashMap<String, ModelRendererVehicle> boxMap = new HashMap<String, ModelRendererVehicle>();
+List<ModelRendererVehicle> baseBoxes = new ArrayList<ModelRendererVehicle>();
+
 @Override
 public abstract void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7);
 
-protected void setPieceRotation(ModelRenderer piece, float x, float y, float z)
+protected void addPiece(ModelRendererVehicle piece)
+  {  
+  boxMap.put(piece.boxName, piece);
+  Iterator<ModelRendererVehicle> it = piece.childModels.iterator();
+  ModelRendererVehicle child;
+  while(it.hasNext() && (child=it.next())!=null)
+    {
+    addPiece(child);
+    }
+  }
+
+protected void setPieceRotation(ModelRendererVehicle piece, float x, float y, float z)
+  {
+  piece.rotateAngleX = x * Trig.TORADIANS;
+  piece.rotateAngleY = y * Trig.TORADIANS;
+  piece.rotateAngleZ = z * Trig.TORADIANS;      
+  }
+
+public void setPieceRotation(String piece, float x, float y, float z)
+  {
+  ModelRendererVehicle rend = this.boxMap.get(piece);
+  if(rend!=null)
+    {
+    setPieceRotation(rend, x, y, z);
+    }
+  }
+
+public void renderModel()
+  {
+  /**
+   * TODO find a way to make a list of base pieces -- those with no parent
+   */
+  }
+
+public void parseFromFile(List<String> lines)
   {
   
   }
-
-protected abstract void renderModelFlag();
 
 }

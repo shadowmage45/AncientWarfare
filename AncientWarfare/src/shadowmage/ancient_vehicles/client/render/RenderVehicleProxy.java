@@ -33,7 +33,7 @@ public class RenderVehicleProxy extends RenderEntity
 {
 
 //vehicle renderers by vehicleType.name
-private static HashMap<String, RenderEntity> vehicleRenders = new HashMap<String, RenderEntity>();
+private static HashMap<String, RenderVehicle> vehicleRenders = new HashMap<String, RenderVehicle>();
 //vehicle models by vehicleType.name
 private static HashMap<String, ModelVehicleBase> vehicleModels = new HashMap<String, ModelVehicleBase>();
 //vehicle textures by vehicleType.name
@@ -41,28 +41,42 @@ private static HashMap<String, ResourceLocation> vehicleTextures = new HashMap<S
 
 public static void registerRenderers()
   {
-  
+  /**
+   * load vehicle renderers and models
+   * textures are registered when vehicleTypes are registered
+   */
   }
 
 public static void registerVehicleType(VehicleType type)
   {
-  
+  vehicleTextures.put(type.getName(), new ResourceLocation("ancientwarfare", type.getTextureName()));
   }
 
 @Override
 public void doRender(Entity entity, double x, double y, double z, float yaw, float partialTick)
   {
-  if(entity.getClass()==EntityVehicle.class)
+  EntityVehicle vehicle = (EntityVehicle)entity;
+  RenderVehicle render = vehicleRenders.get(vehicle.getVehicleType().getName());
+  if(render!=null)
     {
-    EntityVehicle vehicle = (EntityVehicle)entity;
-    RenderEntity render = vehicleRenders.get(vehicle.getVehicleType().getName());
-    if(render!=null)
-      {
-      render.doRender(vehicle, x, y, z, yaw, partialTick);
-      return;
-      }
+    /**
+     * translate to position
+     * rotate for yaw
+     * bind texture
+     */
+    render.renderVehicle(vehicle, partialTick);
+    render.renderVehicleFlag(vehicle, partialTick);    
     }
-  super.doRender(entity, x, y, z, yaw, partialTick);
+  else
+    {
+    super.doRender(entity, x, y, z, yaw, partialTick);
+    }
+  
+  }
+
+public static ModelVehicleBase getModel(String name)
+  {
+  return vehicleModels.get(name);
   }
 
 @Override

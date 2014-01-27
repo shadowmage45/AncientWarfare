@@ -45,7 +45,7 @@ private static HashMap<String, Object> moveTypes = new HashMap<String, Object>()
 public static void loadVehicles()
   {
   List<VehicleType> types = loadFromDefinition(AWVehicleStatics.vehicleDefinitionsFile);
-  AWVehicles.instance.logDebug("loaded: "+types.size() + " vehicle definitions");
+  AWVehicles.instance.config.log("loaded: "+types.size() + " vehicle definitions");
   for(VehicleType t : types)
     {
     if(t.isSuvivalEnabled())

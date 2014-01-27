@@ -17,3 +17,4 @@ ops.txt
 server.properties
 white-list.txt
 server.log.*
+/runtime

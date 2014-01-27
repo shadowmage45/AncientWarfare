@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 public class VehicleType
 {
 
-public static HashMap<String, VehicleType> vehicleTypes = new HashMap<String, VehicleType>();
+public static final HashMap<String, VehicleType> vehicleTypes = new HashMap<String, VehicleType>();
 
 String name;//translation key/unique registered name for this vehicle type
 boolean survival;//available in survival through crafting (forces creative=true)
@@ -59,7 +59,9 @@ public static final VehicleType getVehicleType(String name)
 public String getName(){return name;}
 public boolean isSuvivalEnabled(){return survival;}
 public boolean isCreativeEnabled(){return creative;}
-
+public String getTextureName(){return modelTexture;}
+public String getModelId(){return modelId;}
+public String getRenderId(){return renderId;}
 
 public Object getNewFiringHelper(EntityVehicle vehicle)
   {

@@ -69,31 +69,31 @@ public void loadConfiguration(File config, Logger log)
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
-  log("Ancient Warfare Vehicles Pre-Init started.");
+  this.config.log("Ancient Warfare Vehicles Pre-Init started.");
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWFramework.loadedVehicles = true;
   AWVehiclesItemLoader.instance().registerItems();
   VehicleRegistry.loadVehicles();
-  log("Ancient Warfare Vehicles Pre-Init finished.");
+  this.config.log("Ancient Warfare Vehicles Pre-Init finished.");
   }
 
 @Override
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
-  log("Ancient Warfare Vehicles Init started.");
-  log("Ancient Warfare Vehicles Init finished.");
+  this.config.log("Ancient Warfare Vehicles Init started.");
+  this.config.log("Ancient Warfare Vehicles Init finished.");
   }
 
 @Override
 @EventHandler
 public void postInit(FMLPostInitializationEvent evt)
   {
-  log("Ancient Warfare Vehicles Post-Init started.");
+  this.config.log("Ancient Warfare Vehicles Post-Init started.");
   
 
   config.saveConfig();
-  log("Ancient Warfare Vehicles Post-Init finished.");
+  this.config.log("Ancient Warfare Vehicles Post-Init finished.");
   }
 
 @Override

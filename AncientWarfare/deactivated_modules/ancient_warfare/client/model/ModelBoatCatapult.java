@@ -99,6 +99,8 @@ ModelRenderer standP3;
 ModelRenderer standP4;
 ModelRenderer flagPole;
 ModelRenderer flagCloth;
+
+
 public ModelBoatCatapult(){
   bottomP1 = new ModelRenderer(this,"bottomP1");
   bottomP1.setTextureOffset(0,31);
