@@ -20,36 +20,14 @@
  */
 package shadowmage.ancient_framework.client.model;
 
-public class ModelBaseAWPickable extends ModelBaseAW
+public abstract class Primitive
 {
 
-public ModelBaseAWPickable()
+public ModelPiece parent;
+public Primitive(ModelPiece parent)
   {
- 
+  this.parent = parent;
   }
-
-
-public void renderForSelection()
-  {
-  int startColor = 0xff000000;
-  for(ModelPiece piece : this.basePieces)
-    {
-    startColor = piece.renderForSelection(startColor);
-    }
-  }
-
-public Primitive getSelectedPrimitive(int startNum, int selection)
-  {  
-  selectedPrimitive = null;
-  for(ModelPiece piece : this.basePieces)
-    {
-    startNum = piece.getSelectedPrimitive(startNum, selection);
-    if(selectedPrimitive!=null)
-      {
-      return selectedPrimitive;
-      }
-    }
-  return null;
-  } 
+public abstract void render();
 
 }
