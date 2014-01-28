@@ -26,6 +26,9 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.utils.StringTools;
+
 public class ModelBaseAW
 {
 //name needs changed to something...else
@@ -48,7 +51,77 @@ public void renderModel()
 
 public void parseFromLines(List<String> lines)
   {
-  
+  String[] bits;
+  for(String line : lines)
+    {
+    if(line.toLowerCase().startsWith("#"))
+      {
+      continue;
+      }
+    else if(line.toLowerCase().startsWith("texturesize="))
+      {
+      bits = line.split("=")[1].split(",");
+      textureWidth = StringTools.safeParseInt(bits[0]);
+      textureHeight = StringTools.safeParseInt(bits[1]);
+      }
+    else if(line.startsWith("part="))
+      {
+      bits = line.split("=")[1].split(",");
+      ModelPiece piece = new ModelPiece();
+      String pieceName = bits[0];
+      String parentName = bits[1];
+      if(parentName.equals("null"))
+        {
+        piece.isBasePiece = true;        
+        }
+      else
+        {
+        ModelPiece parent = getPiece(parentName);
+        if(parent==null)
+          {
+          throw new IllegalArgumentException("could not create model, imporoper piece specification for: "+parentName);
+          }
+        parent.children.add(piece);
+        }
+      piece.pieceName = pieceName;
+      piece.x = StringTools.safeParseFloat(bits[2]);
+      piece.y = StringTools.safeParseFloat(bits[3]);
+      piece.z = StringTools.safeParseFloat(bits[4]);
+      piece.rx = StringTools.safeParseFloat(bits[5]);
+      piece.ry = StringTools.safeParseFloat(bits[6]);
+      piece.rz = StringTools.safeParseFloat(bits[7]);
+      addPiece(piece);
+      AWLog.logDebug("parsed a new piece: "+pieceName);      
+      }
+    else if(line.startsWith("box="))
+      {
+      bits = line.split("=")[1].split(",");
+      //parse old-style x,y,z, w,h,l
+      String parentName = bits[0];
+      ModelPiece piece = getPiece(parentName);
+      if(piece==null)
+        {
+        throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
+        }
+      Box box = new Box();
+      box.x1 = StringTools.safeParseFloat(bits[1]);
+      box.y1 = StringTools.safeParseFloat(bits[2]);
+      box.z1 = StringTools.safeParseFloat(bits[3]);
+      
+      box.x2 = box.x1 + StringTools.safeParseFloat(bits[4]);
+      box.y2 = box.y1 + StringTools.safeParseFloat(bits[5]);
+      box.z2 = box.z1 + StringTools.safeParseFloat(bits[6]);
+      
+      if(bits.length>=10)
+        {
+        box.rx = StringTools.safeParseFloat(bits[7]);
+        box.ry = StringTools.safeParseFloat(bits[8]);
+        box.rz = StringTools.safeParseFloat(bits[9]);      
+        }
+      piece.boxes.add(box);
+      AWLog.logDebug("parsed new box for piece: "+parentName);
+      }    
+    }
   }
 
 protected void addPiece(ModelPiece piece)
@@ -155,6 +228,13 @@ float tx, ty;//texture offsets, in texture space (0->1)
 
 private void render()
   {
+//  x1*=ratio;
+//  y1*=ratio;
+//  z1*=ratio;
+//  x2*=ratio;
+//  y2*=ratio;
+//  z2*=ratio;
+  
 //render the cube. only called a single time when building the display list for a piece
   GL11.glPushMatrix();
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
@@ -163,46 +243,47 @@ private void render()
   
   //front side
   GL11.glBegin(GL11.GL_QUADS);
+  
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'front' face
-  GL11.glVertex3f(x1, y1, z1);
   GL11.glVertex3f(x2, y1, z1);
-  GL11.glVertex3f(x2, y2, z1);
+  GL11.glVertex3f(x1, y1, z1);
   GL11.glVertex3f(x1, y2, z1);
+  GL11.glVertex3f(x2, y2, z1);
   
   //right side
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'right' face
-  GL11.glVertex3f(x2, y1, z1);
-  GL11.glVertex3f(x2, y1, z2);
-  GL11.glVertex3f(x2, y2, z2);
-  GL11.glVertex3f(x2, y2, z1);
+  GL11.glVertex3f(x1, y1, z1);
+  GL11.glVertex3f(x1, y1, z2);
+  GL11.glVertex3f(x1, y2, z2);
+  GL11.glVertex3f(x1, y2, z1);
   
-  //left side
+//  //left side
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'left' face
   GL11.glVertex3f(x2, y1, z2);
   GL11.glVertex3f(x2, y1, z1);
   GL11.glVertex3f(x2, y2, z1);
   GL11.glVertex3f(x2, y2, z2);
-
-  //top side
+  
+//  //top side
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'top' face
-  GL11.glVertex3f(x1, y1, z2);
-  GL11.glVertex3f(x2, y1, z2);
-  GL11.glVertex3f(x2, y1, z1);
-  GL11.glVertex3f(x1, y1, z1);
-  
-  //bottom side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'bottom' face
-  GL11.glVertex3f(x1, y2, z1);
   GL11.glVertex3f(x2, y2, z1);
-  GL11.glVertex3f(x2, y2, z2);
+  GL11.glVertex3f(x1, y2, z1);
   GL11.glVertex3f(x1, y2, z2);
+  GL11.glVertex3f(x2, y2, z2);
   
-  //rear side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'rear' face
+//  //bottom side
+  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'bottom' face
   GL11.glVertex3f(x2, y1, z2);
   GL11.glVertex3f(x1, y1, z2);
-  GL11.glVertex3f(x1, y2, z2);
+  GL11.glVertex3f(x1, y1, z1);
+  GL11.glVertex3f(x2, y1, z1);
+//  
+//  //rear side
+  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'rear' face
+  GL11.glVertex3f(x1, y1, z2);
+  GL11.glVertex3f(x2, y1, z2);
   GL11.glVertex3f(x2, y2, z2);
+  GL11.glVertex3f(x1, y2, z2);
   
   GL11.glEnd();
   GL11.glPopMatrix();  

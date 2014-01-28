@@ -6,9 +6,9 @@ textureSize=256,256
 :endheader
 
 #each piece entry is a single line
-piece=name, parent(null for none), x, y, z, rx, ry, rz
+#piece=name, parent(null for none), x, y, z, rx, ry, rz
 #each box for that piece is a single-line following the piece entry
-box=piece.name, x1,y1,z1, x2,y2,z2, rx,ry,rz, tx,ty
+#box=piece.name, x1,y1,z1, x2,y2,z2, rx,ry,rz, tx,ty
 
 # so an example piece with two boxes would be:
 piece=foopiece,null,0,0,0,0,0,0

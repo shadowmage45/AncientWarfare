@@ -21,12 +21,15 @@
 package shadowmage.ancient_vehicles;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Logger;
 
+import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.AWMod;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
+import shadowmage.ancient_vehicles.client.render.RenderTest;
 import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
 import shadowmage.ancient_vehicles.common.item.AWVehiclesItemLoader;
 import shadowmage.ancient_vehicles.common.vehicle.VehicleRegistry;
@@ -69,11 +72,19 @@ public void loadConfiguration(File config, Logger log)
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt)
   {
-  this.config.log("Ancient Warfare Vehicles Pre-Init started.");
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  this.config.log("Ancient Warfare Vehicles Pre-Init started.");
   AWFramework.loadedVehicles = true;
   AWVehiclesItemLoader.instance().registerItems();
   VehicleRegistry.loadVehicles();
+  try
+    {
+    MinecraftForge.EVENT_BUS.register(new RenderTest());
+    } 
+  catch (IOException e)
+    {
+    e.printStackTrace();
+    }
   this.config.log("Ancient Warfare Vehicles Pre-Init finished.");
   }
 
