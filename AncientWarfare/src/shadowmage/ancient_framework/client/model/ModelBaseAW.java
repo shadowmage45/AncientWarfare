@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_vehicles.client.model;
+package shadowmage.ancient_framework.client.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +37,8 @@ private static float ratio = 0.0625f;//possibly not needed?
 
 int textureWidth;
 int textureHeight;
+private Primitive selectedPrimitive = null;
+
 
 private HashMap<String, ModelPiece> pieces = new HashMap<String, ModelPiece>();
 private List<ModelPiece> basePieces = new ArrayList<ModelPiece>();
@@ -48,6 +50,29 @@ public void renderModel()
     piece.render();
     }
   }
+
+public void renderForSelection()
+  {
+  int startColor = 0xff000000;
+  for(ModelPiece piece : this.basePieces)
+    {
+    startColor = piece.renderForSelection(startColor);
+    }
+  }
+
+public Primitive getSelectedPrimitive(int startNum, int selection)
+  {  
+  selectedPrimitive = null;
+  for(ModelPiece piece : this.basePieces)
+    {
+    startNum = piece.getSelectedPrimitive(startNum, selection);
+    if(selectedPrimitive!=null)
+      {
+      return selectedPrimitive;
+      }
+    }
+  return null;
+  } 
 
 public void parseFromLines(List<String> lines)
   {
@@ -103,7 +128,7 @@ public void parseFromLines(List<String> lines)
         {
         throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
         }
-      Box box = new Box();
+      Box box = new Box(piece);
       box.x1 = StringTools.safeParseFloat(bits[1]);
       box.y1 = StringTools.safeParseFloat(bits[2]);
       box.z1 = StringTools.safeParseFloat(bits[3]);
@@ -118,7 +143,7 @@ public void parseFromLines(List<String> lines)
         box.ry = StringTools.safeParseFloat(bits[8]);
         box.rz = StringTools.safeParseFloat(bits[9]);      
         }
-      piece.boxes.add(box);
+      piece.primitives.add(box);
       AWLog.logDebug("parsed new box for piece: "+parentName);
       }    
     }
@@ -158,7 +183,7 @@ protected ModelPiece getPiece(String name)
  * @author Shadowmage
  *
  */
-private static class ModelPiece
+private class ModelPiece
 {
 
 String pieceName;
@@ -168,7 +193,8 @@ float rx, ry, rz;//manipulatable rotation for this piece, relative to either mod
 int displayListNum = -1;//display list for the boxes that make up this piece
 private boolean isBasePiece;//if this is a base-piece or not, set during parsing by reading if this piece has a parent
 private List<ModelPiece> children = new ArrayList<ModelPiece>();//the children of this piece
-private List<Box> boxes = new ArrayList<Box>();//the list of boxes that make up this piece, really only used during first construction of display list
+private List<Primitive> primitives = new ArrayList<Primitive>();//the list of boxes that make up this piece, really only used during first construction of display list
+
 
 public void render()
   {
@@ -194,9 +220,9 @@ public void render()
     {    
     displayListNum = GL11.glGenLists(1);
     GL11.glNewList(displayListNum, GL11.GL_COMPILE);
-    for(Box box : this.boxes)
+    for(Primitive primitive : this.primitives)
       {
-      box.render();
+      primitive.render();
       }
     GL11.glEndList();
     GL11.glPushMatrix();
@@ -210,6 +236,77 @@ public void render()
     }
   GL11.glPopMatrix();
   }
+
+public int renderForSelection(int startIndex)
+  {
+  GL11.glPushMatrix();
+  if(x!=0 || y!=0 || z!=0)
+    {
+    GL11.glTranslatef(ratio*x, ratio*y, ratio*z);
+    }  
+  if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
+  if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
+  if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);}  
+  if(displayListNum>=0)
+    {
+    GL11.glPushMatrix();
+    GL11.glCallList(displayListNum);
+    GL11.glPopMatrix();
+    }
+  else
+    {    
+    displayListNum = GL11.glGenLists(1);
+    GL11.glNewList(displayListNum, GL11.GL_COMPILE);
+    for(Primitive primitive : this.primitives)
+      {
+      primitive.render();
+      startIndex++;
+      }
+    GL11.glEndList();
+    GL11.glPushMatrix();
+    GL11.glCallList(displayListNum);
+    GL11.glPopMatrix();
+    }
+  for(ModelPiece child : this.children)
+    {
+    startIndex = child.renderForSelection(startIndex);
+    }
+  GL11.glPopMatrix();
+  return startIndex;
+  }
+
+public int getSelectedPrimitive(int startNum, int selection)
+  {
+  for(Primitive primitive : this.primitives)
+    {
+    if(startNum==selection)
+      {
+      selectedPrimitive = primitive;
+      break;
+      }
+    startNum++;
+    }
+  if(selectedPrimitive==null)
+    {
+    for(ModelPiece child : this.children)
+      {
+      startNum = child.getSelectedPrimitive(startNum, selection);
+      if(selectedPrimitive==null){return startNum;}
+      }    
+    }
+  return startNum;
+  } 
+
+}
+
+private abstract class Primitive
+{
+public ModelPiece parent;
+public Primitive(ModelPiece parent)
+  {
+  this.parent = parent;
+  }
+public abstract void render();
 }
 
 /**
@@ -219,21 +316,26 @@ public void render()
  * @author Shadowmage
  *
  */
-private static class Box
+private class Box extends Primitive
 {
+
+public Box(ModelPiece parent)
+  {
+  super(parent);
+  }
 
 float x1, y1, z1, x2, y2, z2;//extents of the box, relative to piece origin
 float rx, ry, rz;//rotation of this box, relative to the piece rotation
 float tx, ty;//texture offsets, in texture space (0->1)
 
-private void render()
+public void render()
   {
-//  x1*=ratio;
-//  y1*=ratio;
-//  z1*=ratio;
-//  x2*=ratio;
-//  y2*=ratio;
-//  z2*=ratio;
+  x1*=ratio;
+  y1*=ratio;
+  z1*=ratio;
+  x2*=ratio;
+  y2*=ratio;
+  z2*=ratio;
   
 //render the cube. only called a single time when building the display list for a piece
   GL11.glPushMatrix();

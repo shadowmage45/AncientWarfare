@@ -27,16 +27,18 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-import shadowmage.ancient_vehicles.client.model.ModelBaseAW;
+
+import org.lwjgl.opengl.GL11;
+
+import shadowmage.ancient_framework.client.model.ModelBaseAW;
 
 public class RenderTest
 {
 
+float rotation = 0;
 String modelsPath = "/assets/ancientwarfare/models";
 ResourceLocation testTex = new ResourceLocation("ancientwarfare", "models/test.png");
 private ModelBaseAW testModel;
@@ -62,11 +64,16 @@ public RenderTest() throws IOException
 @ForgeSubscribe
 public void renderWorld(RenderWorldLastEvent evt)
   {
+//  GL11.glEnable(GL11.GL_LIGHTING);
+//  rotation += 1.f;
   GL11.glPushMatrix();
   GL11.glTranslatef(0, 0, 1);
+//  testModel.setPieceRotation("foopiece", rotation*0.1f, 0, 0);
+//  testModel.setPieceRotation("foopiece2", 0, rotation*0.1f, 0);
   evt.context.renderEngine.bindTexture(testTex);
   testModel.renderModel();
   GL11.glPopMatrix();
+//  GL11.glDisable(GL11.GL_LIGHTING);
   }
 
 }

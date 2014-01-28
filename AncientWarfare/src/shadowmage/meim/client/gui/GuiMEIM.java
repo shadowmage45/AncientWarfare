@@ -395,8 +395,6 @@ public void renderExtras(int a, int b, float c)
 
   GL11.glMatrixMode(GL11.GL_PROJECTION);
   GL11.glLoadIdentity();
-  //GLU.gluPerspective(90.0F, 1.3333334F, 0.8F, 50.0F);
-//  GLU.gluPerspective(60.0F, (float)16/(float)9, 0.8F, 50.0F);
   float aspect = (float)this.mc.displayWidth/(float)this.mc.displayHeight;
   GLU.gluPerspective(60.0F, aspect, 0.8F, 50.0F);
   
@@ -463,9 +461,7 @@ public void renderExtras(int a, int b, float c)
    * render grid....
    */
   
-  this.mc.renderEngine.bindTexture(gridTexture);
-  this.gridModel.render();
-
+  this.renderGrid();
   TextureManager.bindTexture();
    
   if(this.model!=null)
@@ -475,6 +471,12 @@ public void renderExtras(int a, int b, float c)
   mc.entityRenderer.setupOverlayRendering();
   RenderHelper.disableStandardItemLighting();
   TextureManager.resetBoundTexture();
+  }
+
+protected void renderGrid()
+  {
+  this.mc.renderEngine.bindTexture(gridTexture);
+  this.gridModel.render();
   }
 
 @Override
