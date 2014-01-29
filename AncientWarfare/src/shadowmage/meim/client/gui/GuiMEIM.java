@@ -27,6 +27,7 @@ import shadowmage.ancient_framework.client.model.ModelBaseAW;
 import shadowmage.ancient_framework.client.model.ModelPiece;
 import shadowmage.ancient_framework.client.model.Primitive;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.meim.client.meim_model.MEIMModelBase;
@@ -65,7 +66,7 @@ public ModelModel gridModel = new ModelModel();
 public ModelBaseAW model;
 
 ModelPiece currentPart;
-Primitive currentBox;
+PrimitiveBox currentBox;
 
 boolean checkHit = false;
 int hitNum = -1;
@@ -106,7 +107,7 @@ public void initDebugModel()
   {
   model.setTextureSize(256, 256);
   ModelPiece piece = new ModelPiece(model, "part1", 0, 0, 0, 0, 0, 0, null);  
-  PrimitiveBox box = new PrimitiveBox(piece, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0);
+  PrimitiveBox box = new PrimitiveBox(piece, 0, 0, 0, 10, 10, 10, 0, 0, 0, 0, 0);
   piece.addPrimitive(box);
   model.addPiece(piece);
   }
@@ -229,29 +230,27 @@ public int doSelection(int posX, int posY, int buttonNum)
   posX = Mouse.getX();
   posY = Mouse.getY();  
 
-
-  GL11.glPushMatrix();  
-  GL11.glRotatef(180, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  GL11.glClearColor(1.f, 1.f, 1.f, 1.f);
   GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-  this.model.renderForSelection();    
-  GL11.glPopMatrix();
+  this.model.renderForSelection();   
 
   byte[] pixelColorsb = new byte[3];
   ByteBuffer pixelColors = ByteBuffer.allocateDirect(3);
-  GL11.glReadPixels(posX, posY, 1, 1, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, pixelColors);
-
+  GL11.glReadPixels(posX, posY, 1, 1, GL11.GL_RGB, GL11.GL_BYTE, pixelColors);
 
   for(int i = 0; i < 3 ; i++)
     {
     pixelColorsb[i] = pixelColors.get(i);
     }
-  int r = (pixelColorsb[0]+256)%256;
-  int g = (pixelColorsb[1]+256)%256;
-  int b = (pixelColorsb[2]+256)%256;
+  
+  int r = pixelColorsb[0];
+  int g = pixelColorsb[1];
+  int b = pixelColorsb[2];
 
-  MEIMConfig.logDebug("colors clicked on: "+r+","+g+","+b);
-  int color = r +(g*256)+(b*256*256);
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  AWLog.logDebug("colors clicked on: "+r+","+g+","+b);
+  int color = (r<<16) | (g<<8) | b;
   return color;
   }
 
@@ -405,6 +404,7 @@ public void renderExtras(int a, int b, float c)
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_TEXTURE_2D);    
     int hitNum = this.doSelection(a, b, (int) c);
+    AWLog.logDebug("selection number: "+hitNum);
     GL11.glEnable(GL11.GL_LIGHTING);
     GL11.glEnable(GL11.GL_LIGHT0);
     GL11.glEnable(GL11.GL_LIGHT1);
@@ -438,14 +438,7 @@ public void renderExtras(int a, int b, float c)
   GL11.glClearColor(0.2f, 0.2f, 0.2f, 1.0f );
   GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
   RenderHelper.enableStandardItemLighting();
-  GL11.glRotatef(180, 0, 1, 0);
-  GL11.glScalef(-1, -1, 1);
-
-
-
-
-
-
+  
   /**
    * render grid....
    */
@@ -523,24 +516,23 @@ public void swapCurrentPartParent()
   {
   if(this.currentPart!=null)
     {
-    this.currentPart.clearCurrent();
-    mc.displayGuiScreen(new GuiSwapParents(this.container,this, this.currentPart));
     this.currentPart = null;
+    this.currentBox = null;
     this.forceUpdate = true;
+    mc.displayGuiScreen(new GuiSwapParents(this.container,this, this.currentPart));
     }
   }
 
 public void clearCurrentPartParent()
   {
-  this.model.swapPartParent(currentPart, null);
+  if(this.currentPart!=null && this.currentPart.getParent()!=null)
+    {
+    this.currentPart.getParent().removeChild(currentPart);
+    }
   }
 
 public void clearCurrentSelection()
   {
-  if(this.currentPart!=null)
-    {
-    this.currentPart.clearCurrent();
-    }
   this.currentPart = null;
   this.currentBox = null;
   this.forceUpdate = true;
@@ -550,13 +542,11 @@ public void deleteCurrentSelection()
   {
   if(this.currentPart!=null)
     {
-    this.model.removePart(this.currentPart);
+    this.model.removePiece(this.currentPart.getName());
     this.currentPart = null;
     this.forceUpdate = true;
     }
   }
-
-
 
 @Override
 public void onElementActivated(IGuiElement element)
@@ -572,8 +562,9 @@ public void onElementActivated(IGuiElement element)
   case 1://piece-name box interaction (enter pressed)
   if(this.currentPart!=null)
     {
-    this.currentPart.boxName = this.partNameField.getText();
-    //TODO update names list.....erm..it is auto-updated??
+    this.model.removePiece(currentPart);
+    this.currentPart.setName(this.partNameField.getText());
+    this.model.addPiece(currentPart);
     }
   break;
 
@@ -604,77 +595,76 @@ public void onElementActivated(IGuiElement element)
   case 9://selection x++
   if(currentPart!=null)
     {
-    currentPart.rotationPointX++;
+    currentPart.setPosition(currentPart.x()+1, currentPart.y(), currentPart.z());
     }
   break;  
   case 10://selection x--
   if(currentPart!=null)
     {
-    currentPart.rotationPointX--;
+    currentPart.setPosition(currentPart.x()-1, currentPart.y(), currentPart.z());
     }
   break;  
   case 11://selection y++
   if(currentPart!=null)
     {
-    currentPart.rotationPointY++;
+    currentPart.setPosition(currentPart.x(), currentPart.y()+1, currentPart.z());
     }
   break;  
   case 12://selection y--
   if(currentPart!=null)
     {
-    currentPart.rotationPointY--;
+    currentPart.setPosition(currentPart.x(), currentPart.y()-1, currentPart.z());
     }
   break;  
   case 13://selection z++
   if(currentPart!=null)
     {
-    currentPart.rotationPointZ++;
+    currentPart.setPosition(currentPart.x(), currentPart.y(), currentPart.z()+1);
     }
   break;  
   case 14://selection z--
   if(currentPart!=null)
     {
-    currentPart.rotationPointZ--;
+    currentPart.setPosition(currentPart.x(), currentPart.y(), currentPart.z()-1);
     }
   break;
 
   case 15://selection rx++
   if(currentPart!=null)
     {
-    currentPart.rotateAngleX += Trig.toRadians(1);
+    currentPart.setRotation(currentPart.rx()+1, currentPart.ry(), currentPart.rz());
     }
   break;
   case 16://selection rx--
   if(currentPart!=null)
     {
-    currentPart.rotateAngleX -= Trig.toRadians(1);
+    currentPart.setRotation(currentPart.rx()-1, currentPart.ry(), currentPart.rz());
     }
   break;
   case 17://selection ry++
   if(currentPart!=null)
     {
-    currentPart.rotateAngleY += Trig.toRadians(1);
+    currentPart.setRotation(currentPart.rx(), currentPart.ry()+1, currentPart.rz());
     }
   break;
   case 18://selection ry--
   if(currentPart!=null)
     {
-    currentPart.rotateAngleY -= Trig.toRadians(1);
+    currentPart.setRotation(currentPart.rx(), currentPart.ry()-1, currentPart.rz());
     }
   break;
   case 19://selection rz++
   if(currentPart!=null)
     {
-    currentPart.rotateAngleZ += Trig.toRadians(1);
+    currentPart.setRotation(currentPart.rx(), currentPart.ry(), currentPart.rz()+1);
     }
   break;
   case 20://selection rz--
   if(currentPart!=null)
     {
-    currentPart.rotateAngleZ -= Trig.toRadians(1);
+    currentPart.setRotation(currentPart.rx(), currentPart.ry(), currentPart.rz()-1);
     }
   break;
-
 
   /**
    * boxes...
@@ -682,86 +672,128 @@ public void onElementActivated(IGuiElement element)
   case 21: //w++
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width+1, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.x2++;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }  
   break;
   case 22: //w--
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width-1, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.x2--;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 23: //h++
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height+1, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.y2++;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 24: //h--
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height-1, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.y2--;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 25://l++
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length+1, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.z2++;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 26://l--
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length-1, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.z2--;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
 
   case 27://x++
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1+1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.x1++;
+    box.x2++;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 28://x--
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1-1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.x1--;
+    box.x2--;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 29://y++
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1+1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.y1++;
+    box.y2++;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 30://y--
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1-1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.y1--;
+    box.y2--;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;    
   case 31://z++
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1+1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.z1++;
+    box.z2++;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;    
   case 32://z--
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1-1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.z1--;
+    box.z2--;
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;  
 
@@ -779,80 +811,98 @@ public void onElementActivated(IGuiElement element)
   case 35:
   if(this.currentPart!=null)
     {
-    this.currentPart.rotationPointX = piecePosFields[0].getFloatVal();
+    this.currentPart.setPosition(piecePosFields[0].getFloatVal(), currentPart.y(), currentPart.z());     
     }
   break;  
   case 36:
   if(this.currentPart!=null)
     {
-    this.currentPart.rotationPointY = piecePosFields[1].getFloatVal();
+    this.currentPart.setPosition(currentPart.x(), piecePosFields[1].getFloatVal(), currentPart.z());
     }  
   break; 
   case 37:
   if(this.currentPart!=null)
     {
-    this.currentPart.rotationPointZ = piecePosFields[2].getFloatVal();
+    this.currentPart.setPosition(currentPart.x(), currentPart.y(), piecePosFields[2].getFloatVal());
     }  
   break;  
   case 38:
   if(this.currentPart!=null)
     {
-    this.currentPart.rotateAngleX = (float) Math.toRadians(pieceRotFields[0].getFloatVal());
+    this.currentPart.setRotation(pieceRotFields[0].getFloatVal(), currentPart.ry(), currentPart.rz());
     }
   break;
   case 39:
   if(this.currentPart!=null)
     {
-    this.currentPart.rotateAngleY = (float) Math.toRadians(pieceRotFields[1].getFloatVal());
+    this.currentPart.setRotation(currentPart.rx(), pieceRotFields[1].getFloatVal(), currentPart.rz());
     }
   break;
   case 40:
   if(this.currentPart!=null)
     {
-    this.currentPart.rotateAngleZ = (float) Math.toRadians(pieceRotFields[2].getFloatVal());
+    this.currentPart.setRotation(currentPart.rx(), currentPart.ry(), pieceRotFields[2].getFloatVal());
     }
   break;
+  
   case 41:  
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, boxSizeFields[0].getIntVal(), currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.x2 = box.x1 + this.currentBox.x1+boxSizeFields[0].getIntVal();
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;  
     }  
   break;
   case 42:
   if(this.currentPart!=null && this.currentBox!=null)
-    {
-    
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width, boxSizeFields[1].getIntVal(), currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    {    
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.y2 = box.y1 + this.currentBox.x1+boxSizeFields[1].getIntVal();
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     } 
   break;
   case 43:
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height, boxSizeFields[2].getIntVal(), 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.z2 = box.z1 + this.currentBox.x1+boxSizeFields[2].getIntVal();
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;
     }
   break;
   case 44:
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, boxPosFields[0].getFloatVal(), currentBox.posY1, currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.x1 = boxPosFields[0].getFloatVal();
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;   
     }
   break;
   case 45:
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, boxPosFields[1].getFloatVal(), currentBox.posZ1, currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.y1 = boxPosFields[1].getFloatVal();
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;  
     }
   break;
   case 46:
   if(this.currentPart!=null && this.currentBox!=null)
     {
-    MEIMModelBox bx = new MEIMModelBox(currentPart, currentPart.textureOffsetX, currentPart.textureOffsetY, currentBox.posX1, currentBox.posY1, boxPosFields[2].getFloatVal(), currentBox.width, currentBox.height, currentBox.length, 0.f);
-    this.currentBox = this.currentPart.replaceCurrentBox(bx);
+    PrimitiveBox box = new PrimitiveBox(currentPart, this.currentBox.x1, this.currentBox.y1, this.currentBox.z1, this.currentBox.x2, this.currentBox.y2, this.currentBox.z2, this.currentBox.rx, this.currentBox.ry, this.currentBox.rz, this.currentBox.tx, this.currentBox.ty);
+    box.z1 = boxPosFields[2].getFloatVal();
+    this.currentPart.removePrimitive(currentBox);
+    this.currentPart.addPrimitive(box);
+    this.currentBox = box;  
     }
   break;
 
@@ -890,13 +940,6 @@ public void onElementActivated(IGuiElement element)
   this.copyCurrentPart();
   break;
 
-  case 106://part renderScale
-  if(this.currentPart!=null)
-    {
-    this.currentPart.customScale = this.scaleField.getFloatVal();
-    }
-  break;
-  
   default:
   break;
   }
@@ -908,24 +951,10 @@ public void copyCurrentPart()
   if(this.currentPart!=null)
     {    
     String partName = this.currentPart.getName()+"CP"+this.partCopyNum;
-    ModelPiece newPart = new ModelPiece(model, partName, this.currentPart.getParent());
-    MEIMModelBox bx = this.currentPart.getFirstBox();
-    newPart.setTextureSize((int)currentPart.textureHeight, (int)currentPart.textureWidth);
-    newPart.setTextureOffset(this.currentPart.textureOffsetX, this.currentPart.textureOffsetY);
-    newPart.setRotationPoint(currentPart.rotationPointX, currentPart.rotationPointY, currentPart.rotationPointZ);
-    newPart.rotateAngleX = currentPart.rotateAngleX;
-    newPart.rotateAngleY = currentPart.rotateAngleY;
-    newPart.rotateAngleZ = currentPart.rotateAngleZ;    
-    newPart.addBox(bx.posX1, bx.posY1, bx.posZ1, bx.width, bx.height, bx.length);
-    if(newPart.parent!=null)
-      {
-      newPart.parent.addChild(newPart);
-      }
-    else
-      {
-      model.baseParts.add(newPart);
-      }
-    this.swapParts(newPart);    
+    ModelPiece newPart = this.currentPart.copy();
+    newPart.setName(partName);
+    model.addPiece(newPart);
+    this.swapParts(newPart);
     this.partCopyNum++;
     }
   }
@@ -1144,12 +1173,12 @@ public void updateControls()
       
   if(this.currentPart!=null)
     {
-    this.piecePosFields[0].setValue(currentPart.rotationPointX);
-    this.piecePosFields[1].setValue(currentPart.rotationPointY);
-    this.piecePosFields[2].setValue(currentPart.rotationPointZ);
-    this.pieceRotFields[0].setValue(Trig.toDegrees(this.currentPart.rotateAngleX));
-    this.pieceRotFields[1].setValue(Trig.toDegrees(this.currentPart.rotateAngleY));
-    this.pieceRotFields[2].setValue(Trig.toDegrees(this.currentPart.rotateAngleZ));    
+    this.piecePosFields[0].setValue(currentPart.x());
+    this.piecePosFields[1].setValue(currentPart.y());
+    this.piecePosFields[2].setValue(currentPart.z());
+    this.pieceRotFields[0].setValue(Trig.toDegrees(this.currentPart.rx()));
+    this.pieceRotFields[1].setValue(Trig.toDegrees(this.currentPart.ry()));
+    this.pieceRotFields[2].setValue(Trig.toDegrees(this.currentPart.rz()));    
     }
   else
     {
@@ -1162,12 +1191,12 @@ public void updateControls()
     }
   if(this.currentBox!=null)
     {
-    this.boxPosFields[0].setValue(this.currentBox.posX1);
-    this.boxPosFields[1].setValue(this.currentBox.posY1);
-    this.boxPosFields[2].setValue(this.currentBox.posZ1);
-    this.boxSizeFields[0].setValue(this.currentBox.posX2 - this.currentBox.posX1);
-    this.boxSizeFields[1].setValue(this.currentBox.posY2 - this.currentBox.posY1);
-    this.boxSizeFields[2].setValue(this.currentBox.posZ2 - this.currentBox.posZ1);
+    this.boxPosFields[0].setValue(this.currentBox.x1);
+    this.boxPosFields[1].setValue(this.currentBox.y1);
+    this.boxPosFields[2].setValue(this.currentBox.z1);
+    this.boxSizeFields[0].setValue(this.currentBox.x2 - this.currentBox.x1);
+    this.boxSizeFields[1].setValue(this.currentBox.y2 - this.currentBox.y1);
+    this.boxSizeFields[2].setValue(this.currentBox.z2 - this.currentBox.z1);
     }
   else
     {
@@ -1180,7 +1209,7 @@ public void updateControls()
     }  
   if(this.currentPart!=null)
     {
-    this.partNameField.setText(this.currentPart.boxName);
+    this.partNameField.setText(this.currentPart.getName());
     }
   else
     {

@@ -29,6 +29,8 @@ public Primitive(ModelPiece parent)
   {
   this.parent = parent;
   }
+
 public abstract void render();
+public abstract Primitive copy();
 
 }

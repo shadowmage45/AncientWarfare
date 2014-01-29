@@ -5,8 +5,9 @@ import java.util.List;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.model.ModelBaseAW;
+import shadowmage.ancient_framework.client.model.ModelPiece;
 import shadowmage.ancient_framework.common.container.ContainerBase;
-import shadowmage.meim.client.meim_model.MEIMModelBase;
 import shadowmage.meim.client.modelrenderer.MEIMModelRenderer;
 import shadowmage.meim.common.config.MEIMConfig;
 
@@ -14,37 +15,34 @@ public class GuiSwapParents extends GuiContainerAdvanced
 {
 
 GuiMEIM parent;
-MEIMModelRenderer thePart;
+ModelPiece thePart;
 List<String> partNames = new ArrayList<String>();
 int currentLowestDisplayed = 0;
 
-public GuiSwapParents(ContainerBase cont, GuiMEIM parent, MEIMModelRenderer part)
+public GuiSwapParents(ContainerBase cont, GuiMEIM parent, ModelPiece part)
     {
     super(cont);
     this.parent = parent;
     this.thePart = part;
     }
 
-public void addAllParts(MEIMModelBase model)
+public void addAllParts(ModelBaseAW model)
   {
   this.partNames.clear();
-  for(MEIMModelRenderer rend : model.baseParts)
+  for(ModelPiece rend : model.getBasePieces())
     {
     this.recursePartNames(rend);
     }
   }
 
-public void recursePartNames(MEIMModelRenderer renderer)
+public void recursePartNames(ModelPiece renderer)
   {
-  if(!renderer.boxName.equals(thePart.boxName))
+  if(!renderer.getName().equals(thePart.getName()))
     {
-    partNames.add(renderer.boxName);
-    if(renderer.childModels!=null)
+    partNames.add(renderer.getName());
+    for(ModelPiece rend : renderer.getChildren())
       {
-      for(MEIMModelRenderer rend : renderer.childModels)
-        {
-        recursePartNames(rend);
-        }
+      recursePartNames(rend);
       }
     }
   }
@@ -121,10 +119,14 @@ protected void mouseClicked(int x, int y, int par3)
       {
       MEIMConfig.logDebug("clicked on name: "+name);
       }
-    MEIMModelRenderer rend = this.parent.model.getRenderForName(name);
+    ModelPiece rend = this.parent.model.getPiece(name);
     if(rend!=null)
       {
-      this.parent.model.swapPartParent(thePart, rend);
+      if(thePart.getParent()!=null)
+        {
+        thePart.getParent().removeChild(thePart);        
+        }
+      rend.addChild(thePart);
       mc.displayGuiScreen(parent);
       }    
     }  

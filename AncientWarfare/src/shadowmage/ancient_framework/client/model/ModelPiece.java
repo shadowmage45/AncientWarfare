@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
 /**
@@ -88,6 +89,16 @@ public ModelPiece(ModelBaseAW model, String name, float x, float y, float z, flo
     }
   }
 
+public ModelPiece copy()
+  {
+  ModelPiece piece = new ModelPiece(model, pieceName, x, y, z, rx, ry, rz, parent);
+  for(Primitive primitive : this.primitives)
+    {
+    piece.addPrimitive(primitive.copy());
+    }  
+  return piece;
+  }
+
 public ModelPiece getParent(){return parent;}
 public boolean isBasePiece(){return getParent()==null;}
 public float x(){return x;}
@@ -97,6 +108,7 @@ public float rx(){return rx;}
 public float ry(){return ry;}
 public float rz(){return rz;}
 public String getName(){return pieceName;}
+public List<ModelPiece> getChildren(){return children;}
 
 public void setRotation(float rx, float ry, float rz)
   {
@@ -110,6 +122,11 @@ public void setPosition(float x, float y, float z)
   this.x = x;
   this.y = y;
   this.z = z;
+  }
+
+public void setName(String name)
+  {
+  this.pieceName = name;
   }
 
 public void addPrimitive(Primitive primitive)
@@ -196,8 +213,12 @@ public void renderForSelection()
     r = (byte)((primitive.primitiveNumber >> 16) & 0xff);
     g = (byte)((primitive.primitiveNumber >> 8 ) & 0xff);
     b = (byte)((primitive.primitiveNumber >> 0 ) & 0xff);
-    GL11.glColor4b(r, g, b, (byte)0xff);      
+    AWLog.logDebug("rendering primitive by color: "+r+","+g+","+b);
+    GL11.glColor3b(r, g, b); 
+    AWLog.logDebug("rendering primitive for selection as number: "+primitive.primitiveNumber);
+    GL11.glPushMatrix();  
     primitive.render();
+    GL11.glPopMatrix();
     }
        
   for(ModelPiece child : this.children)

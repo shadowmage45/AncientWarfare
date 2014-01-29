@@ -155,8 +155,16 @@ public void removePrimitive(Primitive primitive)
 public void removePiece(String name)
   {
   ModelPiece piece = this.getPiece(name);
-  piece.getParent().removeChild(piece);
-  this.pieces.remove(name);
+  removePiece(piece);
+  }
+
+public void removePiece(ModelPiece piece)
+  {
+  if(piece.getParent()!=null)
+    {
+    piece.getParent().removeChild(piece);    
+    }
+  this.pieces.remove(piece.getName());
   }
 
 public List<ModelPiece> getBasePieces()

@@ -36,7 +36,7 @@ public GuiTextureMapEditor(GuiMEIM parent)
   this.parent = parent;
   if(this.parent.currentPart!=null)
     {
-    this.currentPartName = parent.currentPart.boxName;
+    this.currentPartName = parent.currentPart.getName();
     }
   }
 
@@ -62,32 +62,32 @@ public String getGuiBackGroundTexture()
 protected void mouseClicked(int x, int y, int par3)
   {
   super.mouseClicked(x, y, par3);  
-  if(isMouseOverControl(x, y))
-    {
-    return;
-    }
-  if(par3==0)
-    {
-    if(x<5 || x >100 || y <guiTop+35 || y > guiTop+135)
-      {     
-      return;
-      }
-    int adjY = y - (35+guiTop);
-    int index = adjY/10;   
-    String name = getNameClickedOn(currentLowestDisplayed, index);   
-    MEIMModelRenderer rend = this.parent.model.getRenderForName(name);
-    if(rend!=null)
-      {
-      this.currentPartName = name;
-      parent.swapParts(rend);
-      parent.refreshGui();
-      this.forceUpdate = true;
-      }    
-    }
-  else if(par3==1)
-    {
-
-    }  
+//  if(isMouseOverControl(x, y))
+//    {
+//    return;
+//    }
+//  if(par3==0)
+//    {
+//    if(x<5 || x >100 || y <guiTop+35 || y > guiTop+135)
+//      {     
+//      return;
+//      }
+//    int adjY = y - (35+guiTop);
+//    int index = adjY/10;   
+//    String name = getNameClickedOn(currentLowestDisplayed, index);   
+//    MEIMModelRenderer rend = this.parent.model.getRenderForName(name);
+//    if(rend!=null)
+//      {
+//      this.currentPartName = name;
+//      parent.swapParts(rend);
+//      parent.refreshGui();
+//      this.forceUpdate = true;
+//      }    
+//    }
+//  else if(par3==1)
+//    {
+//
+//    }  
   }
 
 @Override
@@ -145,10 +145,10 @@ public void initializeTexture()
       this.img.setRGB(x, y, map.getColorForIndex((byte) 0));
       }
     } 
-  for(MEIMModelRenderer rend : parent.model.baseParts)
-    {
-    this.recurseAddPartMaps(rend);
-    }
+//  for(MEIMModelRenderer rend : parent.model.baseParts)
+//    {
+//    this.recurseAddPartMaps(rend);
+//    }
   }
 
 GuiNumberInputLine xBox;
@@ -159,10 +159,10 @@ public void updateScreenContents()
   {  
   if(contentsChanged)
     {
-    if(this.parent.currentPart!=null)
-      {
-      this.parent.currentPart.reinitCubeList();
-      }
+//    if(this.parent.currentPart!=null)
+//      {
+//      this.parent.currentPart.reinitCubeList();
+//      }
     this.initializeTexture();
     this.setupMap();
     this.contentsChanged = false;
@@ -297,54 +297,54 @@ public void onElementActivated(IGuiElement element)
     }
   break;
 
-  case 3:
-  if(parent.currentPart!=null)
-    {
-    this.parent.currentPart.textureOffsetX++;
-    }
-  break;
-  case 4:
-  if(parent.currentPart!=null)
-    {
-    this.parent.currentPart.textureOffsetY++;
-    }
-  break;  
-  case 5:
-  if(parent.currentPart!=null)
-    {
-    this.parent.currentPart.textureOffsetX--;
-    }
-  break;
-  case 6:
-  if(parent.currentPart!=null)
-    {
-    this.parent.currentPart.textureOffsetY--;
-    }
-  break;
-
-  case 7:
-  this.exportImage();
-  break;
-  
-  case 8:
-  if(parent.currentPart!=null)
-    {
-    this.parent.currentPart.textureOffsetX = xBox.getIntVal();
-    this.contentsChanged = true;
-    
-    } 
-  break;
-  
-  case 9:
-  if(parent.currentPart!=null)
-    {
-    this.parent.currentPart.textureOffsetY = yBox.getIntVal();
-    this.contentsChanged = true;
-    }
-  break;
-  
-  default:
-  break;
+//  case 3:
+//  if(parent.currentPart!=null)
+//    {
+//    this.parent.currentPart.textureOffsetX++;
+//    }
+//  break;
+//  case 4:
+//  if(parent.currentPart!=null)
+//    {
+//    this.parent.currentPart.textureOffsetY++;
+//    }
+//  break;  
+//  case 5:
+//  if(parent.currentPart!=null)
+//    {
+//    this.parent.currentPart.textureOffsetX--;
+//    }
+//  break;
+//  case 6:
+//  if(parent.currentPart!=null)
+//    {
+//    this.parent.currentPart.textureOffsetY--;
+//    }
+//  break;
+//
+//  case 7:
+//  this.exportImage();
+//  break;
+//  
+//  case 8:
+//  if(parent.currentPart!=null)
+//    {
+//    this.parent.currentPart.textureOffsetX = xBox.getIntVal();
+//    this.contentsChanged = true;
+//    
+//    } 
+//  break;
+//  
+//  case 9:
+//  if(parent.currentPart!=null)
+//    {
+//    this.parent.currentPart.textureOffsetY = yBox.getIntVal();
+//    this.contentsChanged = true;
+//    }
+//  break;
+//  
+//  default:
+//  break;
   }
   this.forceUpdate = true;
   this.contentsChanged = true;
@@ -353,7 +353,7 @@ public void onElementActivated(IGuiElement element)
 @Override
 public void setupControls()
   {
-  this.addAllParts(parent.model);
+//  this.addAllParts(parent.model);
   this.initializeTexture();
   this.setupMap();
   this.addGuiButton(0, 35, 16, "Done");  
@@ -373,16 +373,16 @@ public void setupControls()
 @Override
 public void updateControls()
   {
-  if(this.parent.currentPart!=null)
-    {
-    this.xBox.setValue(this.parent.currentPart.textureOffsetX);
-    this.yBox.setValue(this.parent.currentPart.textureOffsetY);    
-    } 
-  else
-    {
-    this.xBox.setValue(0);
-    this.yBox.setValue(0);    
-    }
+//  if(this.parent.currentPart!=null)
+//    {
+//    this.xBox.setValue(this.parent.currentPart.textureOffsetX);
+//    this.yBox.setValue(this.parent.currentPart.textureOffsetY);    
+//    } 
+//  else
+//    {
+//    this.xBox.setValue(0);
+//    this.yBox.setValue(0);    
+//    }
   this.getElementByNumber(0).updateRenderPos(-guiLeft + width - 40, -guiTop+4);
   this.getElementByNumber(1).updateRenderPos(-guiLeft + 2, 20);
   this.getElementByNumber(2).updateRenderPos(-guiLeft + 2+2+35, 20);

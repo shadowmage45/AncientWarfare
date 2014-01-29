@@ -3,13 +3,15 @@ package shadowmage.meim.client.gui;
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.model.ModelPiece;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.meim.client.modelrenderer.MEIMModelRenderer;
 
 public class GuiAddPart extends GuiContainerAdvanced
 {
 
 private final GuiMEIM parent;
-final MEIMModelRenderer basePart;
+final ModelPiece basePart;
 /**
  * piece
  */
@@ -17,7 +19,7 @@ String pieceName = "";
 GuiTextInputLine nameBox;
 
 
-public GuiAddPart(GuiMEIM parent, MEIMModelRenderer basePart)
+public GuiAddPart(GuiMEIM parent, ModelPiece basePart)
   {
   super(parent.container);
   this.parent = parent;
@@ -79,25 +81,11 @@ public void onElementActivated(IGuiElement element)
     {
     break;
     }
-  MEIMModelRenderer part = new MEIMModelRenderer(parent.model, pieceName, basePart);
-  part.rotationPointX = 0;
-  part.rotationPointY = 0;
-  part.rotationPointZ = 0;
-  part.rotateAngleX = 0;
-  part.rotateAngleY = 0;
-  part.rotateAngleZ = 0;
-  part.textureHeight = 256;
-  part.textureWidth = 256;
-  part.addBox(0, 0, 0, 1, 1, 1);  
-  if(this.basePart!=null)
-    {
-    this.basePart.addChild(part);
-    }
-  else
-    {
-    parent.model.baseParts.add(part);
-    }
-  parent.swapParts(part);
+  ModelPiece piece = new ModelPiece(parent.model, pieceName, 0, 0, 0, 0, 0, 0, basePart);
+  parent.model.addPiece(piece);
+  PrimitiveBox box = new PrimitiveBox(piece, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0);
+  piece.addPrimitive(box);
+  parent.swapParts(piece);
   parent.refreshGui();
   this.closeGUI();
   break;
