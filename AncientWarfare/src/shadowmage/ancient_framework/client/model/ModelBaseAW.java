@@ -38,15 +38,29 @@ int textureHeight;
 
 HashMap<Integer, Primitive> primitives = new HashMap<Integer, Primitive>();
 HashMap<String, ModelPiece> pieces = new HashMap<String, ModelPiece>();
-List<ModelPiece> basePieces = new ArrayList<ModelPiece>();
+private List<ModelPiece> basePieces = new ArrayList<ModelPiece>();
 int nextPrimitiveNumber = 0;
 
 public void renderModel()
   {
-  for(ModelPiece piece : this.basePieces)
+  for(ModelPiece piece : this.getBasePieces())
     {
     piece.render();
     }
+  }
+
+public void renderForSelection()
+  {
+  for(ModelPiece piece : this.getBasePieces())
+    {
+    piece.renderForSelection();
+    }
+  }
+
+public void setTextureSize(int width, int height)
+  {
+  this.textureWidth = width;
+  this.textureHeight = height;
   }
 
 public void parseFromLines(List<String> lines)
@@ -80,8 +94,7 @@ public void parseFromLines(List<String> lines)
         {
         throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
         }
-      PrimitiveBox box = new PrimitiveBox(piece, nextPrimitiveNumber);
-      nextPrimitiveNumber++;
+      PrimitiveBox box = new PrimitiveBox(piece);
       box.x1 = StringTools.safeParseFloat(bits[1]);
       box.y1 = StringTools.safeParseFloat(bits[2]);
       box.z1 = StringTools.safeParseFloat(bits[3]);
@@ -108,6 +121,8 @@ public void parseFromLines(List<String> lines)
  */
 protected void addPrimitive(Primitive primitive)
   {
+  primitive.primitiveNumber = this.nextPrimitiveNumber;
+  this.nextPrimitiveNumber++;
   primitives.put(primitive.primitiveNumber, primitive);
   }
 
@@ -116,7 +131,7 @@ public void addPiece(ModelPiece piece)
   pieces.put(piece.getName(), piece);
   if(piece.getParent()==null)
     {
-    basePieces.add(piece);
+    getBasePieces().add(piece);
     }
   }
 
@@ -132,7 +147,6 @@ public ModelPiece getPiece(String name)
   return this.pieces.get(name);
   }
 
-
 public void removePrimitive(Primitive primitive)
   {
   this.primitives.remove(primitive.primitiveNumber);
@@ -143,6 +157,16 @@ public void removePiece(String name)
   ModelPiece piece = this.getPiece(name);
   piece.getParent().removeChild(piece);
   this.pieces.remove(name);
+  }
+
+public List<ModelPiece> getBasePieces()
+  {
+  return basePieces;
+  }
+
+public Primitive getPrimitive(int num)
+  {
+  return primitives.get(num);
   }
 
 }

@@ -6,10 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import shadowmage.ancient_framework.client.model.ModelBaseAW;
+import shadowmage.ancient_framework.client.model.ModelPiece;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.meim.client.meim_model.MEIMModelBase;
 import shadowmage.meim.client.modelrenderer.MEIMModelBox;
@@ -19,9 +23,8 @@ import shadowmage.meim.common.config.MEIMConfig;
 public class ModelLoader
 {
 
-public MEIMModelBase loadModel(String fileName)
+public ModelBaseAW loadModel(String fileName)
   {
-  MEIMModelBase model = new MEIMModelBase();
   FileInputStream fis = null;
   try
     {
@@ -30,7 +33,7 @@ public MEIMModelBase loadModel(String fileName)
   catch (FileNotFoundException e)
     {      
     e.printStackTrace();
-    return model;
+    return null;
     }
   Scanner scan = new Scanner(fis);
   ArrayList<String> lines = new ArrayList<String>();
@@ -47,13 +50,14 @@ public MEIMModelBase loadModel(String fileName)
     {
     e.printStackTrace();
     }
-
-  this.parseModelLines(lines, model);
-  return model;
+  return this.parseModelLines(lines);
   }
 
-private void parseModelLines(List<String> lines, MEIMModelBase model)
+private ModelBaseAW parseModelLines(List<String> lines)
   {
+  ModelBaseAW model = new ModelBaseAW();
+  HashMap<String, Integer> txMap = new HashMap<String, Integer>();
+  HashMap<String, Integer> tyMap = new HashMap<String, Integer>();
   Iterator<String> it = lines.iterator();
   String line;
   String split[];
@@ -75,26 +79,11 @@ private void parseModelLines(List<String> lines, MEIMModelBase model)
       int ty = StringTools.safeParseInt(split[9]);
       int tw = (int)StringTools.safeParseFloat(split[10]);
       int th = (int)StringTools.safeParseFloat(split[11]);
-      MEIMModelRenderer parentModel;
-      if(!parent.toLowerCase().equals("null"));
-        {
-        parentModel = model.getRenderForName(parent);
-        }      
-        MEIMModelRenderer rend = new MEIMModelRenderer(model, name, parentModel);
-        rend.setRotationPoint(x, y, z);
-        rend.rotateAngleX = rx;
-        rend.rotateAngleY = ry;
-        rend.rotateAngleZ = rz;
-        rend.setTextureSize(tw, th);
-        rend.setTextureOffset(tx, ty);
-        if(parentModel==null)
-          {
-          model.baseParts.add(rend);
-          }
-        else// if(parentModel != null);
-          {
-          parentModel.addChild(rend);
-          }
+      model.setTextureSize(tw, th);      
+      ModelPiece piece = new ModelPiece(model, name, x, y, z, rx, ry, rz, model.getPiece(parent));
+      model.addPiece(piece);
+      txMap.put(name, tx);
+      tyMap.put(name, ty);
       }    
     else if(line.toLowerCase().startsWith("box="))
       {
@@ -106,41 +95,43 @@ private void parseModelLines(List<String> lines, MEIMModelBase model)
       int bw = StringTools.safeParseInt(split[4]);
       int bh = StringTools.safeParseInt(split[5]);
       int bl = StringTools.safeParseInt(split[6]);      
-      MEIMModelRenderer rend = model.getRenderForName(name);
-      if(rend!=null)
-        {
-        rend.addBox(x, y, z, bw, bh, bl);
-        }      
+      ModelPiece piece = model.getPiece(name);
+      int tx = txMap.get(name);
+      int ty = tyMap.get(name);
+      if(piece==null){continue;}
+      PrimitiveBox box = new PrimitiveBox(piece, x, y, z, x+bw, y+bh, z+bl, 0, 0, 0, tx, ty);
+      piece.addPrimitive(box);
       }
     }
+  return model;
   }
 
-public void saveModel(MEIMModelBase model, String name)
+public void saveModel(ModelBaseAW model, String name)
   {
-  try
-    {
-    File saveFile = new File(name);
-    List<String> lines = getModelLines(model);
-
-    if(!saveFile.exists())
-      {
-      File newoutputfile = new File(saveFile.getParent());
-      newoutputfile.mkdirs();
-
-      saveFile.createNewFile();
-      }
-    FileWriter writer = new FileWriter(saveFile);
-    for(String line : lines)
-      {
-      writer.write(line+"\n");
-      }
-    writer.close();
-    }
-  catch (IOException e)
-    {
-    MEIMConfig.logDebug("error exporting model for name: "+name);
-    e.printStackTrace();
-    }
+//  try
+//    {
+//    File saveFile = new File(name);
+//    List<String> lines = getModelLines(model);
+//
+//    if(!saveFile.exists())
+//      {
+//      File newoutputfile = new File(saveFile.getParent());
+//      newoutputfile.mkdirs();
+//
+//      saveFile.createNewFile();
+//      }
+//    FileWriter writer = new FileWriter(saveFile);
+//    for(String line : lines)
+//      {
+//      writer.write(line+"\n");
+//      }
+//    writer.close();
+//    }
+//  catch (IOException e)
+//    {
+//    MEIMConfig.logDebug("error exporting model for name: "+name);
+//    e.printStackTrace();
+//    }
 
   }
 

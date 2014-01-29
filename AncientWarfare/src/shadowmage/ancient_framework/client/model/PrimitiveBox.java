@@ -26,9 +26,25 @@ public class PrimitiveBox extends Primitive
 {
 float ratio = 0.0625f;
 
-public PrimitiveBox(ModelPiece parent, int num)
+public PrimitiveBox(ModelPiece parent)
   {
-  super(parent, num);
+  super(parent);
+  }
+
+public PrimitiveBox(ModelPiece parent, float x1, float y1, float z1, float x2, float y2, float z2, float rx, float ry, float rz, float tx, float ty)
+  {
+  this(parent);
+  this.x1 = x1;
+  this.y1 = y1;
+  this.z1 = z1;
+  this.x2 = x2;
+  this.y2 = y2;
+  this.z2 = z2;
+  this.rx = rx;
+  this.ry = ry;
+  this.rz = rz;
+  this.tx = tx;
+  this.ty = ty;
   }
 
 float x1, y1, z1, x2, y2, z2;//extents of the box, relative to piece origin

@@ -23,6 +23,10 @@ import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IFileSelectCallback;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.model.ModelBaseAW;
+import shadowmage.ancient_framework.client.model.ModelPiece;
+import shadowmage.ancient_framework.client.model.Primitive;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.meim.client.meim_model.MEIMModelBase;
@@ -56,10 +60,12 @@ private float tz;
 private ModelLoader loader = new ModelLoader();
 
 public ModelModel gridModel = new ModelModel();
-public MEIMModelBase model;
 
-MEIMModelRenderer currentPart;
-MEIMModelBox currentBox;
+
+public ModelBaseAW model;
+
+ModelPiece currentPart;
+Primitive currentBox;
 
 boolean checkHit = false;
 int hitNum = -1;
@@ -75,11 +81,11 @@ ResourceLocation gridTexture;
 public GuiMEIM(ContainerBase container)
   {
   super(container);
-  this.model = (MEIMModelBase)MEIM.proxy.getModel();
+  this.model = (ModelBaseAW)MEIM.proxy.getModel();
   if(model==null)
     {
     System.out.println("setting up debug model");
-    MEIMModelBase model = new MEIMModelBase();
+    ModelBaseAW model = new ModelBaseAW();
     MEIM.proxy.setModel(model);
     this.model = model;
     this.initDebugModel();
@@ -98,11 +104,11 @@ public GuiMEIM(ContainerBase container)
  */
 public void initDebugModel()
   {
-  MEIMModelRenderer part = new MEIMModelRenderer(model, "part1", null);
-  part.textureHeight = 256;
-  part.textureWidth = 256;
-  part.addBox(-8, -16, -8, 16, 16, 16);
-  model.baseParts.add(part);
+  model.setTextureSize(256, 256);
+  ModelPiece piece = new ModelPiece(model, "part1", 0, 0, 0, 0, 0, 0, null);  
+  PrimitiveBox box = new PrimitiveBox(piece, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0);
+  piece.addPrimitive(box);
+  model.addPiece(piece);
   }
 
 /**
@@ -129,8 +135,9 @@ public void handleFileSelection(int selectionType)
       TextureManager.updateTextureContents(img);
       }
     break;
+    
     case SELECT_MODEL_LOAD:
-    MEIMModelBase model = loader.loadModel(this.fileSelection.get(0));
+    ModelBaseAW model = loader.loadModel(this.fileSelection.get(0));
     if(model!=null)
       {
       this.model = model;
@@ -145,7 +152,6 @@ public void handleFileSelection(int selectionType)
     
     case SELECT_MODEL_SAVE:
     this.loader.saveModel(this.model, this.fileSelection.get(0));
-    //loader.saveModel(model, "fooName");
     break;
     
     case SELECT_MODEL_EXPORT:
@@ -155,12 +161,12 @@ public void handleFileSelection(int selectionType)
     break;
     
     case SELECT_MODEL_IMPORT:
-    MEIMModelBase model2 = loader.loadModel(this.fileSelection.get(0));
+    ModelBaseAW model2 = loader.loadModel(this.fileSelection.get(0));
     if(model2!=null)
       {
-      for(MEIMModelRenderer part : model2.baseParts)
+      for(ModelPiece part : model2.getBasePieces())
         {        
-        this.model.baseParts.add(part);
+        this.model.addPiece(part);
         }
       }
     break;
@@ -183,26 +189,9 @@ public static final int SELECT_MODEL_EXPORT = 3;
 public static final int SELECT_TEXTURE_EXPORT = 4;
 public static final int SELECT_MODEL_IMPORT = 5;
 
-public void swapParts(MEIMModelRenderer newPart)
+public void swapParts(ModelPiece newPart)
   {  
-  MEIMModelRenderer old=this.currentPart;
-  if(old == null && newPart ==null)
-    {
-    return;
-    }
-  if(old != null)
-    {
-    old.clearCurrent();
-    old.swapFor(newPart);
-    }
-  if(newPart!=null)
-    {
-    newPart.setCurrent();
-    this.currentBox = newPart.getFirstBox();
-    this.currentPart = newPart;
-    this.forceUpdate = true;
-    } 
-  return;
+  this.currentPart = newPart;
   }
 
 @Override
@@ -245,7 +234,7 @@ public int doSelection(int posX, int posY, int buttonNum)
   GL11.glRotatef(180, 0, 1, 0);
   GL11.glScalef(-1, -1, 1);
   GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-  this.model.renderSelectionMode();    
+  this.model.renderForSelection();    
   GL11.glPopMatrix();
 
   byte[] pixelColorsb = new byte[3];
@@ -420,10 +409,10 @@ public void renderExtras(int a, int b, float c)
     GL11.glEnable(GL11.GL_LIGHT0);
     GL11.glEnable(GL11.GL_LIGHT1);
     GL11.glEnable(GL11.GL_TEXTURE_2D);
-    MEIMModelRenderer rend = model.getRenderForNumber(hitNum);
-    if(rend!=null)
+    Primitive primitive = model.getPrimitive(hitNum);
+    if(primitive!=null)
       {
-      this.swapParts(rend);
+      this.swapParts(primitive.parent);
       this.forceUpdate = true;
       }
     }
@@ -466,7 +455,7 @@ public void renderExtras(int a, int b, float c)
    
   if(this.model!=null)
     {
-    this.model.render();
+    this.model.renderModel();
     } 
   mc.entityRenderer.setupOverlayRendering();
   RenderHelper.disableStandardItemLighting();
@@ -918,8 +907,8 @@ public void copyCurrentPart()
   {
   if(this.currentPart!=null)
     {    
-    String partName = this.currentPart.boxName+"CP"+this.partCopyNum;
-    MEIMModelRenderer newPart = new MEIMModelRenderer(model, partName, this.currentPart.parent);
+    String partName = this.currentPart.getName()+"CP"+this.partCopyNum;
+    ModelPiece newPart = new ModelPiece(model, partName, this.currentPart.getParent());
     MEIMModelBox bx = this.currentPart.getFirstBox();
     newPart.setTextureSize((int)currentPart.textureHeight, (int)currentPart.textureWidth);
     newPart.setTextureOffset(this.currentPart.textureOffsetX, this.currentPart.textureOffsetY);

@@ -25,10 +25,9 @@ public abstract class Primitive
 
 int primitiveNumber = 0;
 public ModelPiece parent;
-public Primitive(ModelPiece parent, int number)
+public Primitive(ModelPiece parent)
   {
   this.parent = parent;
-  this.primitiveNumber = number;
   }
 public abstract void render();
 
