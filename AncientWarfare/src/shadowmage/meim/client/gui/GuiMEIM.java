@@ -54,10 +54,6 @@ private float viewPosZ;
 
 private float viewScale = 10;
 
-private float tx;
-private float tz;
-
-
 private ModelLoader loader = new ModelLoader();
 
 public ModelModel gridModel = new ModelModel();
@@ -82,22 +78,22 @@ ResourceLocation gridTexture;
 public GuiMEIM(ContainerBase container)
   {
   super(container);
-  this.model = (ModelBaseAW)MEIM.proxy.getModel();
-  if(model==null)
-    {
-    System.out.println("setting up debug model");
-    ModelBaseAW model = new ModelBaseAW();
-    MEIM.proxy.setModel(model);
-    this.model = model;
-    this.initDebugModel();
-    }
-  this.zLevel = -2000f;
-  this.updateViewPos(0,0,0,0);
-  this.forceUpdate = true;
-  Keyboard.enableRepeatEvents(true);
-  TextureManager.allocateTexture();
-  this.gridTexture = new ResourceLocation("ancientwarfare", "meim/test.png");
-  this.container = container;
+//  this.model = (ModelBaseAW)MEIM.proxy.getModel();
+//  if(model==null)
+//    {
+//    System.out.println("setting up debug model");
+//    ModelBaseAW model = new ModelBaseAW();
+//    MEIM.proxy.setModel(model);
+//    this.model = model;
+//    this.initDebugModel();
+//    }
+//  this.zLevel = -2000f;
+//  this.updateViewPos(0,0,0,0);
+//  this.forceUpdate = true;
+//  Keyboard.enableRepeatEvents(true);
+//  TextureManager.allocateTexture();
+//  this.gridTexture = new ResourceLocation("ancientwarfare", "meim/test.png");
+//  this.container = container;
   }
 
 /**
@@ -112,76 +108,73 @@ public void initDebugModel()
   model.addPiece(piece);
   }
 
-/**
- * callback from guiFileSelect...
- * @param selectionType
- */
-@Override
-public void handleFileSelection(int selectionType)
-  {
-  try
-    {
-    File f;
-    if(this.fileSelection.isEmpty())
-      {
-      return;
-      }
-    switch(selectionType)
-    {
-    case SELECT_TEXTURE_LOAD:
-    f = new File(this.fileSelection.get(0));
-    if(f.exists())
-      {
-      this.img = ImageIO.read(f);
-      TextureManager.updateTextureContents(img);
-      }
-    break;
-    
-    case SELECT_MODEL_LOAD:
-    ModelBaseAW model = loader.loadModel(this.fileSelection.get(0));
-    if(model!=null)
-      {
-      this.model = model;
-      this.currentPart = null;
-      this.currentBox = null;
-      //this.currentPart = this.model.baseParts.get(0);
-      //this.currentPart.setCurrent();
-      //this.currentBox = this.currentPart.getFirstBox();
-      MEIM.proxy.setModel(this.model);
-      }
-    break;
-    
-    case SELECT_MODEL_SAVE:
-    this.loader.saveModel(this.model, this.fileSelection.get(0));
-    break;
-    
-    case SELECT_MODEL_EXPORT:
-    break;
-    
-    case SELECT_TEXTURE_EXPORT:
-    break;
-    
-    case SELECT_MODEL_IMPORT:
-    ModelBaseAW model2 = loader.loadModel(this.fileSelection.get(0));
-    if(model2!=null)
-      {
-      for(ModelPiece part : model2.getBasePieces())
-        {        
-        this.model.addPiece(part);
-        }
-      }
-    break;
-    
-    default:
-    break;
-    }
-    }
-  catch(IOException e)
-    {
-    MEIMConfig.logError("A file system error has occured while attempting to handle selection operation for type: "+selectionType);
-    }
-  this.forceUpdate = true;
-  }
+///**
+// * callback from guiFileSelect...
+// * @param selectionType
+// */
+//@Override
+//public void handleFileSelection(int selectionType)
+//  {
+//  try
+//    {
+//    File f;
+//    if(this.fileSelection.isEmpty())
+//      {
+//      return;
+//      }
+//    switch(selectionType)
+//    {
+//    case SELECT_TEXTURE_LOAD:
+//    f = new File(this.fileSelection.get(0));
+//    if(f.exists())
+//      {
+//      this.img = ImageIO.read(f);
+//      TextureManager.updateTextureContents(img);
+//      }
+//    break;
+//    
+//    case SELECT_MODEL_LOAD:
+////    ModelBaseAW model = loader.loadModel(this.fileSelection.get(0));
+////    if(model!=null)
+////      {
+////      this.model = model;
+////      this.currentPart = null;
+////      this.currentBox = null;
+////      MEIM.proxy.setModel(this.model);
+////      }
+//    break;
+//    
+//    case SELECT_MODEL_SAVE:
+//    this.loader.saveModel(this.model, this.fileSelection.get(0));
+//    break;
+//    
+//    case SELECT_MODEL_EXPORT:
+//    break;
+//    
+//    case SELECT_TEXTURE_EXPORT:
+//    break;
+//    
+//    case SELECT_MODEL_IMPORT:
+//    ModelBaseAW model2 = loader.loadModel(this.fileSelection.get(0));
+//    if(model2!=null)
+//      {
+//      for(ModelPiece part : model2.getBasePieces())
+//        {        
+//        this.model.addPiece(part);
+//        }
+//      }
+//    break;
+//    
+//    default:
+//    break;
+//    }
+//    }
+//  catch(IOException e)
+//    {
+//    MEIMConfig.logError("A file system error has occured while attempting to handle selection operation for type: "+selectionType);
+//    }
+//  this.forceUpdate = true;
+//  }
 
 public static final int SELECT_TEXTURE_LOAD = 0;
 public static final int SELECT_MODEL_LOAD = 1;
@@ -508,7 +501,6 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-  //Config.logDebug("updating screen contents");
   
   }
 
@@ -921,19 +913,19 @@ public void onElementActivated(IGuiElement element)
   break;
 
   case 101://load model
-  mc.displayGuiScreen(new GuiFileSelect(this, this, fileSelection, MEIMConfig.getModelSaveDir(), this.SELECT_MODEL_LOAD, false));
+//  mc.displayGuiScreen(new GuiFileSelect(this, this, fileSelection, MEIMConfig.getModelSaveDir(), SELECT_MODEL_LOAD, false));
   break;
   
   case 102://save model
-  mc.displayGuiScreen(new GuiFileSelect(this ,this, fileSelection, MEIMConfig.getModelSaveDir(), this.SELECT_MODEL_SAVE, true));  
+//  mc.displayGuiScreen(new GuiFileSelect(this ,this, fileSelection, MEIMConfig.getModelSaveDir(), SELECT_MODEL_SAVE, true));  
   break;
 
   case 103://load texture
-  mc.displayGuiScreen(new GuiFileSelect(this ,this, fileSelection, MEIMConfig.getTexLoadDir(), this.SELECT_TEXTURE_LOAD, false));
+//  mc.displayGuiScreen(new GuiFileSelect(this ,this, fileSelection, MEIMConfig.getTexLoadDir(), SELECT_TEXTURE_LOAD, false));
   break;
   
   case 104://import pieces from saved model
-  mc.displayGuiScreen(new GuiFileSelect(this ,this, fileSelection, MEIMConfig.getTexLoadDir(), this.SELECT_MODEL_IMPORT, false));
+//  mc.displayGuiScreen(new GuiFileSelect(this ,this, fileSelection, MEIMConfig.getTexLoadDir(), SELECT_MODEL_IMPORT, false));
   break;
   
   case 105://copy part
@@ -1079,8 +1071,6 @@ private GuiNumberInputLine[] pieceRotFields = new GuiNumberInputLine[3];
 private GuiNumberInputLine[] boxSizeFields = new GuiNumberInputLine[3];
 private GuiNumberInputLine[] boxPosFields = new GuiNumberInputLine[3];
 
-private GuiNumberInputLine scaleField;
-
 @Override
 public void updateControls()
   {  
@@ -1215,6 +1205,13 @@ public void updateControls()
     {
     this.partNameField.setText("");
     }
+  }
+
+@Override
+public void handleFileSelection(File file)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 }

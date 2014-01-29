@@ -22,11 +22,6 @@ GuiContainerAdvanced parent;
 IFileSelectCallback fileCall;
 
 /**
- * the output final selection will be put here before the gui is closed, or left empty if no selection
- */
-List<String> selection;
-
-/**
  * cached displayable list of directory names in the current directory (displayed before files)
  */
 List<String> currentFiles = new ArrayList<String>();
@@ -60,18 +55,13 @@ GuiScrollBarSimple bar;// = new GuiScrollBar();
 
 public int displaySize = 16;
 
-int selectionType;
-
-public GuiFileSelect(GuiContainerAdvanced parent, IFileSelectCallback fileCall, List<String> selection, String basePath, int selectionType, boolean allowNewFiles)
+public GuiFileSelect(GuiContainerAdvanced parent, IFileSelectCallback fileCall, String basePath, boolean allowNewFiles)
   {
   super(((ContainerBase)parent.inventorySlots));
   this.parent = parent;
-  this.selection = selection;
-  this.selection.clear();
   this.basePath = basePath;
   this.currentPath = this.basePath;
   this.parentPathName = new File(basePath).getParent();
-  this.selectionType = selectionType;
   this.allowNewFiles = allowNewFiles;  
   this.fileCall = fileCall;
   }
@@ -86,12 +76,6 @@ public int getXSize()
 public int getYSize()
   {
   return 240;
-  }
-
-@Override
-public String getGuiBackGroundTexture()
-  {
-  return "/shadowmage/meim/resources/gui/guiBackgroundLarge.png";
   }
 
 @Override
@@ -206,9 +190,8 @@ public void acceptSelection()
   {
   File f = new File(this.currentPath, this.currentSelection);
   if(f.isFile() || (!f.exists() && this.allowNewFiles))
-    {
-    this.selection.add(f.getAbsolutePath());
-    this.fileCall.handleFileSelection(selectionType);
+    {  
+    this.fileCall.handleFileSelection(f);
     }
   this.mc.displayGuiScreen(parent);
   }

@@ -108,7 +108,7 @@ public void onElementActivated(IGuiElement element)
     case 3://useCustomModelRenderClass checkBox
     break;
     case 4://export button
-    mc.displayGuiScreen(new GuiFileSelect(this, this, this.fileSelection, MEIMConfig.getJavaExportDir(), parent.SELECT_MODEL_EXPORT, true));
+    mc.displayGuiScreen(new GuiFileSelect(this, this, MEIMConfig.getJavaExportDir(), true));
     break;
     case 5://texXSize
     break;
@@ -327,7 +327,7 @@ private void recursiveName(ArrayList<String> lines, MEIMModelRenderer rend, Stri
 
 
 @Override
-public void handleFileSelection(int selectionType)
+public void handleFileSelection(File file)
   {
   if(!this.fileSelection.isEmpty())
     {
