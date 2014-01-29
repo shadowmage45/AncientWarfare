@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.utils.StringTools;
+
 /**
  * A single piece of a model.  A piece is a discrete static component of the model.  Pieces may be rotated and moved
  * relative to other pieces in the model (in contrast to boxes, which may not be altered).  All animation is done
@@ -38,20 +40,102 @@ import org.lwjgl.opengl.GL11;
  */
 public class ModelPiece
 {
-float ratio = 0.0625f;
-String pieceName;
-boolean visible = true;
-float x, y, z;//manipulatable coordinates for this piece, relative to either model origin or parent-piece origin (if base piece or has parent)
-float rx, ry, rz;//manipulatable rotation for this piece, relative to either model rotation or parent-piece rotation (if base piece or has parent)
-int displayListNum = -1;//display list for the boxes that make up this piece
-boolean isBasePiece;//if this is a base-piece or not, set during parsing by reading if this piece has a parent
-List<ModelPiece> children = new ArrayList<ModelPiece>();//the children of this piece
-List<Primitive> primitives = new ArrayList<Primitive>();//the list of boxes that make up this piece, really only used during first construction of display list
-ModelBaseAW model;
 
-public ModelPiece(ModelBaseAW model)
-  {
+private float ratio = 0.0625f;
+private String pieceName;
+private boolean visible = true;
+private float x, y, z;//manipulatable coordinates for this piece, relative to either model origin or parent-piece origin (if base piece or has parent)
+private float rx, ry, rz;//manipulatable rotation for this piece, relative to either model rotation or parent-piece rotation (if base piece or has parent)
+private int displayListNum = -1;//display list for the boxes that make up this piece
+private List<ModelPiece> children = new ArrayList<ModelPiece>();//the children of this piece
+private List<Primitive> primitives = new ArrayList<Primitive>();//the list of boxes that make up this piece, really only used during first construction of display list
+private ModelBaseAW model;
+private ModelPiece parent;
+
+public ModelPiece(ModelBaseAW model, String line)
+  {  
+  String[] bits = line.split(",");
+  String pieceName = bits[0];
+  String parentName = bits[1];
+  float x = StringTools.safeParseFloat(bits[2]);
+  float y = StringTools.safeParseFloat(bits[3]);
+  float z = StringTools.safeParseFloat(bits[4]);
+  float rx = StringTools.safeParseFloat(bits[5]);
+  float ry = StringTools.safeParseFloat(bits[6]);
+  float rz = StringTools.safeParseFloat(bits[7]);
+  ModelPiece parent = parentName.equals("null")? null : model.getPiece(parentName);
+  this.pieceName = pieceName;
   this.model = model;
+  this.setPosition(x, y, z);
+  this.setRotation(rx, ry, rz);
+  this.parent = parent;
+  if(parent!=null)
+    {
+    parent.children.add(this);
+    }
+  }
+
+public ModelPiece(ModelBaseAW model, String name, float x, float y, float z, float rx, float ry, float rz, ModelPiece parent)
+  {
+  this.pieceName = name;
+  this.model = model;
+  this.setPosition(x, y, z);
+  this.setRotation(rx, ry, rz);
+  this.parent = parent;
+  if(parent!=null)
+    {
+    parent.children.add(this);
+    }
+  }
+
+public ModelPiece getParent(){return parent;}
+public boolean isBasePiece(){return getParent()==null;}
+public float x(){return x;}
+public float y(){return y;}
+public float z(){return z;}
+public float rx(){return rx;}
+public float ry(){return ry;}
+public float rz(){return rz;}
+public String getName(){return pieceName;}
+
+public void setRotation(float rx, float ry, float rz)
+  {
+  this.rx = rx;
+  this.ry = ry;
+  this.rz = rz;
+  }
+
+public void setPosition(float x, float y, float z)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  }
+
+public void addPrimitive(Primitive primitive)
+  {
+  this.model.addPrimitive(primitive);
+  this.primitives.add(primitive);  
+  primitive.parent = this;
+  }
+
+public void removePrimitive(Primitive primitive)
+  {
+  this.model.removePrimitive(primitive);
+  this.primitives.remove(primitive);
+  primitive.parent = null;
+  }
+
+public void addChild(ModelPiece piece)
+  {
+  this.children.add(piece);
+  piece.parent = this;
+  }
+
+public void removeChild(ModelPiece piece)
+  {
+  this.children.remove(piece);
+  piece.parent = null;
   }
 
 public void render()
@@ -94,6 +178,35 @@ public void render()
     }
   GL11.glPopMatrix();
   }
+
+public void renderForSelection()
+  {
+  GL11.glPushMatrix();
+  if(x!=0 || y!=0 || z!=0)
+    {
+    GL11.glTranslatef(ratio*x, ratio*y, ratio*z);
+    }  
+  if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
+  if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
+  if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);}  
+ 
+  for(Primitive primitive : this.primitives)
+    {
+    byte r, g, b;
+    r = (byte)((primitive.primitiveNumber >> 16) & 0xff);
+    g = (byte)((primitive.primitiveNumber >> 8 ) & 0xff);
+    b = (byte)((primitive.primitiveNumber >> 0 ) & 0xff);
+    GL11.glColor4b(r, g, b, (byte)0xff);      
+    primitive.render();
+    }
+       
+  for(ModelPiece child : this.children)
+    {
+    child.renderForSelection();
+    }
+  GL11.glPopMatrix();
+  }
+
 
 
 }

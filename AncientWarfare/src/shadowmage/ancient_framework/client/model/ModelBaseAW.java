@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
@@ -37,11 +35,11 @@ static float ratio = 0.0625f;//possibly not needed?
 
 int textureWidth;
 int textureHeight;
-Primitive selectedPrimitive = null;
 
-
+HashMap<Integer, Primitive> primitives = new HashMap<Integer, Primitive>();
 HashMap<String, ModelPiece> pieces = new HashMap<String, ModelPiece>();
 List<ModelPiece> basePieces = new ArrayList<ModelPiece>();
+int nextPrimitiveNumber = 0;
 
 public void renderModel()
   {
@@ -50,7 +48,6 @@ public void renderModel()
     piece.render();
     }
   }
-
 
 public void parseFromLines(List<String> lines)
   {
@@ -68,33 +65,10 @@ public void parseFromLines(List<String> lines)
       textureHeight = StringTools.safeParseInt(bits[1]);
       }
     else if(line.startsWith("part="))
-      {
-      bits = line.split("=")[1].split(",");
-      ModelPiece piece = new ModelPiece(this);
-      String pieceName = bits[0];
-      String parentName = bits[1];
-      if(parentName.equals("null"))
-        {
-        piece.isBasePiece = true;        
-        }
-      else
-        {
-        ModelPiece parent = getPiece(parentName);
-        if(parent==null)
-          {
-          throw new IllegalArgumentException("could not create model, imporoper piece specification for: "+parentName);
-          }
-        parent.children.add(piece);
-        }
-      piece.pieceName = pieceName;
-      piece.x = StringTools.safeParseFloat(bits[2]);
-      piece.y = StringTools.safeParseFloat(bits[3]);
-      piece.z = StringTools.safeParseFloat(bits[4]);
-      piece.rx = StringTools.safeParseFloat(bits[5]);
-      piece.ry = StringTools.safeParseFloat(bits[6]);
-      piece.rz = StringTools.safeParseFloat(bits[7]);
-      addPiece(piece);
-      AWLog.logDebug("parsed a new piece: "+pieceName);      
+      {      
+      ModelPiece piece = new ModelPiece(this, line.split("=")[1]);
+      addPiece(piece);      
+      AWLog.logDebug("parsed a new piece: "+piece.getName());      
       }
     else if(line.startsWith("box="))
       {
@@ -106,7 +80,8 @@ public void parseFromLines(List<String> lines)
         {
         throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
         }
-      Box box = new Box(piece);
+      PrimitiveBox box = new PrimitiveBox(piece, nextPrimitiveNumber);
+      nextPrimitiveNumber++;
       box.x1 = StringTools.safeParseFloat(bits[1]);
       box.y1 = StringTools.safeParseFloat(bits[2]);
       box.z1 = StringTools.safeParseFloat(bits[3]);
@@ -121,16 +96,25 @@ public void parseFromLines(List<String> lines)
         box.ry = StringTools.safeParseFloat(bits[8]);
         box.rz = StringTools.safeParseFloat(bits[9]);      
         }
-      piece.primitives.add(box);
+      piece.addPrimitive(box);
       AWLog.logDebug("parsed new box for piece: "+parentName);
       }    
     }
   }
 
-protected void addPiece(ModelPiece piece)
+/**
+ * should only be called from ModelPiece
+ * @param primitive
+ */
+protected void addPrimitive(Primitive primitive)
   {
-  pieces.put(piece.pieceName, piece);
-  if(piece.isBasePiece)
+  primitives.put(primitive.primitiveNumber, primitive);
+  }
+
+public void addPiece(ModelPiece piece)
+  {
+  pieces.put(piece.getName(), piece);
+  if(piece.getParent()==null)
     {
     basePieces.add(piece);
     }
@@ -140,98 +124,25 @@ public void setPieceRotation(String name, float x, float y, float z)
   {
   ModelPiece piece = this.getPiece(name);
   if(piece==null){return;}
-  piece.rx = x;
-  piece.ry = y;
-  piece.rz = z;
+  piece.setRotation(x, y, z);
   }
 
-protected ModelPiece getPiece(String name)
+public ModelPiece getPiece(String name)
   {
   return this.pieces.get(name);
   }
 
-/**
- * A single box from a model.  Each box is a discrete static component.
- * Boxes do not change position/rotation relative to other boxes in the
- * same piece.
- * @author Shadowmage
- *
- */
-private class Box extends Primitive
-{
 
-public Box(ModelPiece parent)
+public void removePrimitive(Primitive primitive)
   {
-  super(parent);
+  this.primitives.remove(primitive.primitiveNumber);
   }
 
-float x1, y1, z1, x2, y2, z2;//extents of the box, relative to piece origin
-float rx, ry, rz;//rotation of this box, relative to the piece rotation
-float tx, ty;//texture offsets, in texture space (0->1)
-
-public void render()
+public void removePiece(String name)
   {
-  x1*=ratio;
-  y1*=ratio;
-  z1*=ratio;
-  x2*=ratio;
-  y2*=ratio;
-  z2*=ratio;
-  
-//render the cube. only called a single time when building the display list for a piece
-  GL11.glPushMatrix();
-  if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
-  if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
-  if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);}  
-  
-  //front side
-  GL11.glBegin(GL11.GL_QUADS);
-  
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'front' face
-  GL11.glVertex3f(x2, y1, z1);
-  GL11.glVertex3f(x1, y1, z1);
-  GL11.glVertex3f(x1, y2, z1);
-  GL11.glVertex3f(x2, y2, z1);
-  
-  //right side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'right' face
-  GL11.glVertex3f(x1, y1, z1);
-  GL11.glVertex3f(x1, y1, z2);
-  GL11.glVertex3f(x1, y2, z2);
-  GL11.glVertex3f(x1, y2, z1);
-  
-//  //left side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'left' face
-  GL11.glVertex3f(x2, y1, z2);
-  GL11.glVertex3f(x2, y1, z1);
-  GL11.glVertex3f(x2, y2, z1);
-  GL11.glVertex3f(x2, y2, z2);
-  
-//  //top side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'top' face
-  GL11.glVertex3f(x2, y2, z1);
-  GL11.glVertex3f(x1, y2, z1);
-  GL11.glVertex3f(x1, y2, z2);
-  GL11.glVertex3f(x2, y2, z2);
-  
-//  //bottom side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'bottom' face
-  GL11.glVertex3f(x2, y1, z2);
-  GL11.glVertex3f(x1, y1, z2);
-  GL11.glVertex3f(x1, y1, z1);
-  GL11.glVertex3f(x2, y1, z1);
-//  
-//  //rear side
-  GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'rear' face
-  GL11.glVertex3f(x1, y1, z2);
-  GL11.glVertex3f(x2, y1, z2);
-  GL11.glVertex3f(x2, y2, z2);
-  GL11.glVertex3f(x1, y2, z2);
-  
-  GL11.glEnd();
-  GL11.glPopMatrix();  
+  ModelPiece piece = this.getPiece(name);
+  piece.getParent().removeChild(piece);
+  this.pieces.remove(name);
   }
-
-}
 
 }

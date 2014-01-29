@@ -23,10 +23,12 @@ package shadowmage.ancient_framework.client.model;
 public abstract class Primitive
 {
 
+int primitiveNumber = 0;
 public ModelPiece parent;
-public Primitive(ModelPiece parent)
+public Primitive(ModelPiece parent, int number)
   {
   this.parent = parent;
+  this.primitiveNumber = number;
   }
 public abstract void render();
 

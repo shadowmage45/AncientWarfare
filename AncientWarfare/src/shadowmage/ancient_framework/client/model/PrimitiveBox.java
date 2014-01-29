@@ -26,9 +26,9 @@ public class PrimitiveBox extends Primitive
 {
 float ratio = 0.0625f;
 
-public PrimitiveBox(ModelPiece parent)
+public PrimitiveBox(ModelPiece parent, int num)
   {
-  super(parent);
+  super(parent, num);
   }
 
 float x1, y1, z1, x2, y2, z2;//extents of the box, relative to piece origin
