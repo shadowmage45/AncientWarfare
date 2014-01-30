@@ -38,7 +38,7 @@ int scrollPosY;//topLeft of the screen currently being drawn
 int parentGuiWidth;
 int parentGuiHeight;
 
-protected int totalHeight;
+public int totalHeight;
 protected int totalWidth;
 
 public List<GuiElement> elements = new ArrayList<GuiElement>();

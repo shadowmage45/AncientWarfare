@@ -155,6 +155,7 @@ public void onMousePressed(int x, int y, int num)
     this.mouseLastY = y;
     if(this.handleMousePressed(x, y, num) && this.parent!=null)
       {
+      this.onElementActivated();
       this.parent.onElementActivated(this);
       }
     }
@@ -203,6 +204,7 @@ public void onMouseWheel(int x, int y, int wheel)
     {
     if(this.handleMouseWheel(x, y, wheel))
       {
+      this.onElementActivated();
       this.parent.onElementMouseWheel(this, wheel);
       }
     }
@@ -212,8 +214,17 @@ public void onKeyTyped(char ch, int keyNum)
   {
   if(this.handleKeyInput(ch, keyNum) && this.parent!=null)
     {
+    this.onElementActivated();
     this.parent.onElementKeyTyped(ch, keyNum);
     }
+  }
+
+/**
+ * anonymous classes may override this for a single onActivated call
+ */
+public void onElementActivated()
+  {
+  
   }
 
 /**
