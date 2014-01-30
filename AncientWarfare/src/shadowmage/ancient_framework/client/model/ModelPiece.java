@@ -69,10 +69,9 @@ public ModelPiece(ModelBaseAW model, String line)
   this.model = model;
   this.setPosition(x, y, z);
   this.setRotation(rx, ry, rz);
-  this.parent = parent;
   if(parent!=null)
     {
-    parent.children.add(this);
+    parent.addChild(this);
     }
   }
 
@@ -81,11 +80,10 @@ public ModelPiece(ModelBaseAW model, String name, float x, float y, float z, flo
   this.pieceName = name;
   this.model = model;
   this.setPosition(x, y, z);
-  this.setRotation(rx, ry, rz);
-  this.parent = parent;
+  this.setRotation(rx, ry, rz);  
   if(parent!=null)
     {
-    parent.children.add(this);
+    parent.addChild(this);
     }
   }
 
