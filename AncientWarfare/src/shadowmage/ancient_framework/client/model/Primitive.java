@@ -51,9 +51,9 @@ public float rz(){return rz;}
 public float x1(){return x1;}
 public float y1(){return y1;}
 public float z1(){return z1;}
-public float x2(){return x2;}
-public float y2(){return y2;}
-public float z2(){return z2;}
+public float width(){return x2;}
+public float height(){return y2;}
+public float length(){return z2;}
 
 public void setOrigin(float x, float y, float z)
   {
@@ -69,13 +69,13 @@ public void setRotation(float rx, float ry, float rz)
   this.rz = rz;
   }
 
-public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2)
+public void setBounds(float x1, float y1, float z1, float width, float height, float length)
   {
   this.x1 = x1;
-  this.x2 = x2;
+  this.x2 = x1 +width;
   this.y1 = y1;
-  this.y2 = y2;
+  this.y2 = y1 + height;
   this.z1 = z1;
-  this.z2 = z2;
+  this.z2 = z1 +length;
   }
 }

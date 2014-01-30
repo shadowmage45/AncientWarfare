@@ -47,8 +47,6 @@ public PrimitiveBox(ModelPiece parent, float x1, float y1, float z1, float x2, f
   this.ty = ty;
   }
 
-public float x1, y1, z1, x2, y2, z2;//extents of the box, relative to piece origin
-public float rx, ry, rz;//rotation of this box, relative to the piece rotation
 public float tx, ty;//texture offsets, in texture space (0->1)
 
 public void render()

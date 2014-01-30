@@ -96,16 +96,27 @@ private GuiNumberInputLine primitiveRXInput;
 private GuiNumberInputLine primitiveRYInput;
 private GuiNumberInputLine primitiveRZInput;
 
-private GuiButtonSimple primitiveWMinus;
-private GuiButtonSimple primitiveWPlus;
-private GuiButtonSimple primitiveHMinus;
-private GuiButtonSimple primitiveHPlus;
-private GuiButtonSimple primitiveLMinus;
-private GuiButtonSimple primitiveLPlus;
+private GuiButtonSimple primitiveX1Minus;
+private GuiButtonSimple primitiveX1Plus;
+private GuiButtonSimple primitiveY1Minus;
+private GuiButtonSimple primitiveY1Plus;
+private GuiButtonSimple primitiveZ1Minus;
+private GuiButtonSimple primitiveZ1Plus;
 
-private GuiNumberInputLine primitiveWInput;
-private GuiNumberInputLine primitiveHInput;
-private GuiNumberInputLine primitiveLInput;
+private GuiNumberInputLine primitiveX1Input;
+private GuiNumberInputLine primitiveY1Input;
+private GuiNumberInputLine primitiveZ1Input;
+
+private GuiButtonSimple primitiveX2Minus;
+private GuiButtonSimple primitiveX2Plus;
+private GuiButtonSimple primitiveY2Minus;
+private GuiButtonSimple primitiveY2Plus;
+private GuiButtonSimple primitiveZ2Minus;
+private GuiButtonSimple primitiveZ2Plus;
+
+private GuiNumberInputLine primitiveX2Input;
+private GuiNumberInputLine primitiveY2Input;
+private GuiNumberInputLine primitiveZ2Input;
 
 private GuiScrollableArea leftControlPanel;
 private GuiScrollableArea leftPiecesPanel;
@@ -1009,6 +1020,391 @@ private int addLeftPrimitiveControls(int totalHeight)
   
   totalHeight+=12;
   
+  
+  primitiveX1Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {   
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width(), p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveX1Minus.updateRenderPos(col2, totalHeight);
+  leftControlPanel.addGuiElement(primitiveX1Minus);
+  
+  primitiveX1Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1()+1, p.y1(), p.z1(), p.width(), p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveX1Plus.updateRenderPos(col4, totalHeight);
+  leftControlPanel.addGuiElement(primitiveX1Plus);
+  
+  primitiveX1Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(getFloatVal(), p.y1(), p.z1(), p.width(), p.height(), p.length());        
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      }
+    };
+  primitiveX1Input.setValue(0.f);
+  primitiveX1Input.updateRenderPos(col3, totalHeight);
+  leftControlPanel.addGuiElement(primitiveX1Input);
+  
+  label = new GuiString(0, leftControlPanel, 25, 12, "B:X1");
+  label.updateRenderPos(col1, totalHeight);
+  leftControlPanel.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
+  primitiveY1Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {   
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1()-1, p.z1(), p.width(), p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveY1Minus.updateRenderPos(col2, totalHeight);
+  leftControlPanel.addGuiElement(primitiveY1Minus);
+  
+  primitiveY1Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1()+1, p.z1(), p.width(), p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveY1Plus.updateRenderPos(col4, totalHeight);
+  leftControlPanel.addGuiElement(primitiveY1Plus);
+  
+  primitiveY1Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), getFloatVal(), p.z1(), p.width(), p.height(), p.length());        
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      }
+    };
+  primitiveY1Input.setValue(0.f);
+  primitiveY1Input.updateRenderPos(col3, totalHeight);
+  leftControlPanel.addGuiElement(primitiveY1Input);
+  
+  label = new GuiString(0, leftControlPanel, 25, 12, "B:Y1");
+  label.updateRenderPos(col1, totalHeight);
+  leftControlPanel.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
+  primitiveZ1Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {   
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1()-1, p.width(), p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveZ1Minus.updateRenderPos(col2, totalHeight);
+  leftControlPanel.addGuiElement(primitiveZ1Minus);
+  
+  primitiveZ1Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1()+1, p.width(), p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveZ1Plus.updateRenderPos(col4, totalHeight);
+  leftControlPanel.addGuiElement(primitiveZ1Plus);
+  
+  primitiveZ1Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), getFloatVal(), p.width(), p.height(), p.length());        
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      }
+    };
+  primitiveZ1Input.setValue(0.f);
+  primitiveZ1Input.updateRenderPos(col3, totalHeight);
+  leftControlPanel.addGuiElement(primitiveZ1Input);
+  
+  label = new GuiString(0, leftControlPanel, 25, 12, "B:Z1");
+  label.updateRenderPos(col1, totalHeight);
+  leftControlPanel.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
+  primitiveX2Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {   
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width()-1, p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveX2Minus.updateRenderPos(col2, totalHeight);
+  leftControlPanel.addGuiElement(primitiveX2Minus);
+  
+  primitiveX2Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1(), p.width()+1, p.height(), p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveX2Plus.updateRenderPos(col4, totalHeight);
+  leftControlPanel.addGuiElement(primitiveX2Plus);
+  
+  primitiveX2Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1(), getFloatVal(), p.height(), p.length());        
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      }
+    };
+  primitiveX2Input.setValue(0.f);
+  primitiveX2Input.updateRenderPos(col3, totalHeight);
+  leftControlPanel.addGuiElement(primitiveX2Input);
+  
+  label = new GuiString(0, leftControlPanel, 25, 12, "B:X2");
+  label.updateRenderPos(col1, totalHeight);
+  leftControlPanel.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
+  primitiveY2Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {   
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width(), p.height()-1, p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveY2Minus.updateRenderPos(col2, totalHeight);
+  leftControlPanel.addGuiElement(primitiveY2Minus);
+  
+  primitiveY2Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), p.height()+1, p.length());
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveY2Plus.updateRenderPos(col4, totalHeight);
+  leftControlPanel.addGuiElement(primitiveY2Plus);
+  
+  primitiveY2Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), getFloatVal(), p.length());        
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      }
+    };
+  primitiveY2Input.setValue(0.f);
+  primitiveY2Input.updateRenderPos(col3, totalHeight);
+  leftControlPanel.addGuiElement(primitiveY2Input);
+  
+  label = new GuiString(0, leftControlPanel, 25, 12, "B:Y2");
+  label.updateRenderPos(col1, totalHeight);
+  leftControlPanel.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
+  primitiveZ2Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {   
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width(), p.height(), p.length()-1);
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveZ2Minus.updateRenderPos(col2, totalHeight);
+  leftControlPanel.addGuiElement(primitiveZ2Minus);
+  
+  primitiveZ2Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), p.height(), p.length()+1);
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      return true;
+      }
+    };  
+  primitiveZ2Plus.updateRenderPos(col4, totalHeight);
+  leftControlPanel.addGuiElement(primitiveZ2Plus);
+  
+  primitiveZ2Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+        {
+        Primitive p = gui.selectedPrimitive.copy();
+        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), p.height(), getFloatVal());        
+        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
+        gui.selectedPrimitive = p;
+        gui.selectedPiece.addPrimitive(p); 
+        }
+      }
+    };
+  primitiveZ2Input.setValue(0.f);
+  primitiveZ2Input.updateRenderPos(col3, totalHeight);
+  leftControlPanel.addGuiElement(primitiveZ2Input);
+  
+  label = new GuiString(0, leftControlPanel, 25, 12, "B:Z2");
+  label.updateRenderPos(col1, totalHeight);
+  leftControlPanel.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
   return totalHeight;
   }
 
@@ -1154,6 +1550,7 @@ public void updateControls(int guiLeft, int guiTop, int width, int height)
   
   }
 
+
 /**
  * 
  */
@@ -1167,7 +1564,8 @@ public void updateScreenContents()
   pieceRYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.ry());
   pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz());  
   /**
-   * update input boxes, bx, by, bz, brx, bry, brz, bx1, by1, bz1, bx2, by2, bz2
+   * TODO
+   * add remaining to-update input boxes, bx, by, bz, brx, bry, brz, bx1, by1, bz1, bx2, by2, bz2
    */
   }
 

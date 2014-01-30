@@ -3,7 +3,6 @@ package shadowmage.meim.client.proxy;
 import net.minecraft.client.Minecraft;
 import shadowmage.ancient_framework.client.model.ModelBaseAW;
 import shadowmage.ancient_framework.common.container.ContainerDummy;
-import shadowmage.meim.client.gui.GuiMEIM;
 import shadowmage.meim.client.gui.GuiModelEditor;
 import shadowmage.meim.common.proxy.CommonProxy;
 

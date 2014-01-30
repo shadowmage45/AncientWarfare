@@ -76,7 +76,8 @@ public void initModel()
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  //this.refreshGui();//element actions handled by anonymous element classes implementation
+  //element actions handled by anonymous element classes implementation in GuiModelEditorSetup
+  //this.refreshGui();
   }
 
 @Override
@@ -106,14 +107,13 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-  this.setup.setupControls();
+  this.setup.setupControls();//all controls are maintained in the setup class
   }
 
 @Override
 public void updateControls()
   {
-  setup.updateControls(guiLeft, guiTop, width, height);
-    
+  setup.updateControls(guiLeft, guiTop, width, height);//all controls are maintained in the setup class    
   }
 
 @Override
