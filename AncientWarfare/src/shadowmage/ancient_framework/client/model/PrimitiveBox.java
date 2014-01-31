@@ -60,6 +60,7 @@ public void render()
   //front side
   GL11.glBegin(GL11.GL_QUADS);
   
+  GL11.glNormal3f(0, 0, 1);
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'front' face
   GL11.glVertex3f(x2, y1, z1);
   GL11.glVertex3f(x1, y1, z1);
@@ -67,6 +68,7 @@ public void render()
   GL11.glVertex3f(x2, y2, z1);
   
   //right side
+  GL11.glNormal3f(1, 0, 0);
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'right' face
   GL11.glVertex3f(x1, y1, z1);
   GL11.glVertex3f(x1, y1, z2);
@@ -74,6 +76,7 @@ public void render()
   GL11.glVertex3f(x1, y2, z1);
   
 //  //left side
+  GL11.glNormal3f(-1, 0, 0);
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'left' face
   GL11.glVertex3f(x2, y1, z2);
   GL11.glVertex3f(x2, y1, z1);
@@ -81,6 +84,7 @@ public void render()
   GL11.glVertex3f(x2, y2, z2);
   
 //  //top side
+  GL11.glNormal3f(0, 1, 0);
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'top' face
   GL11.glVertex3f(x2, y2, z1);
   GL11.glVertex3f(x1, y2, z1);
@@ -88,6 +92,7 @@ public void render()
   GL11.glVertex3f(x2, y2, z2);
   
 //  //bottom side
+  GL11.glNormal3f(0, -1, 0);
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'bottom' face
   GL11.glVertex3f(x2, y1, z2);
   GL11.glVertex3f(x1, y1, z2);
@@ -95,6 +100,7 @@ public void render()
   GL11.glVertex3f(x2, y1, z1);
 //  
 //  //rear side
+  GL11.glNormal3f(0, 0, -1);
   GL11.glTexCoord2f(tx, ty);//offset for the coords for the 'rear' face
   GL11.glVertex3f(x1, y1, z2);
   GL11.glVertex3f(x2, y1, z2);
