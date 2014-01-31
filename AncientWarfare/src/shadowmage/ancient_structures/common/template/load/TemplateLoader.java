@@ -135,7 +135,7 @@ public void loadTemplates()
       }
     else
       {
-      AWLog.logError("could not load template for: "+f.getAbsolutePath() + " error parsing.");
+      AWLog.logError("Could not load template for: "+f.getAbsolutePath() + " error parsing.");
       }
     }
   AWLog.log("Loaded "+loadedCount+" structure(s).");

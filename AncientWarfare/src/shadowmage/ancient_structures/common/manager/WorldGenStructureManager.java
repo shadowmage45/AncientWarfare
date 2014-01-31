@@ -78,7 +78,6 @@ public void registerWorldGenStructure(StructureTemplate template)
     for(String biome : templatesByBiome.keySet())
       {
       if(!biomes.isEmpty() && biomes.contains(biome.toLowerCase())){continue;}
-//      AWLog.logDebug("adding template to biome: "+biome.toLowerCase()+", "+template);
       templatesByBiome.get(biome).add(template);
       }
     }
@@ -115,8 +114,6 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
    
   String biomeName = world.getBiomeGenForCoords(x, z).biomeName.toLowerCase();
   Collection<StructureEntry> genEntries = map.getEntriesNear(world, x, z, chunkSearchRange, false, searchCache);
-  
-//  AWLog.logDebug("selecting structure for" +x+", "+z + " biome: "+biomeName+"." + " found: "+genEntries.size()+ " nearby structures.");
   
   foundValue = 0;
   for(StructureEntry entry : genEntries)

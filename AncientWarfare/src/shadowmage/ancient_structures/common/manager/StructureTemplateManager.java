@@ -44,12 +44,11 @@ public void addTemplate(StructureTemplate template)
   {
   if(template.getValidationSettings()==null)
     {
-    AWLog.logError("could not load template for: " + template.name + " no validation settings present.");
+    AWLog.logError("Could not load template for: " + template.name + " no validation settings present.");
     return;
     }
   if(template.getValidationSettings().isWorldGenEnabled())
     {
-//    AWLog.logDebug("adding world gen structure entry for: "+template.name);
     WorldGenStructureManager.instance().registerWorldGenStructure(template);    
     }
   loadedTemplates.put(template.name, template);
