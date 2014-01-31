@@ -170,8 +170,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
         {
         if(initData[i]==false)
           {
-          AWLog.logError("error parsing structure for: "+name);
-          return null;
+          throw new TemplateParsingException("Could not parse template for "+file.getName() +" -- template was missing header or header data.");
           }
         }
       templateData = new short[xSize*ySize*zSize];
@@ -294,7 +293,6 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   for(TemplateRuleEntity rule : parsedEntities)
     {
     entityRuleArray[rule.ruleNumber] = rule;
-    AWLog.logDebug("parsed entity rule of......."+rule);
     }
   
   return constructTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset, templateData, ruleArray, entityRuleArray, validation);  
