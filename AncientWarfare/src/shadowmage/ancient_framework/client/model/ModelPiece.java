@@ -42,7 +42,6 @@ import shadowmage.ancient_framework.common.utils.StringTools;
 public class ModelPiece
 {
 
-private float ratio = 0.0625f;
 private String pieceName;
 private boolean visible = true;
 private float x, y, z;//manipulatable coordinates for this piece, relative to either model origin or parent-piece origin (if base piece or has parent)
@@ -162,7 +161,7 @@ public void render()
   GL11.glPushMatrix();
   if(x!=0 || y!=0 || z!=0)
     {
-    GL11.glTranslatef(ratio*x, ratio*y, ratio*z);
+    GL11.glTranslatef(x, y, z);
     }  
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
   if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
@@ -199,7 +198,7 @@ public void renderForSelection()
   GL11.glPushMatrix();
   if(x!=0 || y!=0 || z!=0)
     {
-    GL11.glTranslatef(ratio*x, ratio*y, ratio*z);
+    GL11.glTranslatef(x, y, z);
     }  
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
   if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}

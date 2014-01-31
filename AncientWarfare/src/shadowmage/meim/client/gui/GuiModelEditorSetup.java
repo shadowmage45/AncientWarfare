@@ -156,9 +156,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        /**
-         * TODO open new piece addition gui
-         */
+        gui.addNewPiece();
         }
       return true;
       }
@@ -174,9 +172,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        /**
-         * TODO copy piece
-         */
+        gui.copyPiece();
         }
       return true;
       }
@@ -192,8 +188,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        gui.selectedPiece = null;
-        gui.selectedPrimitive = null;
+        gui.clearSelection();
         }
       return true;
       }
@@ -209,9 +204,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        /**
-         * TODO delete piece
-         */
+        gui.deletePiece();
         }
       return true;
       }
@@ -227,9 +220,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        /**
-         * TODO open select gui to change piece parent
-         */
+        gui.changeParent();
         }
       return true;
       }
@@ -264,7 +255,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-       
+        gui.addBox();
         }
       return true;
       }
@@ -280,7 +271,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        //TODO delete current selected box
+        gui.deletePiece();
         }
       return true;
       }
@@ -296,7 +287,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        //open piece-selection gui for swap
+        gui.swapBox();
         }
       return true;
       }
@@ -1492,9 +1483,7 @@ private void addRightControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        /**
-         * TODO open UVMap editor GUI
-         */
+        gui.openUVMap();
         }
       return true;
       }
@@ -1562,11 +1551,23 @@ public void updateScreenContents()
   
   pieceRXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rx());
   pieceRYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.ry());
-  pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz());  
-  /**
-   * TODO
-   * add remaining to-update input boxes, bx, by, bz, brx, bry, brz, bx1, by1, bz1, bx2, by2, bz2
-   */
+  pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz()); 
+  
+  primitiveXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x());
+  primitiveYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y());
+  primitiveZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z());
+  
+  primitiveRXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rx());
+  primitiveRYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.ry());
+  primitiveRZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rz()); 
+  
+  primitiveX1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x1());
+  primitiveY1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y1());
+  primitiveZ1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z1());
+  
+  primitiveX2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.width());
+  primitiveY2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.height());
+  primitiveZ2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.length());  
   }
 
 }

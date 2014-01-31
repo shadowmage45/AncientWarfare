@@ -404,11 +404,10 @@ protected void renderBackgroundImage(String tex)
 @Override
 protected void drawGuiContainerBackgroundLayer(float var1, int mouseX, int mouseY)
   { 
-  String tex = this.getGuiBackGroundTexture();
-  this.renderBackgroundImage(tex);
+  this.renderBackgroundImage(this.getGuiBackGroundTexture());
   if(this.inventorySlots.inventorySlots.size()>0)
     {
-    tex = Statics.TEXTURE_PATH+"gui/guiButtons.png";
+    String tex = Statics.TEXTURE_PATH+"gui/guiButtons.png";
     AWTextureManager.bindTexture(tex);
     for(Object ob : this.inventorySlots.inventorySlots)    
       {      
