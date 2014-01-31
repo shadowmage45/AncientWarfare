@@ -51,8 +51,6 @@ public float tx, ty;//texture offsets, in texture space (0->1)
 
 public void render()
   {
-  
-  
 //render the cube. only called a single time when building the display list for a piece
   GL11.glPushMatrix();
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
