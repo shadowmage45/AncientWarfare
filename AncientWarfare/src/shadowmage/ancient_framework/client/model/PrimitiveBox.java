@@ -110,8 +110,13 @@ public void render()
 @Override
 public Primitive copy()
   {
-  // TODO Auto-generated method stub
-  return null;
+  PrimitiveBox box = new PrimitiveBox(parent);
+  box.setBounds(x1, y1, z1, x2-x1, y2-y1, z2-z1);
+  box.setOrigin(x, y, z);
+  box.setRotation(rx, ry, rz);
+  box.tx = tx;
+  box.ty = ty;
+  return box;
   }
 
 }
