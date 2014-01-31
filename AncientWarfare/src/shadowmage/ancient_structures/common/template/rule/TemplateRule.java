@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_framework.common.utils.NBTTools;
 import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.common.template.load.TemplateParser;
 
 /**
  * base template-rule class.  Plugins should define their own rule classes.
@@ -159,6 +160,7 @@ public static final TemplateRule getRule(List<String> ruleData, String ruleType)
   List<String> ruleDataPackage = new ArrayList<String>();
   while(it.hasNext())
     {
+    TemplateParser.lineNumber++;
     line = it.next();
     if(line.startsWith(ruleType+":"))
       {

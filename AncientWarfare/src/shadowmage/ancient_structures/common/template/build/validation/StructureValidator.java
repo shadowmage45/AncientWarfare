@@ -40,6 +40,7 @@ import shadowmage.ancient_framework.common.utils.StringTools;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
+import shadowmage.ancient_structures.common.template.load.TemplateParser;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public abstract class StructureValidator
@@ -184,7 +185,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   Set<String> validTargetBlocks = new HashSet<String>();
   
   while(it.hasNext() && (line=it.next())!=null)
-    {    
+    {   
     if(line.toLowerCase().startsWith("type=")){type = StringTools.safeParseString("=", line);}
     else if(line.toLowerCase().startsWith("unique=")){unique = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("worldgenenabled=")){worldGen = StringTools.safeParseBoolean("=", line);}
@@ -212,6 +213,7 @@ public static final StructureValidator parseValidator(List<String> lines)
           }
         }
       }
+    TemplateParser.lineNumber++;
     }
   StructureValidationType validatorType = StructureValidationType.getTypeFromName(type);
   StructureValidator validator;

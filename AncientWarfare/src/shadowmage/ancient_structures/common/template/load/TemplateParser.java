@@ -59,7 +59,18 @@ public StructureTemplate parseTemplate(File file)
       templateLines.add(scan.nextLine());
       }
     AWLog.logDebug("parsing templateLines for: "+file.getAbsolutePath());
-    return parseTemplateLines(file, templateLines); 
+    try
+      {
+      return parseTemplateLines(file, templateLines);
+      }
+    catch(TemplateParsingException e1)
+      {
+      throw new IllegalArgumentException(e1.getMessage());
+      }   
+    catch(Exception e2)
+      {
+      throw new IllegalArgumentException("Error parsing template: "+file.getName() +" at line: "+ (lineNumber+1) + " for line: "+templateLines.get(lineNumber));
+      }
     } 
   catch (FileNotFoundException e)
     {
@@ -86,8 +97,14 @@ public StructureTemplate parseTemplate(File file)
   return null;
   }
 
-private StructureTemplate parseTemplateLines(File file, List<String> lines) throws IllegalArgumentException
+/**
+ * used for debug/error output purposes, to know what line number is currently being iterated over/read through
+ */
+public static int lineNumber = -1;
+
+private StructureTemplate parseTemplateLines(File file, List<String> lines) throws IllegalArgumentException, TemplateParsingException
   {
+  lineNumber = -1;
   Iterator<String> it = lines.iterator();
   String line;
  
@@ -109,6 +126,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   int highestParsedRule = 0;
   while(it.hasNext())
     {
+    lineNumber++;
     line = it.next();    
     if(line.startsWith("#") || line.equals("")){continue;}
     if(line.startsWith("header:"))
@@ -116,6 +134,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
       while(it.hasNext())
         {
         line = it.next();
+        lineNumber++;
         if(line.startsWith(":endheader"))
           {          
           break;
@@ -160,7 +179,14 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
     
     if(!newVersion)
       {
-      return converter.convertOldTemplate(file, lines);
+      try
+        {
+        return converter.convertOldTemplate(file, lines);
+        }
+      catch(Exception e)
+        {
+        throw new TemplateParsingException("Error parsing template: "+file.getName() +" at line: "+ (converter.lineNumber+1) + " for line: "+lines.get(converter.lineNumber));
+        }
       }
     /**
      * parse out validation data
@@ -297,6 +323,7 @@ private void parseLayer(List<String> templateLines, int yLayer, int xSize, int y
   int z = 0;
   for(String st : templateLines)
     {
+    lineNumber++;
     if(st.startsWith("layer:") || st.startsWith(":endlayer"))
       {
       continue;
@@ -309,5 +336,13 @@ private void parseLayer(List<String> templateLines, int yLayer, int xSize, int y
     z++;
     }
   }
+
+private static class TemplateParsingException extends Exception
+{
+public TemplateParsingException(String string)
+  {
+  super(string);
+  }
+}
 
 }

@@ -88,9 +88,11 @@ specialHandledBlocks.add(Block.dispenser);
 specialHandledBlocks.add(Block.hopperBlock);
 }
 
+int lineNumber = -1;
 
 public StructureTemplate convertOldTemplate(File file, List<String> templateLines)
   {  
+  lineNumber = -1;
   /**
    * parsed-out data, to be used to construct new template
    */
@@ -113,6 +115,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   int highestRuleNumber = 0;
   while(it.hasNext() && (line = it.next())!=null)
     {    
+    lineNumber++;
     if(line.toLowerCase().startsWith("xsize="))
       {
       xSize = StringTools.safeParseInt("=", line);
@@ -263,6 +266,7 @@ private TemplateRule parseOldBlockRule(List<String> lines)
   int buildPass = 0;
   for(String line : lines)
     {
+    lineNumber++;
     if(line.toLowerCase().startsWith("number=")){number = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("blocks="))
       {
@@ -271,7 +275,7 @@ private TemplateRule parseOldBlockRule(List<String> lines)
       id = StringTools.safeParseInt(blockData[0]);
       meta = StringTools.safeParseInt(blockData[1]);
       }
-    else if(line.toLowerCase().startsWith("order=")){buildPass = StringTools.safeParseInt("=", line);}    
+    else if(line.toLowerCase().startsWith("order=")){buildPass = StringTools.safeParseInt("=", line);} 
     }
   
   Block block = Block.blocksList[id];
@@ -441,6 +445,7 @@ private void parseLayer(List<String> lines, short[] templateData, int yLayer, in
   int z = 0;
   for(String st : lines)
     {
+    lineNumber++;
     if(st.startsWith("layer:") || st.startsWith(":endlayer"))
       {
       continue;
