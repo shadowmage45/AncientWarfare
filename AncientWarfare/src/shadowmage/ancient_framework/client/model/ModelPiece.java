@@ -46,7 +46,6 @@ private String pieceName;
 private boolean visible = true;
 private float x, y, z;//manipulatable coordinates for this piece, relative to either model origin or parent-piece origin (if base piece or has parent)
 private float rx, ry, rz;//manipulatable rotation for this piece, relative to either model rotation or parent-piece rotation (if base piece or has parent)
-private int displayListNum = -1;//display list for the boxes that make up this piece
 private List<ModelPiece> children = new ArrayList<ModelPiece>();//the children of this piece
 private List<Primitive> primitives = new ArrayList<Primitive>();//the list of boxes that make up this piece, really only used during first construction of display list
 private ModelBaseAW model;
@@ -159,33 +158,14 @@ public void render()
     return;
     }
   GL11.glPushMatrix();
-  if(x!=0 || y!=0 || z!=0)
-    {
-    GL11.glTranslatef(x, y, z);
-    }  
+  if(x!=0 || y!=0 || z!=0){GL11.glTranslatef(x, y, z);}  
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
   if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
   if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);}  
-  if(displayListNum>=0)
-    {
-    GL11.glPushMatrix();
-    GL11.glCallList(displayListNum);
-    GL11.glPopMatrix();
-    }
-  else
-    {    
-    displayListNum = GL11.glGenLists(1);
-    GL11.glNewList(displayListNum, GL11.GL_COMPILE);
-    for(Primitive primitive : this.primitives)
-      {
-      primitive.render();
-      }
-    GL11.glEndList();
-    GL11.glPushMatrix();
-    GL11.glCallList(displayListNum);
-    GL11.glPopMatrix();
-    }
-  
+  for(Primitive primitive : this.primitives)
+    {  
+    primitive.render();   
+    }  
   for(ModelPiece child : this.children)
     {
     child.render();
@@ -225,6 +205,13 @@ public void renderForSelection()
   GL11.glPopMatrix();
   }
 
-
+protected void getPieces(List<ModelPiece> input)
+  {
+  input.add(this);
+  for(ModelPiece piece : this.children)
+    {
+    piece.getPieces(input);
+    }
+  }
 
 }

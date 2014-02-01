@@ -37,6 +37,7 @@ import shadowmage.ancient_framework.client.model.ModelBaseAW;
 import shadowmage.ancient_framework.client.model.ModelPiece;
 import shadowmage.ancient_framework.client.model.Primitive;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class GuiModelEditor extends GuiContainerAdvanced implements IFileSelectCallback
@@ -209,11 +210,13 @@ private void renderGrid()
 
 @Override
 public void updateScreenContents()
-  {
-  this.setup.updateScreenContents();
-  if(this.selectedPiece!=null)
+  {  
+  if(this.selectedPiece!=null && this.selectedPrimitive!=null)
     {
-    this.selectedPiece.setRotation(selectedPiece.rx(), selectedPiece.ry()+0.1f, selectedPiece.rz());
+//    AWLog.logDebug("selected piece: "+selectedPiece);
+//    AWLog.logDebug("selected prim: "+selectedPrimitive);
+//    this.selectedPiece.setRotation(selectedPiece.rx(), selectedPiece.ry()+0.1f, selectedPiece.rz());
+//    this.setup.updateButtonValues();
     }
   }
 
@@ -266,11 +269,6 @@ public void handleFileSelection(File file)
     break;
   }
   this.refreshGui();
-  }
-
-public void addNewPiece()
-  {
-  
   }
 
 public void copyPiece(){}

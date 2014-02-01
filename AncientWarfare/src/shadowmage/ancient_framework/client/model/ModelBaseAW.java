@@ -135,6 +135,14 @@ public void addPiece(ModelPiece piece)
     }
   }
 
+public void getPieces(List<ModelPiece> input)
+  {
+  for(ModelPiece piece : this.basePieces)
+    {
+    piece.getPieces(input);
+    }
+  }
+
 public void setPieceRotation(String name, float x, float y, float z)
   {
   ModelPiece piece = this.getPiece(name);

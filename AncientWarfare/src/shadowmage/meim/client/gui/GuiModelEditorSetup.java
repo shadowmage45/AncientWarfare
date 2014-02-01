@@ -20,13 +20,19 @@
  */
 package shadowmage.meim.client.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiElement;
 import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
-import shadowmage.ancient_framework.client.model.Primitive;
+import shadowmage.ancient_framework.client.model.ModelPiece;
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.meim.common.config.MEIMConfig;
 
 public class GuiModelEditorSetup
@@ -123,6 +129,11 @@ private GuiScrollableArea leftPiecesPanel;
 private GuiScrollableArea rightControlPanel;
 private GuiScrollableArea rightPrimitivesPanel;
 
+
+HashMap<GuiString, ModelPiece> pieceLabelMap = new HashMap<GuiString, ModelPiece>();
+
+private float scale = 0.0625f;
+
 public GuiModelEditorSetup(GuiModelEditor gui)
   {
   this.gui = gui;
@@ -156,7 +167,7 @@ private void addLeftControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        gui.addNewPiece();
+        Minecraft.getMinecraft().displayGuiScreen(new GuiNewPiece((ContainerBase) gui.inventorySlots, gui));
         }
       return true;
       }
@@ -315,7 +326,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x()-1, gui.selectedPiece.y(), gui.selectedPiece.z()); 
+        gui.selectedPiece.setPosition(gui.selectedPiece.x() - 1 * scale, gui.selectedPiece.y(), gui.selectedPiece.z());  
+        updateButtonValues();
         }
       return true;
       }
@@ -330,7 +342,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x()+1, gui.selectedPiece.y(), gui.selectedPiece.z()); 
+        gui.selectedPiece.setPosition(gui.selectedPiece.x()+1 * scale, gui.selectedPiece.y(), gui.selectedPiece.z());  
+        updateButtonValues();
         }
       return true;
       }
@@ -345,7 +358,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(getFloatVal(), gui.selectedPiece.y(), gui.selectedPiece.z()); 
+        gui.selectedPiece.setPosition(getFloatVal() * scale, gui.selectedPiece.y(), gui.selectedPiece.z());  
+        updateButtonValues();
         }
       }     
     };
@@ -367,7 +381,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y()-1, gui.selectedPiece.z());
+        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y()-1 * scale, gui.selectedPiece.z()); 
+        updateButtonValues();
         }
       return true;
       }
@@ -382,7 +397,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y()+1, gui.selectedPiece.z()); 
+        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y()+1 * scale, gui.selectedPiece.z());  
+        updateButtonValues();
         }
       return true;
       }
@@ -397,7 +413,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), getFloatVal(), gui.selectedPiece.z());     
+        gui.selectedPiece.setPosition(gui.selectedPiece.x(), getFloatVal() * scale, gui.selectedPiece.z());      
+        updateButtonValues();
         }
       }  
     };
@@ -419,7 +436,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), gui.selectedPiece.z()-1); 
+        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), gui.selectedPiece.z()-1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -434,7 +452,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), gui.selectedPiece.z()+1); 
+        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), gui.selectedPiece.z()+1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -449,7 +468,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), getFloatVal());     
+        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), getFloatVal() * scale);   
+        updateButtonValues();   
         }
       }       
     };
@@ -471,7 +491,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx()-1, gui.selectedPiece.ry(), gui.selectedPiece.rz()); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx()-1 * scale, gui.selectedPiece.ry(), gui.selectedPiece.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -486,7 +507,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx()+1, gui.selectedPiece.ry(), gui.selectedPiece.rz()); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx()+1 * scale, gui.selectedPiece.ry(), gui.selectedPiece.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -501,7 +523,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(getFloatVal(), gui.selectedPiece.ry(), gui.selectedPiece.rz()); 
+        gui.selectedPiece.setRotation(getFloatVal() * scale, gui.selectedPiece.ry(), gui.selectedPiece.rz());  
+        updateButtonValues();
         }
       }
     };
@@ -523,7 +546,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry()-1, gui.selectedPiece.rz()); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry()-1 * scale, gui.selectedPiece.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -538,7 +562,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry()+1, gui.selectedPiece.rz()); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry()+1 * scale, gui.selectedPiece.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -553,7 +578,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), getFloatVal(), gui.selectedPiece.rz()); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), getFloatVal() * scale, gui.selectedPiece.rz());  
+        updateButtonValues();
         }
       }   
     };
@@ -575,7 +601,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(), gui.selectedPiece.rz()+1); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(), gui.selectedPiece.rz()-1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -590,7 +617,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(), gui.selectedPiece.rz()+1); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(), gui.selectedPiece.rz()+1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -605,7 +633,8 @@ private int addLeftPieceControls(int totalHeight)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(),  getFloatVal()); 
+        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(),  getFloatVal() * scale);  
+        updateButtonValues();
         }
       }      
     };
@@ -636,11 +665,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x()-1, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x()-1 * scale, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());          
+        updateButtonValues();
         }
       return true;
       }
@@ -655,11 +681,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x()+1, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x()+1 * scale, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());  
+        updateButtonValues();
         }
       return true;
       }
@@ -672,13 +695,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
-        {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(getFloatVal(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
+        {        
+        gui.selectedPrimitive.setOrigin(getFloatVal() * scale, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());          
+        updateButtonValues();
         }
       }
     };
@@ -700,11 +720,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y()-1, gui.selectedPrimitive.z());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y()-1 * scale, gui.selectedPrimitive.z());  
+        updateButtonValues();
         }
       return true;
       }
@@ -719,11 +736,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y()+1, gui.selectedPrimitive.z());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y()+1 * scale, gui.selectedPrimitive.z());
+        updateButtonValues();
         }
       return true;
       }
@@ -736,13 +750,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x(), getFloatVal(), gui.selectedPrimitive.z());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), getFloatVal() * scale, gui.selectedPrimitive.z());  
+        updateButtonValues();
         }
       }
     };
@@ -764,11 +775,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z()-1);
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z()-1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -783,11 +791,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z()+1);
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z()+1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -800,13 +805,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), getFloatVal());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), getFloatVal() * scale);  
+        updateButtonValues();
         }
       }    
     };
@@ -826,12 +828,9 @@ private int addLeftPrimitiveControls(int totalHeight)
     public boolean handleMousePressed(int x, int y, int num)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx()-1, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        { 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx()-1 * scale, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -846,11 +845,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx()+1, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx()+1 * scale, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -863,13 +859,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(getFloatVal(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(getFloatVal() * scale, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());  
+        updateButtonValues();
         }
       }
     };
@@ -891,11 +884,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry()-1, gui.selectedPrimitive.rz());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry()-1 * scale, gui.selectedPrimitive.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -910,11 +900,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry()+1, gui.selectedPrimitive.rz());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry()+1 * scale, gui.selectedPrimitive.rz());  
+        updateButtonValues();
         }
       return true;
       }
@@ -927,13 +914,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx(), getFloatVal(), gui.selectedPrimitive.rz());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), getFloatVal() * scale, gui.selectedPrimitive.rz());
+        updateButtonValues();
         }
       }
     };
@@ -955,11 +939,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz()-1);
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz()-1 * scale);  
+        updateButtonValues();
         }
       return true;
       }
@@ -974,11 +955,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz()+1);
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz()+1 * scale);
+        updateButtonValues();
         }
       return true;
       }
@@ -991,13 +969,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), getFloatVal());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), getFloatVal() * scale);  
+        updateButtonValues();
         }
       }
     };
@@ -1019,11 +994,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width(), p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1()-1 * scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());  
+        updateButtonValues();
         }
       return true;
       }
@@ -1038,11 +1010,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1()+1, p.y1(), p.z1(), p.width(), p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1()+1 * scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1055,13 +1024,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(getFloatVal(), p.y1(), p.z1(), p.width(), p.height(), p.length());        
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(getFloatVal() * scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()); 
+        updateButtonValues();
         }
       }
     };
@@ -1083,11 +1049,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1()-1, p.z1(), p.width(), p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1()-1 * scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1102,11 +1065,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1()+1, p.z1(), p.width(), p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1()+1 * scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1119,13 +1079,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), getFloatVal(), p.z1(), p.width(), p.height(), p.length());        
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), getFloatVal() * scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());  
+        updateButtonValues();
         }
       }
     };
@@ -1147,11 +1104,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1()-1, p.width(), p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1()-1 * scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1166,11 +1120,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1()+1, p.width(), p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1()+1 * scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1183,13 +1134,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), getFloatVal(), p.width(), p.height(), p.length());        
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), getFloatVal() * scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()); 
+        updateButtonValues();
         }
       }
     };
@@ -1211,11 +1159,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width()-1, p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width()-1 * scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues(); 
         }
       return true;
       }
@@ -1230,11 +1175,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1(), p.width()+1, p.height(), p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width()+1 * scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1247,13 +1189,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1(), getFloatVal(), p.height(), p.length());        
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), getFloatVal() * scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());   
+        updateButtonValues();
         }
       }
     };
@@ -1275,11 +1214,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width(), p.height()-1, p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height()-1 * scale, gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1294,11 +1230,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), p.height()+1, p.length());
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height()+1 * scale, gui.selectedPrimitive.length());
+        updateButtonValues();
         }
       return true;
       }
@@ -1311,13 +1244,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), getFloatVal(), p.length());        
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), getFloatVal() * scale, gui.selectedPrimitive.length()); 
+        updateButtonValues();
         }
       }
     };
@@ -1339,11 +1269,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1()-1, p.y1(), p.z1(), p.width(), p.height(), p.length()-1);
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()-1 * scale);
+        updateButtonValues();
         }
       return true;
       }
@@ -1358,11 +1285,8 @@ private int addLeftPrimitiveControls(int totalHeight)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), p.height(), p.length()+1);
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()+1 * scale);
+        updateButtonValues();
         }
       return true;
       }
@@ -1375,13 +1299,10 @@ private int addLeftPrimitiveControls(int totalHeight)
     @Override
     public void onElementActivated()
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        Primitive p = gui.selectedPrimitive.copy();
-        p.setBounds(p.x1(), p.y1(), p.z1(), p.width(), p.height(), getFloatVal());        
-        gui.selectedPiece.removePrimitive(gui.selectedPrimitive);
-        gui.selectedPrimitive = p;
-        gui.selectedPiece.addPrimitive(p); 
+        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), getFloatVal() * scale);   
+        updateButtonValues();
         }
       }
     };
@@ -1401,8 +1322,44 @@ private int addLeftPrimitiveControls(int totalHeight)
 
 public void addLeftLabels()
   {
-  
+  int totalHeight = 0;
+  pieceLabelMap.clear();
+  if(gui.model!=null)
+    {
+    List<ModelPiece> pieces = new ArrayList<ModelPiece>();
+    gui.model.getPieces(pieces);
+    
+    GuiString label = new GuiString(0, leftPiecesPanel, 80, 12, "Pieces:");
+    label.updateRenderPos(0, totalHeight);
+    leftPiecesPanel.addGuiElement(label);
+    totalHeight+=12;
+    
+    for(ModelPiece piece : pieces)
+      {
+      label = new GuiString(0, leftPiecesPanel, 80, 12, piece.getName())
+        {
+        @Override
+        public void onElementActivated()
+          {
+          ModelPiece p = pieceLabelMap.get(this);
+          if(p!=null)
+            {
+            AWLog.logDebug("piece-label clicked...");
+            gui.selectedPiece = p;
+            gui.selectedPrimitive = null;
+            updateButtonValues();
+            }
+          }
+        };
+      label.clickable = true;
+      label.updateRenderPos(0, totalHeight);
+      pieceLabelMap.put(label, piece);
+      leftPiecesPanel.addGuiElement(label);
+      totalHeight+=12;
+      }    
+    }  
   }
+
 
 private void addRightControls()
   {
@@ -1508,6 +1465,25 @@ private void addRightControls()
   loadTexture.updateRenderPos(0, totalHeight);
   totalHeight+=12;
   rightControlPanel.elements.add(loadTexture);
+  
+  
+  GuiString label = new GuiString(0, rightControlPanel, 40, 12, "Scale");
+  label.updateRenderPos(0, totalHeight);
+  rightControlPanel.addGuiElement(label);
+  
+  GuiNumberInputLine scaleInput = new GuiNumberInputLine(0, rightControlPanel, 40, 10, 10, "0.0625")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      scale = getFloatVal();
+      updateButtonValues();
+      }
+    };
+  scaleInput.setValue(scale);
+  scaleInput.updateRenderPos(40, totalHeight+1);
+  rightControlPanel.addGuiElement(scaleInput);
+  totalHeight+=12;
     
   rightControlPanel.updateTotalHeight(totalHeight);
   }
@@ -1537,37 +1513,43 @@ public void updateControls(int guiLeft, int guiTop, int width, int height)
   rightPrimitivesPanel.setHeight(height/2); 
   rightPrimitivesPanel.updateTotalHeight(rightPrimitivesPanel.totalHeight);
   
+  leftPiecesPanel.elements.clear();
+  addLeftLabels();
+  rightPrimitivesPanel.elements.clear();
+  addRightLabels();
+  
+  this.updateButtonValues();
   }
 
 
 /**
  * 
  */
-public void updateScreenContents()
+public void updateButtonValues()
   {
-  pieceXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.x());
-  pieceYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.y());
-  pieceZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.z());
+  pieceXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.x()/scale);
+  pieceYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.y()/scale);
+  pieceZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.z()/scale);
   
-  pieceRXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rx());
-  pieceRYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.ry());
-  pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz()); 
+  pieceRXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rx()/scale);
+  pieceRYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.ry()/scale);
+  pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz()/scale); 
   
-  primitiveXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x());
-  primitiveYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y());
-  primitiveZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z());
+  primitiveXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x()/scale);
+  primitiveYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y()/scale);
+  primitiveZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z()/scale);
   
-  primitiveRXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rx());
-  primitiveRYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.ry());
-  primitiveRZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rz()); 
+  primitiveRXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rx()/scale);
+  primitiveRYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.ry()/scale);
+  primitiveRZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rz()/scale); 
   
-  primitiveX1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x1());
-  primitiveY1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y1());
-  primitiveZ1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z1());
+  primitiveX1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x1()/scale);
+  primitiveY1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y1()/scale);
+  primitiveZ1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z1()/scale);
   
-  primitiveX2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.width());
-  primitiveY2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.height());
-  primitiveZ2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.length());  
+  primitiveX2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.width()/scale);
+  primitiveY2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.height()/scale);
+  primitiveZ2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.length()/scale);  
   }
 
 }

@@ -49,10 +49,22 @@ public PrimitiveBox(ModelPiece parent, float x1, float y1, float z1, float x2, f
 
 public float tx, ty;//texture offsets, in texture space (0->1)
 
-public void render()
+@Override
+public Primitive copy()
+  {
+  PrimitiveBox box = new PrimitiveBox(parent);
+  box.setBounds(x1, y1, z1, x2-x1, y2-y1, z2-z1);
+  box.setOrigin(x, y, z);
+  box.setRotation(rx, ry, rz);
+  box.tx = tx;
+  box.ty = ty;
+  return box;
+  }
+
+@Override
+protected void renderForDisplayList()
   {
 //render the cube. only called a single time when building the display list for a piece
-  GL11.glPushMatrix();
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
   if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
   if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);}  
@@ -108,19 +120,6 @@ public void render()
   GL11.glVertex3f(x1, y2, z2);
   
   GL11.glEnd();
-  GL11.glPopMatrix();  
-  }
-
-@Override
-public Primitive copy()
-  {
-  PrimitiveBox box = new PrimitiveBox(parent);
-  box.setBounds(x1, y1, z1, x2-x1, y2-y1, z2-z1);
-  box.setOrigin(x, y, z);
-  box.setRotation(rx, ry, rz);
-  box.tx = tx;
-  box.ty = ty;
-  return box;
   }
 
 }

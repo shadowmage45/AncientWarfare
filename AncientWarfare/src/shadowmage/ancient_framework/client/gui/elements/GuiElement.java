@@ -28,6 +28,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.entity.RenderItem;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.client.render.AWTextureManager;
@@ -214,7 +215,10 @@ public void onKeyTyped(char ch, int keyNum)
   {
   if(this.handleKeyInput(ch, keyNum) && this.parent!=null)
     {
-    this.onElementActivated();
+    if(keyNum==Keyboard.KEY_RETURN)
+      {
+      this.onElementActivated();      
+      }
     this.parent.onElementKeyTyped(ch, keyNum);
     }
   }

@@ -293,6 +293,7 @@ protected void handleCharAction(char ch)
   {
   String firstPart = "";
   String lastPart = "";
+  this.cursorPos = this.cursorPos > this.text.length() ? this.text.length() : this.cursorPos;
   firstPart = this.text.substring(0, this.cursorPos);
   lastPart = this.text.substring(cursorPos, text.length());
   this.text = firstPart + ch + lastPart;
