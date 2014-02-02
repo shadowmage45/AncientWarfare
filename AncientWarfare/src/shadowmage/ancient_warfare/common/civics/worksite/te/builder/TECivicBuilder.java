@@ -21,15 +21,18 @@
 package shadowmage.ancient_warfare.common.civics.worksite.te.builder;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
 import shadowmage.ancient_warfare.common.civics.worksite.WorkPoint;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.IWorker;
+import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
 import shadowmage.ancient_warfare.common.structures.build.Builder;
 import shadowmage.ancient_warfare.common.structures.build.BuilderTicked;
 import shadowmage.ancient_warfare.common.targeting.TargetType;
+import shadowmage.ancient_warfare.common.utils.InventoryTools;
 
 public class TECivicBuilder extends TEWorkSite
 {
@@ -159,13 +162,17 @@ protected void tickBuilder()
     }
   }
 
+public String getStructureName()
+  {
+  return builder==null ? null : builder.struct.name;
+  }
+
 @Override
 public void readFromNBT(NBTTagCompound par1nbtTagCompound)
   {
   super.readFromNBT(par1nbtTagCompound);
   if(par1nbtTagCompound.hasKey("builder"))
     {
-//    Config.logDebug("reading builder data");
     NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
     this.builder = Builder.readTickedBuilderFromNBT(builder);
     if(this.builder==null)
@@ -177,6 +184,14 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
       this.builder.tickTimer = 1;
       }
     }  
+  }
+
+@Override
+public IInventory[] getInventoryToDropOnBreak()
+  {  
+//  String name = getStructureName();
+//  InventoryTools.dropItemInWorld(worldObj, ItemCivicBuilder.getCivicBuilderItem(name), xCoord, yCoord, zCoord);
+  return super.getInventoryToDropOnBreak();
   }
 
 @Override
