@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_framework.client.model;
 
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 
 public abstract class Primitive
@@ -121,4 +123,8 @@ public String toString()
   {
   return String.format("Primitive:: origin: %.1f, %.1f, %.1f rotation: %.1f, %.1f, %.1f min: %.1f, %.1f, %.1f max: %.1f, %.1f, %.1f", x,y,z, rx,ry,rz, x1,y1,z1, x2,y2,z2);
   }
+
+public abstract void addPrimitiveLines(ArrayList<String> lines);
+
+
 }

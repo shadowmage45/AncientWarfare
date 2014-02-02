@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_framework.client.model;
 
+import java.util.ArrayList;
+
 import org.lwjgl.opengl.GL11;
 
 public class PrimitiveBox extends Primitive
@@ -120,6 +122,15 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x1, y2, z2);
   
   GL11.glEnd();
+  }
+
+@Override
+public void addPrimitiveLines(ArrayList<String> lines)
+  {
+  StringBuilder b = new StringBuilder("box=").append(parent.getName()).append(",");
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
+  b.append(x1).append(",").append(y1).append(",").append(z1).append(",").append(x2).append(",").append(y2).append(",").append(z2);
+  lines.add(b.toString());
   }
 
 }

@@ -214,4 +214,26 @@ protected void getPieces(List<ModelPiece> input)
     }
   }
 
+public List<Primitive> getPrimitives()
+  {
+  return this.primitives;
+  }
+
+public void addPieceLines(ArrayList<String> lines)
+  {
+  StringBuilder b = new StringBuilder("part=");
+  b.append(this.pieceName).append(",");
+  b.append(this.parent==null? "null" : this.parent.getName()).append(",");
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz);
+  lines.add(b.toString());
+  for(Primitive p : this.primitives)
+    {
+    p.addPrimitiveLines(lines);
+    }
+  for(ModelPiece p : this.children)
+    {
+    p.addPieceLines(lines);
+    }
+  }
+
 }

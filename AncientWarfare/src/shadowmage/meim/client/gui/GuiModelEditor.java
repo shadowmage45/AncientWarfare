@@ -39,6 +39,7 @@ import shadowmage.ancient_framework.client.model.Primitive;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
+import shadowmage.meim.client.texture.TextureManager;
 
 public class GuiModelEditor extends GuiContainerAdvanced implements IFileSelectCallback
 {
@@ -117,8 +118,9 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   enableModelLighting();
   if(model!=null)
     {
-    Minecraft.getMinecraft().renderEngine.bindTexture(testTex);
+    TextureManager.bindTexture();
     model.renderModel();
+    TextureManager.resetBoundTexture();
     }  
   resetModelView();
   }
@@ -232,6 +234,8 @@ public void updateControls()
   setup.updateControls(guiLeft, guiTop, width, height);//all controls are maintained in the setup class    
   }
 
+ModelLoader loader = new ModelLoader();
+
 @Override
 public void handleFileSelection(File file)
   {
@@ -239,12 +243,17 @@ public void handleFileSelection(File file)
   {
   case SELECT_LOAD:
     {
-    
+    ModelBaseAW model = loader.loadModel(file);
+    GuiModelEditor.model = model;
+    selectedPiece = null;
+    selectedPrimitive = null;
+    this.setup.updateButtonValues();    
+    this.refreshGui();    
     }
     break;
   case SELECT_SAVE:
     { 
-    
+    loader.saveModel(model, file);
     }
     break;
   case SELECT_IMPORT_PIECE:
@@ -282,11 +291,6 @@ public void clearSelection()
   }
 
 public void changeParent()
-  {
-  
-  }
-
-public void addBox()
   {
   
   }

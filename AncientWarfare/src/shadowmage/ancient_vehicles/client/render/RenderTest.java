@@ -38,42 +38,18 @@ import shadowmage.ancient_framework.client.model.ModelBaseAW;
 public class RenderTest
 {
 
-float rotation = 0;
 String modelsPath = "/assets/ancientwarfare/models";
 ResourceLocation testTex = new ResourceLocation("ancientwarfare", "models/test.png");
-private ModelBaseAW testModel;
 
 public RenderTest() throws IOException
   {
-  InputStream is = this.getClass().getResourceAsStream(modelsPath+"/test.mmf");
-  if(is==null)
-    {
-    throw new IllegalArgumentException("could not load test.mmf from : "+modelsPath+"/test.mmf");
-    }
-  List<String> lines = new ArrayList<String>();
-  String line;
-  BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-  while((line = reader.readLine())!=null)
-    {
-    lines.add(line);
-    }
-  testModel = new ModelBaseAW();
-  testModel.parseFromLines(lines);  
+
   }
 
 @ForgeSubscribe
 public void renderWorld(RenderWorldLastEvent evt)
   {
-//  GL11.glEnable(GL11.GL_LIGHTING);
-//  rotation += 1.f;
-  GL11.glPushMatrix();
-  GL11.glTranslatef(0, 0, 1);
-//  testModel.setPieceRotation("foopiece", rotation*0.1f, 0, 0);
-//  testModel.setPieceRotation("foopiece2", 0, rotation*0.1f, 0);
-  evt.context.renderEngine.bindTexture(testTex);
-  testModel.renderModel();
-  GL11.glPopMatrix();
-//  GL11.glDisable(GL11.GL_LIGHTING);
+  
   }
 
 }

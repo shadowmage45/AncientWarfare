@@ -95,24 +95,40 @@ public void parseFromLines(List<String> lines)
         throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
         }
       PrimitiveBox box = new PrimitiveBox(piece);
-      box.x1 = StringTools.safeParseFloat(bits[1]);
-      box.y1 = StringTools.safeParseFloat(bits[2]);
-      box.z1 = StringTools.safeParseFloat(bits[3]);
+      box.x = StringTools.safeParseFloat(bits[1]);
+      box.y = StringTools.safeParseFloat(bits[2]);
+      box.z = StringTools.safeParseFloat(bits[3]);
       
-      box.x2 = box.x1 + StringTools.safeParseFloat(bits[4]);
-      box.y2 = box.y1 + StringTools.safeParseFloat(bits[5]);
-      box.z2 = box.z1 + StringTools.safeParseFloat(bits[6]);
+      box.rx = StringTools.safeParseFloat(bits[4]);
+      box.ry = StringTools.safeParseFloat(bits[5]);
+      box.rz = StringTools.safeParseFloat(bits[6]);
       
-      if(bits.length>=10)
-        {
-        box.rx = StringTools.safeParseFloat(bits[7]);
-        box.ry = StringTools.safeParseFloat(bits[8]);
-        box.rz = StringTools.safeParseFloat(bits[9]);      
-        }
+      box.tx = StringTools.safeParseFloat(bits[7]);
+      box.ty = StringTools.safeParseFloat(bits[8]);
+      
+      box.x1 = StringTools.safeParseFloat(bits[9]);
+      box.y1 = StringTools.safeParseFloat(bits[10]);
+      box.z1 = StringTools.safeParseFloat(bits[11]);
+      
+      box.x2 = StringTools.safeParseFloat(bits[12]);
+      box.y2 = StringTools.safeParseFloat(bits[13]);
+      box.z2 = StringTools.safeParseFloat(bits[14]);
+      
       piece.addPrimitive(box);
       AWLog.logDebug("parsed new box for piece: "+parentName);
       }    
     }
+  }
+
+public List<String> getModelLines()
+  {
+  ArrayList<String> lines = new ArrayList<String>();
+  lines.add("textureSize="+textureWidth+","+textureHeight);
+  for(ModelPiece piece : this.basePieces)
+    {
+    piece.addPieceLines(lines);
+    }  
+  return lines;
   }
 
 /**
