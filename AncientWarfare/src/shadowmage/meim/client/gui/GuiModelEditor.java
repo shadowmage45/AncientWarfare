@@ -81,6 +81,7 @@ public GuiModelEditor(ContainerBase container)
 public void initModel()
   {
   model = new ModelBaseAW();
+  model.setTextureSize(256, 256);
   ModelPiece piece = new ModelPiece(model, "part1", 0, 0, 0, 0, 0, 0, null);
   PrimitiveBox box = new PrimitiveBox(piece);
   box.setOrigin(0, 0, 0);

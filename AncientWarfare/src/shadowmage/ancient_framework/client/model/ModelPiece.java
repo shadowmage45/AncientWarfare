@@ -236,4 +236,9 @@ public void addPieceLines(ArrayList<String> lines)
     }
   }
 
+protected ModelBaseAW getModel()
+  {
+  return this.model;
+  }
+
 }

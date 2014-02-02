@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL11;
 public abstract class Primitive
 {
 
+public float tx, ty;//texture offsets, in texture space (0->1)
 float x, y, z;//origin of this primitive, relative to parent origin and orientation
 
 float rx, ry, rz;//rotation of this primitive, relative to parent orientation
