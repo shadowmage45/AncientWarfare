@@ -1462,7 +1462,7 @@ private void addRightControls()
       if(super.handleMousePressed(x, y, num))
         {
         gui.selectionMode = GuiModelEditor.SELECT_LOAD_TEXTURE;
-        Minecraft.getMinecraft().displayGuiScreen(new GuiFileSelect(gui, gui, MEIMConfig.getModelSaveDir(), false));
+        Minecraft.getMinecraft().displayGuiScreen(new GuiFileSelect(gui, gui, MEIMConfig.getTexLoadDir(), false));
         }
       return true;
       }

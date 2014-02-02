@@ -21,6 +21,9 @@
 package shadowmage.meim.client.gui;
 
 import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -263,7 +266,14 @@ public void handleFileSelection(File file)
     break;
   case SELECT_LOAD_TEXTURE:
     {
-    
+    try
+      {
+      TextureManager.updateTextureContents(ImageIO.read(file));
+      } 
+    catch (IOException e)
+      {
+      e.printStackTrace();
+      }
     }
     break;
   case SELECT_SAVE_TEXTURE:
