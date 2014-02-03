@@ -127,7 +127,7 @@ private void addPrimitiveControls()
     }
   else if(this.gui.getSelectedPrimitive() instanceof PrimitiveTriangle)
     {
-    
+    this.primitiveControls = new PrimitiveTriangleSetup(gui, this);
     }
   if(this.primitiveControls!=null)
     {
@@ -644,6 +644,8 @@ private void addFileControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
+        gui.setSelectedPiece(null);
+        gui.setSelectedPrimitive(null);
         gui.model = null;
         gui.initModel();
         updateButtonValues();

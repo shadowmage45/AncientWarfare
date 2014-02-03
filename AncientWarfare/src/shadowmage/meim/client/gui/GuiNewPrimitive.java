@@ -29,6 +29,7 @@ import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.model.ModelPiece;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.client.model.PrimitiveQuad;
+import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class GuiNewPrimitive extends GuiContainerAdvanced
@@ -138,8 +139,8 @@ public void setupControls()
       {
       if(parentGui.getSelectedPiece()!=null)
         {
-        PrimitiveBox b = new PrimitiveBox(parentGui.getSelectedPiece());
-        b.setBounds(-0.5f, -0.5f, -0.5f, 1, 1, 1);
+        PrimitiveTriangle b = new PrimitiveTriangle(parentGui.getSelectedPiece());
+        b.setBounds(-0.5f, 0.f, 0.5f, 0.f, 0, -.5f);
         b.setOrigin(0, 0, 0);
         b.setRotation(0, 0, 0);
         parentGui.getSelectedPiece().addPrimitive(b);        

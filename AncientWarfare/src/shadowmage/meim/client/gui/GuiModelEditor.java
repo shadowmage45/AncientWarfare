@@ -131,7 +131,6 @@ public void handleMouseInput()
   int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
   int z = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
   int button = Mouse.getEventButton();
-  boolean state = Mouse.getEventButtonState();
   int wheelDelta = Mouse.getEventDWheel();
   if(this.isMouseOverControl(x, z))
     {
@@ -169,10 +168,6 @@ public void handleMouseInput()
     
     float yChange = zInput * MathHelper.cos(pitch);
     
-    
-    
-    AWLog.logDebug(String.format("input change: %.2f,  %.2f, %.2f", xChange, yChange, zChange));
-    
     viewPosX -= xChange * 0.1f;
     viewPosY += yChange * 0.1f;
     viewPosZ -= zChange * 0.1f;
@@ -180,11 +175,6 @@ public void handleMouseInput()
     viewTargetX -= xChange * 0.1f;
     viewTargetY += yChange * 0.1f;
     viewTargetZ -= zChange * 0.1f;
-    /**
-     * TODO move viewTarget relative to current view yaw/pitch
-     * (will need move both viewTarget and viewPos in order to have proper movement)
-     * (need to move relative to current view facing -- will require a bit of trig)
-     */
     this.lastClickXLeft = x;
     this.lastClickZLeft = z; 
     }
@@ -215,7 +205,6 @@ public void handleMouseInput()
     this.lastClickXRight = x;
     this.lastClickZRight = z;
     }
-//  AWLog.logDebug("pitch: "+pitch+" yaw: "+yaw);
   }
 
 @Override
