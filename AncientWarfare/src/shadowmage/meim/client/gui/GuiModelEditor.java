@@ -65,6 +65,17 @@ private ModelPiece selectedPiece;
 private Primitive selectedPrimitive;
 
 /**
+ * values manipulated via mouse input
+ */
+int lastClickXLeft;
+int lastClickZLeft;
+int lastClickXRight;
+int lastClickZRight;
+float yaw;
+float pitch;
+float viewDistance = 5.f;
+
+/**
  * stored/calc'd values
  */
 float viewPosX, viewPosY, viewPosZ, viewTargetX, viewTargetY, viewTargetZ;
@@ -111,13 +122,7 @@ public int getYSize()
   return 240;
   }
 
-int lastClickXLeft;
-int lastClickZLeft;
-int lastClickXRight;
-int lastClickZRight;
-float yaw;
-float pitch;
-float viewDistance = 5.f;
+
 
 @Override
 public void handleMouseInput()
@@ -132,10 +137,8 @@ public void handleMouseInput()
     {
     return;
     }
-
   if(button==-1 && wheelDelta!=0)
     {
-    AWLog.logDebug("handling wheel input: "+x+","+z+","+" :: b: "+button+" s:"+state+" w: "+wheelDelta);
     if(wheelDelta<0)
       {
       viewDistance+=0.25f;
@@ -150,24 +153,43 @@ public void handleMouseInput()
     }
   else if(button==0)
     {
-    AWLog.logDebug("handling mouse input: "+x+","+z+","+" :: b: "+button+" s:"+state+" w: "+wheelDelta);
-    if(state)
-      {
-      this.lastClickXLeft = x;
-      this.lastClickZLeft = z;      
-      }
-    else
-      {
-      /**
-       * TODO move viewTarget relative to current view yaw/pitch
-       * (will need move both viewTarget and viewPos in order to have proper movement)
-       * (need to move relative to current view facing -- will require a bit of trig)
-       */
-      }
+    this.lastClickXLeft = x;
+    this.lastClickZLeft = z; 
     }
-  else if(button==1 && state)
+  else if(Mouse.isButtonDown(0))
     {
-    AWLog.logDebug("handling mouse input: "+x+","+z+","+" :: b: "+button+" s:"+state+" w: "+wheelDelta);
+    float xInput = x - lastClickXLeft;
+    float zInput = z - lastClickZLeft;
+    
+    float xChange = zInput * MathHelper.sin(pitch) * MathHelper.sin(yaw);
+    float zChange = zInput * MathHelper.sin(pitch) * MathHelper.cos(yaw);
+    
+    xChange += MathHelper.cos(yaw)*xInput;
+    zChange += MathHelper.sin(yaw)*xInput;
+    
+    float yChange = zInput * MathHelper.cos(pitch);
+    
+    
+    
+    AWLog.logDebug(String.format("input change: %.2f,  %.2f, %.2f", xChange, yChange, zChange));
+    
+    viewPosX -= xChange * 0.1f;
+    viewPosY += yChange * 0.1f;
+    viewPosZ -= zChange * 0.1f;
+    
+    viewTargetX -= xChange * 0.1f;
+    viewTargetY += yChange * 0.1f;
+    viewTargetZ -= zChange * 0.1f;
+    /**
+     * TODO move viewTarget relative to current view yaw/pitch
+     * (will need move both viewTarget and viewPos in order to have proper movement)
+     * (need to move relative to current view facing -- will require a bit of trig)
+     */
+    this.lastClickXLeft = x;
+    this.lastClickZLeft = z; 
+    }
+  else if(button==1)
+    {
     this.lastClickXRight = x;
     this.lastClickZRight = z;
     } 
@@ -177,18 +199,23 @@ public void handleMouseInput()
     float pitchInput = z - lastClickZRight;
       
     yaw -= yawInput*Trig.TORADIANS;
-    pitch -= pitchInput*Trig.TORADIANS;
-    
+    pitch += pitchInput*Trig.TORADIANS;
+    if(pitch*Trig.TODEGREES>=89.f)
+      {
+      pitch = 89.f * Trig.TORADIANS;
+      }
+    if(pitch*Trig.TODEGREES<=-89.f)
+      {
+      pitch = -89.f * Trig.TORADIANS;
+      }    
     viewPosX = viewTargetX + viewDistance * MathHelper.sin(yaw) * MathHelper.cos(pitch);
     viewPosZ = viewTargetZ + viewDistance * MathHelper.cos(yaw) * MathHelper.cos(pitch);
     viewPosY = viewTargetY + viewDistance * MathHelper.sin(pitch);
     
     this.lastClickXRight = x;
     this.lastClickZRight = z;
-    /**
-     * TODO move viewPosition using x/y as degrees of change input on yaw/pitch
-     */
     }
+//  AWLog.logDebug("pitch: "+pitch+" yaw: "+yaw);
   }
 
 @Override
