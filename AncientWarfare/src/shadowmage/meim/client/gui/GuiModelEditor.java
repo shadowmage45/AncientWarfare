@@ -28,8 +28,10 @@ import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -42,6 +44,7 @@ import shadowmage.ancient_framework.client.model.Primitive;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
+import shadowmage.ancient_framework.common.utils.Trig;
 import shadowmage.meim.client.texture.TextureManager;
 
 public class GuiModelEditor extends GuiContainerAdvanced implements IFileSelectCallback
@@ -61,6 +64,9 @@ int selectionMode = -1;
 private ModelPiece selectedPiece;
 private Primitive selectedPrimitive;
 
+/**
+ * stored/calc'd values
+ */
 float viewPosX, viewPosY, viewPosZ, viewTargetX, viewTargetY, viewTargetZ;
 private GuiModelEditorSetup setup;
 
@@ -69,9 +75,7 @@ public GuiModelEditor(ContainerBase container)
   super(container);
   this.setup = new GuiModelEditorSetup(this);
   this.shouldCloseOnVanillaKeys = true;
-  viewPosX = 5;
   viewPosZ = 5;
-  viewPosY = 5;
   }
 
 public void initModel()
@@ -92,8 +96,7 @@ public void initModel()
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  //element actions handled by anonymous element classes implementation in GuiModelEditorSetup
-  //this.refreshGui();
+ 
   }
 
 @Override
@@ -108,7 +111,85 @@ public int getYSize()
   return 240;
   }
 
-private ResourceLocation testTex = new ResourceLocation("ancientwarfare", "test.png");
+int lastClickXLeft;
+int lastClickZLeft;
+int lastClickXRight;
+int lastClickZRight;
+float yaw;
+float pitch;
+float viewDistance = 5.f;
+
+@Override
+public void handleMouseInput()
+  {
+  super.handleMouseInput();  
+  int x = Mouse.getEventX() * this.width / this.mc.displayWidth;
+  int z = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+  int button = Mouse.getEventButton();
+  boolean state = Mouse.getEventButtonState();
+  int wheelDelta = Mouse.getEventDWheel();
+  if(this.isMouseOverControl(x, z))
+    {
+    return;
+    }
+
+  if(button==-1 && wheelDelta!=0)
+    {
+    AWLog.logDebug("handling wheel input: "+x+","+z+","+" :: b: "+button+" s:"+state+" w: "+wheelDelta);
+    if(wheelDelta<0)
+      {
+      viewDistance+=0.25f;
+      }
+    else
+      {
+      viewDistance-=0.25f;
+      }
+    viewPosX = viewTargetX + viewDistance * MathHelper.sin(yaw) * MathHelper.cos(pitch);
+    viewPosZ = viewTargetZ + viewDistance * MathHelper.cos(yaw) * MathHelper.cos(pitch);
+    viewPosY = viewTargetY + viewDistance * MathHelper.sin(pitch);
+    }
+  else if(button==0)
+    {
+    AWLog.logDebug("handling mouse input: "+x+","+z+","+" :: b: "+button+" s:"+state+" w: "+wheelDelta);
+    if(state)
+      {
+      this.lastClickXLeft = x;
+      this.lastClickZLeft = z;      
+      }
+    else
+      {
+      /**
+       * TODO move viewTarget relative to current view yaw/pitch
+       * (will need move both viewTarget and viewPos in order to have proper movement)
+       * (need to move relative to current view facing -- will require a bit of trig)
+       */
+      }
+    }
+  else if(button==1 && state)
+    {
+    AWLog.logDebug("handling mouse input: "+x+","+z+","+" :: b: "+button+" s:"+state+" w: "+wheelDelta);
+    this.lastClickXRight = x;
+    this.lastClickZRight = z;
+    } 
+  else if(Mouse.isButtonDown(1))
+    {
+    float yawInput = x - lastClickXRight;
+    float pitchInput = z - lastClickZRight;
+      
+    yaw -= yawInput*Trig.TORADIANS;
+    pitch -= pitchInput*Trig.TORADIANS;
+    
+    viewPosX = viewTargetX + viewDistance * MathHelper.sin(yaw) * MathHelper.cos(pitch);
+    viewPosZ = viewTargetZ + viewDistance * MathHelper.cos(yaw) * MathHelper.cos(pitch);
+    viewPosY = viewTargetY + viewDistance * MathHelper.sin(pitch);
+    
+    this.lastClickXRight = x;
+    this.lastClickZRight = z;
+    /**
+     * TODO move viewPosition using x/y as degrees of change input on yaw/pitch
+     */
+    }
+  }
 
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
