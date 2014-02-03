@@ -32,6 +32,9 @@ import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.model.ModelPiece;
 import shadowmage.ancient_framework.client.model.Primitive;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
+import shadowmage.ancient_framework.client.model.PrimitiveQuad;
+import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 import shadowmage.meim.common.config.MEIMConfig;
@@ -81,60 +84,20 @@ private GuiNumberInputLine pieceRXInput;
 private GuiNumberInputLine pieceRYInput;
 private GuiNumberInputLine pieceRZInput;
 
-private GuiButtonSimple primitiveXMinus;
-private GuiButtonSimple primitiveXPlus;
-private GuiButtonSimple primitiveYMinus;
-private GuiButtonSimple primitiveYPlus;
-private GuiButtonSimple primitiveZMinus;
-private GuiButtonSimple primitiveZPlus;
 
-private GuiNumberInputLine primitiveXInput;
-private GuiNumberInputLine primitiveYInput;
-private GuiNumberInputLine primitiveZInput;
 
-private GuiButtonSimple primitiveRXMinus;
-private GuiButtonSimple primitiveRXPlus;
-private GuiButtonSimple primitiveRYMinus;
-private GuiButtonSimple primitiveRYPlus;
-private GuiButtonSimple primitiveRZMinus;
-private GuiButtonSimple primitiveRZPlus;
-
-private GuiNumberInputLine primitiveRXInput;
-private GuiNumberInputLine primitiveRYInput;
-private GuiNumberInputLine primitiveRZInput;
-
-private GuiButtonSimple primitiveX1Minus;
-private GuiButtonSimple primitiveX1Plus;
-private GuiButtonSimple primitiveY1Minus;
-private GuiButtonSimple primitiveY1Plus;
-private GuiButtonSimple primitiveZ1Minus;
-private GuiButtonSimple primitiveZ1Plus;
-
-private GuiNumberInputLine primitiveX1Input;
-private GuiNumberInputLine primitiveY1Input;
-private GuiNumberInputLine primitiveZ1Input;
-
-private GuiButtonSimple primitiveX2Minus;
-private GuiButtonSimple primitiveX2Plus;
-private GuiButtonSimple primitiveY2Minus;
-private GuiButtonSimple primitiveY2Plus;
-private GuiButtonSimple primitiveZ2Minus;
-private GuiButtonSimple primitiveZ2Plus;
-
-private GuiNumberInputLine primitiveX2Input;
-private GuiNumberInputLine primitiveY2Input;
-private GuiNumberInputLine primitiveZ2Input;
-
-private GuiScrollableArea leftControlPanel;
-private GuiScrollableArea leftPiecesPanel;
+private GuiScrollableArea leftPieceControlPanel;
+private GuiScrollableArea leftPrimitiveControlPanel;
 private GuiScrollableArea rightControlPanel;
 private GuiScrollableArea rightPrimitivesPanel;
+
+PrimitiveGuiSetup primitiveControls;
 
 
 HashMap<GuiString, ModelPiece> pieceLabelMap = new HashMap<GuiString, ModelPiece>();
 HashMap<GuiString, Primitive> primitiveLabelMap = new HashMap<GuiString, Primitive>();
 
-private float scale = 0.0625f;
+float scale = 0.0625f;
 
 public GuiModelEditorSetup(GuiModelEditor gui)
   {
@@ -143,26 +106,48 @@ public GuiModelEditorSetup(GuiModelEditor gui)
 
 public void setupControls()
   {
-  leftControlPanel = new GuiScrollableArea(0, gui, 0, 0, 100, 120, 120);
-  this.addElement(leftControlPanel);
-  leftPiecesPanel = new GuiScrollableArea(1, gui, 0, 120, 100, 120, 120);
-  this.addElement(leftPiecesPanel);
+  leftPieceControlPanel = new GuiScrollableArea(0, gui, 0, 0, 100, 120, 120);
+  this.addElement(leftPieceControlPanel);
+  leftPrimitiveControlPanel = new GuiScrollableArea(1, gui, 0, 120, 100, 120, 120);
+  this.addElement(leftPrimitiveControlPanel);
   rightControlPanel = new GuiScrollableArea(2, gui, 0, 0, 100, 120, 120);
   this.addElement(rightControlPanel);
   rightPrimitivesPanel = new GuiScrollableArea(3, gui, 0, 120, 100, 120, 120);
   this.addElement(rightPrimitivesPanel); 
     
-  addLeftControls();
-  addRightControls();
-  addLeftLabels();
+  addPieceControls();
+  addPrimitiveControls();
+  addFileControls();
   addRightLabels();
   }
 
-private void addLeftControls()
+private void addPrimitiveControls()
+  {
+  this.primitiveControls = null;
+  if(this.gui.selectedPrimitive instanceof PrimitiveBox)
+    {
+    this.primitiveControls = new PrimitiveBoxSetup(gui, this);
+    
+    }
+  else if(this.gui.selectedPrimitive instanceof PrimitiveQuad)
+    {
+    
+    }
+  else if(this.gui.selectedPrimitive instanceof PrimitiveTriangle)
+    {
+    
+    }
+  if(this.primitiveControls!=null)
+    {
+    this.primitiveControls.addElements(leftPrimitiveControlPanel);
+    }
+  }
+
+private void addPieceControls()
   {
   int totalHeight = 0;
    
-  newPiece = new GuiButtonSimple(0, leftControlPanel, 84, 12, "New Piece")
+  newPiece = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "New Piece")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -176,9 +161,9 @@ private void addLeftControls()
     };  
   newPiece.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(newPiece);
+  leftPieceControlPanel.elements.add(newPiece);
   
-  copyPiece = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Copy Piece")
+  copyPiece = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Copy Piece")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -192,9 +177,9 @@ private void addLeftControls()
     };  
   copyPiece.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(copyPiece);
+  leftPieceControlPanel.elements.add(copyPiece);
   
-  clearSelection = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Clear Selection")
+  clearSelection = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Clear Selection")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -208,9 +193,9 @@ private void addLeftControls()
     };  
   clearSelection.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(clearSelection);
+  leftPieceControlPanel.elements.add(clearSelection);
   
-  deletePiece = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Delete Piece")
+  deletePiece = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Delete Piece")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -224,9 +209,9 @@ private void addLeftControls()
     };  
   deletePiece.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(deletePiece);
+  leftPieceControlPanel.elements.add(deletePiece);
     
-  changePieceParent = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Change Parent")
+  changePieceParent = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Change Parent")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -240,9 +225,9 @@ private void addLeftControls()
     };  
   changePieceParent.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(changePieceParent);
+  leftPieceControlPanel.elements.add(changePieceParent);
   
-  clearPieceParent = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Clear Parent")
+  clearPieceParent = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Clear Parent")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -259,9 +244,9 @@ private void addLeftControls()
     };  
   clearPieceParent.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(clearPieceParent);
+  leftPieceControlPanel.elements.add(clearPieceParent);
   
-  addBox = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Add Box")
+  addBox = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Add Box")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -275,9 +260,9 @@ private void addLeftControls()
     };  
   addBox.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(addBox);
+  leftPieceControlPanel.elements.add(addBox);
   
-  deleteBox = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Delete Box")
+  deleteBox = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Delete Box")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -291,9 +276,9 @@ private void addLeftControls()
     };  
   deleteBox.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(deleteBox);
+  leftPieceControlPanel.elements.add(deleteBox);
   
-  changeBoxOwnerPiece = new GuiButtonSimple(0, leftControlPanel, 84, 12, "Change Box Owner")
+  changeBoxOwnerPiece = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Change Box Owner")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -307,12 +292,10 @@ private void addLeftControls()
     };  
   changeBoxOwnerPiece.updateRenderPos(0, totalHeight);
   totalHeight+=12;
-  leftControlPanel.elements.add(changeBoxOwnerPiece);
+  leftPieceControlPanel.elements.add(changeBoxOwnerPiece);
      
-  totalHeight = addLeftPieceControls(totalHeight);
-  totalHeight = addLeftPrimitiveControls(totalHeight);
-    
-  leftControlPanel.updateTotalHeight(totalHeight);
+  totalHeight = addLeftPieceControls(totalHeight);    
+  leftPieceControlPanel.updateTotalHeight(totalHeight);
   }
 
 private int addLeftPieceControls(int totalHeight)
@@ -321,7 +304,7 @@ private int addLeftPieceControls(int totalHeight)
   int col2 = 25;
   int col3 = 25+12+2;
   int col4 = 25+12+2+20+2;
-  pieceXMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+  pieceXMinus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "-")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -335,9 +318,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceXMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(pieceXMinus);
+  leftPieceControlPanel.addGuiElement(pieceXMinus);
   
-  pieceXPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+  pieceXPlus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "+")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -351,9 +334,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceXPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(pieceXPlus);
+  leftPieceControlPanel.addGuiElement(pieceXPlus);
   
-  pieceXInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+  pieceXInput = new GuiNumberInputLine(0, leftPieceControlPanel, 20, 12, 4, "0")
     {
     @Override
     public void onElementActivated()      
@@ -367,16 +350,16 @@ private int addLeftPieceControls(int totalHeight)
     };
   pieceXInput.setValue(0.f);
   pieceXInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(pieceXInput);
+  leftPieceControlPanel.addGuiElement(pieceXInput);
   
-  GuiString label = new GuiString(0, leftControlPanel, 25, 12, "P:X");
+  GuiString label = new GuiString(0, leftPieceControlPanel, 25, 12, "P:X");
   label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
+  leftPieceControlPanel.addGuiElement(label);
   
   totalHeight+=12;
   
   
-  pieceYMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+  pieceYMinus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "-")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -390,9 +373,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceYMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(pieceYMinus);
+  leftPieceControlPanel.addGuiElement(pieceYMinus);
   
-  pieceYPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+  pieceYPlus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "+")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -406,9 +389,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceYPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(pieceYPlus);
+  leftPieceControlPanel.addGuiElement(pieceYPlus);
   
-  pieceYInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+  pieceYInput = new GuiNumberInputLine(0, leftPieceControlPanel, 20, 12, 4, "0")
     {
     @Override
     public void onElementActivated()      
@@ -422,16 +405,16 @@ private int addLeftPieceControls(int totalHeight)
     };
   pieceYInput.setValue(0.f);
   pieceYInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(pieceYInput);
+  leftPieceControlPanel.addGuiElement(pieceYInput);
   
-  label = new GuiString(0, leftControlPanel, 25, 12, "P:Y");
+  label = new GuiString(0, leftPieceControlPanel, 25, 12, "P:Y");
   label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
+  leftPieceControlPanel.addGuiElement(label);
   
   totalHeight+=12;
     
   
-  pieceZMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+  pieceZMinus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "-")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -445,9 +428,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceZMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(pieceZMinus);
+  leftPieceControlPanel.addGuiElement(pieceZMinus);
   
-  pieceZPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+  pieceZPlus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "+")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -461,9 +444,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceZPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(pieceZPlus);
+  leftPieceControlPanel.addGuiElement(pieceZPlus);
   
-  pieceZInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+  pieceZInput = new GuiNumberInputLine(0, leftPieceControlPanel, 20, 12, 4, "0")
     {
     @Override
     public void onElementActivated()      
@@ -477,16 +460,16 @@ private int addLeftPieceControls(int totalHeight)
     };
   pieceZInput.setValue(0.f);
   pieceZInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(pieceZInput);
+  leftPieceControlPanel.addGuiElement(pieceZInput);
   
-  label = new GuiString(0, leftControlPanel, 25, 12, "P:Z");
+  label = new GuiString(0, leftPieceControlPanel, 25, 12, "P:Z");
   label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
+  leftPieceControlPanel.addGuiElement(label);
   
   totalHeight+=12;
   
   
-  pieceRXMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+  pieceRXMinus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "-")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -500,9 +483,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceRXMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(pieceRXMinus);
+  leftPieceControlPanel.addGuiElement(pieceRXMinus);
   
-  pieceRXPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+  pieceRXPlus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "+")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -516,9 +499,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceRXPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(pieceRXPlus);
+  leftPieceControlPanel.addGuiElement(pieceRXPlus);
   
-  pieceRXInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+  pieceRXInput = new GuiNumberInputLine(0, leftPieceControlPanel, 20, 12, 4, "0")
     {
     @Override
     public void onElementActivated()      
@@ -532,16 +515,16 @@ private int addLeftPieceControls(int totalHeight)
     };
   pieceRXInput.setValue(0.f);
   pieceRXInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(pieceRXInput);
+  leftPieceControlPanel.addGuiElement(pieceRXInput);
   
-  label = new GuiString(0, leftControlPanel, 25, 12, "P:RX");
+  label = new GuiString(0, leftPieceControlPanel, 25, 12, "P:RX");
   label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
+  leftPieceControlPanel.addGuiElement(label);
   
   totalHeight+=12;
   
   
-  pieceRYMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+  pieceRYMinus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "-")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -555,9 +538,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceRYMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(pieceRYMinus);
+  leftPieceControlPanel.addGuiElement(pieceRYMinus);
   
-  pieceRYPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+  pieceRYPlus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "+")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -571,9 +554,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceRYPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(pieceRYPlus);
+  leftPieceControlPanel.addGuiElement(pieceRYPlus);
   
-  pieceRYInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+  pieceRYInput = new GuiNumberInputLine(0, leftPieceControlPanel, 20, 12, 4, "0")
     {
     @Override
     public void onElementActivated()      
@@ -587,16 +570,16 @@ private int addLeftPieceControls(int totalHeight)
     };
   pieceRYInput.setValue(0.f);
   pieceRYInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(pieceRYInput);
+  leftPieceControlPanel.addGuiElement(pieceRYInput);
   
-  label = new GuiString(0, leftControlPanel, 25, 12, "P:RY");
+  label = new GuiString(0, leftPieceControlPanel, 25, 12, "P:RY");
   label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
+  leftPieceControlPanel.addGuiElement(label);
   
   totalHeight+=12;
   
   
-  pieceRZMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
+  pieceRZMinus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "-")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -610,9 +593,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceRZMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(pieceRZMinus);
+  leftPieceControlPanel.addGuiElement(pieceRZMinus);
   
-  pieceRZPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
+  pieceRZPlus = new GuiButtonSimple(0, leftPieceControlPanel, 12, 12, "+")
     {
     @Override
     public boolean handleMousePressed(int x, int y, int num)
@@ -626,9 +609,9 @@ private int addLeftPieceControls(int totalHeight)
       }
     };  
   pieceRZPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(pieceRZPlus);
+  leftPieceControlPanel.addGuiElement(pieceRZPlus);
   
-  pieceRZInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
+  pieceRZInput = new GuiNumberInputLine(0, leftPieceControlPanel, 20, 12, 4, "0")
     {
     @Override
     public void onElementActivated()      
@@ -642,729 +625,18 @@ private int addLeftPieceControls(int totalHeight)
     };
   pieceRZInput.setValue(0.f);
   pieceRZInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(pieceRZInput);
+  leftPieceControlPanel.addGuiElement(pieceRZInput);
   
-  label = new GuiString(0, leftControlPanel, 25, 12, "P:RZ");
+  label = new GuiString(0, leftPieceControlPanel, 25, 12, "P:RZ");
   label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
+  leftPieceControlPanel.addGuiElement(label);
   
   totalHeight+=12;
       
   return totalHeight;
   }
 
-private int addLeftPrimitiveControls(int totalHeight)
-  {
-  int col1 = 0;
-  int col2 = 25;
-  int col3 = 25+12+2;
-  int col4 = 25+12+2+20+2;
-  
-  primitiveXMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x()-1 * scale, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());          
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveXMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveXMinus);
-  
-  primitiveXPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x()+1 * scale, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveXPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveXPlus);
-  
-  primitiveXInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {        
-        gui.selectedPrimitive.setOrigin(getFloatVal() * scale, gui.selectedPrimitive.y(), gui.selectedPrimitive.z());          
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveXInput.setValue(0.f);
-  primitiveXInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveXInput);
-  
-  GuiString label = new GuiString(0, leftControlPanel, 25, 12, "B:OX");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveYMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y()-1 * scale, gui.selectedPrimitive.z());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveYMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveYMinus);
-  
-  primitiveYPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y()+1 * scale, gui.selectedPrimitive.z());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveYPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveYPlus);
-  
-  primitiveYInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), getFloatVal() * scale, gui.selectedPrimitive.z());  
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveYInput.setValue(0.f);
-  primitiveYInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveYInput);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:OY");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveZMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z()-1 * scale);  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveZMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZMinus);
-  
-  primitiveZPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), gui.selectedPrimitive.z()+1 * scale);  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveZPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZPlus);
-  
-  primitiveZInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setOrigin(gui.selectedPrimitive.x(), gui.selectedPrimitive.y(), getFloatVal() * scale);  
-        updateButtonValues();
-        }
-      }    
-    };
-  primitiveZInput.setValue(0.f);
-  primitiveZInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZInput);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:OZ");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  primitiveRXMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        { 
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx()-1, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveRXMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRXMinus);
-  
-  primitiveRXPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx()+1, gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveRXPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRXPlus);
-  
-  primitiveRXInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setRotation(getFloatVal(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz());  
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveRXInput.setValue(0.f);
-  primitiveRXInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRXInput);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:RX");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveRYMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry()-1, gui.selectedPrimitive.rz());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveRYMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRYMinus);
-  
-  primitiveRYPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry()+1, gui.selectedPrimitive.rz());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveRYPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRYPlus);
-  
-  primitiveRYInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), getFloatVal(), gui.selectedPrimitive.rz());
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveRYInput.setValue(0.f);
-  primitiveRYInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRYInput);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:RY");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveRZMinus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz()-1);  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveRZMinus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRZMinus);
-  
-  primitiveRZPlus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), gui.selectedPrimitive.rz()+1);
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveRZPlus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRZPlus);
-  
-  primitiveRZInput = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setRotation(gui.selectedPrimitive.rx(), gui.selectedPrimitive.ry(), getFloatVal());  
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveRZInput.setValue(0.f);
-  primitiveRZInput.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveRZInput);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:RZ");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveX1Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1()-1 * scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());  
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveX1Minus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveX1Minus);
-  
-  primitiveX1Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1()+1 * scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveX1Plus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveX1Plus);
-  
-  primitiveX1Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(getFloatVal() * scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()); 
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveX1Input.setValue(0.f);
-  primitiveX1Input.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveX1Input);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:X1");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveY1Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1()-1 * scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveY1Minus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveY1Minus);
-  
-  primitiveY1Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1()+1 * scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveY1Plus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveY1Plus);
-  
-  primitiveY1Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), getFloatVal() * scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());  
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveY1Input.setValue(0.f);
-  primitiveY1Input.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveY1Input);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:Y1");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveZ1Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1()-1 * scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveZ1Minus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZ1Minus);
-  
-  primitiveZ1Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1()+1 * scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveZ1Plus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZ1Plus);
-  
-  primitiveZ1Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), getFloatVal() * scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()); 
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveZ1Input.setValue(0.f);
-  primitiveZ1Input.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZ1Input);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:Z1");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveX2Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width()-1 * scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues(); 
-        }
-      return true;
-      }
-    };  
-  primitiveX2Minus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveX2Minus);
-  
-  primitiveX2Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width()+1 * scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveX2Plus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveX2Plus);
-  
-  primitiveX2Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), getFloatVal() * scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());   
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveX2Input.setValue(0.f);
-  primitiveX2Input.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveX2Input);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:X2");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveY2Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height()-1 * scale, gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveY2Minus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveY2Minus);
-  
-  primitiveY2Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height()+1 * scale, gui.selectedPrimitive.length());
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveY2Plus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveY2Plus);
-  
-  primitiveY2Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), getFloatVal() * scale, gui.selectedPrimitive.length()); 
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveY2Input.setValue(0.f);
-  primitiveY2Input.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveY2Input);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:Y2");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  primitiveZ2Minus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "-")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()-1 * scale);
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveZ2Minus.updateRenderPos(col2, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZ2Minus);
-  
-  primitiveZ2Plus = new GuiButtonSimple(0, leftControlPanel, 12, 12, "+")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()+1 * scale);
-        updateButtonValues();
-        }
-      return true;
-      }
-    };  
-  primitiveZ2Plus.updateRenderPos(col4, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZ2Plus);
-  
-  primitiveZ2Input = new GuiNumberInputLine(0, leftControlPanel, 20, 12, 4, "0")
-    {
-    @Override
-    public void onElementActivated()
-      {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), getFloatVal() * scale);   
-        updateButtonValues();
-        }
-      }
-    };
-  primitiveZ2Input.setValue(0.f);
-  primitiveZ2Input.updateRenderPos(col3, totalHeight);
-  leftControlPanel.addGuiElement(primitiveZ2Input);
-  
-  label = new GuiString(0, leftControlPanel, 25, 12, "B:Z2");
-  label.updateRenderPos(col1, totalHeight);
-  leftControlPanel.addGuiElement(label);
-  
-  totalHeight+=12;
-  
-  
-  return totalHeight;
-  }
-
-public void addLeftLabels()
-  {
-  int totalHeight = 0;
-  pieceLabelMap.clear();
-  if(gui.model!=null)
-    {
-    List<ModelPiece> pieces = new ArrayList<ModelPiece>();
-    gui.model.getPieces(pieces);
-    
-    GuiString label = new GuiString(0, leftPiecesPanel, 80, 12, "Pieces:");
-    label.updateRenderPos(0, totalHeight);
-    leftPiecesPanel.addGuiElement(label);
-    totalHeight+=12;
-    
-    for(ModelPiece piece : pieces)
-      {
-      label = new GuiString(0, leftPiecesPanel, 80, 12, piece.getName())
-        {
-        @Override
-        public void onElementActivated()
-          {
-          ModelPiece p = pieceLabelMap.get(this);
-          if(p!=null)
-            {
-            gui.selectedPiece = p;
-            gui.selectedPrimitive = null;
-            gui.refreshGui();
-            updateButtonValues();
-            AWLog.logDebug("selected piece: "+gui.selectedPiece + " prims: " + (gui.selectedPiece!=null ? gui.selectedPiece.getPrimitives().size() : "null"));
-            }
-          }
-        };
-      label.clickable = true;
-      label.updateRenderPos(0, totalHeight);
-      pieceLabelMap.put(label, piece);
-      leftPiecesPanel.addGuiElement(label);
-      totalHeight+=12;
-      }    
-    }  
-  leftPiecesPanel.updateTotalHeight(totalHeight);
-  }
-
-private void addRightControls()
+private void addFileControls()
   {
   int totalHeight = 0;
   
@@ -1496,6 +768,44 @@ private void addRightControls()
 public void addRightLabels()
   {
   int totalHeight = 0;
+  pieceLabelMap.clear();
+  if(gui.model!=null)
+    {
+    List<ModelPiece> pieces = new ArrayList<ModelPiece>();
+    gui.model.getPieces(pieces);
+    
+    GuiString label = new GuiString(0, rightPrimitivesPanel, 80, 12, "Pieces:");
+    label.updateRenderPos(0, totalHeight);
+    rightPrimitivesPanel.addGuiElement(label);
+    totalHeight+=12;
+    
+    for(ModelPiece piece : pieces)
+      {
+      label = new GuiString(0, rightPrimitivesPanel, 80, 12, piece.getName())
+        {
+        @Override
+        public void onElementActivated()
+          {
+          ModelPiece p = pieceLabelMap.get(this);
+          if(p!=null)
+            {
+            gui.selectedPiece = p;
+            gui.selectedPrimitive = null;
+            gui.refreshGui();
+            updateButtonValues();
+            AWLog.logDebug("selected piece: "+gui.selectedPiece + " prims: " + (gui.selectedPiece!=null ? gui.selectedPiece.getPrimitives().size() : "null"));
+            }
+          }
+        };
+      label.clickable = true;
+      label.updateRenderPos(0, totalHeight);
+      pieceLabelMap.put(label, piece);
+      rightPrimitivesPanel.addGuiElement(label);
+      totalHeight+=12;
+      }    
+    }  
+  
+  
   primitiveLabelMap.clear();
   
   if(gui.selectedPiece!=null)
@@ -1537,31 +847,25 @@ private void addElement(GuiElement element)
 
 public void updateControls(int guiLeft, int guiTop, int width, int height)
   {
-  leftControlPanel.updateRenderPos(-guiLeft, -guiTop);
-  leftControlPanel.setHeight(height/2);
-  leftControlPanel.updateTotalHeight(leftControlPanel.totalHeight);
-  leftPiecesPanel.updateRenderPos(-guiLeft, -guiTop + height/2);
-  leftPiecesPanel.setHeight(height/2);
-  leftPiecesPanel.updateTotalHeight(leftPiecesPanel.totalHeight);
+  leftPieceControlPanel.updateRenderPos(-guiLeft, -guiTop);
+  leftPieceControlPanel.setHeight(height/2);
+  leftPieceControlPanel.updateTotalHeight(leftPieceControlPanel.totalHeight);
+  leftPrimitiveControlPanel.updateRenderPos(-guiLeft, -guiTop + height/2);
+  leftPrimitiveControlPanel.setHeight(height/2);
+  leftPrimitiveControlPanel.updateTotalHeight(leftPrimitiveControlPanel.totalHeight);
   rightControlPanel.updateRenderPos(-guiLeft + width - 100, -guiTop);
   rightControlPanel.setHeight(height/2);
   rightControlPanel.updateTotalHeight(rightControlPanel.totalHeight);
   rightPrimitivesPanel.updateRenderPos(-guiLeft + width - 100, -guiTop + height/2);
   rightPrimitivesPanel.setHeight(height/2); 
   rightPrimitivesPanel.updateTotalHeight(rightPrimitivesPanel.totalHeight);
-  
-  leftPiecesPanel.elements.clear();
-  addLeftLabels();
+
   rightPrimitivesPanel.elements.clear();
   addRightLabels();
   
   this.updateButtonValues();
   }
 
-
-/**
- * 
- */
 public void updateButtonValues()
   {
   pieceXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.x()/scale);
@@ -1572,21 +876,21 @@ public void updateButtonValues()
   pieceRYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.ry());
   pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz()); 
   
-  primitiveXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x()/scale);
-  primitiveYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y()/scale);
-  primitiveZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z()/scale);
-  
-  primitiveRXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rx());
-  primitiveRYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.ry());
-  primitiveRZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rz()); 
-  
-  primitiveX1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x1()/scale);
-  primitiveY1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y1()/scale);
-  primitiveZ1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z1()/scale);
-  
-  primitiveX2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.width()/scale);
-  primitiveY2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.height()/scale);
-  primitiveZ2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.length()/scale);  
+//  primitiveXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x()/scale);
+//  primitiveYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y()/scale);
+//  primitiveZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z()/scale);
+//  
+//  primitiveRXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rx());
+//  primitiveRYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.ry());
+//  primitiveRZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rz()); 
+//  
+//  primitiveX1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x1()/scale);
+//  primitiveY1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y1()/scale);
+//  primitiveZ1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z1()/scale);
+//  
+//  primitiveX2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.width()/scale);
+//  primitiveY2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.height()/scale);
+//  primitiveZ2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.length()/scale);  
   }
 
 }

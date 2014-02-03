@@ -30,7 +30,6 @@ import shadowmage.ancient_framework.common.config.AWLog;
 
 public class PrimitiveBox extends Primitive
 {
-float ratio = 0.0625f;
 
 public PrimitiveBox(ModelPiece parent)
   {
@@ -196,6 +195,12 @@ public void addPrimitiveLines(ArrayList<String> lines)
   b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
   b.append(x1).append(",").append(y1).append(",").append(z1).append(",").append(x2).append(",").append(y2).append(",").append(z2);
   lines.add(b.toString());
+  }
+
+@Override
+public void readFromLine(String[] lineBits)
+  {
+  // TODO Auto-generated method stub  
   }
 
 }

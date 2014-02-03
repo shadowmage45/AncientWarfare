@@ -127,5 +127,7 @@ public String toString()
 
 public abstract void addPrimitiveLines(ArrayList<String> lines);
 
+public abstract void readFromLine(String[] lineBits);
+
 
 }
