@@ -99,16 +99,16 @@ public void setupControls()
       String name = inputLine.getText();
       if(!name.equals(""))
         {
-        float x = parentGui.selectedPiece == null ? 0.f : parentGui.selectedPiece.x();
-        float y = parentGui.selectedPiece == null ? 0.f : parentGui.selectedPiece.y();
-        float z = parentGui.selectedPiece == null ? 0.f : parentGui.selectedPiece.z();
-        float rx = parentGui.selectedPiece == null ? 0.f : parentGui.selectedPiece.rx();
-        float ry = parentGui.selectedPiece == null ? 0.f : parentGui.selectedPiece.ry();
-        float rz = parentGui.selectedPiece == null ? 0.f : parentGui.selectedPiece.rz();        
-        ModelPiece p = new ModelPiece(parentGui.model, name, x, y, z, rx, ry, rz, parentGui.selectedPiece);
+        float x = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().x();
+        float y = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().y();
+        float z = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().z();
+        float rx = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().rx();
+        float ry = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().ry();
+        float rz = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().rz();        
+        ModelPiece p = new ModelPiece(parentGui.model, name, x, y, z, rx, ry, rz, parentGui.getSelectedPiece());
         parentGui.model.addPiece(p);
-        parentGui.selectedPiece = p;
-        parentGui.selectedPrimitive = null;        
+        parentGui.setSelectedPiece(p);
+        parentGui.setSelectedPrimitive(null);        
         Minecraft.getMinecraft().displayGuiScreen(parentGui);
         parentGui.refreshGui();
         }

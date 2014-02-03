@@ -53,14 +53,10 @@ private GuiButtonSimple loadTexture;
 
 private GuiButtonSimple copyPiece;
 private GuiButtonSimple newPiece;
-private GuiButtonSimple clearSelection;
+//private GuiButtonSimple clearSelection;
 private GuiButtonSimple deletePiece;
 private GuiButtonSimple changePieceParent;
-private GuiButtonSimple clearPieceParent;
-private GuiButtonSimple changeBoxOwnerPiece;
-
-private GuiButtonSimple addBox;
-private GuiButtonSimple deleteBox;
+//private GuiButtonSimple clearPieceParent;
 
 private GuiButtonSimple pieceXMinus;
 private GuiButtonSimple pieceXPlus;
@@ -84,15 +80,12 @@ private GuiNumberInputLine pieceRXInput;
 private GuiNumberInputLine pieceRYInput;
 private GuiNumberInputLine pieceRZInput;
 
-
-
 private GuiScrollableArea leftPieceControlPanel;
 private GuiScrollableArea leftPrimitiveControlPanel;
 private GuiScrollableArea rightControlPanel;
 private GuiScrollableArea rightPrimitivesPanel;
 
 PrimitiveGuiSetup primitiveControls;
-
 
 HashMap<GuiString, ModelPiece> pieceLabelMap = new HashMap<GuiString, ModelPiece>();
 HashMap<GuiString, Primitive> primitiveLabelMap = new HashMap<GuiString, Primitive>();
@@ -124,16 +117,15 @@ public void setupControls()
 private void addPrimitiveControls()
   {
   this.primitiveControls = null;
-  if(this.gui.selectedPrimitive instanceof PrimitiveBox)
+  if(this.gui.getSelectedPrimitive() instanceof PrimitiveBox)
     {
-    this.primitiveControls = new PrimitiveBoxSetup(gui, this);
-    
+    this.primitiveControls = new PrimitiveBoxSetup(gui, this);    
     }
-  else if(this.gui.selectedPrimitive instanceof PrimitiveQuad)
+  else if(this.gui.getSelectedPrimitive() instanceof PrimitiveQuad)
     {
-    
+    this.primitiveControls = new PrimitiveQuadSetup(gui, this);
     }
-  else if(this.gui.selectedPrimitive instanceof PrimitiveTriangle)
+  else if(this.gui.getSelectedPrimitive() instanceof PrimitiveTriangle)
     {
     
     }
@@ -179,21 +171,21 @@ private void addPieceControls()
   totalHeight+=12;
   leftPieceControlPanel.elements.add(copyPiece);
   
-  clearSelection = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Clear Selection")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num))
-        {
-        gui.clearSelection();
-        }
-      return true;
-      }
-    };  
-  clearSelection.updateRenderPos(0, totalHeight);
-  totalHeight+=12;
-  leftPieceControlPanel.elements.add(clearSelection);
+//  clearSelection = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Clear Selection")
+//    {
+//    @Override
+//    public boolean handleMousePressed(int x, int y, int num)
+//      {
+//      if(super.handleMousePressed(x, y, num))
+//        {
+//        gui.clearSelection();
+//        }
+//      return true;
+//      }
+//    };  
+//  clearSelection.updateRenderPos(0, totalHeight);
+//  totalHeight+=12;
+//  leftPieceControlPanel.elements.add(clearSelection);
   
   deletePiece = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Delete Piece")
     {
@@ -227,72 +219,26 @@ private void addPieceControls()
   totalHeight+=12;
   leftPieceControlPanel.elements.add(changePieceParent);
   
-  clearPieceParent = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Clear Parent")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num))
-        {
-        if(gui.selectedPiece!=null && gui.selectedPiece.getParent()!=null)
-          {
-          gui.selectedPiece.getParent().removeChild(gui.selectedPiece);
-          }
-        }
-      return true;
-      }
-    };  
-  clearPieceParent.updateRenderPos(0, totalHeight);
-  totalHeight+=12;
-  leftPieceControlPanel.elements.add(clearPieceParent);
+//  clearPieceParent = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Clear Parent")
+//    {
+//    @Override
+//    public boolean handleMousePressed(int x, int y, int num)
+//      {
+//      if(super.handleMousePressed(x, y, num))
+//        {
+//        if(gui.selectedPiece!=null && gui.selectedPiece.getParent()!=null)
+//          {
+//          gui.selectedPiece.getParent().removeChild(gui.selectedPiece);
+//          }
+//        }
+//      return true;
+//      }
+//    };  
+//  clearPieceParent.updateRenderPos(0, totalHeight);
+//  totalHeight+=12;
+//  leftPieceControlPanel.elements.add(clearPieceParent);
   
-  addBox = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Add Box")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num))
-        {
-        Minecraft.getMinecraft().displayGuiScreen(new GuiNewPrimitive((ContainerBase) gui.inventorySlots, gui));
-        }
-      return true;
-      }
-    };  
-  addBox.updateRenderPos(0, totalHeight);
-  totalHeight+=12;
-  leftPieceControlPanel.elements.add(addBox);
-  
-  deleteBox = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Delete Box")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.deletePiece();
-        }
-      return true;
-      }
-    };  
-  deleteBox.updateRenderPos(0, totalHeight);
-  totalHeight+=12;
-  leftPieceControlPanel.elements.add(deleteBox);
-  
-  changeBoxOwnerPiece = new GuiButtonSimple(0, leftPieceControlPanel, 84, 12, "Change Box Owner")
-    {
-    @Override
-    public boolean handleMousePressed(int x, int y, int num)
-      {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {
-        gui.swapBox();
-        }
-      return true;
-      }
-    };  
-  changeBoxOwnerPiece.updateRenderPos(0, totalHeight);
-  totalHeight+=12;
-  leftPieceControlPanel.elements.add(changeBoxOwnerPiece);
+ 
      
   totalHeight = addLeftPieceControls(totalHeight);    
   leftPieceControlPanel.updateTotalHeight(totalHeight);
@@ -309,9 +255,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x() - 1 * scale, gui.selectedPiece.y(), gui.selectedPiece.z());  
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x() - 1 * scale, gui.getSelectedPiece().y(), gui.getSelectedPiece().z());  
         updateButtonValues();
         }
       return true;
@@ -325,9 +271,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x()+1 * scale, gui.selectedPiece.y(), gui.selectedPiece.z());  
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x()+1 * scale, gui.getSelectedPiece().y(), gui.getSelectedPiece().z());  
         updateButtonValues();
         }
       return true;
@@ -341,9 +287,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public void onElementActivated()      
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(getFloatVal() * scale, gui.selectedPiece.y(), gui.selectedPiece.z());  
+        gui.getSelectedPiece().setPosition(getFloatVal() * scale, gui.getSelectedPiece().y(), gui.getSelectedPiece().z());  
         updateButtonValues();
         }
       }     
@@ -364,9 +310,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y()-1 * scale, gui.selectedPiece.z()); 
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x(), gui.getSelectedPiece().y()-1 * scale, gui.getSelectedPiece().z()); 
         updateButtonValues();
         }
       return true;
@@ -380,9 +326,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y()+1 * scale, gui.selectedPiece.z());  
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x(), gui.getSelectedPiece().y()+1 * scale, gui.getSelectedPiece().z());  
         updateButtonValues();
         }
       return true;
@@ -396,9 +342,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public void onElementActivated()      
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), getFloatVal() * scale, gui.selectedPiece.z());      
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x(), getFloatVal() * scale, gui.getSelectedPiece().z());      
         updateButtonValues();
         }
       }  
@@ -419,9 +365,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), gui.selectedPiece.z()-1 * scale);  
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x(), gui.getSelectedPiece().y(), gui.getSelectedPiece().z()-1 * scale);  
         updateButtonValues();
         }
       return true;
@@ -435,9 +381,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), gui.selectedPiece.z()+1 * scale);  
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x(), gui.getSelectedPiece().y(), gui.getSelectedPiece().z()+1 * scale);  
         updateButtonValues();
         }
       return true;
@@ -451,9 +397,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public void onElementActivated()      
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setPosition(gui.selectedPiece.x(), gui.selectedPiece.y(), getFloatVal() * scale);   
+        gui.getSelectedPiece().setPosition(gui.getSelectedPiece().x(), gui.getSelectedPiece().y(), getFloatVal() * scale);   
         updateButtonValues();   
         }
       }       
@@ -474,9 +420,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx()-1, gui.selectedPiece.ry(), gui.selectedPiece.rz());  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx()-1, gui.getSelectedPiece().ry(), gui.getSelectedPiece().rz());  
         updateButtonValues();
         }
       return true;
@@ -490,9 +436,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx()+1, gui.selectedPiece.ry(), gui.selectedPiece.rz());  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx()+1, gui.getSelectedPiece().ry(), gui.getSelectedPiece().rz());  
         updateButtonValues();
         }
       return true;
@@ -506,9 +452,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public void onElementActivated()      
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(getFloatVal(), gui.selectedPiece.ry(), gui.selectedPiece.rz());  
+        gui.getSelectedPiece().setRotation(getFloatVal(), gui.getSelectedPiece().ry(), gui.getSelectedPiece().rz());  
         updateButtonValues();
         }
       }
@@ -529,9 +475,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry()-1, gui.selectedPiece.rz());  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx(), gui.getSelectedPiece().ry()-1, gui.getSelectedPiece().rz());  
         updateButtonValues();
         }
       return true;
@@ -545,9 +491,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry()+1, gui.selectedPiece.rz());  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx(), gui.getSelectedPiece().ry()+1, gui.getSelectedPiece().rz());  
         updateButtonValues();
         }
       return true;
@@ -561,9 +507,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public void onElementActivated()      
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), getFloatVal(), gui.selectedPiece.rz());  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx(), getFloatVal(), gui.getSelectedPiece().rz());  
         updateButtonValues();
         }
       }   
@@ -584,9 +530,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(), gui.selectedPiece.rz()-1);  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx(), gui.getSelectedPiece().ry(), gui.getSelectedPiece().rz()-1);  
         updateButtonValues();
         }
       return true;
@@ -600,9 +546,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(), gui.selectedPiece.rz()+1);  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx(), gui.getSelectedPiece().ry(), gui.getSelectedPiece().rz()+1);  
         updateButtonValues();
         }
       return true;
@@ -616,9 +562,9 @@ private int addLeftPieceControls(int totalHeight)
     @Override
     public void onElementActivated()      
       {
-      if(GuiModelEditor.model!=null && gui.selectedPiece!=null)
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null)
         {
-        gui.selectedPiece.setRotation(gui.selectedPiece.rx(), gui.selectedPiece.ry(),  getFloatVal());  
+        gui.getSelectedPiece().setRotation(gui.getSelectedPiece().rx(), gui.getSelectedPiece().ry(),  getFloatVal());  
         updateButtonValues();
         }
       }      
@@ -789,11 +735,11 @@ public void addRightLabels()
           ModelPiece p = pieceLabelMap.get(this);
           if(p!=null)
             {
-            gui.selectedPiece = p;
-            gui.selectedPrimitive = null;
+            gui.setSelectedPiece(p);
+            gui.setSelectedPrimitive(null);
             gui.refreshGui();
             updateButtonValues();
-            AWLog.logDebug("selected piece: "+gui.selectedPiece + " prims: " + (gui.selectedPiece!=null ? gui.selectedPiece.getPrimitives().size() : "null"));
+            AWLog.logDebug("selected piece: "+gui.getSelectedPiece() + " prims: " + (gui.getSelectedPiece()!=null ? gui.getSelectedPiece().getPrimitives().size() : "null"));
             }
           }
         };
@@ -808,7 +754,7 @@ public void addRightLabels()
   
   primitiveLabelMap.clear();
   
-  if(gui.selectedPiece!=null)
+  if(gui.getSelectedPiece()!=null)
     {
     GuiString label = new GuiString(0, rightPrimitivesPanel, 80, 12, "Primitives:");
     label.updateRenderPos(0, totalHeight);
@@ -816,16 +762,14 @@ public void addRightLabels()
     totalHeight+=12;
     
     int num = 1;    
-    for(Primitive p : gui.selectedPiece.getPrimitives())
+    for(Primitive p : gui.getSelectedPiece().getPrimitives())
       {
       label = new GuiString(0, rightPrimitivesPanel, 80, 12, "Box:"+num)
         {
         @Override
         public void onElementActivated()
-          {
-          gui.selectedPrimitive = primitiveLabelMap.get(this);
-          gui.refreshGui();
-          updateButtonValues();
+          {          
+          gui.setSelectedPrimitive(primitiveLabelMap.get(this));
           }
         };
       label.clickable = true;
@@ -863,34 +807,25 @@ public void updateControls(int guiLeft, int guiTop, int width, int height)
   rightPrimitivesPanel.elements.clear();
   addRightLabels();
   
+  this.addPrimitiveControls();
+  
   this.updateButtonValues();
   }
 
 public void updateButtonValues()
   {
-  pieceXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.x()/scale);
-  pieceYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.y()/scale);
-  pieceZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.z()/scale);
+  pieceXInput.setValue(gui.getSelectedPiece()==null ? 0.f : gui.getSelectedPiece().x()/scale);
+  pieceYInput.setValue(gui.getSelectedPiece()==null ? 0.f : gui.getSelectedPiece().y()/scale);
+  pieceZInput.setValue(gui.getSelectedPiece()==null ? 0.f : gui.getSelectedPiece().z()/scale);
   
-  pieceRXInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rx());
-  pieceRYInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.ry());
-  pieceRZInput.setValue(gui.selectedPiece==null ? 0.f : gui.selectedPiece.rz()); 
-  
-//  primitiveXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x()/scale);
-//  primitiveYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y()/scale);
-//  primitiveZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z()/scale);
-//  
-//  primitiveRXInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rx());
-//  primitiveRYInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.ry());
-//  primitiveRZInput.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.rz()); 
-//  
-//  primitiveX1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.x1()/scale);
-//  primitiveY1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.y1()/scale);
-//  primitiveZ1Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.z1()/scale);
-//  
-//  primitiveX2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.width()/scale);
-//  primitiveY2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.height()/scale);
-//  primitiveZ2Input.setValue(gui.selectedPrimitive==null ? 0.f : gui.selectedPrimitive.length()/scale);  
+  pieceRXInput.setValue(gui.getSelectedPiece()==null ? 0.f : gui.getSelectedPiece().rx());
+  pieceRYInput.setValue(gui.getSelectedPiece()==null ? 0.f : gui.getSelectedPiece().ry());
+  pieceRZInput.setValue(gui.getSelectedPiece()==null ? 0.f : gui.getSelectedPiece().rz()); 
+  if(this.primitiveControls!=null)
+    {
+    this.primitiveControls.updateButtonValues();
+    }
+ 
   }
 
 }

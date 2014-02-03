@@ -116,7 +116,7 @@ protected void renderForDisplayList()
   tx2 = (tx + l + w)*px;
   ty2 = (th - (ty + l))*py;  
   
-  GL11.glNormal3f(0, 0, -1);
+  GL11.glNormal3f(0, 0, 1);
   GL11.glTexCoord2f(tx1, ty1);
   GL11.glVertex3f(x1, y1, z2);
   GL11.glTexCoord2f(tx2, ty1);
@@ -131,7 +131,7 @@ protected void renderForDisplayList()
   ty1 = (th - (ty + l + h))*py; 
   tx2 = (tx + l + w + l + w)*px;
   ty2 = (th - (ty + l))*py;
-  GL11.glNormal3f(0, 0, 1);
+  GL11.glNormal3f(0, 0, -1);
   GL11.glTexCoord2f(tx1, ty1);
   GL11.glVertex3f(x2, y1, z1);
   GL11.glTexCoord2f(tx2, ty1);

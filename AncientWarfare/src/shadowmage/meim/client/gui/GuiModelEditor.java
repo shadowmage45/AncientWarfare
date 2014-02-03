@@ -58,8 +58,8 @@ static ModelBaseAW model;
 
 int selectionMode = -1;
 
-ModelPiece selectedPiece;
-Primitive selectedPrimitive;
+private ModelPiece selectedPiece;
+private Primitive selectedPrimitive;
 
 float viewPosX, viewPosY, viewPosZ, viewTargetX, viewTargetY, viewTargetZ;
 private GuiModelEditorSetup setup;
@@ -67,12 +67,8 @@ private GuiModelEditorSetup setup;
 public GuiModelEditor(ContainerBase container)
   {
   super(container);
-  if(model==null)
-    {
-    initModel();
-    }
-  this.shouldCloseOnVanillaKeys = true;
   this.setup = new GuiModelEditorSetup(this);
+  this.shouldCloseOnVanillaKeys = true;
   viewPosX = 5;
   viewPosZ = 5;
   viewPosY = 5;
@@ -89,8 +85,8 @@ public void initModel()
   box.setBounds(-0.5f, 0.f, -0.5f, 1, 1, 1);
   model.addPiece(piece);
   piece.addPrimitive(box);
-  selectedPiece = piece;
-  selectedPrimitive = box;
+  setSelectedPiece(piece);
+  setSelectedPrimitive(box);
   }
 
 @Override
@@ -217,12 +213,9 @@ private void renderGrid()
 @Override
 public void updateScreenContents()
   {  
-  if(this.selectedPiece!=null && this.selectedPrimitive!=null)
+  if(model==null)
     {
-//    AWLog.logDebug("selected piece: "+selectedPiece);
-//    AWLog.logDebug("selected prim: "+selectedPrimitive);
-//    this.selectedPiece.setRotation(selectedPiece.rx(), selectedPiece.ry()+0.1f, selectedPiece.rz());
-//    this.setup.updateButtonValues();
+    initModel();
     }
   }
 
@@ -249,8 +242,8 @@ public void handleFileSelection(File file)
     {
     ModelBaseAW model = loader.loadModel(file);
     GuiModelEditor.model = model;
-    selectedPiece = null;
-    selectedPrimitive = null;
+    setSelectedPiece(null);
+    setSelectedPrimitive(null);
     this.setup.updateButtonValues();    
     this.refreshGui();    
     }
@@ -295,11 +288,7 @@ public void copyPiece(){}
 
 public void deletePiece(){}
 
-public void clearSelection()
-  {
-  selectedPiece = null;
-  selectedPrimitive = null;
-  }
+public void deletePrimitive(){}
 
 public void changeParent()
   {
@@ -314,5 +303,28 @@ public void swapBox()
 public void openUVMap()
   {
   
+  }
+
+Primitive getSelectedPrimitive()
+  {
+  return selectedPrimitive;
+  }
+
+void setSelectedPrimitive(Primitive selectedPrimitive)
+  {
+  this.selectedPrimitive = selectedPrimitive;
+  this.refreshGui();
+  }
+
+ModelPiece getSelectedPiece()
+  {
+  return selectedPiece;
+  }
+
+void setSelectedPiece(ModelPiece selectedPiece)
+  {
+  this.selectedPiece = selectedPiece;
+  this.setSelectedPrimitive(null);
+  this.refreshGui();
   }
 }

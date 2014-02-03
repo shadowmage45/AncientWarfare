@@ -28,6 +28,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.model.ModelPiece;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
+import shadowmage.ancient_framework.client.model.PrimitiveQuad;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class GuiNewPrimitive extends GuiContainerAdvanced
@@ -75,12 +76,8 @@ public void updateScreenContents()
 
 @Override
 public void setupControls()
-  {
-  GuiString label = new GuiString(0, this, 100, 12, "Name:");
-  label.updateRenderPos(8, 8);
-  this.addElement(label);
-  
-  GuiButtonSimple button = new GuiButtonSimple(1, this, 35, 12, "Back")
+  {  
+  GuiButtonSimple button = new GuiButtonSimple(1, this, 50, 12, "Cancel")
     {
     @Override
     public void onElementActivated()
@@ -89,38 +86,73 @@ public void setupControls()
       parentGui.refreshGui();
       }
     };
-  button.updateRenderPos(40, 8);
+  button.updateRenderPos(116-8-50, 8);
   this.addElement(button);
     
-  button = new GuiButtonSimple(2, this, 32, 12, "Add")
+  button = new GuiButtonSimple(2, this, 35, 12, "Box")
     {
     @Override
     public void onElementActivated()
       {
-      String name = inputLine.getText();
-      if(parentGui.selectedPiece!=null)
+      if(parentGui.getSelectedPiece()!=null)
         {
-        PrimitiveBox b = new PrimitiveBox(parentGui.selectedPiece);
+        PrimitiveBox b = new PrimitiveBox(parentGui.getSelectedPiece());
         b.setBounds(-0.5f, -0.5f, -0.5f, 1, 1, 1);
         b.setOrigin(0, 0, 0);
         b.setRotation(0, 0, 0);
-        parentGui.selectedPiece.addPrimitive(b);        
-        parentGui.selectedPrimitive = b;        
+        parentGui.getSelectedPiece().addPrimitive(b);        
+        parentGui.setSelectedPrimitive(b);        
         Minecraft.getMinecraft().displayGuiScreen(parentGui);
         parentGui.refreshGui();
         }
       }
     };
-  button.updateRenderPos(80, 8);
-  this.addElement(button);
+  button.updateRenderPos(8, 8);
+  this.addElement(button);  
   
+  button = new GuiButtonSimple(3, this, 35, 12, "Quad")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(parentGui.getSelectedPiece()!=null)
+        {
+        PrimitiveQuad b = new PrimitiveQuad(parentGui.getSelectedPiece());        
+        b.setBounds(-0.5f, -0.5f, 1, 1);
+        b.setOrigin(0, 0, 0);
+        b.setRotation(0, 0, 0);
+        parentGui.getSelectedPiece().addPrimitive(b); 
+        parentGui.setSelectedPrimitive(b);      
+        Minecraft.getMinecraft().displayGuiScreen(parentGui);
+        parentGui.refreshGui();
+        }
+      }
+    };
+  button.updateRenderPos(8, 8+12+4);
+  this.addElement(button); 
   
-  inputLine = new GuiTextInputLine(3, this, 100, 10, 80, "");
-  inputLine.updateRenderPos(8, 8+12+2);
-  this.addElement(inputLine);
+  button = new GuiButtonSimple(4, this, 60, 12, "Triangle")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(parentGui.getSelectedPiece()!=null)
+        {
+        PrimitiveBox b = new PrimitiveBox(parentGui.getSelectedPiece());
+        b.setBounds(-0.5f, -0.5f, -0.5f, 1, 1, 1);
+        b.setOrigin(0, 0, 0);
+        b.setRotation(0, 0, 0);
+        parentGui.getSelectedPiece().addPrimitive(b);        
+        parentGui.setSelectedPrimitive(b);        
+        Minecraft.getMinecraft().displayGuiScreen(parentGui);
+        parentGui.refreshGui();
+        }
+      }
+    };
+  button.updateRenderPos(8+35+4, 8+12+4);
+  this.addElement(button); 
   }
 
-GuiTextInputLine inputLine;
 
 @Override
 public void updateControls()
