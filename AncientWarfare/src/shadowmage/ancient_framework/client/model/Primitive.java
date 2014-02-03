@@ -32,8 +32,6 @@ float x, y, z;//origin of this primitive, relative to parent origin and orientat
 
 float rx, ry, rz;//rotation of this primitive, relative to parent orientation
 
-float x1, y1, z1, x2, y2, z2;//extends of bounding box in local space (post rotation) -- used for w/l/h for boxes
-
 int primitiveNumber = 0;
 
 protected boolean isCompiled = false;
@@ -85,12 +83,7 @@ public float z(){return z;}
 public float rx(){return rx;}
 public float ry(){return ry;}
 public float rz(){return rz;}
-public float x1(){return x1;}
-public float y1(){return y1;}
-public float z1(){return z1;}
-public float width(){return x2-x1;}
-public float height(){return y2-y1;}
-public float length(){return z2-z1;}
+
 
 public void setOrigin(float x, float y, float z)
   {
@@ -108,22 +101,6 @@ public void setRotation(float rx, float ry, float rz)
   this.isCompiled = false;
   }
 
-public void setBounds(float x1, float y1, float z1, float width, float height, float length)
-  {
-  this.x1 = x1;
-  this.x2 = x1 + width;
-  this.y1 = y1;
-  this.y2 = y1 + height;
-  this.z1 = z1;
-  this.z2 = z1 + length;
-  this.isCompiled = false;
-  }
-
-@Override
-public String toString()
-  {
-  return String.format("Primitive:: origin: %.1f, %.1f, %.1f rotation: %.1f, %.1f, %.1f min: %.1f, %.1f, %.1f max: %.1f, %.1f, %.1f", x,y,z, rx,ry,rz, x1,y1,z1, x2,y2,z2);
-  }
 
 public abstract void addPrimitiveLines(ArrayList<String> lines);
 

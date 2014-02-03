@@ -24,6 +24,7 @@ import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
 
 public class PrimitiveBoxSetup extends PrimitiveGuiSetup
 {
@@ -71,8 +72,9 @@ public void addElements(GuiScrollableArea area)
     public boolean handleMousePressed(int x, int y, int num)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
-        {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1()-1 * setup.scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());  
+        {  
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1()-1 * setup.scale, box.y1(), box.z1(), box.width(), box.height(), box.length());  
         updateButtonValues();
         }
       return true;
@@ -88,7 +90,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1()+1 * setup.scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1()+1 * setup.scale, box.y1(), box.z1(), box.width(), box.height(), box.length());
         updateButtonValues();
         }
       return true;
@@ -104,7 +107,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(getFloatVal() * setup.scale, gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()); 
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(getFloatVal() * setup.scale, box.y1(), box.z1(), box.width(), box.height(), box.length()); 
         updateButtonValues();
         }
       }
@@ -127,7 +131,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1()-1 * setup.scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1()-1 * setup.scale, box.z1(), box.width(), box.height(), box.length());
         updateButtonValues();
         }
       return true;
@@ -143,7 +148,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1()+1 * setup.scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1()+1 * setup.scale, box.z1(), box.width(), box.height(), box.length());
         updateButtonValues();
         }
       return true;
@@ -159,7 +165,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), getFloatVal() * setup.scale, gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());  
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), getFloatVal() * setup.scale, box.z1(), box.width(), box.height(), box.length());  
         updateButtonValues();
         }
       }
@@ -182,7 +189,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1()-1 * setup.scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1()-1 * setup.scale, box.width(), box.height(), box.length());
         updateButtonValues();
         }
       return true;
@@ -198,7 +206,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1()+1 * setup.scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1()+1 * setup.scale, box.width(), box.height(), box.length());
         updateButtonValues();
         }
       return true;
@@ -214,7 +223,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), getFloatVal() * setup.scale, gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()); 
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), getFloatVal() * setup.scale, box.width(), box.height(), box.length()); 
         updateButtonValues();
         }
       }
@@ -237,7 +247,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width()-1 * setup.scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width()-1 * setup.scale, box.height(), box.length());
         updateButtonValues(); 
         }
       return true;
@@ -253,7 +264,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width()+1 * setup.scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width()+1 * setup.scale, box.height(), box.length());
         updateButtonValues();
         }
       return true;
@@ -269,7 +281,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), getFloatVal() * setup.scale, gui.selectedPrimitive.height(), gui.selectedPrimitive.length());   
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), getFloatVal() * setup.scale, box.height(), box.length());   
         updateButtonValues();
         }
       }
@@ -292,7 +305,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height()-1 * setup.scale, gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width(), box.height()-1 * setup.scale, box.length());
         updateButtonValues();
         }
       return true;
@@ -308,7 +322,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height()+1 * setup.scale, gui.selectedPrimitive.length());
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width(), box.height()+1 * setup.scale, box.length());
         updateButtonValues();
         }
       return true;
@@ -324,7 +339,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), getFloatVal() * setup.scale, gui.selectedPrimitive.length()); 
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width(), getFloatVal() * setup.scale, box.length()); 
         updateButtonValues();
         }
       }
@@ -347,7 +363,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {   
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()-1 * setup.scale);
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width(), box.height(), box.length()-1 * setup.scale);
         updateButtonValues();
         }
       return true;
@@ -363,7 +380,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), gui.selectedPrimitive.length()+1 * setup.scale);
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width(), box.height(), box.length()+1 * setup.scale);
         updateButtonValues();
         }
       return true;
@@ -379,7 +397,8 @@ public void addElements(GuiScrollableArea area)
       {
       if(GuiModelEditor.model!=null && gui.selectedPiece!=null && gui.selectedPrimitive!=null)
         {
-        gui.selectedPrimitive.setBounds(gui.selectedPrimitive.x1(), gui.selectedPrimitive.y1(), gui.selectedPrimitive.z1(), gui.selectedPrimitive.width(), gui.selectedPrimitive.height(), getFloatVal() * setup.scale);   
+        PrimitiveBox box = (PrimitiveBox)gui.selectedPrimitive;
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.width(), box.height(), getFloatVal() * setup.scale);   
         updateButtonValues();
         }
       }
