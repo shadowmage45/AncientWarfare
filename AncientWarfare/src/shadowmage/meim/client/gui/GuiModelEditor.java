@@ -22,6 +22,7 @@ package shadowmage.meim.client.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
@@ -60,6 +61,12 @@ private static final int SELECT_EXPORT_UV_MAP = 5;
 static ModelBaseAW model;
 
 int selectionMode = -1;
+
+int copyNumber = 1;
+
+boolean doSelection;
+int selX;
+int selZ;
 
 private ModelPiece selectedPiece;
 private Primitive selectedPrimitive;
@@ -152,8 +159,13 @@ public void handleMouseInput()
     }
   else if(button==0)
     {
+    if(Mouse.getEventButtonState())//left button released
+      {
+      AWLog.logDebug("should do selection--");
+      doSelection = true;
+      }
     this.lastClickXLeft = x;
-    this.lastClickZLeft = z; 
+    this.lastClickZLeft = z;     
     }
   else if(Mouse.isButtonDown(0))
     {
@@ -210,7 +222,14 @@ public void handleMouseInput()
 @Override
 public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   {
+  GL11.glClearColor(.2f, .2f, .2f, 1.f);
+  GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
   setupModelView();
+  if(model!=null && doSelection)
+    {
+    this.doSelection();
+    doSelection = false;
+    }
   renderGrid();
   enableModelLighting();
   if(model!=null)
@@ -220,6 +239,40 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
     TextureManager.resetBoundTexture();
     }  
   resetModelView();
+  }
+
+protected void doSelection()
+  {
+  int posX = Mouse.getX();
+  int posY = Mouse.getY();  
+
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  GL11.glClearColor(1.f, 1.f, 1.f, 1.f);
+  GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+  this.model.renderForSelection();   
+
+  byte[] pixelColorsb = new byte[3];
+  ByteBuffer pixelColors = ByteBuffer.allocateDirect(3);
+  GL11.glReadPixels(posX, posY, 1, 1, GL11.GL_RGB, GL11.GL_BYTE, pixelColors);
+
+  for(int i = 0; i < 3 ; i++)
+    {
+    pixelColorsb[i] = pixelColors.get(i);
+    }
+  
+  int r = pixelColorsb[0];
+  int g = pixelColorsb[1];
+  int b = pixelColorsb[2];
+
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
+  AWLog.logDebug("colors clicked on: "+r+","+g+","+b);
+  int color = (r<<16) | (g<<8) | b;
+  AWLog.logDebug("color out: "+color);
+
+  GL11.glClearColor(.2f, .2f, .2f, 1.f);
+  GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+  
+  this.setSelectedPrimitive(model.getPrimitive(color));
   }
 
 @Override
@@ -381,15 +434,59 @@ public void handleFileSelection(File file)
   this.refreshGui();
   }
 
-public void copyPiece(){}
+public void copyPiece()
+  {
+  if(this.selectedPiece!=null)
+    {
+    ModelPiece newPiece = this.selectedPiece.copy();
+    newPiece.setName(selectedPiece.getName()+"CP"+copyNumber);
+    copyNumber++;
+    if(this.selectedPiece.getParent()==null)
+      {
+      this.model.addPiece(newPiece);
+      }
+    else
+      {
+      this.selectedPiece.addChild(newPiece);
+      }
+    this.setSelectedPiece(newPiece);
+    this.setSelectedPrimitive(null);
+    }
+  }
 
-public void deletePiece(){}
+public void copyPrimitive()
+  {
+  if(this.selectedPrimitive!=null)
+    {
+    Primitive newPrim = this.selectedPrimitive.copy();
+    this.selectedPrimitive.parent.addPrimitive(newPrim);
+    this.setSelectedPrimitive(newPrim);
+    }
+  }
 
-public void deletePrimitive(){}
+public void deletePiece()
+  {
+  if(this.selectedPiece!=null)
+    {
+    this.model.removePiece(selectedPiece);
+    this.setSelectedPiece(null);
+    }
+  }
+
+public void deletePrimitive()
+  {
+  if(this.selectedPiece!=null)
+    {
+    this.selectedPiece.removePrimitive(selectedPrimitive);
+    this.setSelectedPrimitive(null);
+    }
+  }
 
 public void changeParent()
   {
-  
+  /**
+   * TODO open change-piece-parent GUI
+   */
   }
 
 public void swapBox()
@@ -409,7 +506,11 @@ Primitive getSelectedPrimitive()
 
 void setSelectedPrimitive(Primitive selectedPrimitive)
   {
-  this.selectedPrimitive = selectedPrimitive;
+  if(selectedPrimitive!=null && selectedPrimitive.parent!=null)
+    {
+    this.selectedPiece = selectedPrimitive.parent;
+    }
+  this.selectedPrimitive = selectedPrimitive;  
   this.refreshGui();
   }
 

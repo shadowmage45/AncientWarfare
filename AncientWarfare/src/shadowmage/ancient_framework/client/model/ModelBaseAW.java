@@ -189,6 +189,7 @@ public void removePiece(ModelPiece piece)
     piece.getParent().removeChild(piece);    
     }
   this.pieces.remove(piece.getName());
+  this.basePieces.remove(piece);
   }
 
 public List<ModelPiece> getBasePieces()
