@@ -161,7 +161,6 @@ public void handleMouseInput()
     {
     if(Mouse.getEventButtonState())//left button released
       {
-      AWLog.logDebug("should do selection--");
       doSelection = true;
       }
     this.lastClickXLeft = x;
@@ -473,23 +472,12 @@ public void deletePiece()
     }
   }
 
-public void deletePrimitive()
+public void changePieceParent()
   {
-  if(this.selectedPiece!=null)
-    {
-    this.selectedPiece.removePrimitive(selectedPrimitive);
-    this.setSelectedPrimitive(null);
-    }
+  Minecraft.getMinecraft().displayGuiScreen(new GuiSwapPieceParent((ContainerBase) this.inventorySlots, this));
   }
 
-public void changeParent()
-  {
-  /**
-   * TODO open change-piece-parent GUI
-   */
-  }
-
-public void swapBox()
+public void changeBoxParent()
   {
   
   }
@@ -510,7 +498,8 @@ void setSelectedPrimitive(Primitive selectedPrimitive)
     {
     this.selectedPiece = selectedPrimitive.parent;
     }
-  this.selectedPrimitive = selectedPrimitive;  
+  this.selectedPrimitive = selectedPrimitive;
+  this.setup.addPrimitiveControls();
   this.refreshGui();
   }
 

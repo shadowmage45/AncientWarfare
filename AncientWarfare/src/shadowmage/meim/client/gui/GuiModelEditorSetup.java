@@ -114,7 +114,7 @@ public void setupControls()
   addRightLabels();
   }
 
-private void addPrimitiveControls()
+void addPrimitiveControls()
   {
   this.primitiveControls = null;
   if(this.gui.getSelectedPrimitive()==null)
@@ -137,6 +137,7 @@ private void addPrimitiveControls()
     {
     this.primitiveControls.addElements(leftPrimitiveControlPanel);
     }
+  this.updateButtonValues();
   }
 
 private void addPieceControls()
@@ -214,7 +215,7 @@ private void addPieceControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        gui.changeParent();
+        gui.changePieceParent();
         }
       return true;
       }

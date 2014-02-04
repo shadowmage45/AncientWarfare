@@ -98,7 +98,11 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
-        gui.deletePrimitive();
+        if(gui.getSelectedPiece()!=null)
+          {
+          gui.getSelectedPiece().removePrimitive(gui.getSelectedPrimitive());
+          gui.setSelectedPrimitive(null);
+          }
         }
       return true;
       }
@@ -114,7 +118,7 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
-        gui.swapBox();
+        gui.changeBoxParent();
         }
       return true;
       }
