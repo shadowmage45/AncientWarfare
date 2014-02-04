@@ -94,8 +94,7 @@ public void setupControls()
       {
       if(parentGui.getSelectedPiece().getParent()!=null)
         {
-        parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece());  
-       
+        parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece()); 
         parentGui.model.addPiece(parentGui.getSelectedPiece());        
         }
       Minecraft.getMinecraft().displayGuiScreen(parentGui);
@@ -111,16 +110,38 @@ public void setupControls()
       {
       continue;
       }
+    ModelPiece parent = piece.getParent();
+    if(parent==parentGui.getSelectedPiece())
+      {
+      continue;
+      }
+    else if(parent!=null)
+      {
+      parent = parent.getParent();
+      boolean skip = false;
+      while(parent!=null)
+        {
+        if(parent==parentGui.getSelectedPiece())
+          {
+          skip = true;
+          continue;
+          }
+        parent = parent.getParent();
+        }      
+      if(skip)
+        {
+        continue;
+        }
+      }
     button = new GuiButtonSimple(0, area, 160, 12, piece.getName())
       {
       public void onElementActivated()
         {
         ModelPiece piece2 = pieceMap.get(this);
-        if(parentGui.getSelectedPiece().getParent()!=null)
-          {
-          parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece()); 
-          }         
-        piece2.addChild(parentGui.getSelectedPiece());
+        ModelPiece selPiece = parentGui.getSelectedPiece();
+        parentGui.model.removePiece(selPiece);
+        piece2.addChild(selPiece);
+        parentGui.model.addPiece(selPiece);
         Minecraft.getMinecraft().displayGuiScreen(parentGui);
         };
       };

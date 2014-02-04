@@ -21,7 +21,10 @@
 package shadowmage.ancient_framework.client.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 
@@ -46,7 +49,7 @@ private String pieceName;
 private boolean visible = true;
 private float x, y, z;//manipulatable coordinates for this piece, relative to either model origin or parent-piece origin (if base piece or has parent)
 private float rx, ry, rz;//manipulatable rotation for this piece, relative to either model rotation or parent-piece rotation (if base piece or has parent)
-private List<ModelPiece> children = new ArrayList<ModelPiece>();//the children of this piece
+private Set<ModelPiece> children = new HashSet<ModelPiece>();//the children of this piece
 private List<Primitive> primitives = new ArrayList<Primitive>();//the list of boxes that make up this piece, really only used during first construction of display list
 private ModelBaseAW model;
 private ModelPiece parent;
@@ -104,7 +107,7 @@ public float rx(){return rx;}
 public float ry(){return ry;}
 public float rz(){return rz;}
 public String getName(){return pieceName;}
-public List<ModelPiece> getChildren(){return children;}
+public Collection<ModelPiece> getChildren(){return children;}
 
 public void setRotation(float rx, float ry, float rz)
   {
@@ -142,6 +145,10 @@ public void removePrimitive(Primitive primitive)
 public void addChild(ModelPiece piece)
   {
   this.children.add(piece);
+  if(piece.parent!=null)
+    {
+    piece.parent.removeChild(piece);
+    }
   piece.parent = this;
   }
 
@@ -188,7 +195,7 @@ public void renderForEditor(ModelPiece piece, Primitive prim)
     GL11.glColor4f(1.0f, 0.f, 0.f, 1.f);
     GL11.glPointSize(5.f);
     GL11.glBegin(GL11.GL_POINTS);    
-    GL11.glVertex3f(-x, -y, -z);
+    GL11.glVertex3f(0, 0, 0);
     GL11.glEnd();
     GL11.glColor4f(0.75f, 0.5f, 0.5f, 1.f);
     GL11.glEnable(GL11.GL_LIGHTING);

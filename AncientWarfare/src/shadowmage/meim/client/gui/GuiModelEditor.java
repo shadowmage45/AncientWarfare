@@ -270,8 +270,16 @@ protected void doSelection()
 
   GL11.glClearColor(.2f, .2f, .2f, 1.f);
   GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-  
-  this.setSelectedPrimitive(model.getPrimitive(color));
+  Primitive p = model.getPrimitive(color);
+  if(p==null)
+    {
+    this.setSelectedPiece(null);
+    this.setSelectedPrimitive(null);
+    }
+  else
+    {
+    this.setSelectedPrimitive(p);
+    }
   }
 
 @Override
@@ -483,11 +491,7 @@ Primitive getSelectedPrimitive()
 
 void setSelectedPrimitive(Primitive selectedPrimitive)
   {
-  if(selectedPrimitive==null)
-    {
-    this.selectedPiece = null;
-    }
-  else if(selectedPrimitive!=null && selectedPrimitive.parent!=null)
+  if(selectedPrimitive!=null && selectedPrimitive.parent!=null)
     {
     this.selectedPiece = selectedPrimitive.parent;
     }
