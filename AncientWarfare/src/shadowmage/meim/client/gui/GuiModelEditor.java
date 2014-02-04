@@ -479,7 +479,7 @@ public void changePieceParent()
 
 public void changeBoxParent()
   {
-  
+  Minecraft.getMinecraft().displayGuiScreen(new GuiSwapPrimitiveParent((ContainerBase) this.inventorySlots, this));
   }
 
 public void openUVMap()

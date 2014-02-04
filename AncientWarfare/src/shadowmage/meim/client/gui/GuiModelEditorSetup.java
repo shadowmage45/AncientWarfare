@@ -119,7 +119,7 @@ void addPrimitiveControls()
   this.primitiveControls = null;
   if(this.gui.getSelectedPrimitive()==null)
     {
-    //add dummy controls that only have add new butto
+    this.primitiveControls = new PrimitiveDummySetup(gui, this);    
     }
   else if(this.gui.getSelectedPrimitive() instanceof PrimitiveBox)
     {
