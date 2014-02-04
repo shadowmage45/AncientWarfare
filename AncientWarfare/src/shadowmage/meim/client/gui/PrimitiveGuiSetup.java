@@ -54,6 +54,8 @@ private GuiNumberInputLine primitiveRZInput;
 
 private GuiButtonSimple changeBoxOwnerPiece;
 
+private GuiButtonSimple copyBox;
+
 private GuiButtonSimple addBox;
 private GuiButtonSimple deleteBox;
 
@@ -128,9 +130,20 @@ public void addElements(GuiScrollableArea area)
   area.elements.add(changeBoxOwnerPiece);
   
   
-  
-  
-  
+  copyBox = new GuiButtonSimple(0, area, 84, 12, "Copy Primitive")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      gui.getSelectedPiece().addPrimitive(gui.getSelectedPrimitive().copy());
+      setup.addPrimitiveControls();
+      gui.refreshGui();
+      }
+    };  
+  copyBox.updateRenderPos(0, totalHeight);
+  totalHeight+=12;
+  area.elements.add(copyBox);
+   
   
   primitiveXMinus = new GuiButtonSimple(0,area, 12, 12, "-")
     {
