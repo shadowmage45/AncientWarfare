@@ -95,28 +95,40 @@ public void parseFromLines(List<String> lines)
         throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
         }
       PrimitiveBox box = new PrimitiveBox(piece);
-      box.x = StringTools.safeParseFloat(bits[1]);
-      box.y = StringTools.safeParseFloat(bits[2]);
-      box.z = StringTools.safeParseFloat(bits[3]);
-      
-      box.rx = StringTools.safeParseFloat(bits[4]);
-      box.ry = StringTools.safeParseFloat(bits[5]);
-      box.rz = StringTools.safeParseFloat(bits[6]);
-      
-      box.tx = StringTools.safeParseFloat(bits[7]);
-      box.ty = StringTools.safeParseFloat(bits[8]);
-      
-      box.x1 = StringTools.safeParseFloat(bits[9]);
-      box.y1 = StringTools.safeParseFloat(bits[10]);
-      box.z1 = StringTools.safeParseFloat(bits[11]);
-      
-      box.x2 = StringTools.safeParseFloat(bits[12]);
-      box.y2 = StringTools.safeParseFloat(bits[13]);
-      box.z2 = StringTools.safeParseFloat(bits[14]);
-      
+      box.readFromLine(bits);
       piece.addPrimitive(box);
       AWLog.logDebug("parsed new box for piece: "+parentName);
-      }    
+      }
+    else if(line.toLowerCase().startsWith("quad"))
+      {
+      bits = line.split("=")[1].split(",");
+      //parse old-style x,y,z, w,h,l
+      String parentName = bits[0];
+      ModelPiece piece = getPiece(parentName);
+      if(piece==null)
+        {
+        throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
+        }
+      PrimitiveQuad box = new PrimitiveQuad(piece);
+      box.readFromLine(bits);
+      piece.addPrimitive(box);
+      AWLog.logDebug("parsed new quad for piece: "+parentName);
+      }
+    else if(line.toLowerCase().startsWith("triangle"))
+      {
+      bits = line.split("=")[1].split(",");
+      //parse old-style x,y,z, w,h,l
+      String parentName = bits[0];
+      ModelPiece piece = getPiece(parentName);
+      if(piece==null)
+        {
+        throw new IllegalArgumentException("could not construct model, improper piece reference for: "+parentName);
+        }
+      PrimitiveTriangle box = new PrimitiveTriangle(piece);
+      box.readFromLine(bits);
+      piece.addPrimitive(box);
+      AWLog.logDebug("parsed new quad for piece: "+parentName);
+      }
     }
   }
 

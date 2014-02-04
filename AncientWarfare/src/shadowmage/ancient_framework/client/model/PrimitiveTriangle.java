@@ -27,6 +27,7 @@ import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class PrimitiveTriangle extends Primitive
 {
@@ -125,14 +126,34 @@ public Primitive copy()
 @Override
 public void addPrimitiveLines(ArrayList<String> lines)
   {
-
+  StringBuilder b = new StringBuilder("triangle=").append(parent.getName()).append(",");
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
+  b.append(x1).append(",").append(y1).append(",").append(z1).append(",").append(x2).append(",").append(y2).append(",").append(z2).append(",").append(x3).append(",").append(y3).append(",").append(z3);
+  lines.add(b.toString());
   }
 
 @Override
 public void readFromLine(String[] lineBits)
   {
-  // TODO Auto-generated method stub
-  
+  String parent = lineBits[0];
+  x = StringTools.safeParseFloat(lineBits[1]);
+  y = StringTools.safeParseFloat(lineBits[2]);
+  z = StringTools.safeParseFloat(lineBits[3]);
+  rx = StringTools.safeParseFloat(lineBits[4]);
+  ry = StringTools.safeParseFloat(lineBits[5]);
+  rz = StringTools.safeParseFloat(lineBits[6]);
+  tx = StringTools.safeParseFloat(lineBits[7]);
+  ty = StringTools.safeParseFloat(lineBits[8]);
+  x1 = StringTools.safeParseFloat(lineBits[9]);
+  y1 = StringTools.safeParseFloat(lineBits[10]);
+  z1 = StringTools.safeParseFloat(lineBits[11]);
+  x2 = StringTools.safeParseFloat(lineBits[12]);
+  y2 = StringTools.safeParseFloat(lineBits[13]);
+  z2 = StringTools.safeParseFloat(lineBits[14]);
+  x3 = StringTools.safeParseFloat(lineBits[15]);
+  y3 = StringTools.safeParseFloat(lineBits[16]);
+  z3 = StringTools.safeParseFloat(lineBits[17]);
+  setBounds(x1, y1, z1, x2, y2, z2, x3, y3, z3);
   }
 
 public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3)

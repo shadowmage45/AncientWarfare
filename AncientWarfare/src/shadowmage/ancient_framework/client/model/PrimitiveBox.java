@@ -27,6 +27,7 @@ import net.minecraft.client.model.ModelBase;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class PrimitiveBox extends Primitive
 {
@@ -217,7 +218,21 @@ public void addPrimitiveLines(ArrayList<String> lines)
 @Override
 public void readFromLine(String[] lineBits)
   {
-  // TODO Auto-generated method stub  
+  String parent = lineBits[0];
+  x = StringTools.safeParseFloat(lineBits[1]);
+  y = StringTools.safeParseFloat(lineBits[2]);
+  z = StringTools.safeParseFloat(lineBits[3]);
+  rx = StringTools.safeParseFloat(lineBits[4]);
+  ry = StringTools.safeParseFloat(lineBits[5]);
+  rz = StringTools.safeParseFloat(lineBits[6]);
+  tx = StringTools.safeParseFloat(lineBits[7]);
+  ty = StringTools.safeParseFloat(lineBits[8]);
+  x1 = StringTools.safeParseFloat(lineBits[9]);
+  y1 = StringTools.safeParseFloat(lineBits[10]);
+  z1 = StringTools.safeParseFloat(lineBits[11]);
+  x2 = StringTools.safeParseFloat(lineBits[12]);
+  y2 = StringTools.safeParseFloat(lineBits[13]);
+  z2 = StringTools.safeParseFloat(lineBits[14]);
   }
 
 }

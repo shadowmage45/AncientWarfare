@@ -117,7 +117,11 @@ public void setupControls()
 private void addPrimitiveControls()
   {
   this.primitiveControls = null;
-  if(this.gui.getSelectedPrimitive() instanceof PrimitiveBox)
+  if(this.gui.getSelectedPrimitive()==null)
+    {
+    //add dummy controls that only have add new butto
+    }
+  else if(this.gui.getSelectedPrimitive() instanceof PrimitiveBox)
     {
     this.primitiveControls = new PrimitiveBoxSetup(gui, this);    
     }
@@ -648,6 +652,7 @@ private void addFileControls()
         gui.setSelectedPrimitive(null);
         gui.model = null;
         gui.initModel();
+        addPrimitiveControls();
         updateButtonValues();
         gui.refreshGui();
         }

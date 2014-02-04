@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.utils.StringTools;
 
 public class PrimitiveQuad extends Primitive
 {
@@ -97,14 +98,28 @@ public Primitive copy()
 @Override
 public void addPrimitiveLines(ArrayList<String> lines)
   {
-
+  StringBuilder b = new StringBuilder("quad="+parent.getName()+",");
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
+  b.append(x1).append(",").append(y1).append(",").append(x2).append(",").append(y2);
+  lines.add(b.toString());
   }
 
 @Override
 public void readFromLine(String[] lineBits)
   {
-  // TODO Auto-generated method stub
-  
+  String parent = lineBits[0];
+  x = StringTools.safeParseFloat(lineBits[1]);
+  y = StringTools.safeParseFloat(lineBits[2]);
+  z = StringTools.safeParseFloat(lineBits[3]);
+  rx = StringTools.safeParseFloat(lineBits[4]);
+  ry = StringTools.safeParseFloat(lineBits[5]);
+  rz = StringTools.safeParseFloat(lineBits[6]);
+  tx = StringTools.safeParseFloat(lineBits[7]);
+  ty = StringTools.safeParseFloat(lineBits[8]);
+  x1 = StringTools.safeParseFloat(lineBits[9]);
+  y1 = StringTools.safeParseFloat(lineBits[10]);
+  x2 = StringTools.safeParseFloat(lineBits[11]);
+  y2 = StringTools.safeParseFloat(lineBits[12]);
   }
 
 public void setBounds(float x1, float y1, float width, float height)
