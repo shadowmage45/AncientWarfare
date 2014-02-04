@@ -140,7 +140,7 @@ public void setupControls()
       if(parentGui.getSelectedPiece()!=null)
         {
         PrimitiveTriangle b = new PrimitiveTriangle(parentGui.getSelectedPiece());
-        b.setBounds(-0.5f, 0.f, 0.5f, 0.f, 0, -.5f);
+        b.setBounds(-0.5f, 0.f, 0.f, 0.5f, 0.f, 0.f, 0, -.5f, 0.f);
         b.setOrigin(0, 0, 0);
         b.setRotation(0, 0, 0);
         parentGui.getSelectedPiece().addPrimitive(b);        

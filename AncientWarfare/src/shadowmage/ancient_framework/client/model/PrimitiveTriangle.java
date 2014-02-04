@@ -29,7 +29,8 @@ import shadowmage.ancient_framework.common.config.AWLog;
 public class PrimitiveTriangle extends Primitive
 {
 
-float x1, y1, x2, y2, x3, y3;
+float x1, y1, z1, x2, y2, z2, x3, y3, z3;
+float normalX, normalY, normalZ;//normal for lighting...should be calc'd when setBounds is called
 /**
  * @param parent
  */
@@ -40,10 +41,13 @@ public PrimitiveTriangle(ModelPiece parent)
 
 public float x1(){return x1;}
 public float y1(){return y1;}
+public float z1(){return z1;}
 public float x2(){return x2;}
 public float y2(){return y2;}
+public float z2(){return z2;}
 public float x3(){return x3;}
 public float y3(){return y3;}
+public float z3(){return z3;}
 
 @Override
 protected void renderForDisplayList()
@@ -79,22 +83,36 @@ protected void renderForDisplayList()
   tx2 = (tx + l + w)*px;
   ty2 = (th - (ty + l))*py;  
   
-  GL11.glNormal3f(0, 0, 1);
+  GL11.glNormal3f(normalX, normalY, normalZ);
   GL11.glTexCoord2f(tx2, ty2);
-  GL11.glVertex3f(x3, y3, 0.f);
   GL11.glTexCoord2f(tx2, ty1);
-  GL11.glVertex3f(x2, y2, 0.f);
   GL11.glTexCoord2f(tx1, ty1);
-  GL11.glVertex3f(x1, y1, 0.f);
+  GL11.glVertex3f(x1, y1, z1);
+  GL11.glVertex3f(x2, y2, z2);
+  GL11.glVertex3f(x3, y3, z3);
   
   GL11.glEnd();
+  }
+
+public void reverseVertexOrder()
+  {
+  float x = x1;
+  float y = y1;
+  float z = z1;
+  x1 = x3;
+  y1 = y3;
+  z1 = z3;
+  x3 = x;
+  y3 = y;
+  z3 = z;
+  this.setBounds(x1, y1, z1, x2, y2, z1, x3, y3, z3);
   }
 
 @Override
 public Primitive copy()
   {
   PrimitiveTriangle box = new PrimitiveTriangle(parent);
-  box.setBounds(x1, y1, x2, y2, x3, y3);
+  box.setBounds(x1, y1, z1, x2, y2, z2, x3, y3, z3);
   box.setOrigin(x, y, z);
   box.setRotation(rx, ry, rz);
   box.tx = tx;
@@ -115,7 +133,7 @@ public void readFromLine(String[] lineBits)
   
   }
 
-public void setBounds(float x1, float y1, float x2, float y2, float x3, float y3)
+public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3)
   {
   this.x1 = x1;
   this.x2 = x2;
@@ -123,6 +141,22 @@ public void setBounds(float x1, float y1, float x2, float y2, float x3, float y3
   this.y1 = y1;
   this.y2 = y2;
   this.y3 = y3;
+  this.z1 = z1;
+  this.z2 = z2;
+  this.z3 = z3;
+  
+  float vx, vy, vz, wx, wy, wz;
+  vx = x2-x1;
+  vy = y2-y1;
+  vz = z2-z1;
+  wx = x3-x1;
+  wy = y3-y1;
+  wz = z3-z1;
+  
+  normalX = (vy*wz)-(vz*wy);
+  normalY = (vz*wx)-(vx*wz);
+  normalZ = (vx*wy)-(vy*wx);
+  
   this.isCompiled = false;
   }
 

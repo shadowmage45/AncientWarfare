@@ -34,25 +34,34 @@ private GuiButtonSimple primitiveX1Minus;
 private GuiButtonSimple primitiveX1Plus;
 private GuiButtonSimple primitiveY1Minus;
 private GuiButtonSimple primitiveY1Plus;
+private GuiButtonSimple primitiveZ1Minus;
+private GuiButtonSimple primitiveZ1Plus;
 
 private GuiNumberInputLine primitiveX1Input;
 private GuiNumberInputLine primitiveY1Input;
+private GuiNumberInputLine primitiveZ1Input;
 
 private GuiButtonSimple primitiveX2Minus;
 private GuiButtonSimple primitiveX2Plus;
 private GuiButtonSimple primitiveY2Minus;
 private GuiButtonSimple primitiveY2Plus;
+private GuiButtonSimple primitiveZ2Minus;
+private GuiButtonSimple primitiveZ2Plus;
 
 private GuiNumberInputLine primitiveX2Input;
 private GuiNumberInputLine primitiveY2Input;
+private GuiNumberInputLine primitiveZ2Input;
 
 private GuiButtonSimple primitiveX3Minus;
 private GuiButtonSimple primitiveX3Plus;
 private GuiButtonSimple primitiveY3Minus;
 private GuiButtonSimple primitiveY3Plus;
+private GuiButtonSimple primitiveZ3Minus;
+private GuiButtonSimple primitiveZ3Plus;
 
 private GuiNumberInputLine primitiveX3Input;
 private GuiNumberInputLine primitiveY3Input;
+private GuiNumberInputLine primitiveZ3Input;
 
 public PrimitiveTriangleSetup(GuiModelEditor gui, GuiModelEditorSetup setup)
   {
@@ -77,7 +86,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {  
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1()-1 * setup.scale, box.y1(), box.x2(), box.y2(), box.x3(), box.y3());   
+        box.setBounds(box.x1()-1 * setup.scale, box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -94,7 +103,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1()+1 * setup.scale, box.y1(), box.x2(), box.y2(), box.x3(), box.y3());
+        box.setBounds(box.x1()+1 * setup.scale, box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -111,7 +120,7 @@ public void addElements(GuiScrollableArea area)
       if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(getFloatVal() * setup.scale, box.y1(), box.x2(), box.y2(), box.x3(), box.y3()); 
+        box.setBounds(getFloatVal() * setup.scale, box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       }
@@ -126,7 +135,7 @@ public void addElements(GuiScrollableArea area)
   
   totalHeight+=12;
   
-  
+   
   primitiveY1Minus = new GuiButtonSimple(0,area, 12, 12, "-")
     {
     @Override
@@ -135,7 +144,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {   
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1()-1 * setup.scale, box.x2(), box.y2(), box.x3(), box.y3());
+        box.setBounds(box.x1(), box.y1()-1 * setup.scale, box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -152,7 +161,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1()+1 * setup.scale, box.x2(), box.y2(), box.x3(), box.y3());
+        box.setBounds(box.x1(), box.y1()+1 * setup.scale, box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -169,7 +178,7 @@ public void addElements(GuiScrollableArea area)
       if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), getFloatVal() * setup.scale, box.x2(), box.y2(), box.x3(), box.y3());  
+        box.setBounds(box.x1(), getFloatVal() * setup.scale, box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       }
@@ -185,6 +194,64 @@ public void addElements(GuiScrollableArea area)
   totalHeight+=12;
   
   
+  primitiveZ1Minus = new GuiButtonSimple(0,area, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {  
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1()-1 * setup.scale, box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
+        updateButtonValues();
+        }
+      return true;
+      }
+    };  
+  primitiveZ1Minus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(primitiveZ1Minus);
+  
+  primitiveZ1Plus = new GuiButtonSimple(0,area, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1()+1 * setup.scale, box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
+        updateButtonValues();
+        }
+      return true;
+      }
+    };  
+  primitiveZ1Plus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(primitiveZ1Plus);
+  
+  primitiveZ1Input = new GuiNumberInputLine(0,area, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), getFloatVal() * setup.scale, box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
+        updateButtonValues();
+        }
+      }
+    };
+  primitiveZ1Input.setValue(0.f);
+  primitiveZ1Input.updateRenderPos(col3, totalHeight);
+  area.addGuiElement(primitiveZ1Input);
+  
+  label = new GuiString(0,area, 25, 12, "B:Z1");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
   primitiveX2Minus = new GuiButtonSimple(0,area, 12, 12, "-")
     {
     @Override
@@ -193,7 +260,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {   
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2() -1 * setup.scale, box.y2(), box.x3(), box.y3());  
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2() -1 * setup.scale, box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues(); 
         }
       return true;
@@ -210,7 +277,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2() +1 * setup.scale, box.y2(), box.x3(), box.y3());   
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2()+1 * setup.scale, box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -227,7 +294,7 @@ public void addElements(GuiScrollableArea area)
       if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), getFloatVal() * setup.scale, box.y2(), box.x3(), box.y3());   
+        box.setBounds(box.x1(), box.y1(), box.z1(),  getFloatVal() * setup.scale, box.y2(), box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       }
@@ -251,7 +318,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {   
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2()-1 * setup.scale, box.x3(), box.y3());
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2()-1 * setup.scale, box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -268,7 +335,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2()+1 * setup.scale, box.x3(), box.y3());
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2()+1 * setup.scale, box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -285,7 +352,7 @@ public void addElements(GuiScrollableArea area)
       if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x1(), getFloatVal() * setup.scale, box.x3(), box.y3()); 
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), getFloatVal() * setup.scale, box.z2(), box.x3(), box.y3(), box.z3());
         updateButtonValues();
         }
       }
@@ -301,6 +368,64 @@ public void addElements(GuiScrollableArea area)
   totalHeight+=12;
   
   
+  primitiveZ2Minus = new GuiButtonSimple(0,area, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {  
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2()-1 * setup.scale, box.x3(), box.y3(), box.z3());
+        updateButtonValues();
+        }
+      return true;
+      }
+    };  
+  primitiveZ2Minus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(primitiveZ2Minus);
+  
+  primitiveZ2Plus = new GuiButtonSimple(0,area, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2()+1 * setup.scale, box.x3(), box.y3(), box.z3());
+        updateButtonValues();
+        }
+      return true;
+      }
+    };  
+  primitiveZ2Plus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(primitiveZ2Plus);
+  
+  primitiveZ2Input = new GuiNumberInputLine(0,area, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), getFloatVal() * setup.scale, box.x3(), box.y3(), box.z3());
+        updateButtonValues();
+        }
+      }
+    };
+  primitiveZ2Input.setValue(0.f);
+  primitiveZ2Input.updateRenderPos(col3, totalHeight);
+  area.addGuiElement(primitiveZ2Input);
+  
+  label = new GuiString(0,area, 25, 12, "B:Z1");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
   primitiveX3Minus = new GuiButtonSimple(0,area, 12, 12, "-")
     {
     @Override
@@ -309,7 +434,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {   
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2(), box.x3() -1 * setup.scale, box.y3());  
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3() -1 * setup.scale, box.y3(), box.z3());
         updateButtonValues(); 
         }
       return true;
@@ -326,7 +451,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2(), box.x3() +1 * setup.scale, box.y3());   
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3() +1 * setup.scale, box.y3(), box.z3());
         updateButtonValues();
         }
       return true;
@@ -343,7 +468,7 @@ public void addElements(GuiScrollableArea area)
       if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2(), getFloatVal() * setup.scale, box.y3());   
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), getFloatVal() * setup.scale, box.y3(), box.z3());
         updateButtonValues();
         }
       }
@@ -367,7 +492,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {   
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2(), box.x3(), box.y3()-1 * setup.scale);
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3()-1 * setup.scale, box.z3());
         updateButtonValues();
         }
       return true;
@@ -384,7 +509,7 @@ public void addElements(GuiScrollableArea area)
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2(), box.x3(), box.y3()+1 * setup.scale);
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3()+1 * setup.scale, box.z3());
         updateButtonValues();
         }
       return true;
@@ -401,7 +526,7 @@ public void addElements(GuiScrollableArea area)
       if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
         PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
-        box.setBounds(box.x1(), box.y1(), box.x2(), box.y2(), box.x3(), getFloatVal() * setup.scale); 
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(),  getFloatVal() * setup.scale, box.z3());
         updateButtonValues();
         }
       }
@@ -415,6 +540,83 @@ public void addElements(GuiScrollableArea area)
   area.addGuiElement(label);
   
   totalHeight+=12;
+  
+  
+  primitiveZ3Minus = new GuiButtonSimple(0,area, 12, 12, "-")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {  
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3()-1 * setup.scale);
+        updateButtonValues();
+        }
+      return true;
+      }
+    };  
+  primitiveZ3Minus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(primitiveZ3Minus);
+  
+  primitiveZ3Plus = new GuiButtonSimple(0,area, 12, 12, "+")
+    {
+    @Override
+    public boolean handleMousePressed(int x, int y, int num)
+      {
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), box.z3()+1 * setup.scale);
+        updateButtonValues();
+        }
+      return true;
+      }
+    };  
+  primitiveZ3Plus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(primitiveZ3Plus);
+  
+  primitiveZ3Input = new GuiNumberInputLine(0,area, 20, 12, 4, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.setBounds(box.x1(), box.y1(), box.z1(), box.x2(), box.y2(), box.z2(), box.x3(), box.y3(), getFloatVal() * setup.scale);
+        updateButtonValues();
+        }
+      }
+    };
+  primitiveZ3Input.setValue(0.f);
+  primitiveZ3Input.updateRenderPos(col3, totalHeight);
+  area.addGuiElement(primitiveZ3Input);
+  
+  label = new GuiString(0,area, 25, 12, "B:Z3");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  totalHeight+=12;
+  
+  
+  GuiButtonSimple button = new GuiButtonSimple(0, area, 45, 12, "Flip")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      if(GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
+        {
+        PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
+        box.reverseVertexOrder();
+        updateButtonValues();
+        }
+      }
+    };
+  button.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(button);
+  
+  totalHeight+=12;
   area.updateTotalHeight(totalHeight);
   }
 
@@ -426,12 +628,15 @@ public void updateButtonValues()
   PrimitiveTriangle box = (PrimitiveTriangle)gui.getSelectedPrimitive();
   primitiveX1Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.x1()/scale);
   primitiveY1Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.y1()/scale);
+  primitiveZ1Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.z1()/scale);
   
   primitiveX2Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.x2()/scale);
   primitiveY2Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.y2()/scale);
+  primitiveZ2Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.z2()/scale);
   
   primitiveX3Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.x3()/scale);
   primitiveY3Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.y3()/scale);
+  primitiveZ3Input.setValue(gui.getSelectedPrimitive()==null ? 0.f : box.z3()/scale);
   }
 
 
