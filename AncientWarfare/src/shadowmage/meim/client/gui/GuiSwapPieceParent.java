@@ -94,10 +94,11 @@ public void setupControls()
       {
       if(parentGui.getSelectedPiece().getParent()!=null)
         {
-        parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece());    
-        Minecraft.getMinecraft().displayGuiScreen(parentGui); 
+        parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece());  
+       
         parentGui.model.addPiece(parentGui.getSelectedPiece());        
         }
+      Minecraft.getMinecraft().displayGuiScreen(parentGui);
       }    
     };
   button.updateRenderPos(0, totalHeight);
@@ -118,7 +119,7 @@ public void setupControls()
         if(parentGui.getSelectedPiece().getParent()!=null)
           {
           parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece()); 
-          }        
+          }         
         piece2.addChild(parentGui.getSelectedPiece());
         Minecraft.getMinecraft().displayGuiScreen(parentGui);
         };

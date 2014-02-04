@@ -173,6 +173,60 @@ public void render()
   GL11.glPopMatrix();
   }
 
+public void renderForEditor(ModelPiece piece, Primitive prim)
+  {
+  GL11.glPushMatrix();
+  if(x!=0 || y!=0 || z!=0){GL11.glTranslatef(x, y, z);}  
+  if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
+  if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
+  if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);} 
+  if(piece==this)
+    {
+    GL11.glDisable(GL11.GL_LIGHTING);
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    GL11.glEnable(GL11.GL_POINT_SMOOTH);
+    GL11.glColor4f(1.0f, 0.f, 0.f, 1.f);
+    GL11.glPointSize(5.f);
+    GL11.glBegin(GL11.GL_POINTS);    
+    GL11.glVertex3f(-x, -y, -z);
+    GL11.glEnd();
+    GL11.glColor4f(0.75f, 0.5f, 0.5f, 1.f);
+    GL11.glEnable(GL11.GL_LIGHTING);
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+    }
+  for(Primitive primitive : this.primitives)
+    {  
+    if(primitive==prim)
+      {
+      GL11.glDisable(GL11.GL_LIGHTING);
+      GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+      GL11.glColor4f(1.0f, 0.f, 0.f, 1.f);
+      
+      
+      GL11.glBegin(GL11.GL_POINTS);    
+      GL11.glVertex3f(prim.x, prim.y, prim.z);
+      GL11.glEnd();
+      
+      GL11.glEnable(GL11.GL_LIGHTING);
+      GL11.glEnable(GL11.GL_TEXTURE_2D);    
+
+      GL11.glColor4f(1.0f, 0.5f, 0.5f, 1.f);
+      }
+    primitive.render();
+    if(primitive==prim)
+      {
+      GL11.glColor4f(0.75f, 0.5f, 0.5f, 1.f);
+      }
+    }  
+  for(ModelPiece child : this.children)
+    {
+    child.renderForEditor(piece, prim);
+    }
+  GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
+  GL11.glPopMatrix();
+  }
+
 public void renderForSelection()
   {
   GL11.glPushMatrix();

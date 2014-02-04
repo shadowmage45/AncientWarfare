@@ -215,7 +215,7 @@ private void addPieceControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        gui.changePieceParent();
+        Minecraft.getMinecraft().displayGuiScreen(new GuiSwapPieceParent((ContainerBase) gui.inventorySlots, gui));
         }
       return true;
       }

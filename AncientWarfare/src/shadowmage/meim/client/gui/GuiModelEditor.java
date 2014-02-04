@@ -23,14 +23,14 @@ package shadowmage.meim.client.gui;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -234,7 +234,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
   if(model!=null)
     {
     TextureManager.bindTexture();
-    model.renderModel();
+    model.renderForEditor(getSelectedPiece(), getSelectedPrimitive());//.renderModel();
     TextureManager.resetBoundTexture();
     }  
   resetModelView();
@@ -248,7 +248,7 @@ protected void doSelection()
   GL11.glDisable(GL11.GL_TEXTURE_2D);
   GL11.glClearColor(1.f, 1.f, 1.f, 1.f);
   GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-  this.model.renderForSelection();   
+  GuiModelEditor.model.renderForSelection();   
 
   byte[] pixelColorsb = new byte[3];
   ByteBuffer pixelColors = ByteBuffer.allocateDirect(3);
@@ -283,23 +283,31 @@ public void drawExtraForeground(int mouseX, int mouseY, float partialTick)
 private void setupModelView()
   {  
   /**
-   * load projection matrix and clear it (set to identity)
+   * load a clean projection matrix
    */
   GL11.glMatrixMode(GL11.GL_PROJECTION);
   GL11.glPushMatrix(); 
   GL11.glLoadIdentity();
   
   /**
-   * set up the base projection transformation, as well as
+   * set up the base projection transformation matrix, as well as view target and position
+   * (camera setup)
    */
   float aspect = (float)this.mc.displayWidth/(float)this.mc.displayHeight;  
   GLU.gluPerspective(60.f, aspect, 0.1f, 100.f); 
   GLU.gluLookAt(viewPosX, viewPosY, viewPosZ, viewTargetX, viewTargetY, viewTargetZ, 0, 1, 0);   
     
+  /**
+   * load a clean model-view matrix
+   */
   GL11.glMatrixMode(GL11.GL_MODELVIEW);
   GL11.glPushMatrix();  
   GL11.glLoadIdentity();
   
+  /**
+   * and finally, clear the depth buffer 
+   * (we want to ignore any world/etc, as we're rendering over-top of it all anyway)
+   */
   GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
   }
 
@@ -365,6 +373,7 @@ public void updateScreenContents()
   if(model==null)
     {
     initModel();
+    this.refreshGui();
     }
   }
 
@@ -453,16 +462,6 @@ public void copyPiece()
     }
   }
 
-public void copyPrimitive()
-  {
-  if(this.selectedPrimitive!=null)
-    {
-    Primitive newPrim = this.selectedPrimitive.copy();
-    this.selectedPrimitive.parent.addPrimitive(newPrim);
-    this.setSelectedPrimitive(newPrim);
-    }
-  }
-
 public void deletePiece()
   {
   if(this.selectedPiece!=null)
@@ -470,16 +469,6 @@ public void deletePiece()
     this.model.removePiece(selectedPiece);
     this.setSelectedPiece(null);
     }
-  }
-
-public void changePieceParent()
-  {
-  Minecraft.getMinecraft().displayGuiScreen(new GuiSwapPieceParent((ContainerBase) this.inventorySlots, this));
-  }
-
-public void changeBoxParent()
-  {
-  Minecraft.getMinecraft().displayGuiScreen(new GuiSwapPrimitiveParent((ContainerBase) this.inventorySlots, this));
   }
 
 public void openUVMap()
@@ -494,7 +483,11 @@ Primitive getSelectedPrimitive()
 
 void setSelectedPrimitive(Primitive selectedPrimitive)
   {
-  if(selectedPrimitive!=null && selectedPrimitive.parent!=null)
+  if(selectedPrimitive==null)
+    {
+    this.selectedPiece = null;
+    }
+  else if(selectedPrimitive!=null && selectedPrimitive.parent!=null)
     {
     this.selectedPiece = selectedPrimitive.parent;
     }

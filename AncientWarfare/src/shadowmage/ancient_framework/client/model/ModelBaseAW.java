@@ -57,6 +57,14 @@ public void renderForSelection()
     }
   }
 
+public void renderForEditor(ModelPiece piece, Primitive prim)
+  {
+  for(ModelPiece piece2 : this.getBasePieces())
+    {
+    piece2.renderForEditor(piece, prim);
+    }
+  }
+
 public void setTextureSize(int width, int height)
   {
   this.textureWidth = width;

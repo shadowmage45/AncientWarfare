@@ -120,7 +120,7 @@ public void addElements(GuiScrollableArea area)
       {
       if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null && gui.getSelectedPiece()!=null && gui.getSelectedPrimitive()!=null)
         {
-        gui.changeBoxParent();
+        Minecraft.getMinecraft().displayGuiScreen(new GuiSwapPrimitiveParent((ContainerBase) gui.inventorySlots, gui));
         }
       return true;
       }
