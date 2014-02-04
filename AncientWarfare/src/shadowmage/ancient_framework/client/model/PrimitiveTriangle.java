@@ -22,6 +22,8 @@ package shadowmage.ancient_framework.client.model;
 
 import java.util.ArrayList;
 
+import net.minecraft.util.MathHelper;
+
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.config.AWLog;
@@ -157,6 +159,10 @@ public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2
   normalY = (vz*wx)-(vx*wz);
   normalZ = (vx*wy)-(vy*wx);
   
+  float norm = MathHelper.sqrt_float(normalX * normalX + normalY * normalY + normalZ * normalZ);
+  normalX/=norm;
+  normalY/=norm;
+  normalZ/=norm;
   this.isCompiled = false;
   }
 
