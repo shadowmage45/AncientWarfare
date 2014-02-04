@@ -37,6 +37,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
+import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IFileSelectCallback;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
 import shadowmage.ancient_framework.client.model.ModelBaseAW;
@@ -388,13 +389,22 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
+  pieceLabel = new GuiString(100, this, 160, 12, "None");
+  pieceLabel.updateRenderPos(-guiLeft+125, -guiTop);
+  this.addElement(pieceLabel);
+  primitiveLabel = new GuiString(101, this, 160, 12, "None");
+  primitiveLabel.updateRenderPos(-guiLeft+125, -guiTop+14);
+  this.addElement(primitiveLabel);
   this.setup.setupControls();//all controls are maintained in the setup class
+  
   }
 
 @Override
 public void updateControls()
   {
-  setup.updateControls(guiLeft, guiTop, width, height);//all controls are maintained in the setup class    
+  setup.updateControls(guiLeft, guiTop, width, height);//all controls are maintained in the setup class
+  pieceLabel.updateRenderPos(-guiLeft+125, -guiTop);
+  primitiveLabel.updateRenderPos(-guiLeft+125, -guiTop+14);
   }
 
 ModelLoader loader = new ModelLoader();
@@ -491,14 +501,11 @@ Primitive getSelectedPrimitive()
 
 void setSelectedPrimitive(Primitive selectedPrimitive)
   {
-  if(selectedPrimitive!=null && selectedPrimitive.parent!=null)
-    {
-    this.selectedPiece = selectedPrimitive.parent;
-    }
-  this.selectedPrimitive = selectedPrimitive;
-  this.setup.addPrimitiveControls();
-  this.refreshGui();
+  this.setSelection(selectedPrimitive==null? null : selectedPrimitive.parent, selectedPrimitive);
   }
+
+GuiString pieceLabel;
+GuiString primitiveLabel;
 
 ModelPiece getSelectedPiece()
   {
@@ -507,8 +514,40 @@ ModelPiece getSelectedPiece()
 
 void setSelectedPiece(ModelPiece selectedPiece)
   {
+  setSelection(selectedPiece, null);  
+  }
+
+private void setSelection(ModelPiece selectedPiece, Primitive selectedPrimitive)
+  {
+  if(selectedPrimitive!=null && selectedPrimitive.parent!=selectedPiece)
+    {
+    selectedPiece = selectedPrimitive.parent;
+    }
+  if(selectedPiece==null)
+    {
+    selectedPrimitive=null;
+    }
+  
   this.selectedPiece = selectedPiece;
-  this.setSelectedPrimitive(null);
+  pieceLabel.setText(selectedPiece==null? "None" : selectedPiece.getName());
+  
+  
+  this.selectedPrimitive = selectedPrimitive;  
+  int num = 1;
+  if(selectedPrimitive!=null)
+    {
+    for(Primitive prim :selectedPrimitive.parent.getPrimitives())
+      {
+      if(prim==selectedPrimitive)
+        {
+        break;
+        }
+      num++;
+      }    
+    }
+  this.primitiveLabel.setText(selectedPrimitive==null ? "None" : "Prim:"+num);
+  
+  this.setup.addPrimitiveControls();
   this.refreshGui();
   }
 }

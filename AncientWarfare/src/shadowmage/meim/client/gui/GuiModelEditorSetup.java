@@ -772,12 +772,12 @@ public void addRightLabels()
     int num = 1;    
     for(Primitive p : gui.getSelectedPiece().getPrimitives())
       {
-      label = new GuiString(0, rightPrimitivesPanel, 80, 12, "Box:"+num)
+      label = new GuiString(0, rightPrimitivesPanel, 80, 12, "Prim:"+num)
         {
         @Override
         public void onElementActivated()
           {          
-          gui.setSelectedPrimitive(primitiveLabelMap.get(this));
+          gui.setSelectedPrimitive(primitiveLabelMap.get(this));          
           }
         };
       label.clickable = true;
