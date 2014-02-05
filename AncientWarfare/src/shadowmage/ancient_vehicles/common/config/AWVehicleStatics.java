@@ -29,7 +29,9 @@ import shadowmage.ancient_framework.common.config.Statics;
 public class AWVehicleStatics extends ModConfiguration
 {
 
-public static final String vehicleDefinitionsFile = Statics.ASSETS_PATH +"/definitions/vehicles.def";
+public static final String vehicleDefinitionsFile = Statics.ASSETS_PATH +"/definitions/vehicles.csv";
+public static final String vehicleTooltipsFile = Statics.ASSETS_PATH +"/definitions/vehicletooltips.csv";
+public static final String vehicleResearchFile = Statics.ASSETS_PATH +"/definitions/vehicleresearch.csv";
 
 public AWVehicleStatics(File configFile, Logger log, String version)
   {

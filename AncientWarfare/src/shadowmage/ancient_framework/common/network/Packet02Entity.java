@@ -21,6 +21,7 @@
 package shadowmage.ancient_framework.common.network;
 
 import net.minecraft.entity.Entity;
+import shadowmage.ancient_framework.common.interfaces.IEntityPacketHandler;
 import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -64,10 +65,10 @@ public void readDataStream(ByteArrayDataInput data)
 public void execute()
   {
   Entity entity = world.getEntityByID(entityID);
-  if(entity instanceof IHandlePacketData)
+  if(entity instanceof IEntityPacketHandler)
     {
-    IHandlePacketData handle = (IHandlePacketData)entity;
-    handle.handlePacketData(packetData);
+    IEntityPacketHandler handle = (IEntityPacketHandler)entity;
+    handle.onPacketDataReceived(packetData);
     }
   }
 

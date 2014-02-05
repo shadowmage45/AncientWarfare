@@ -30,7 +30,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.interfaces.IContainerGuiCallback;
-import shadowmage.ancient_framework.common.interfaces.IEntityContainerSynch;
 import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
 import shadowmage.ancient_framework.common.network.Packet03GuiComs;
 import shadowmage.ancient_framework.common.utils.InventoryTools;
@@ -50,26 +49,11 @@ public abstract class ContainerBase extends Container implements IHandlePacketDa
  */
 public final EntityPlayer player;
 
-/**
- * the TE or Entity responsible for server-side base data, and multi-crafter support
- */
-public final IEntityContainerSynch entity;
 public IContainerGuiCallback gui;
 
 public ContainerBase(EntityPlayer player, int x, int y, int z)
   {
   this.player = player;
-  this.entity = null;  
-  }
-
-public ContainerBase(EntityPlayer openingPlayer, IEntityContainerSynch synch)
-  {
-  this.player = openingPlayer;
-  this.entity = synch;
-  if(entity!=null)
-    {
-    entity.addPlayer(player);
-    }
   }
 
 protected void addPlayerSlots(EntityPlayer player, int tx, int ty, int gap)
@@ -164,10 +148,6 @@ public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClic
 @Override
 public boolean canInteractWith(EntityPlayer var1)
   {  
-  if(entity!=null)
-    {
-    return entity.canInteract(var1);
-    }
   return true;
   }
 

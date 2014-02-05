@@ -30,6 +30,12 @@ package shadowmage.ancient_vehicles.common.vehicle;
 public class VehicleStats
 {
 
+float maxHealth;
+float health;
+float mass;
+float thrust;
+float firePower;
+
 public float wheelAngle;
 public float wheelSpeed;
 public float turretYaw;
@@ -39,10 +45,11 @@ public float turretPitchSpeed;
 
 public float yawSpeed;//how fast the vehicle is rotating
 
+EntityVehicle vehicle;
 
-public VehicleStats()
+public VehicleStats(EntityVehicle vehicle)
   {
-  // TODO Auto-generated constructor stub
+  this.vehicle = vehicle;
   }
 
 }

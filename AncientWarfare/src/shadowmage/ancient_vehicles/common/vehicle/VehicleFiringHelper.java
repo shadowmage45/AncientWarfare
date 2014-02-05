@@ -28,4 +28,5 @@ public VehicleFiringHelper(EntityVehicle vehicle)
  
   }
 
+public void onUpdate(){}
 }

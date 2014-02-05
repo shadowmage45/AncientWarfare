@@ -30,9 +30,17 @@ package shadowmage.ancient_vehicles.common.vehicle;
 public class VehicleMoveHelper
 {
 
-public VehicleMoveHelper()
+EntityVehicle vehicle;
+public VehicleMoveHelper(EntityVehicle vehicle)
   {
+  this.vehicle = vehicle;
+  }
 
+public void onUpdate(){}
+
+public void updateRiderPosition()
+  {
+  
   }
 
 }

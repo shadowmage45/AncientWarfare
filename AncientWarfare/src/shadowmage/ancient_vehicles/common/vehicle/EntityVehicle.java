@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_vehicles.common.vehicle;
 
+import shadowmage.ancient_framework.common.interfaces.IEntityPacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -29,16 +30,18 @@ import com.google.common.io.ByteArrayDataOutput;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityVehicle extends Entity implements IEntityAdditionalSpawnData
+public class EntityVehicle extends Entity implements IEntityAdditionalSpawnData, IEntityPacketHandler
 {
 
 private VehicleType vehicleType;
 private VehicleFiringHelper firingHelper;
+private VehicleMoveHelper moveHelper;
 private VehicleStats vehicleStats;
 
 public EntityVehicle(World par1World)
   {
   super(par1World);
+  this.vehicleStats = new VehicleStats(this);
   }
 
 public EntityVehicle setVehicleType(VehicleType type)
@@ -53,20 +56,35 @@ public EntityVehicle setFiringHelper(VehicleFiringHelper firingHelper)
   return this;
   }
 
-public VehicleType getVehicleType()
+public EntityVehicle setMoveHelper(VehicleMoveHelper helper)
   {
-  return this.vehicleType;
+  this.moveHelper = helper;
+  return this;
   }
 
-public VehicleStats getVehicleStats()
-  {
-  return this.vehicleStats;
+public VehicleType getVehicleType(){return this.vehicleType;}
+public VehicleMoveHelper getMoveHelper(){return moveHelper;}
+public VehicleFiringHelper getFiringHelper(){return firingHelper;}
+public VehicleStats getVehicleStats(){return this.vehicleStats;}
+
+@Override
+public void onUpdate()
+  {    
+  super.onUpdate();
+  this.firingHelper.onUpdate();
+  this.moveHelper.onUpdate();
   }
 
 @Override
 protected void entityInit()
   {
 
+  }
+
+@Override
+public void updateRiderPosition()
+  {
+  this.moveHelper.updateRiderPosition();
   }
 
 @Override
@@ -100,6 +118,13 @@ public void readSpawnData(ByteArrayDataInput data)
   {
   //read nbt tag from stream
   //read vars from tag...will need to mimic readEntityFromNBT
+  }
+
+@Override
+public void onPacketDataReceived(NBTTagCompound tag)
+  {
+  // TODO Auto-generated method stub
+  
   }
 
 }

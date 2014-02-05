@@ -31,13 +31,22 @@ NPCS:
 * not yet started
 
 
-
-loading sequence:
-
-load definitions in pre-init (vehicles/ammo/npc)
-register items / icons / etc
-
-
-
 AUTOMATION:
 * not yet started
+
+
+
+
+
+
+Vehicles:
+	EntityVehicle
+		VehicleType singleton base definition (model, texture, name, base stats)
+		MoveHelper instance variable holder, type determined by vehicleType definition
+		FiringHelper instance variable holder, type determined by vehicleType definition
+		VehicleStats instance variable holder for current stats
+		
+		
+lose the material type/level stuff -- it is cumbersome an unnatural, perhaps just make a few 'advanced' types of some vehicles
+
+

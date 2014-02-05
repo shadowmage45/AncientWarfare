@@ -32,17 +32,17 @@ public interface INBTTaggable
 {
 
 /**
- * get a tag representing the entire data structure for this object;
- * i.e., the entire object should be able to be reconstructed from 
- * this tag alone
- * @return
+ * write the entire data structure for this object to the passed in tag
+ * @param tag
  */
-public NBTTagCompound getNBTTag();
+public void writeToNBT(NBTTagCompound tag);
 
 /**
- * populate the entire data structure for this entity from a tag
+ * populate the entire data structure for this object from a tag
  * @param tag
  */
 public void readFromNBT(NBTTagCompound tag);
+
+
 
 }

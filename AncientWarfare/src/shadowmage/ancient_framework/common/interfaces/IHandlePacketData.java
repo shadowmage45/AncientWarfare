@@ -36,8 +36,7 @@ public interface IHandlePacketData
 public void handlePacketData(NBTTagCompound tag);
 
 /**
- * server->client init data, should only exec client side, to setup any params not available
- * on client end.
+ * used by GUIs
  * @param tag
  */
 public void handleInitData(NBTTagCompound tag);

@@ -38,7 +38,7 @@ public String mobID = "Pig";
  */
 public ContainerSpawnerPlacer(EntityPlayer openingPlayer, int x, int y, int z)
   {
-  super(openingPlayer, null);
+  super(openingPlayer, x, y, z);
   ItemStack builderItem = player.inventory.getCurrentItem(); 
   if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("spawnData"))
     {

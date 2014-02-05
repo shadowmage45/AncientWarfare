@@ -43,8 +43,17 @@ private static HashMap<String, Object> moveTypes = new HashMap<String, Object>()
 
 public static void loadVehicles()
   {
-  List<VehicleType> types = loadFromDefinition(AWVehicleStatics.vehicleDefinitionsFile);
+  registerVehicleHelperTypes();
+  List<VehicleType> types = loadFromDefinition(AWVehicleStatics.vehicleDefinitionsFile, AWVehicleStatics.vehicleTooltipsFile, AWVehicleStatics.vehicleResearchFile);
   AWVehicles.instance.config.log("loaded: "+types.size() + " vehicle definitions");
+  }
+
+private static void registerVehicleHelperTypes()
+  {
+  /**
+   * TODO register vehicle helpers -- firing and move
+   * TODO figure out move-types
+   */
   }
 
 public static void registerVehicleItemData(AWItemBase item)
@@ -56,6 +65,7 @@ public static void registerVehicleItemData(AWItemBase item)
       {
       item.addDisplayName(t.getId(), t.name);
       item.addDisplayStack(t.getId(), new ItemStack(item, 1, t.getId()));
+      item.addTooltip(t.getId(), t.tooltips);
       }
     if(t.isSuvivalEnabled())
       {
@@ -77,21 +87,17 @@ public static Object getMoveType(String name)
   return moveTypes.get(name);
   }
 
-private static List<VehicleType> loadFromDefinition(String path)
+private static List<VehicleType> loadFromDefinition(String definitions, String tooltips, String research)
   {
-  InputStream is = AWVehicles.instance.getClass().getResourceAsStream(path);
-  if(is==null){return Collections.emptyList();}  
   List<VehicleType> types = new ArrayList<VehicleType>();
-  BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-  String line;
-  String[] lineBits;
-  VehicleType type;
-  //#name, id, model, render, texture, firingHelper, moveType, <other stats--movement, inventory size, etc>
   try
     {
-    while((line = reader.readLine())!=null)
+    
+    String[] lineBits;
+    VehicleType type;
+    List<String> lines = getLinesFrom(definitions);
+    for(String line : lines)
       {
-      if(line.startsWith("#")){continue;}
       lineBits = line.split(",", -1);
       type = VehicleType.parseFromCSV(lineBits);
       if(type!=null)
@@ -99,20 +105,46 @@ private static List<VehicleType> loadFromDefinition(String path)
         types.add(type);
         }
       }
-    } 
-  catch (IOException e1)
-    {
-    e1.printStackTrace();
-    }  
-  try
-    {
-    reader.close();
+    
+    lines = getLinesFrom(tooltips);
+    for(String line : lines)
+      {
+      lineBits = line.split(",", -1);
+      type = VehicleType.getVehicleType(lineBits[0]);
+      if(type==null){continue;}
+      type.parseTooltips(lineBits);
+      }
+    
+    lines = getLinesFrom(research);
+    for(String line : lines)
+      {
+      lineBits = line.split(",", -1);
+      type = VehicleType.getVehicleType(lineBits[0]);
+      if(type==null){continue;}
+      type.parseResearch(lineBits);
+      }
     } 
   catch (IOException e)
-    {
+    {  
     e.printStackTrace();
     }
   return types;
+  }
+
+private static List<String> getLinesFrom(String resourcePath) throws IOException
+  {
+  List<String> lines = new ArrayList<String>();
+  InputStream is = AWVehicles.instance.getClass().getResourceAsStream(resourcePath);
+  BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+  String line;
+  while((line = reader.readLine())!=null)
+    {
+    if(line.startsWith("#")){continue;}
+    lines.add(line);
+    }
+  reader.close();
+  is.close();
+  return lines;
   }
 
 }

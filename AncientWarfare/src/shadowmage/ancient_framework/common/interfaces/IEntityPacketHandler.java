@@ -25,7 +25,6 @@ import net.minecraft.nbt.NBTTagCompound;
 public interface IEntityPacketHandler
 {
 
-
 public void onPacketDataReceived(NBTTagCompound tag);
 
 }

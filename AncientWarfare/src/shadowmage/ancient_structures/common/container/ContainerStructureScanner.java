@@ -48,7 +48,7 @@ ItemStructureSettings settings = new ItemStructureSettings();
 
 public ContainerStructureScanner(EntityPlayer openingPlayer, int x, int y, int z)
   {
-  super(openingPlayer, null);
+  super(openingPlayer, x, y, z );
   if(player.worldObj.isRemote)
     {
     return;
