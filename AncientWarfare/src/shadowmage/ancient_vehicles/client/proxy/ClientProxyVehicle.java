@@ -22,7 +22,9 @@ package shadowmage.ancient_vehicles.client.proxy;
 
 import shadowmage.ancient_framework.client.proxy.ClientProxyBase;
 import shadowmage.ancient_vehicles.client.render.RenderVehicleProxy;
+import shadowmage.ancient_vehicles.common.vehicle.EntityVehicle;
 import shadowmage.ancient_vehicles.common.vehicle.VehicleType;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxyVehicle extends ClientProxyBase
 {
@@ -67,6 +69,7 @@ public void registerRenderers()
       RenderVehicleProxy.registerVehicleType(type);
       }
     } 
+  RenderingRegistry.registerEntityRenderingHandler(EntityVehicle.class, new RenderVehicleProxy());
   }
 
 @Override

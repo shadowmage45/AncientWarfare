@@ -23,6 +23,7 @@ package shadowmage.ancient_vehicles.common.vehicle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -85,15 +86,13 @@ float flagY;
 float flagZ;
 boolean flagMovesWithTurret;
 
-String tooltipKey;//key used to load tooltips from tooltip definition file
-String researchKey;//key used to load research goal data from research definition file
-
-
 /**
- * not loaded from definitions csv
+ * loaded from separate csvs
  */
 List<String> tooltips;
 Set<Integer> researchGoals;
+Set<String> upgrades;
+Set<String> ammos;
 
 public VehicleType(String name, int id)
   {
@@ -101,7 +100,10 @@ public VehicleType(String name, int id)
   this.vehicleId = id;
   vehicleTypesByName.put(name, this);
   vehicleTypeByID.put(id, this);
-  this.tooltips = new ArrayList<String>();
+  tooltips = new ArrayList<String>();
+  researchGoals = new HashSet<Integer>();
+  upgrades = new HashSet<String>();
+  ammos = new HashSet<String>();
   }
 
 public static final VehicleType getVehicleType(String name)
@@ -211,4 +213,27 @@ public void parseResearch(String[] csv)
       }
     }
   }
+
+public void parseUpgrades(String[] csv)
+  {
+  for(int i = 1; i < csv.length; i++)//start at 1 to skip vehicle name
+    {
+    if(!csv[i].isEmpty())
+      {
+      upgrades.add(csv[i]);      
+      }
+    }
+  }
+
+public void parseAmmoTypes(String[] csv)
+  {
+  for(int i = 1; i < csv.length; i++)//start at 1 to skip vehicle name
+    {
+    if(!csv[i].isEmpty())
+      {
+      ammos.add(csv[i]);      
+      }
+    }
+  }
+
 }

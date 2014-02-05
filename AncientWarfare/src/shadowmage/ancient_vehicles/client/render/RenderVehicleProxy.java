@@ -50,6 +50,7 @@ public static void registerRenderers()
 public static void registerVehicleType(VehicleType type)
   {
   vehicleTextures.put(type.getName(), new ResourceLocation("ancientwarfare", type.getTextureName()));
+  //load model file from disk
   }
 
 @Override

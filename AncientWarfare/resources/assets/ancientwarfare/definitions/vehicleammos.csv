@@ -1,0 +1,6 @@
+#csv-formatted vehicle research goals,,,,,
+#fields are:,,,,,
+#string,int,int,int,int,int
+#name,goal1,goal2,goal3,goal4,etc..
+vehicle.catapult.mobile.turret,,,,,
+vehicle.ballista.mobile.turret,,,,,

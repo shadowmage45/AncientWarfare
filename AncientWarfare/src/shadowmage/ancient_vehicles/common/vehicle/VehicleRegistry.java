@@ -44,7 +44,7 @@ private static HashMap<String, Object> moveTypes = new HashMap<String, Object>()
 public static void loadVehicles()
   {
   registerVehicleHelperTypes();
-  List<VehicleType> types = loadFromDefinition(AWVehicleStatics.vehicleDefinitionsFile, AWVehicleStatics.vehicleTooltipsFile, AWVehicleStatics.vehicleResearchFile);
+  List<VehicleType> types = loadFromDefinitions(AWVehicleStatics.vehicleDefinitionsFile, AWVehicleStatics.vehicleTooltipsFile, AWVehicleStatics.vehicleResearchFile, AWVehicleStatics.vehicleUpgradeFile, AWVehicleStatics.vehicleAmmoFile);
   AWVehicles.instance.config.log("loaded: "+types.size() + " vehicle definitions");
   }
 
@@ -87,7 +87,7 @@ public static Object getMoveType(String name)
   return moveTypes.get(name);
   }
 
-private static List<VehicleType> loadFromDefinition(String definitions, String tooltips, String research)
+private static List<VehicleType> loadFromDefinitions(String definitions, String tooltips, String research, String upgrades, String ammos)
   {
   List<VehicleType> types = new ArrayList<VehicleType>();
   try
@@ -122,6 +122,24 @@ private static List<VehicleType> loadFromDefinition(String definitions, String t
       type = VehicleType.getVehicleType(lineBits[0]);
       if(type==null){continue;}
       type.parseResearch(lineBits);
+      }
+    
+    lines = getLinesFrom(upgrades);
+    for(String line : lines)
+      {
+      lineBits = line.split(",", -1);
+      type = VehicleType.getVehicleType(lineBits[0]);
+      if(type==null){continue;}
+      type.parseUpgrades(lineBits);
+      }
+    
+    lines = getLinesFrom(ammos);
+    for(String line : lines)
+      {
+      lineBits = line.split(",", -1);
+      type = VehicleType.getVehicleType(lineBits[0]);
+      if(type==null){continue;}
+      type.parseAmmoTypes(lineBits);
       }
     } 
   catch (IOException e)
