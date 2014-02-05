@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
@@ -38,9 +39,9 @@ import shadowmage.ancient_framework.common.utils.BlockTools;
 public class ItemStructureScanner extends AWItemClickable
 {
 
-public ItemStructureScanner(int itemID)
+public ItemStructureScanner(Configuration config, String itemName)
   {
-  super(itemID);
+  super(config, itemName);
   this.setMaxStackSize(1);  
   this.hasLeftClick = true;
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
@@ -53,8 +54,7 @@ public ItemStructureScanner(int itemID)
 ItemStructureSettings viewSettings = new ItemStructureSettings();
 @Override
 public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4)
-  {
-  super.addInformation(par1ItemStack, par2EntityPlayer, list, par4);  
+  { 
   if(par1ItemStack!=null)
     {
     ItemStructureSettings.getSettingsFor(par1ItemStack, viewSettings);

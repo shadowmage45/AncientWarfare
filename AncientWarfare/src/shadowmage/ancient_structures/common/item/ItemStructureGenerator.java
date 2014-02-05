@@ -23,6 +23,7 @@ package shadowmage.ancient_structures.common.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.gamedata.AWGameData;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
@@ -38,9 +39,9 @@ public class ItemStructureGenerator extends ItemBuilderCreative
 /**
  * @param itemID
  */
-public ItemStructureGenerator(int itemID)
+public ItemStructureGenerator(Configuration config, String itemName)
   {
-  super(itemID);
+  super(config, itemName);
   }
 
 @Override

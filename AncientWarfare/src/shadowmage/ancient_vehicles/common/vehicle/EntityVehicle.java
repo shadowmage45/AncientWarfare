@@ -33,7 +33,7 @@ public class EntityVehicle extends Entity implements IEntityAdditionalSpawnData
 {
 
 private VehicleType vehicleType;
-private Object firingHelper;
+private VehicleFiringHelper firingHelper;
 private VehicleStats vehicleStats;
 
 public EntityVehicle(World par1World)
@@ -47,7 +47,7 @@ public EntityVehicle setVehicleType(VehicleType type)
   return this;
   }
 
-public EntityVehicle setFiringHelper(Object firingHelper)
+public EntityVehicle setFiringHelper(VehicleFiringHelper firingHelper)
   {
   this.firingHelper = firingHelper;
   return this;

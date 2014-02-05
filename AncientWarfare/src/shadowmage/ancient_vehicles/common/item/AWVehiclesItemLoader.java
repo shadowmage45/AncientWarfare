@@ -22,9 +22,8 @@ package shadowmage.ancient_vehicles.common.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import shadowmage.ancient_framework.AWFramework;
 import shadowmage.ancient_framework.common.item.AWItemBase;
-import shadowmage.ancient_framework.common.registry.ObjectRegistry;
+import shadowmage.ancient_vehicles.AWVehicles;
 
 public class AWVehiclesItemLoader
 {
@@ -32,7 +31,6 @@ public class AWVehiclesItemLoader
 private AWVehiclesItemLoader(){}
 private static AWVehiclesItemLoader instance = new AWVehiclesItemLoader();
 public static AWVehiclesItemLoader instance(){return instance;}
-private static ObjectRegistry registry = AWFramework.instance.objectRegistry;
 
 public static CreativeTabs vehiclesTab = new CreativeTabs("Ancient Vehicles")
 {
@@ -44,12 +42,12 @@ public Item getTabIconItem()
 };//need to declare this instance prior to any items that use it as their creative tab
 
 
-public static final AWItemBase vehicleSpawner = registry.createItem("item.vehicleSpawner", ItemVehicleSpawner.class);
+public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(AWVehicles.instance.config.getConfig(), "item.vehiclespawner");//.createItem("item.vehicleSpawner", ItemVehicleSpawner.class);
 
 
 public void registerItems()
-  {
-  registry.addDescription(vehicleSpawner, "item.vehicleSpawner", 0, "item.vehicleSpawner.tooltip", "ancientwarfare:testIcon1");
+  {  
+  //registry.addDescription(vehicleSpawner, "item.vehicleSpawner", 0, "item.vehicleSpawner.tooltip", "ancientwarfare:testIcon1");
   }
 
 }

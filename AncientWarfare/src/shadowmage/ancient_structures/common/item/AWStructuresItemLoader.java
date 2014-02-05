@@ -22,9 +22,10 @@ package shadowmage.ancient_structures.common.item;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import shadowmage.ancient_framework.AWFramework;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.item.AWItemBase;
-import shadowmage.ancient_framework.common.registry.ObjectRegistry;
+import shadowmage.ancient_structures.AWStructures;
 
 public class AWStructuresItemLoader
 {
@@ -32,9 +33,10 @@ public class AWStructuresItemLoader
 private AWStructuresItemLoader(){}
 private static AWStructuresItemLoader instance = new AWStructuresItemLoader();
 public static AWStructuresItemLoader instance(){return instance;}
-private static ObjectRegistry registry = AWFramework.instance.objectRegistry;
+private static Configuration config = AWStructures.instance.config.getConfig();
 public static CreativeTabs structureTab = new CreativeTabs("Ancient Structures")
 {
+
 @Override
 public Item getTabIconItem()
   {  
@@ -48,17 +50,28 @@ public String getTranslatedTabLabel()
   }  
 };//need to declare this instance prior to any items that use it as their creative tab
 
-public static AWItemBase structureScanner = registry.createItem("item.structurescanner", ItemStructureScanner.class);
-public static AWItemBase structureBuilderCreative = registry.createItem("item.structurebuilder", ItemBuilderCreative.class);
-public static AWItemBase spawnerPlacer = registry.createItem("item.spawnerplacer", ItemSpawnerPlacer.class);
-public static AWItemBase structureGenerator = registry.createItem("item.structuregenerator", ItemStructureGenerator.class);
+public static AWItemBase structureScanner = new ItemStructureScanner(config, "item.structurescanner");
+public static AWItemBase structureBuilderCreative = new ItemBuilderCreative(config, "item.structurebuilder");
+public static AWItemBase spawnerPlacer = new ItemSpawnerPlacer(config, "item.spawnerplacer");
+public static AWItemBase structureGenerator = new ItemStructureGenerator(config, "item.structuregenerator");
 
 public void registerItems()
   {
-  registry.addDescription(structureScanner, "item.structurescanner",  0, "item.structurescanner.tooltip", "ancientwarfare:builder/structureScanner1");
-  registry.addDescription(structureBuilderCreative, "item.structurebuilder", 0, "item.structurebuilder.tooltip", "ancientwarfare:builder/structureBuilder1");
-  registry.addDescription(spawnerPlacer, "item.spawnerplacer", 0, "item.spawnerplacer.tooltip", "ancientwarfare:builder/structureBuilder1");
-  registry.addDescription(structureGenerator, "item.structuregenerator", 0, "item.structuregenerator.tooltip", "ancientwarfare:builder/structureBuilder1");
+  structureScanner.addDisplayStack(0, new ItemStack(structureScanner));
+  structureScanner.addDisplayName(0, "item.structurescanner");
+  structureScanner.addIcon(0, "ancientwarfare:structure/structureScanner");
+  
+  structureBuilderCreative.addDisplayStack(0, new ItemStack(structureBuilderCreative));
+  structureBuilderCreative.addDisplayName(0, "item.structurebuildercreative");
+  structureBuilderCreative.addIcon(0, "ancientwarfare:structure/structureBuilder");
+
+  spawnerPlacer.addDisplayStack(0, new ItemStack(spawnerPlacer));
+  spawnerPlacer.addDisplayName(0, "item.spawnerplacer");
+  spawnerPlacer.addIcon(0, "ancientwarfare:structure/spawnerPlacer");
+  
+  structureGenerator.addDisplayStack(0, new ItemStack(structureGenerator));
+  structureGenerator.addDisplayName(0, "item.structuregenerator");
+  structureGenerator.addIcon(0, "ancientwarfare:structure/structureGenerator");
   }
 
 }

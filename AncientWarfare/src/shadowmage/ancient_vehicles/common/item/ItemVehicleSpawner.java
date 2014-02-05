@@ -22,18 +22,27 @@ package shadowmage.ancient_vehicles.common.item;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
+import shadowmage.ancient_vehicles.common.vehicle.VehicleType;
 
 public class ItemVehicleSpawner extends AWItemClickable
 {
 
-public ItemVehicleSpawner(int itemID)
+public ItemVehicleSpawner(Configuration config, String itemName)
   {
-  super(itemID);
+  super(config, itemName);
   this.setHasSubtypes(true);
   this.setCreativeTab(AWVehiclesItemLoader.vehiclesTab);
+  }
+
+@Override
+public Icon getIconFromDamage(int par1)
+  {
+  return icons.get(0);//return placeholder icon -- normally the item should use a model
   }
 
 @Override

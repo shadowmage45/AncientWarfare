@@ -1,0 +1,43 @@
+TODO:
+
+FRAMEWORK:
+* crafting system
+* research system
+* teams system -- WIP
+
+
+STRUCTURES:
+* plugins for other modules
+* stand-alone template converter packaging for different OS / testing
+
+
+VEHICLES:
+* networking/input
+* upgrade system
+* ammo system
+
+
+MODEL EDITOR:
+* u/v mapping
+* u/v editor
+* png texture editor
+
+
+PVP:
+* strategy system
+
+
+NPCS:
+* not yet started
+
+
+
+loading sequence:
+
+load definitions in pre-init (vehicles/ammo/npc)
+register items / icons / etc
+
+
+
+AUTOMATION:
+* not yet started

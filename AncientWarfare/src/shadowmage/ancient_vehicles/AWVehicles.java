@@ -75,8 +75,9 @@ public void preInit(FMLPreInitializationEvent evt)
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   this.config.log("Ancient Warfare Vehicles Pre-Init started.");
   AWFramework.loadedVehicles = true;
-  AWVehiclesItemLoader.instance().registerItems();
   VehicleRegistry.loadVehicles();
+  AWVehiclesItemLoader.instance().registerItems();
+  VehicleRegistry.registerVehicleItemData(AWVehiclesItemLoader.vehicleSpawner);
   try
     {
     MinecraftForge.EVENT_BUS.register(new RenderTest());

@@ -1,8 +1,8 @@
 #csv-formatted vehicle definitions
 #fields are:
 #name, model, render, texture, firingHelper, moveType, <other stats--movement, inventory size, etc>
-vehicle.catapult.mobile.turret.1, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret1.png, null, null, true, true
-vehicle.catapult.mobile.turret.2, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret2.png, null, null, true, true
-vehicle.catapult.mobile.turret.3, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret3.png, null, null, true, true
-vehicle.catapult.mobile.turret.4, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret4.png, null, null, true, true
-vehicle.catapult.mobile.turret.5, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret5.png, null, null, true, true
+vehicle.catapult.mobile.turret.1, 0, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret1.png, null, null, true, true
+vehicle.catapult.mobile.turret.2, 1, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret2.png, null, null, true, true
+vehicle.catapult.mobile.turret.3, 2, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret3.png, null, null, true, true
+vehicle.catapult.mobile.turret.4, 3, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret4.png, null, null, true, true
+vehicle.catapult.mobile.turret.5, 4, model.catapult.mobile.turret, render.vehicle.mobile.turret, models/catapultMobileTurret5.png, null, null, true, true

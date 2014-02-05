@@ -22,6 +22,7 @@
  */
 package shadowmage.ancient_framework.common.item;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -31,30 +32,58 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
-import shadowmage.ancient_framework.common.registry.entry.Description;
+import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AWItemBase extends Item
 {
 
-public Description description;
+String itemName;
 
-public AWItemBase(int itemID)
+protected HashMap<Integer, Icon> icons = new HashMap<Integer, Icon>();
+protected HashMap<Integer, String> iconTextures = new HashMap<Integer, String>();
+protected HashMap<Integer, List<String>> tooltips = new HashMap<Integer, List<String>>();
+protected HashMap<Integer, ItemStack> displayStacks = new HashMap<Integer, ItemStack>();
+protected HashMap<Integer, String> displayNames = new HashMap<Integer, String>();
+
+public AWItemBase(Configuration config, String itemName)
   {
-  super(itemID);  
+  super(config.getItem(itemName, 10000).getInt(10000));
+  this.itemName = itemName;
   }
 
-/**
- * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
- */
+public AWItemBase addIcon(int dmg, String tex)
+  {
+  this.iconTextures.put(dmg, tex);
+  return this;
+  }
+
+public AWItemBase addDisplayStack(int dmg, ItemStack stack)
+  {
+  displayStacks.put(dmg, stack);
+  return this;
+  }
+
+public AWItemBase addDisplayName(int dmg, String key)
+  {
+  this.displayNames.put(dmg, key);
+  return this;
+  }
+
+public AWItemBase addTooltip(int dmg, List<String> keys)
+  {
+  this.tooltips.put(dmg, keys);
+  return this;
+  }
+
 @SideOnly(Side.CLIENT)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {  
-  if(description!=null)
+  if(!displayStacks.isEmpty())
     {
-    par3List.addAll(description.getDisplayStackCache());
+    par3List.addAll(displayStacks.values());
     }
   else
     {
@@ -65,21 +94,10 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  if(stack!=null)
+  if(tooltips.containsKey(stack.getItemDamage()))
     {
-    Description d = description;
-    if(d!=null)
-      {
-      List<String> tips = d.getDisplayTooltips(stack.getItemDamage());
-      if(tips!=null && !tips.isEmpty())
-        {
-        for(String tip : tips)
-          {
-          list.add(StatCollector.translateToLocal(tip));
-          }        
-        }
-      }     
-    }  
+    list.addAll(tooltips.get(stack.getItemDamage()));
+    }
   }
 
 @Override
@@ -89,58 +107,41 @@ public String getItemStackDisplayName(ItemStack par1ItemStack)
   }
 
 @Override
+public String getItemDisplayName(ItemStack par1ItemStack)
+  {
+  String itemName = this.itemName;
+  if(displayNames.containsKey(par1ItemStack.getItemDamage()))
+    {
+    itemName = displayNames.get(par1ItemStack.getItemDamage());
+    }
+  return StatCollector.translateToLocal(itemName);
+  }
+
+@Override
 public String getUnlocalizedName()
   {
-  Description d = description;
-  if(d!=null)
-    {
-    return d.getDisplayName(0);
-    }
-  return "Unregistered Item : "+itemID;
+  return itemName;
   }
 
 @Override
 public String getUnlocalizedName(ItemStack par1ItemStack)
   {
-  Description d = description;
-  if(d!=null)
-    {
-    return d.getDisplayName(par1ItemStack.getItemDamage());
-    }
-  return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
-  }
-
-@Override
-public String getItemDisplayName(ItemStack par1ItemStack)
-  {
-  Description d = description;
-  if(d!=null)
-    {
-    String name = d.getDisplayName(par1ItemStack.getItemDamage());
-    return StatCollector.translateToLocal(name);
-    }
-  return "Unregistered Item : "+itemID+":"+par1ItemStack.getItemDamage();
+  return getUnlocalizedName();
   }
 
 @Override
 public void registerIcons(IconRegister par1IconRegister)
   {
-  Description d = description;
-  if(d!=null)
+  for(Integer key : this.iconTextures.keySet())
     {
-    d.registerIcons(par1IconRegister);
+    this.icons.put(key, par1IconRegister.registerIcon(this.iconTextures.get(key)));
     }
   }
-
+ 
 @Override
 public Icon getIconFromDamage(int par1)
   {
-  Description d = description;
-  if(d!=null)
-    {
-    return d.getIconFor(par1);
-    }
-  return super.getIconFromDamage(par1);
+  return icons.get(par1); 
   }
 
 @Override

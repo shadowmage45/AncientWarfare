@@ -23,6 +23,7 @@ package shadowmage.ancient_framework.common.item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
 
 public abstract class AWItemClickable extends AWItemBase
@@ -34,9 +35,9 @@ public boolean hasLeftClick = false;
  * @param itemID
  * @param hasSubTypes
  */
-public AWItemClickable(int itemID)
+public AWItemClickable(Configuration config, String itemName)
   {
-  super(itemID);
+  super(config, itemName);
   }
 
 @Override

@@ -29,47 +29,46 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import shadowmage.ancient_framework.AWFramework;
+import net.minecraft.item.ItemStack;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.item.AWItemBase;
-import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_vehicles.AWVehicles;
 import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;
-import shadowmage.ancient_vehicles.common.item.AWVehiclesItemLoader;
 
 public class VehicleRegistry
 {
 
-private static HashMap<String, Class> firingHelpers = new HashMap<String, Class>();
+private static HashMap<String, Class <? extends VehicleFiringHelper>> firingHelpers = new HashMap<String, Class<? extends VehicleFiringHelper>>();
 private static HashMap<String, Object> moveTypes = new HashMap<String, Object>();
 
 public static void loadVehicles()
   {
   List<VehicleType> types = loadFromDefinition(AWVehicleStatics.vehicleDefinitionsFile);
   AWVehicles.instance.config.log("loaded: "+types.size() + " vehicle definitions");
-  for(VehicleType t : types)
+  }
+
+public static void registerVehicleItemData(AWItemBase item)
+  {
+  item.addIcon(0, "");//TODO make default vehicle icon
+  for(VehicleType t : VehicleType.vehicleTypesByName.values())
     {
+    if(t.isSuvivalEnabled() || t.isCreativeEnabled())
+      {
+      //register stuff to item      
+      item.addDisplayName(t.getId(), t.name);
+      item.addDisplayStack(t.getId(), new ItemStack(item, 1, t.getId()));
+      }
     if(t.isSuvivalEnabled())
       {
-      //reg recipes and items
-      AWItemBase item = AWVehiclesItemLoader.vehicleSpawner;
-      ObjectRegistry reg = AWFramework.instance.objectRegistry;
-      //reg.addDescription(item, t.name, itemDamage, tooltipKey, itemIcon);
+      //register recipes and research
       /**
-       * TODO -- I don't think I need to really reg-the extra types, merely add the display stacks for creative (if reg for creative)
-       * and in the item, I need to override getName() to return the name from the nbt-tag
-       * 
-       * should probably add a helper method into the vehicleType to return a properly formatted itemStack for that vehicle type
-       * to use in display stacks/recipe results/etc
-       */
-      }
-    else if(t.isSuvivalEnabled())
-      {
-      //reg only items
+       * TODO research and crafting systems
+       */  
       }
     }
   }
 
-public static Class getFiringHelperClass(String name)
+public static Class<? extends VehicleFiringHelper> getFiringHelperClass(String name)
   {
   return firingHelpers.get(name);
   }
@@ -88,7 +87,7 @@ private static List<VehicleType> loadFromDefinition(String path)
   String line;
   String[] lineBits;
   VehicleType type;
-  //#name, model, render, texture, firingHelper, moveType, <other stats--movement, inventory size, etc>
+  //#name, id, model, render, texture, firingHelper, moveType, <other stats--movement, inventory size, etc>
   try
     {
     while((line = reader.readLine())!=null)

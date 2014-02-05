@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.network.GUIHandler;
@@ -39,9 +40,9 @@ public class ItemSpawnerPlacer extends AWItemClickable
 /**
  * @param itemID
  */
-public ItemSpawnerPlacer(int itemID)
+public ItemSpawnerPlacer(Configuration config, String itemName)
   {
-  super(itemID);
+  super(config, itemName);
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
   }
 
@@ -88,7 +89,6 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
 @Override
 public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4)
   {
-  super.addInformation(stack, player, list, par4);
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("spawnData"))
     {
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("spawnData");

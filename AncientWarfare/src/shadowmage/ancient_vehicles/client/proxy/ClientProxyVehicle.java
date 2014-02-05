@@ -60,7 +60,7 @@ public void registerTickHandlers()
 public void registerRenderers()
   {
   RenderVehicleProxy.registerRenderers();
-  for(VehicleType type : VehicleType.vehicleTypes.values())
+  for(VehicleType type : VehicleType.vehicleTypesByName.values())
     {
     if(type.isSuvivalEnabled() || type.isCreativeEnabled())
       {

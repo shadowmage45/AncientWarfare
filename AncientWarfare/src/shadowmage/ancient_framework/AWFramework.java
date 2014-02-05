@@ -34,7 +34,6 @@ import shadowmage.ancient_framework.common.lang.LanguageLoader;
 import shadowmage.ancient_framework.common.network.GUIHandler;
 import shadowmage.ancient_framework.common.network.PacketHandler;
 import shadowmage.ancient_framework.common.proxy.CommonProxy;
-import shadowmage.ancient_framework.common.registry.ObjectRegistry;
 import shadowmage.ancient_framework.common.teams.TeamData;
 import shadowmage.ancient_framework.common.teams.TeamTracker;
 import shadowmage.ancient_framework.common.utils.ServerPerformanceMonitor;
@@ -76,7 +75,6 @@ public static AWFramework instance;
 @SidedProxy(clientSide = "shadowmage.ancient_framework.client.proxy.ClientProxyCore", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
 public static CommonProxy proxy;
 
-public ObjectRegistry objectRegistry;
 public shadowmage.ancient_framework.common.event.EventHandler eventHandler;
 
 /**
@@ -91,7 +89,6 @@ public static boolean loadedAutomation = false;
 public void loadConfiguration(File config, Logger log)
   {  
   this.config = new AWConfig(config, log, Statics.VERSION);
-  objectRegistry = new ObjectRegistry(this.config);
   AWLog.setLogger(log);
   }
 
