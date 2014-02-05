@@ -54,7 +54,6 @@ public static void registerVehicleItemData(AWItemBase item)
     {
     if(t.isSuvivalEnabled() || t.isCreativeEnabled())
       {
-      //register stuff to item      
       item.addDisplayName(t.getId(), t.name);
       item.addDisplayStack(t.getId(), new ItemStack(item, 1, t.getId()));
       }

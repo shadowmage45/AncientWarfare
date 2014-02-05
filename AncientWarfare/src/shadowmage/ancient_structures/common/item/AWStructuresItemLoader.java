@@ -58,19 +58,19 @@ public static AWItemBase structureGenerator = new ItemStructureGenerator(config,
 public void registerItems()
   {
   structureScanner.addDisplayStack(0, new ItemStack(structureScanner));
-  structureScanner.addDisplayName(0, "item.structurescanner");
+  structureScanner.addDisplayName(0, structureScanner.getUnlocalizedName());
   structureScanner.addIcon(0, "ancientwarfare:structure/structureScanner");
   
   structureBuilderCreative.addDisplayStack(0, new ItemStack(structureBuilderCreative));
-  structureBuilderCreative.addDisplayName(0, "item.structurebuildercreative");
+  structureBuilderCreative.addDisplayName(0, structureBuilderCreative.getUnlocalizedName());
   structureBuilderCreative.addIcon(0, "ancientwarfare:structure/structureBuilder");
 
   spawnerPlacer.addDisplayStack(0, new ItemStack(spawnerPlacer));
-  spawnerPlacer.addDisplayName(0, "item.spawnerplacer");
+  spawnerPlacer.addDisplayName(0, spawnerPlacer.getUnlocalizedName());
   spawnerPlacer.addIcon(0, "ancientwarfare:structure/spawnerPlacer");
   
   structureGenerator.addDisplayStack(0, new ItemStack(structureGenerator));
-  structureGenerator.addDisplayName(0, "item.structuregenerator");
+  structureGenerator.addDisplayName(0, structureGenerator.getUnlocalizedName());
   structureGenerator.addIcon(0, "ancientwarfare:structure/structureGenerator");
   }
 
