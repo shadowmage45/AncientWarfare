@@ -39,6 +39,7 @@ int handleHeight;
  * current position of the scroll bar
  */
 public int handleTop;
+private int displayListNum;
 
 
 final int buffer = 4;
@@ -70,15 +71,25 @@ public void drawElement(int mouseX, int mouseY)
       this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 32, 128, tex, 120, 120);
       return;
       }
+    else if(displayListNum>0)
+      {
+      GL11.glCallList(displayListNum);
+      return;
+      }
     
-    
+    displayListNum = GL11.glGenLists(1);
+    GL11.glNewList(displayListNum, GL11.GL_COMPILE_AND_EXECUTE);
     AWTextureManager.bindTexture(tex);
     float texPixPercent = 1.f / 256.f;
-    float x, y, u, v;
+    float x, y, u, v, uw, uh, width, height;
     x = renderPosX+guiLeft;
     y = renderPosY+guiTop;
+    uw = 40;
+    uh = 128;
     u = 80;
     v = 120;
+    width = this.width;
+    height = this.height;
     float x1, y1, x2, y2, x3, y3, x4, y4;
     float u1, v1, u2, v2, u3, v3, u4, v4;
     /**
@@ -97,8 +108,8 @@ public void drawElement(int mouseX, int mouseY)
     y3 = y2;//bottom-right
     x4 = x3;//top-right
     y4 = y3-8;//top-right    
-    u1 = 80 *texPixPercent;
-    v1 = 120 * texPixPercent;    
+    u1 = u * texPixPercent;
+    v1 = v * texPixPercent;    
     u2 = u1;
     v2 = v1 + 8 * texPixPercent;    
     u3 = u2 + (width/2) * texPixPercent;
@@ -110,7 +121,7 @@ public void drawElement(int mouseX, int mouseY)
     /**
      * render the top-right bit
      */
-    x1 = x+8;//top-left
+    x1 = x + (width/2);//top-left
     y1 = y;//top-left
     x2 = x1;//bottom-left
     y2 = y1 + 8;//bottom-left
@@ -118,8 +129,8 @@ public void drawElement(int mouseX, int mouseY)
     y3 = y2;//bottom-right
     x4 = x3;//top-right
     y4 = y3-8;//top-right
-    u1 = 80 * texPixPercent + (40-(width/2))*texPixPercent;
-    v1 = 120 * texPixPercent;    
+    u1 = u * texPixPercent + (uw-(width/2))*texPixPercent;
+    v1 = v * texPixPercent;    
     u2 = u1;
     v2 = v1 + 8 * texPixPercent;    
     u3 = u2 + (width/2) * texPixPercent;
@@ -140,8 +151,8 @@ public void drawElement(int mouseX, int mouseY)
     y3 = y2;
     x4 = x3;
     y4 = y3-8;    
-    u1 = 80 *texPixPercent;
-    v1 = 120 * texPixPercent + 120 * texPixPercent;    
+    u1 = u *texPixPercent;
+    v1 = v * texPixPercent + ((uh-8) * texPixPercent);    
     u2 = u1;
     v2 = v1 + 8 * texPixPercent;    
     u3 = u2 + (width/2) * texPixPercent;
@@ -151,7 +162,7 @@ public void drawElement(int mouseX, int mouseY)
     renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
     
     
-    x1 = x+8;//top-left
+    x1 = x + (width/2);//top-left
     y1 = y + height - 8;//top-left
     x2 = x1;//bottom-left
     y2 = y1 + 8;//bottom-left
@@ -159,8 +170,8 @@ public void drawElement(int mouseX, int mouseY)
     y3 = y2;//bottom-right
     x4 = x3;//top-right
     y4 = y3-8;//top-right
-    u1 = 80 * texPixPercent + (40-(width/2))*texPixPercent;
-    v1 = 120 * texPixPercent + 120 * texPixPercent;    
+    u1 = u * texPixPercent + (uw -(width/2))*texPixPercent;
+    v1 = v * texPixPercent + ((uh-8) * texPixPercent);    
     u2 = u1;
     v2 = v1 + 8 * texPixPercent;    
     u3 = u2 + (width/2) * texPixPercent;
@@ -169,62 +180,214 @@ public void drawElement(int mouseX, int mouseY)
     v4 = v3 - 8 * texPixPercent;
     renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
     
-    float h = height - 16;
-    float ny = y+8;
-    float uh;
-    while(h>0)
+    float remainingHeight = height - 16;
+    float nextY = y+8;
+    float usedHeight;
+    while(remainingHeight>0)
       {
-      uh = h > 40 ? 40 : h;
-      h-=uh;
+      usedHeight = remainingHeight > 40 ? 40 : remainingHeight;
+      remainingHeight-=usedHeight;
       
       /**
        * render left bit
        */
       x1 = x;//top-left
-      y1 = ny;//top-left
+      y1 = nextY;//top-left
       x2 = x1;//bottom-left
-      y2 = y1 + uh;//bottom-left
+      y2 = y1 + usedHeight;//bottom-left
       x3 = x2 + (width/2);//bottom-right
       y3 = y2;//bottom-right
       x4 = x3;//top-right
-      y4 = y3 - uh;//top-right
+      y4 = y3 - usedHeight;//top-right
       
-      u1 = 80 * texPixPercent;
-      v1 = 120 * texPixPercent + (8*texPixPercent);    
+      u1 = u * texPixPercent;
+      v1 = v * texPixPercent + (8*texPixPercent);    
       u2 = u1;
-      v2 = v1 + uh * texPixPercent;    
+      v2 = v1 + usedHeight * texPixPercent;    
       u3 = u2 + (width/2) * texPixPercent;
       v3 = v2;    
       u4 = u3;
-      v4 = v3 - uh * texPixPercent;
+      v4 = v3 - usedHeight * texPixPercent;
       renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
       
       /**
        * render right bit
        */
       x1 = x + (width/2);//top-left
-      y1 = ny;//top-left
+      y1 = nextY;//top-left
       x2 = x1;//bottom-left
-      y2 = y1 + uh;//bottom-left
+      y2 = y1 + usedHeight;//bottom-left
       x3 = x2 + (width/2);//bottom-right
       y3 = y2;//bottom-right
       x4 = x3;//top-right
-      y4 = y3 - uh;//top-right
+      y4 = y3 - usedHeight;//top-right
       
-      u1 = 80 * texPixPercent + (40-(width/2))*texPixPercent;
-      v1 = 120 * texPixPercent + (8*texPixPercent);    
+      u1 = u * texPixPercent + (uw-(width/2))*texPixPercent;
+      v1 = v * texPixPercent + (8*texPixPercent);    
       u2 = u1;
-      v2 = v1 + uh * texPixPercent;    
+      v2 = v1 + usedHeight * texPixPercent;    
       u3 = u2 + (width/2) * texPixPercent;
       v3 = v2;    
       u4 = u3;
-      v4 = v3 - uh * texPixPercent;
+      v4 = v3 - usedHeight * texPixPercent;
       renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
       
       
-      ny +=uh;
+      nextY += usedHeight;
+      }
+    
+    
+    x = renderPosX + guiLeft + buffer;
+    y = renderPosY + guiTop + buffer + handleTop;
+    u = 120;//uw = 32
+    v = 120;//uh = 128 
+    uw = 32;
+    uh = 128;
+    width = this.width - (buffer*2);
+    height = this.handleHeight;
+    
+    /**
+     * render the top-left bit
+     */
+    x1 = x;//top-left
+    y1 = y;//top-left
+    x2 = x1;//bottom-left
+    y2 = y1 + 8;//bottom-left
+    x3 = x2 + (width/2);//bottom-right
+    y3 = y2;//bottom-right
+    x4 = x3;//top-right
+    y4 = y3-8;//top-right    
+    u1 = u * texPixPercent;
+    v1 = v * texPixPercent;    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;     
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+    /**
+     * render the top-right bit
+     */
+    x1 = x+ (width/2);//top-left
+    y1 = y;//top-left
+    x2 = x1;//bottom-left
+    y2 = y1 + 8;//bottom-left
+    x3 = x2 + (width/2);//bottom-right
+    y3 = y2;//bottom-right
+    x4 = x3;//top-right
+    y4 = y3-8;//top-right
+    u1 = u * texPixPercent + (uw-(width/2))*texPixPercent;
+    v1 = v * texPixPercent;    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+
+    /**
+     * render bottom-left bit
+     */
+    x1 = x;
+    y1 = y + height - 8;
+    x2 = x1;
+    y2 = y1 + 8;
+    x3 = x2 + (width/2);
+    y3 = y2;
+    x4 = x3;
+    y4 = y3-8;    
+    u1 = u *texPixPercent;
+    v1 = v * texPixPercent + ((uh-8) * texPixPercent);    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+    /**
+     * render bottom-right bit
+     */
+    x1 = x + (width/2);//top-left
+    y1 = y + height - 8;//top-left
+    x2 = x1;//bottom-left
+    y2 = y1 + 8;//bottom-left
+    x3 = x2 + (width/2);//bottom-right
+    y3 = y2;//bottom-right
+    x4 = x3;//top-right
+    y4 = y3-8;//top-right
+    u1 = u * texPixPercent + (uw-(width/2))*texPixPercent;
+    v1 = v * texPixPercent + ((uh-8) * texPixPercent);    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+    remainingHeight = height - 16;
+    nextY = y+8;
+    while(remainingHeight>0)
+      {
+      usedHeight = remainingHeight > 40 ? 40 : remainingHeight;
+      remainingHeight-=usedHeight;
+      
+      /**
+       * render left bit
+       */
+      x1 = x;//top-left
+      y1 = nextY;//top-left
+      x2 = x1;//bottom-left
+      y2 = y1 + usedHeight;//bottom-left
+      x3 = x2 + (width/2);//bottom-right
+      y3 = y2;//bottom-right
+      x4 = x3;//top-right
+      y4 = y3 - usedHeight;//top-right
+      
+      u1 = u * texPixPercent;
+      v1 = v * texPixPercent + (8*texPixPercent);    
+      u2 = u1;
+      v2 = v1 + usedHeight * texPixPercent;    
+      u3 = u2 + (width/2) * texPixPercent;
+      v3 = v2;    
+      u4 = u3;
+      v4 = v3 - usedHeight * texPixPercent;
+      renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+      
+      /**
+       * render right bit
+       */
+      x1 = x + (width/2);//top-left
+      y1 = nextY;//top-left
+      x2 = x1;//bottom-left
+      y2 = y1 + usedHeight;//bottom-left
+      x3 = x2 + (width/2);//bottom-right
+      y3 = y2;//bottom-right
+      x4 = x3;//top-right
+      y4 = y3 - usedHeight;//top-right
+      
+      u1 = u * texPixPercent + (uw-(width/2))*texPixPercent;
+      v1 = v * texPixPercent + (8*texPixPercent);    
+      u2 = u1;
+      v2 = v1 + usedHeight * texPixPercent;    
+      u3 = u2 + (width/2) * texPixPercent;
+      v3 = v2;    
+      u4 = u3;
+      v4 = v3 - usedHeight * texPixPercent;
+      renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+      
+      
+      nextY += usedHeight;
       }
     }
+  
+  GL11.glEndList();
   }
 
 protected void renderQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float u1, float v1, float u2, float v2, float u3, float v3, float u4, float v4)
@@ -297,6 +460,8 @@ private void updateHandleDisplayPos(int yDelta)
     {
     this.handleTop = lowestTopPosition;
     }
+  GL11.glDeleteLists(displayListNum, 1);
+  this.displayListNum=0;
   }
 
 /**
@@ -315,6 +480,8 @@ public void updateHandleHeight(int setSize, int displayElements)
   int barHeight = (int) (bar + 20);
   this.handleHeight = barHeight;
   this.updateHandleDisplayPos(0);
+  GL11.glDeleteLists(displayListNum, 1);
+  this.displayListNum=0;
   }
 
 /**
