@@ -69,6 +69,7 @@ public void setTextureSize(int width, int height)
   {
   this.textureWidth = width;
   this.textureHeight = height;
+  this.recompilePrimitives();
   }
 
 public void parseFromLines(List<String> lines)
@@ -222,4 +223,14 @@ public Primitive getPrimitive(int num)
   return primitives.get(num);
   }
 
+public void recompilePrimitives()
+  {
+  for(Primitive p : this.primitives.values())
+    {
+    p.setCompiled(false);
+    }
+  }
+
+public int textureWidth(){return textureWidth;}
+public int textureHeight(){return textureHeight;}
 }

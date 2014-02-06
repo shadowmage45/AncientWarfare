@@ -671,7 +671,7 @@ private void addFileControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        gui.openUVMap();
+        Minecraft.getMinecraft().displayGuiScreen(new GuiUVMap((ContainerBase) gui.inventorySlots));
         }
       return true;
       }

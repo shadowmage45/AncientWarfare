@@ -28,6 +28,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.MathHelper;
@@ -487,11 +488,6 @@ public void deletePiece()
     this.model.removePiece(selectedPiece);
     this.setSelectedPiece(null);
     }
-  }
-
-public void openUVMap()
-  {
-  
   }
 
 Primitive getSelectedPrimitive()

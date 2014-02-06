@@ -20,6 +20,9 @@
  */
 package shadowmage.ancient_framework.client.gui.elements;
 
+import org.lwjgl.opengl.GL11;
+
+import shadowmage.ancient_framework.client.render.AWTextureManager;
 import shadowmage.ancient_framework.common.config.Statics;
 
 
@@ -59,11 +62,183 @@ public GuiScrollBarSimple(int elementNum, IGuiElementCallback parent, int w, int
 public void drawElement(int mouseX, int mouseY)
   {
   if(!this.hidden)
-    {
+    {    
     String tex = Statics.TEXTURE_PATH+"gui/guiButtons.png";
-    this.drawQuadedTexture(renderPosX+guiLeft, renderPosY+guiTop, width, height, 40, 128, tex, 80, 120); 
-    this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 32, 128, tex, 120, 120);
+    if(height<=128)//do simple render
+      { 
+      this.drawQuadedTexture(renderPosX+guiLeft, renderPosY+guiTop, width, height, 40, 128, tex, 80, 120);
+      this.drawQuadedTexture(renderPosX+guiLeft+buffer, renderPosY+guiTop+buffer+handleTop, width-buffer*2, handleHeight, 32, 128, tex, 120, 120);
+      return;
+      }
+    
+    
+    AWTextureManager.bindTexture(tex);
+    float texPixPercent = 1.f / 256.f;
+    float x, y, u, v;
+    x = renderPosX+guiLeft;
+    y = renderPosY+guiTop;
+    u = 80;
+    v = 120;
+    float x1, y1, x2, y2, x3, y3, x4, y4;
+    float u1, v1, u2, v2, u3, v3, u4, v4;
+    /**
+     * setup render bounds
+     */
+    
+
+    /**
+     * render the top-left bit
+     */
+    x1 = x;//top-left
+    y1 = y;//top-left
+    x2 = x1;//bottom-left
+    y2 = y1 + 8;//bottom-left
+    x3 = x2 + (width/2);//bottom-right
+    y3 = y2;//bottom-right
+    x4 = x3;//top-right
+    y4 = y3-8;//top-right    
+    u1 = 80 *texPixPercent;
+    v1 = 120 * texPixPercent;    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;     
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+    /**
+     * render the top-right bit
+     */
+    x1 = x+8;//top-left
+    y1 = y;//top-left
+    x2 = x1;//bottom-left
+    y2 = y1 + 8;//bottom-left
+    x3 = x2 + (width/2);//bottom-right
+    y3 = y2;//bottom-right
+    x4 = x3;//top-right
+    y4 = y3-8;//top-right
+    u1 = 80 * texPixPercent + (40-(width/2))*texPixPercent;
+    v1 = 120 * texPixPercent;    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+
+    /**
+     * render bottom-left bit
+     */
+    x1 = x;
+    y1 = y + height - 8;
+    x2 = x1;
+    y2 = y1 + 8;
+    x3 = x2 + (width/2);
+    y3 = y2;
+    x4 = x3;
+    y4 = y3-8;    
+    u1 = 80 *texPixPercent;
+    v1 = 120 * texPixPercent + 120 * texPixPercent;    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+    
+    x1 = x+8;//top-left
+    y1 = y + height - 8;//top-left
+    x2 = x1;//bottom-left
+    y2 = y1 + 8;//bottom-left
+    x3 = x2 + (width/2);//bottom-right
+    y3 = y2;//bottom-right
+    x4 = x3;//top-right
+    y4 = y3-8;//top-right
+    u1 = 80 * texPixPercent + (40-(width/2))*texPixPercent;
+    v1 = 120 * texPixPercent + 120 * texPixPercent;    
+    u2 = u1;
+    v2 = v1 + 8 * texPixPercent;    
+    u3 = u2 + (width/2) * texPixPercent;
+    v3 = v2;    
+    u4 = u3;
+    v4 = v3 - 8 * texPixPercent;
+    renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+    
+    float h = height - 16;
+    float ny = y+8;
+    float uh;
+    while(h>0)
+      {
+      uh = h > 40 ? 40 : h;
+      h-=uh;
+      
+      /**
+       * render left bit
+       */
+      x1 = x;//top-left
+      y1 = ny;//top-left
+      x2 = x1;//bottom-left
+      y2 = y1 + uh;//bottom-left
+      x3 = x2 + (width/2);//bottom-right
+      y3 = y2;//bottom-right
+      x4 = x3;//top-right
+      y4 = y3 - uh;//top-right
+      
+      u1 = 80 * texPixPercent;
+      v1 = 120 * texPixPercent + (8*texPixPercent);    
+      u2 = u1;
+      v2 = v1 + uh * texPixPercent;    
+      u3 = u2 + (width/2) * texPixPercent;
+      v3 = v2;    
+      u4 = u3;
+      v4 = v3 - uh * texPixPercent;
+      renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+      
+      /**
+       * render right bit
+       */
+      x1 = x + (width/2);//top-left
+      y1 = ny;//top-left
+      x2 = x1;//bottom-left
+      y2 = y1 + uh;//bottom-left
+      x3 = x2 + (width/2);//bottom-right
+      y3 = y2;//bottom-right
+      x4 = x3;//top-right
+      y4 = y3 - uh;//top-right
+      
+      u1 = 80 * texPixPercent + (40-(width/2))*texPixPercent;
+      v1 = 120 * texPixPercent + (8*texPixPercent);    
+      u2 = u1;
+      v2 = v1 + uh * texPixPercent;    
+      u3 = u2 + (width/2) * texPixPercent;
+      v3 = v2;    
+      u4 = u3;
+      v4 = v3 - uh * texPixPercent;
+      renderQuad(x1, y1, x2, y2, x3, y3, x4, y4, u1, v1, u2, v2, u3, v3, u4, v4);
+      
+      
+      ny +=uh;
+      }
     }
+  }
+
+protected void renderQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float u1, float v1, float u2, float v2, float u3, float v3, float u4, float v4)
+  {
+  GL11.glBegin(GL11.GL_QUADS);
+  GL11.glTexCoord2f(u1, v1);
+  GL11.glVertex3f(x1, y1, 0);
+  GL11.glTexCoord2f(u2, v2);
+  GL11.glVertex3f(x2, y2, 0);
+  GL11.glTexCoord2f(u3, v3);
+  GL11.glVertex3f(x3, y3, 0);
+  GL11.glTexCoord2f(u4, v4);
+  GL11.glVertex3f(x4, y4, 0);    
+  GL11.glEnd();
   }
 
 @Override

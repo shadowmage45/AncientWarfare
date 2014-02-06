@@ -34,7 +34,7 @@ float rx, ry, rz;//rotation of this primitive, relative to parent orientation
 
 int primitiveNumber = 0;
 
-protected boolean isCompiled = false;
+private boolean isCompiled = false;
 int displayListNumber = -1;
 
 public ModelPiece parent;
@@ -70,7 +70,7 @@ public void buildDisplayList()
   if(ry!=0){GL11.glRotatef(-ry, 0, 1, 0);}
   if(rz!=0){GL11.glRotatef(-rz, 0, 0, 1);}  
   GL11.glEndList();
-  isCompiled = true;
+  setCompiled(true);
   }
 
 protected abstract void renderForDisplayList();
@@ -90,7 +90,7 @@ public void setOrigin(float x, float y, float z)
   this.x = x;
   this.y = y;
   this.z = z;
-  this.isCompiled = false;
+  this.setCompiled(false);
   }
 
 public void setRotation(float rx, float ry, float rz)
@@ -98,7 +98,7 @@ public void setRotation(float rx, float ry, float rz)
   this.rx = rx;
   this.ry = ry;
   this.rz = rz;
-  this.isCompiled = false;
+  this.setCompiled(false);
   }
 
 
@@ -106,5 +106,9 @@ public abstract void addPrimitiveLines(ArrayList<String> lines);
 
 public abstract void readFromLine(String[] lineBits);
 
+public void setCompiled(boolean isCompiled)
+  {
+  this.isCompiled = isCompiled;
+  }
 
 }

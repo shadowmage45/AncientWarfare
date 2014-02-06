@@ -20,11 +20,22 @@
  */
 package shadowmage.meim.client.gui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElement;
+import shadowmage.ancient_framework.client.model.ModelBaseAW;
+import shadowmage.ancient_framework.client.model.ModelPiece;
+import shadowmage.ancient_framework.client.model.Primitive;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
+import shadowmage.ancient_framework.client.model.PrimitiveQuad;
+import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class GuiUVMap extends GuiContainerAdvanced
@@ -37,14 +48,21 @@ GuiButtonSimple textureYSizeMinus;
 GuiNumberInputLine textureXSizeInput;
 GuiNumberInputLine textureYSizeInput;
 
-GuiScrollableArea primitivesSelectionArea;
+GuiScrollableArea textureControlArea;
 GuiScrollableArea primitiveControlArea;
+GuiScrollableArea primitiveSelectionArea;
+
 GuiTextureElement texture;
 
+PrimitiveUVSetup primitiveSetup;
+
+ModelPiece selectedPiece;
+Primitive selectedPrimitive;
 
 public GuiUVMap(ContainerBase container)
   {
   super(container);
+  this.shouldCloseOnVanillaKeys = true;
   }
 
 @Override
@@ -56,7 +74,7 @@ public void onElementActivated(IGuiElement element)
 @Override
 public int getXSize()
   {
-  return 256;
+  return 240;
   }
 
 @Override
@@ -80,11 +98,244 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-
+  textureControlArea = new GuiScrollableArea(0, this, -guiLeft, -guiTop, 80, 30, 120);
+  this.addElement(textureControlArea);
+  
+  primitiveControlArea = new GuiScrollableArea(1, this, -guiLeft, -guiTop+30, 80, 120, 120);
+  this.addElement(primitiveControlArea);
+  
+  primitiveSelectionArea = new GuiScrollableArea(2, this, -guiLeft+width-80, -guiTop, 80, height, height);
+  this.addElement(primitiveSelectionArea);  
+  
+  int col1 = 0;
+  int col2 = 25;
+  int col3 = 25+12+2;
+  int col4 = 25+12+2+20+2;
+  int totalHeight = 0;
+   
+  
+  textureXSizeMinus = new GuiButtonSimple(0, textureControlArea, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      ModelBaseAW model = GuiModelEditor.model;
+      model.setTextureSize(model.textureWidth()-16, model.textureHeight());
+      textureXSizeInput.setIntegerValue(model.textureWidth());
+      }
+    };  
+  textureXSizeMinus.updateRenderPos(col2, totalHeight);
+  textureControlArea.addGuiElement(textureXSizeMinus);
+  
+  textureXSizePlus = new GuiButtonSimple(0, textureControlArea, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      ModelBaseAW model = GuiModelEditor.model;
+      model.setTextureSize(model.textureWidth()+16, model.textureHeight());
+      textureXSizeInput.setIntegerValue(model.textureWidth());
+      }
+    };  
+  textureXSizePlus.updateRenderPos(col4, totalHeight);
+  textureControlArea.addGuiElement(textureXSizePlus);
+  
+  textureXSizeInput = new GuiNumberInputLine(0, textureControlArea, 20, 12, 10, String.valueOf(GuiModelEditor.model.textureWidth()))
+    {
+    @Override
+    public void onElementActivated()
+      {
+      ModelBaseAW model = GuiModelEditor.model;
+      int val = getIntVal();
+      int m = val%16;
+      int mod = val/16;
+      if(m==1)
+        {
+        mod++;
+        }     
+      val = mod*16;
+      setIntegerValue(val);
+      model.setTextureSize(val, model.textureHeight());
+      }
+    };
+  textureXSizeInput.updateRenderPos(col3, totalHeight);
+  textureControlArea.addGuiElement(textureXSizeInput);
+  textureXSizeInput.setAsIntegerValue();  
+    
+  GuiString label = new GuiString(0, textureControlArea, 25, 12, "T:XS");
+  label.updateRenderPos(col1, totalHeight);
+  textureControlArea.addGuiElement(label);
+  totalHeight+=12;
+  
+  
+  textureYSizeMinus = new GuiButtonSimple(0, textureControlArea, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      ModelBaseAW model = GuiModelEditor.model;
+      model.setTextureSize(model.textureWidth(), model.textureHeight()-16);
+      textureYSizeInput.setIntegerValue(model.textureHeight());
+      }
+    };  
+  textureYSizeMinus.updateRenderPos(col2, totalHeight);
+  textureControlArea.addGuiElement(textureYSizeMinus);
+  
+  textureYSizePlus = new GuiButtonSimple(0, textureControlArea, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      ModelBaseAW model = GuiModelEditor.model;
+      model.setTextureSize(model.textureWidth(), model.textureHeight()+16);
+      textureYSizeInput.setIntegerValue(model.textureHeight());
+      }
+    };  
+  textureYSizePlus.updateRenderPos(col4, totalHeight);
+  textureControlArea.addGuiElement(textureYSizePlus);
+  
+  textureYSizeInput = new GuiNumberInputLine(0, textureControlArea, 20, 12, 10, String.valueOf(GuiModelEditor.model.textureWidth()))
+    {
+    @Override
+    public void onElementActivated()
+      {
+      ModelBaseAW model = GuiModelEditor.model; 
+      int val = getIntVal();   
+      int m = val%16;
+      int mod = val/16;
+      if(m==1)
+        {
+        mod++;
+        }     
+      val = mod*16;
+      model.setTextureSize(model.textureWidth(), val);
+      setIntegerValue(val);
+      }
+    };
+  textureYSizeInput.updateRenderPos(col3, totalHeight);
+  textureControlArea.addGuiElement(textureYSizeInput);
+  textureYSizeInput.setAsIntegerValue();  
+    
+  label = new GuiString(0, textureControlArea, 25, 12, "T:YS");
+  label.updateRenderPos(col1, totalHeight);
+  textureControlArea.addGuiElement(label);
+  totalHeight+=12;
+  
+  textureControlArea.updateTotalHeight(totalHeight);
+  
+  
+  
+  /**
+   * TODO after controls are setup, init texture from parent model pieces
+   */
   }
 
 @Override
 public void updateControls()
+  {
+  ModelBaseAW model = GuiModelEditor.model;
+  
+  textureControlArea.updateRenderPos(-guiLeft, -guiTop);
+  textureControlArea.setHeight(30);
+  
+  primitiveControlArea.updateRenderPos(-guiLeft, -guiTop+30);
+  primitiveControlArea.setHeight(height-30);
+  primitiveControlArea.elements.clear();
+  this.addPrimitiveControls();
+  
+  primitiveSelectionArea.updateRenderPos(-guiLeft+width-80, -guiTop);
+  primitiveSelectionArea.setHeight(height);
+  this.addSelectionControls();
+  }
+
+protected void addPrimitiveControls()
+  {
+  if(this.selectedPrimitive==null)
+    {
+    this.primitiveSetup = new PrimitiveDummyUVSetup(this);
+    }
+  else if(this.selectedPrimitive instanceof PrimitiveBox)
+    {
+    this.primitiveSetup = new PrimitiveBoxUVSetup(this);
+    }
+  else if(this.selectedPrimitive instanceof PrimitiveQuad)
+    {
+    this.primitiveSetup = new PrimitiveQuadUVSetup(this);
+    }
+  else if(this.selectedPrimitive instanceof PrimitiveTriangle)
+    {
+    this.primitiveSetup = new PrimitiveTriangleUVSetup(this);
+    }
+  this.primitiveSetup.addControls(primitiveControlArea);
+  }
+
+protected void addSelectionControls()
+  {
+  primitiveSelectionArea.elements.clear();
+  pieceLabelMap.clear();
+  primitiveLabelMap.clear();
+  List<ModelPiece> pieces = new ArrayList<ModelPiece>();
+  GuiModelEditor.model.getPieces(pieces);
+  
+  int totalHeight = 0;
+  
+  GuiString label;
+  
+  label = new GuiString(0, primitiveSelectionArea, 80, 12, "Pieces:");
+  label.updateRenderPos(0, totalHeight);
+  primitiveSelectionArea.addGuiElement(label);
+  totalHeight+=12;
+  
+  
+  for(ModelPiece piece : pieces)
+    {
+    label = new GuiString(0, primitiveSelectionArea, 80, 12, piece.getName())
+      {
+      @Override
+      public void onElementActivated()
+        {
+        setSelection(pieceLabelMap.get(this), null);
+        }
+      };
+    label.updateRenderPos(0, totalHeight);
+    label.clickable = true;
+    pieceLabelMap.put(label, piece);
+    primitiveSelectionArea.addGuiElement(label);
+    totalHeight+=12;
+    }
+  
+  if(this.selectedPiece!=null)
+    {
+    label = new GuiString(0, primitiveSelectionArea, 80, 12, "Primitives:");
+    label.updateRenderPos(0, totalHeight);
+    primitiveSelectionArea.addGuiElement(label);
+    totalHeight+=12;
+    int num = 1;
+    for(Primitive p : this.selectedPiece.getPrimitives())
+      {
+      label = new GuiString(0, primitiveSelectionArea, 80, 12, "BOX:"+num)
+        {
+        @Override
+        public void onElementActivated()
+          {
+          setSelection(selectedPiece, primitiveLabelMap.get(this));
+          }
+        };
+      label.updateRenderPos(0, totalHeight);
+      label.clickable = true;
+      primitiveLabelMap.put(label, p);
+      primitiveSelectionArea.addGuiElement(label);
+      totalHeight+=12;
+      }
+    }
+  
+  primitiveSelectionArea.updateTotalHeight(totalHeight);
+  }
+
+private HashMap<GuiString, ModelPiece> pieceLabelMap = new HashMap<GuiString, ModelPiece>();
+private HashMap<GuiString, Primitive> primitiveLabelMap = new HashMap<GuiString, Primitive>();
+
+public void setSelection(ModelPiece piece, Primitive primitve)
   {
   
   }

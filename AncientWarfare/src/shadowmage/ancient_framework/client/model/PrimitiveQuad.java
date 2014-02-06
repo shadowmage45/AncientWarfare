@@ -128,7 +128,7 @@ public void setBounds(float x1, float y1, float width, float height)
   this.x2 = x1 + width;
   this.y1 = y1;
   this.y2 = y1 + height; 
-  this.isCompiled = false;
+  this.setCompiled(false);
   }
 
 public float x1(){return x1;}

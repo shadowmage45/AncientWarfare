@@ -68,7 +68,7 @@ public void setBounds(float x1, float y1, float z1, float width, float height, f
   this.y2 = y1 + height;
   this.z1 = z1;
   this.z2 = z1 + length;
-  this.isCompiled = false;
+  this.setCompiled(false);
   }
 
 @Override
