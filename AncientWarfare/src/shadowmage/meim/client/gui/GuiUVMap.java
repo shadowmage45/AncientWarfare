@@ -20,6 +20,7 @@
  */
 package shadowmage.meim.client.gui;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,10 +60,46 @@ PrimitiveUVSetup primitiveSetup;
 ModelPiece selectedPiece;
 Primitive selectedPrimitive;
 
+BufferedImage image;
+
 public GuiUVMap(ContainerBase container)
   {
   super(container);
   this.shouldCloseOnVanillaKeys = true;
+  this.initImage();
+  }
+
+private final void initImage()
+  {
+  ModelBaseAW model = GuiModelEditor.model;
+  image = new BufferedImage(model.textureWidth(), model.textureHeight(), BufferedImage.TYPE_INT_ARGB);
+  
+  this.updateImage();
+  }
+
+/**
+ * updates the image from the current model/pieces
+ * updates the openGL texture
+ * should be called whenever the image-contents need to be recalculated -- normally because a piece texture-mapping has changed
+ */
+public final void updateImage()
+  {
+  int pixel;
+  pixel = 0xffffffff;
+  int a = 0xff;
+  int r = 0x00;
+  int g;
+  int b;
+  for(int x = 0; x < image.getWidth(); x++)
+    {
+    for(int y = 0; y < image.getHeight(); y++)
+      {
+      g = x%256;
+      b = y%256;
+      pixel = (a<<24) | (r<<16) | (g<<8) | (b<<0);
+      image.setRGB(x, y, pixel);
+      }
+    }
   }
 
 @Override
@@ -74,13 +111,13 @@ public void onElementActivated(IGuiElement element)
 @Override
 public int getXSize()
   {
-  return 240;
+  return 256;
   }
 
 @Override
 public int getYSize()
   {
-  return 240;
+  return 256;
   }
 
 @Override
@@ -106,6 +143,10 @@ public void setupControls()
   
   primitiveSelectionArea = new GuiScrollableArea(2, this, -guiLeft+width-80, -guiTop, 80, height, height);
   this.addElement(primitiveSelectionArea);  
+  
+  texture = new GuiTextureElement(3, this, 256, 256, image);
+  texture.updateRenderPos(0, 0);
+  this.addElement(texture);
   
   int col1 = 0;
   int col2 = 25;
@@ -232,9 +273,7 @@ public void setupControls()
 
 @Override
 public void updateControls()
-  {
-  ModelBaseAW model = GuiModelEditor.model;
-  
+  {  
   textureControlArea.updateRenderPos(-guiLeft, -guiTop);
   textureControlArea.setHeight(30);
   
@@ -337,7 +376,11 @@ private HashMap<GuiString, Primitive> primitiveLabelMap = new HashMap<GuiString,
 
 public void setSelection(ModelPiece piece, Primitive primitve)
   {
-  
+  this.selectedPiece = piece;
+  this.selectedPrimitive = primitve;
+  this.refreshGui();
+//  this.addPrimitiveControls();
+//  this.addSelectionControls();  
   }
 
 }

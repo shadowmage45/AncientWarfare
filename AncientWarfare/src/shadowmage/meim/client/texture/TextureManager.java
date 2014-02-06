@@ -36,11 +36,9 @@ public class TextureManager
 
 static int texNum = -1;
 static int prevTexNum = -1;
-private static IntBuffer texNumber = BufferUtils.createIntBuffer(1);
 private static IntBuffer dataBuffer = BufferUtils.createIntBuffer(1024*2048);
 private static int[] inBuff = new int[256*256];
 private static int[] outBuff = new int[256*256];
-private static int[] blendBuff = new int[256*256];
 private static int bufferSize = 256*256;
 
 public static void allocateTexture()
