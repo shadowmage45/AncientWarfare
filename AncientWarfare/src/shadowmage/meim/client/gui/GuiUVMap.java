@@ -163,6 +163,7 @@ public void setupControls()
       ModelBaseAW model = GuiModelEditor.model;
       model.setTextureSize(model.textureWidth()-16, model.textureHeight());
       textureXSizeInput.setIntegerValue(model.textureWidth());
+      updateImage();
       }
     };  
   textureXSizeMinus.updateRenderPos(col2, totalHeight);
@@ -176,6 +177,7 @@ public void setupControls()
       ModelBaseAW model = GuiModelEditor.model;
       model.setTextureSize(model.textureWidth()+16, model.textureHeight());
       textureXSizeInput.setIntegerValue(model.textureWidth());
+      updateImage();
       }
     };  
   textureXSizePlus.updateRenderPos(col4, totalHeight);
@@ -197,6 +199,7 @@ public void setupControls()
       val = mod*16;
       setIntegerValue(val);
       model.setTextureSize(val, model.textureHeight());
+      updateImage();
       }
     };
   textureXSizeInput.updateRenderPos(col3, totalHeight);
@@ -217,6 +220,7 @@ public void setupControls()
       ModelBaseAW model = GuiModelEditor.model;
       model.setTextureSize(model.textureWidth(), model.textureHeight()-16);
       textureYSizeInput.setIntegerValue(model.textureHeight());
+      updateImage();
       }
     };  
   textureYSizeMinus.updateRenderPos(col2, totalHeight);
@@ -230,6 +234,7 @@ public void setupControls()
       ModelBaseAW model = GuiModelEditor.model;
       model.setTextureSize(model.textureWidth(), model.textureHeight()+16);
       textureYSizeInput.setIntegerValue(model.textureHeight());
+      updateImage();
       }
     };  
   textureYSizePlus.updateRenderPos(col4, totalHeight);
@@ -251,6 +256,7 @@ public void setupControls()
       val = mod*16;
       model.setTextureSize(model.textureWidth(), val);
       setIntegerValue(val);
+      updateImage();
       }
     };
   textureYSizeInput.updateRenderPos(col3, totalHeight);

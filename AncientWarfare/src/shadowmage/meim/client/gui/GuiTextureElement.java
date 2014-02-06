@@ -29,6 +29,7 @@ import org.lwjgl.opengl.GL12;
 
 import shadowmage.ancient_framework.client.gui.elements.GuiElement;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElementCallback;
+import shadowmage.ancient_framework.common.config.AWLog;
 
 public class GuiTextureElement extends GuiElement
 {
@@ -170,26 +171,27 @@ public void drawElement(int mouseX, int mouseY)
   int y4 = y;
   
   
-  float pixX = 1/image.getWidth();
-  float pixY = 1/image.getHeight();
+  float pixX = 1.f / (float)image.getWidth();
+  float pixY = 1.f / (float)image.getHeight();
   float u1, v1, u2, v2, u3, v3, u4, v4;
   float uw, uh;
     
   uw = scale;//image.getWidth() * pixX * scale;
   uh = scale;
   
-  float u = pixX * viewX; 
-  float v = pixY * viewY;
-  
+  float u = pixX * (float)viewX; 
+  float v = pixY * (float)viewY + uh;
+  v = v > 1 ? 1 : v;
   
   u1 = u;
-  v1 = v + uh;  
+  v1 = v;  
+  
   u2 = u;
-  v2 = v;
+  v2 = v - uh;
   u3 = u + uw;
-  v3 = v;
+  v3 = v - uh;
   u4 = u + uw;
-  v4 = v + uh;
+  v4 = v;
   
   
   bindTexture();
@@ -206,23 +208,62 @@ public void drawElement(int mouseX, int mouseY)
   
   GL11.glEnd();
   resetBoundTexture();
+  
+  
+  GL11.glDisable(GL11.GL_TEXTURE_2D);
+  
+  GL11.glColor4f(1.f, 0.f, 0.f, 1.f);
+  GL11.glPointSize(5);
+  GL11.glBegin(GL11.GL_POINTS);
+  GL11.glVertex3f(x, y, 0.f);
+  GL11.glEnd();
+  GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
+  
+  GL11.glEnable(GL11.GL_TEXTURE_2D);
   }
 
 @Override
 public boolean handleMousePressed(int x, int y, int num)
   {
+  if(num==0)
+    {
+    scroll = true;
+    lastX = x;
+    lastY = y;
+    }
   return false;
   }
+
+boolean scroll = false;
+int lastX;
+int lastY;
 
 @Override
 public boolean handleMouseReleased(int x, int y, int num)
   {
+  if(num==0)
+    {
+    scroll = false;
+    lastX = x;
+    lastY = y;
+    }
   return false;
   }
 
 @Override
 public boolean handleMouseMoved(int x, int y, int num)
   {
+  if(scroll)
+    {
+    int dx = x - lastX;
+    int dy = y - lastY;
+    viewX -= dx;
+    viewY += dy;
+    if(viewX<0){viewX = 0;}
+    if(viewY>0){viewY = 0;}
+    }
+  lastX = x;
+  lastY = y;
   return false;
   }
 
@@ -231,11 +272,11 @@ public boolean handleMouseWheel(int x, int y, int wheel)
   {
   if(wheel>0)
     {
-    scale *= 1.01f;
+    scale *= 0.99f;    
     }
   else
     {
-    scale *= 0.99f;
+    scale *= 1.010101f;
     }
   return false;
   }
