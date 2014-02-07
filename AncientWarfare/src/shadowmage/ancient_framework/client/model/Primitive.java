@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.client.model;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -110,5 +111,7 @@ public void setCompiled(boolean isCompiled)
   {
   this.isCompiled = isCompiled;
   }
+
+public abstract void addUVMapToImage(BufferedImage image);
 
 }

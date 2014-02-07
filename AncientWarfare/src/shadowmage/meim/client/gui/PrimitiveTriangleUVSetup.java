@@ -20,12 +20,269 @@
  */
 package shadowmage.meim.client.gui;
 
+import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
+import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_framework.client.gui.elements.GuiString;
+import shadowmage.ancient_framework.client.model.PrimitiveBox;
+import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
+
 public class PrimitiveTriangleUVSetup extends PrimitiveUVSetup
 {
+
+GuiButtonSimple xMinus;
+GuiButtonSimple xPlus;
+
+GuiButtonSimple yMinus;
+GuiButtonSimple yPlus;
+
+GuiNumberInputLine xInput;
+GuiNumberInputLine yInput;
+
+GuiButtonSimple u1Minus;
+GuiButtonSimple u1Plus;
+GuiNumberInputLine u1Input;
+GuiButtonSimple v1Minus;
+GuiButtonSimple v1Plus;
+GuiNumberInputLine v1Input;
+
+GuiButtonSimple u2Minus;
+GuiButtonSimple u2Plus;
+GuiNumberInputLine u2Input;
+GuiButtonSimple v2Minus;
+GuiButtonSimple v2Plus;
+GuiNumberInputLine v2Input;
+
+GuiButtonSimple u3Minus;
+GuiButtonSimple u3Plus;
+GuiNumberInputLine u3Input;
+GuiButtonSimple v3Minus;
+GuiButtonSimple v3Plus;
+GuiNumberInputLine v3Input;
 
 public PrimitiveTriangleUVSetup(GuiUVMap gui)
   {
   super(gui);
+  }
+
+@Override
+public void addControls(GuiScrollableArea area)
+  { 
+  super.addControls(area);
+  int col1 = 0;
+  int col2 = 25;
+  int col3 = 25+12+2;
+  int col4 = 25+12+2+20+2;  
+  int totalHeight = 0;
+  
+  GuiString label;
+  
+  label = new GuiString(0, area, 25, 12, "T:X");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  xMinus = new GuiButtonSimple(0, area, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.tx--;
+      xInput.setIntegerValue((int) box.tx);
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  xMinus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(xMinus);
+  
+  xPlus = new GuiButtonSimple(0, area, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.tx++;
+      xInput.setIntegerValue((int) box.tx);
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  xPlus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(xPlus);
+  
+  xInput = new GuiNumberInputLine(0, area, 25, 12, 10, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.tx = getIntVal();
+      gui.updateImage();
+      }
+    };
+  xInput.updateRenderPos(col2, totalHeight);
+  xInput.setAsIntegerValue();
+  area.addGuiElement(xInput);
+  
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area, 25, 12, "T:Y");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  yMinus = new GuiButtonSimple(0, area, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.tx--;
+      xInput.setIntegerValue((int) box.tx);
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  yMinus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(yMinus);
+  
+  yPlus = new GuiButtonSimple(0, area, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.ty++;
+      yInput.setIntegerValue((int) box.ty);
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  yPlus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(yPlus);
+  
+  yInput = new GuiNumberInputLine(0, area, 25, 12, 10, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.ty = getIntVal();
+      gui.updateImage();
+      }
+    };
+  yInput.updateRenderPos(col2, totalHeight);
+  yInput.setAsIntegerValue();
+  area.addGuiElement(yInput);
+  
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area, 25, 12, "T:U1");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  u1Minus = new GuiButtonSimple(0, area, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.setUV(box.u1(), box.v1(), box.u2(), box.v2(), box.u3(), box.v3());
+      u1Input.setValue(box.u1());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  u1Minus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(u1Minus);
+  
+  u1Plus = new GuiButtonSimple(0, area, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  u1Plus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(u1Plus);
+  
+  u1Input = new GuiNumberInputLine(0, area, 25, 12, 10, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  u1Input.setValue(((PrimitiveTriangle) gui.selectedPrimitive).u1());
+  u1Input.updateRenderPos(col3, totalHeight);
+  area.addGuiElement(u1Input);
+  
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area, 25, 12, "T:V1");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  v1Minus = new GuiButtonSimple(0, area, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.setUV(box.v1()-1, box.v1(), box.u2(), box.v2(), box.u3(), box.v3());
+      v1Input.setValue(box.v1());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  v1Minus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(v1Minus);
+  
+  v1Plus = new GuiButtonSimple(0, area, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.setUV(box.v1()+1, box.v1(), box.u2(), box.v2(), box.u3(), box.v3());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  v1Plus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(v1Plus);
+  
+  v1Input = new GuiNumberInputLine(0, area, 25, 12, 10, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveTriangle box = (PrimitiveTriangle) gui.selectedPrimitive;
+      box.setUV(getFloatVal(), box.v1(), box.u2(), box.v2(), box.u3(), box.v3());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  v1Input.setValue(((PrimitiveTriangle) gui.selectedPrimitive).v1());
+  v1Input.updateRenderPos(col3, totalHeight);
+  area.addGuiElement(v1Input);
+  
+  totalHeight+=12;
+  
+  
+  
+  area.updateTotalHeight(totalHeight); 
   }
 
 }

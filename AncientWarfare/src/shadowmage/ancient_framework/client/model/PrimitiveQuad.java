@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.client.model;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.GL11;
@@ -135,5 +136,20 @@ public float x1(){return x1;}
 public float y1(){return y1;}
 public float width(){return x2-x1;}
 public float height(){return y2-y1;}
+
+@Override
+public void addUVMapToImage(BufferedImage image)
+  {
+  int w = (int) (x2-x1)*16;
+  int h = (int) (y2-y1)*16;
+  
+  for(int x = (int) tx; x< tx+w; x++)
+    {
+    for(int y = (int) ty; y<=ty+h; y++)
+      {
+      image.setRGB(x, y, 0xffff0000);
+      }
+    }
+  }
 
 }

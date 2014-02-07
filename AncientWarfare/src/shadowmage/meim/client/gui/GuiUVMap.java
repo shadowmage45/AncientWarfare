@@ -84,21 +84,46 @@ private final void initImage()
  */
 public final void updateImage()
   {
-  int pixel;
-  pixel = 0xffffffff;
-  int a = 0xff;
-  int r = 0x00;
-  int g;
-  int b;
   for(int x = 0; x < image.getWidth(); x++)
     {
     for(int y = 0; y < image.getHeight(); y++)
-      {
-      g = x%256;
-      b = y%256;
-      pixel = (a<<24) | (r<<16) | (g<<8) | (b<<0);
-      image.setRGB(x, y, pixel);
+      {      
+      image.setRGB(x, y, 0xff222222);
+      if((x==0 || x==image.getWidth()-1) || (y==0 || y==image.getHeight()-1))
+        {
+        image.setRGB(x, y, 0xff00ff00);
+        }
       }
+    }  
+  List<ModelPiece> pieces = new ArrayList<ModelPiece>();
+  GuiModelEditor.model.getPieces(pieces);
+  for(ModelPiece p : pieces)
+    {
+    for(Primitive pr : p.getPrimitives())
+      {
+      addPrimitiveToTexture(pr);
+      }
+    }
+  
+//  int pixel;
+//  pixel = 0xffffffff;
+//  int a = 0xff;
+//  int r = 0x00;
+//  int g;
+//  int b;
+//  for(int x = 0; x < image.getWidth(); x++)
+//    {
+//    for(int y = 0; y < image.getHeight(); y++)
+//      {
+//      g = x%256;
+//      b = y%256;
+//      pixel = (a<<24) | (r<<16) | (g<<8) | (b<<0);
+//      image.setRGB(x, y, pixel);
+//      }
+//    }
+  if(this.texture!=null)
+    {
+    this.texture.updateImage(image);    
     }
   }
 
@@ -285,7 +310,6 @@ public void updateControls()
   
   primitiveControlArea.updateRenderPos(-guiLeft, -guiTop+30);
   primitiveControlArea.setHeight(height-30);
-  primitiveControlArea.elements.clear();
   this.addPrimitiveControls();
   
   primitiveSelectionArea.updateRenderPos(-guiLeft+width-80, -guiTop);
@@ -295,6 +319,8 @@ public void updateControls()
 
 protected void addPrimitiveControls()
   {
+  this.primitiveSetup = null;
+  primitiveControlArea.elements.clear();  
   if(this.selectedPrimitive==null)
     {
     this.primitiveSetup = new PrimitiveDummyUVSetup(this);
@@ -385,8 +411,11 @@ public void setSelection(ModelPiece piece, Primitive primitve)
   this.selectedPiece = piece;
   this.selectedPrimitive = primitve;
   this.refreshGui();
-//  this.addPrimitiveControls();
-//  this.addSelectionControls();  
+  }
+
+public void addPrimitiveToTexture(Primitive p)
+  {
+  p.addUVMapToImage(image);
   }
 
 }

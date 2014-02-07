@@ -51,6 +51,7 @@ public GuiTextureElement(int elementNum, IGuiElementCallback parent, int w, int 
   {
   super(elementNum, parent, w, h); 
   this.image = image;
+  this.allocateTexture();
   this.updateTextureContents(image);
   scale = 1.f;
   }
@@ -114,7 +115,8 @@ private void fillImageArray(BufferedImage image, IntBuffer buffer)
   image.getRGB(0, 0, width, height, inBuff, 0, width);
   for(int y = 0; y < height; y++)
     {
-    row = height-y-1;
+    row = y;
+//    row = height-y-1;
     for(int x = 0; x < width; x++)
       {
       outBuff[row*width + x] = ARGBtoRGBA(inBuff[y*width + x]);
@@ -147,12 +149,7 @@ public void allocateTexture()
     {
     GL11.glDeleteTextures(openGLTextureNumber);
     }
-  openGLTextureNumber = GL11.glGenTextures();
-  for(int i =0; i < 256*256 ; i++)
-    {
-    dataBuffer.put(i, 0xfffffff); 
-    }
-  dataBuffer.rewind();
+  openGLTextureNumber = GL11.glGenTextures(); 
   this.updateTextureContents(image); 
   }
 
@@ -180,16 +177,15 @@ public void drawElement(int mouseX, int mouseY)
   uh = scale;
   
   float u = pixX * (float)viewX; 
-  float v = pixY * (float)viewY + uh;
+  float v = pixY * (float)viewY;
   v = v > 1 ? 1 : v;
   
   u1 = u;
-  v1 = v;  
-  
+  v1 = v;    
   u2 = u;
-  v2 = v - uh;
+  v2 = v + uh;
   u3 = u + uw;
-  v3 = v - uh;
+  v3 = v + uh;
   u4 = u + uw;
   v4 = v;
   
@@ -258,9 +254,9 @@ public boolean handleMouseMoved(int x, int y, int num)
     int dx = x - lastX;
     int dy = y - lastY;
     viewX -= dx;
-    viewY += dy;
+    viewY -= dy;
     if(viewX<0){viewX = 0;}
-    if(viewY>0){viewY = 0;}
+    if(viewY<0){viewY = 0;}
     }
   lastX = x;
   lastY = y;

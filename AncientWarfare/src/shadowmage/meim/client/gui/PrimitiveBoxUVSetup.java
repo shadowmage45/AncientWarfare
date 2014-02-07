@@ -68,6 +68,7 @@ public void addControls(GuiScrollableArea area)
       box.tx--;
       xInput.setIntegerValue((int) box.tx);
       box.setCompiled(false);
+      gui.updateImage();
       }
     };
   xMinus.updateRenderPos(col2, totalHeight);
@@ -82,6 +83,7 @@ public void addControls(GuiScrollableArea area)
       box.tx++;
       xInput.setIntegerValue((int) box.tx);
       box.setCompiled(false);
+      gui.updateImage();
       }
     };
   xPlus.updateRenderPos(col4, totalHeight);
@@ -94,6 +96,7 @@ public void addControls(GuiScrollableArea area)
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
       box.tx = getIntVal();
+      gui.updateImage();
       }
     };
   xInput.updateRenderPos(col2, totalHeight);
@@ -116,6 +119,7 @@ public void addControls(GuiScrollableArea area)
       box.tx--;
       xInput.setIntegerValue((int) box.tx);
       box.setCompiled(false);
+      gui.updateImage();
       }
     };
   yMinus.updateRenderPos(col2, totalHeight);
@@ -130,6 +134,7 @@ public void addControls(GuiScrollableArea area)
       box.ty++;
       yInput.setIntegerValue((int) box.ty);
       box.setCompiled(false);
+      gui.updateImage();
       }
     };
   yPlus.updateRenderPos(col4, totalHeight);
@@ -142,6 +147,7 @@ public void addControls(GuiScrollableArea area)
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
       box.ty = getIntVal();
+      gui.updateImage();
       }
     };
   yInput.updateRenderPos(col2, totalHeight);

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.client.model;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import net.minecraft.client.model.ModelBase;
@@ -233,6 +234,66 @@ public void readFromLine(String[] lineBits)
   x2 = StringTools.safeParseFloat(lineBits[12]);
   y2 = StringTools.safeParseFloat(lineBits[13]);
   z2 = StringTools.safeParseFloat(lineBits[14]);
+  }
+
+@Override
+public void addUVMapToImage(BufferedImage image)
+  {
+  int u = (int) tx;
+  int v = (int) ty;
+  int w = (int) (x2-x1)*16;
+  int h = (int) (y2-y1)*16;
+  int l = (int) (z2-z1)*16;
+  int x, y;
+  /**
+   * front face
+   */
+  for(x = u + l; x <= u + l + w; x++)
+    {
+    for(y = v + l; y<= v+ l + h; y++)
+      {
+      image.setRGB(x, y, 0xffff0000);
+      }
+    }
+  //left face
+  for(x = u ; x<= u + l; x++)
+    {
+    for(y = v+l; y<= v+l+h; y++)
+      {
+      image.setRGB(x, y, 0xff00aa00);
+      }
+    }
+  //right face
+  for(x = u + l + w ; x<= u + l + w + l; x++)
+    {
+    for(y = v+l; y<= v+l+h; y++)
+      {
+      image.setRGB(x, y, 0xff00ff00);
+      }
+    }
+  //rear face
+  for(x = u + l + w + l ; x<= u + l + w + l + w; x++)
+    {
+    for(y = v+l; y<= v+l+h; y++)
+      {
+      image.setRGB(x, y, 0xffaa0000);
+      }
+    }
+  //top face
+  for(x = u + l; x<= u +l +w; x++)
+    {
+    for(y = v; y<= v+l; y++)
+      {
+      image.setRGB(x, y, 0xff0000ff);
+      }
+    }
+  for(x = u + l + w; x<= u +l + w + l; x++)
+    {
+    for(y = v; y<= v+l; y++)
+      {
+      image.setRGB(x, y, 0xff0000aa);
+      }
+    }
   }
 
 }

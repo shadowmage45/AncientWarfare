@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_framework.client.model;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import net.minecraft.util.MathHelper;
@@ -28,11 +29,13 @@ import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_framework.common.utils.Trig;
 
 public class PrimitiveTriangle extends Primitive
 {
 
 float x1, y1, z1, x2, y2, z2, x3, y3, z3;
+float u1, v1, u2, v2, u3, v3;//texture uv's...saved to file, as I have no idea how to dynamically calc a triangle uv map
 float normalX, normalY, normalZ;//normal for lighting...should be calc'd when setBounds is called
 /**
  * @param parent
@@ -51,60 +54,51 @@ public float z2(){return z2;}
 public float x3(){return x3;}
 public float y3(){return y3;}
 public float z3(){return z3;}
+public float u1(){return u1;}
+public float u2(){return u2;}
+public float u3(){return u3;}
+public float v1(){return v1;}
+public float v2(){return v2;}
+public float v3(){return v3;}
 
 @Override
 protected void renderForDisplayList()
-  {
-
-  float tw = parent.getModel().textureWidth;
-  float th = parent.getModel().textureHeight;
-  float px = 1.f/tw;
-  float py = 1.f/th;
-  float w = (x2-x1)*16.f;
-  float h = (y2-y1)*16.f;
-  float l = 1.f;//TODO fix this....
-  float ty = this.ty;
-  float tx = this.tx;
-  
-  float tx1, ty1, tx2, ty2;
-  
-//render the cube. only called a single time when building the display list for a piece
+  {   
   if(rx!=0){GL11.glRotatef(rx, 1, 0, 0);}
   if(ry!=0){GL11.glRotatef(ry, 0, 1, 0);}
   if(rz!=0){GL11.glRotatef(rz, 0, 0, 1);}  
   
- 
+  float tw = parent.getModel().textureWidth;
+  float th = parent.getModel().textureHeight;
+  float px = 1.f/tw;
+  float py = 1.f/th;
+  
+  float u1, v1, u2, v2, u3, v3;
+  u1 = this.u1 * px + this.tx * px;
+  u2 = this.u2 * px + this.tx * px;
+  u3 = this.u3 * px + this.tx * px;
+  v1 = this.v1 * py + this.ty * py;
+  v2 = this.v2 * py + this.ty * py;
+  v3 = this.v3 * py + this.ty * py;
   GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
-
-  AWLog.logDebug("tx, ty: "+tx+","+ty);
-  AWLog.logDebug("w,l,h: "+w+","+l+","+h);
-//  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
-  
-  //front side  
-  tx1 = (tx + l)*px;  
-  ty1 = (th - (ty + l + h))*py;
-  tx2 = (tx + l + w)*px;
-  ty2 = (th - (ty + l))*py;  
-  
   GL11.glNormal3f(normalX, normalY, normalZ);
-  GL11.glTexCoord2f(tx2, ty2);
-  GL11.glTexCoord2f(tx2, ty1);
-  GL11.glTexCoord2f(tx1, ty1);
+  GL11.glTexCoord2f(u1, v1);
   GL11.glVertex3f(x1, y1, z1);
+  GL11.glTexCoord2f(u2, v2);
   GL11.glVertex3f(x2, y2, z2);
-  GL11.glVertex3f(x3, y3, z3);
-  
+  GL11.glTexCoord2f(u3, v3);
+  GL11.glVertex3f(x3, y3, z3);  
   GL11.glEnd();
   }
 
 public void reverseVertexOrder()
   {
-  float x = x1;
-  float y = y1;
-  float z = z1;
-  x1 = x3;
-  y1 = y3;
-  z1 = z3;
+  float x = x2;
+  float y = y2;
+  float z = z2;
+  x2 = x3;
+  y2 = y3;
+  z2 = z3;
   x3 = x;
   y3 = y;
   z3 = z;
@@ -120,6 +114,7 @@ public Primitive copy()
   box.setRotation(rx, ry, rz);
   box.tx = tx;
   box.ty = ty;
+  box.setUV(u1, v1, u2, v2, u3, v3);
   return box;
   }
 
@@ -153,6 +148,15 @@ public void readFromLine(String[] lineBits)
   x3 = StringTools.safeParseFloat(lineBits[15]);
   y3 = StringTools.safeParseFloat(lineBits[16]);
   z3 = StringTools.safeParseFloat(lineBits[17]);
+  if(lineBits.length>18)
+    {
+    u1 = StringTools.safeParseFloat(lineBits[18]);
+    v1 = StringTools.safeParseFloat(lineBits[19]);
+    u2 = StringTools.safeParseFloat(lineBits[20]);
+    v2 = StringTools.safeParseFloat(lineBits[21]);
+    u3 = StringTools.safeParseFloat(lineBits[22]);
+    v3 = StringTools.safeParseFloat(lineBits[23]);    
+    }
   setBounds(x1, y1, z1, x2, y2, z2, x3, y3, z3);
   }
 
@@ -185,6 +189,27 @@ public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2
   normalY/=norm;
   normalZ/=norm;
   this.setCompiled(false);
+  }
+
+public void setUV(float u1, float v1, float u2, float v2, float u3, float v3)
+  {
+  this.u1 = u1;
+  this.v1 = v1;
+  this.u2 = u2;
+  this.v2 = v2;
+  this.u3 = u3;
+  this.v3 = v3;
+  }
+
+@Override
+public void addUVMapToImage(BufferedImage image)
+  {
+  /**
+   * map the triangle onto a flat surface
+   */
+  float d1 = Trig.getDistance(x1, y1, z1, x2, y2, z2);
+  float d2 = Trig.getDistance(x2, y2, z1, x3, y3, z3);
+  float d3 = Trig.getDistance(x3, y3, z3, x1, y1, z1);
   }
 
 
