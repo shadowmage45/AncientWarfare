@@ -73,13 +73,15 @@ public void drawElement(int mouseX, int mouseY)
       }
     else if(displayListNum>0)
       {
+      AWTextureManager.bindTexture(tex);
       GL11.glCallList(displayListNum);
       return;
       }
     
     displayListNum = GL11.glGenLists(1);
-    GL11.glNewList(displayListNum, GL11.GL_COMPILE_AND_EXECUTE);
     AWTextureManager.bindTexture(tex);
+    GL11.glNewList(displayListNum, GL11.GL_COMPILE_AND_EXECUTE);
+    GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
     float texPixPercent = 1.f / 256.f;
     float x, y, u, v, uw, uh, width, height;
     x = renderPosX+guiLeft;
