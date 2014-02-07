@@ -20,6 +20,8 @@
  */
 package shadowmage.ancient_framework.client.gui.elements;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.util.ChatAllowedCharacters;
 import shadowmage.ancient_framework.common.utils.StringTools;
 
@@ -86,6 +88,7 @@ public void drawElement(int mouseX, int mouseY)
     {
     this.updateCursorOffset();
     this.fr.drawString("_", xPos+2+cursorOffset, syPos, cursorColor, false);
+    GL11.glColor4f(1.f, 1.f, 1.f, 1.f);
     }
   }
 
