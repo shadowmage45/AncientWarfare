@@ -177,7 +177,7 @@ public void handleMouseInput()
     float zChange = zInput * MathHelper.sin(pitch) * MathHelper.cos(yaw);
     
     xChange += MathHelper.cos(yaw)*xInput;
-    zChange += MathHelper.sin(yaw)*xInput;
+    zChange -= MathHelper.sin(yaw)*xInput;
     
     float yChange = zInput * MathHelper.cos(pitch);
     
