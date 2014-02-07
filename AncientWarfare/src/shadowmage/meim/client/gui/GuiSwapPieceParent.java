@@ -80,7 +80,7 @@ public void setupControls()
   area = new GuiScrollableArea(0, this, 8, 8, 256-16, 240-16-12-4, 240-16-12-4);
   this.addElement(area);
   ArrayList<ModelPiece> pieces = new ArrayList<ModelPiece>();
-  parentGui.model.getPieces(pieces);
+  GuiModelEditor.model.getPieces(pieces);
   
   int totalHeight = 0;
   
@@ -95,7 +95,7 @@ public void setupControls()
       if(parentGui.getSelectedPiece().getParent()!=null)
         {
         parentGui.getSelectedPiece().getParent().removeChild(parentGui.getSelectedPiece()); 
-        parentGui.model.addPiece(parentGui.getSelectedPiece());        
+        GuiModelEditor.model.addPiece(parentGui.getSelectedPiece());        
         }
       Minecraft.getMinecraft().displayGuiScreen(parentGui);
       }    
@@ -139,9 +139,9 @@ public void setupControls()
         {
         ModelPiece piece2 = pieceMap.get(this);
         ModelPiece selPiece = parentGui.getSelectedPiece();
-        parentGui.model.removePiece(selPiece);
+        GuiModelEditor.model.removePiece(selPiece);
         piece2.addChild(selPiece);
-        parentGui.model.addPiece(selPiece);
+        GuiModelEditor.model.addPiece(selPiece);
         Minecraft.getMinecraft().displayGuiScreen(parentGui);
         };
       };

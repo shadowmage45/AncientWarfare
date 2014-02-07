@@ -20,16 +20,143 @@
  */
 package shadowmage.meim.client.gui;
 
+import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
+import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_framework.client.gui.elements.GuiString;
+import shadowmage.ancient_framework.client.model.PrimitiveQuad;
+
 public class PrimitiveQuadUVSetup extends PrimitiveUVSetup
 {
+GuiButtonSimple xMinus;
+GuiButtonSimple xPlus;
 
-/**
- * @param gui
- */
+GuiButtonSimple yMinus;
+GuiButtonSimple yPlus;
+
+GuiNumberInputLine xInput;
+GuiNumberInputLine yInput;
+
+
 public PrimitiveQuadUVSetup(GuiUVMap gui)
   {
   super(gui);
-  // TODO Auto-generated constructor stub
+  }
+
+@Override
+public void addControls(GuiScrollableArea area)
+  {
+  int col1 = 0;
+  int col2 = 25;
+  int col3 = 25+12+2;
+  int col4 = 25+12+2+20+2;  
+  int totalHeight = 0;
+  
+  GuiString label;
+  
+  label = new GuiString(0, area, 25, 12, "T:X");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  xMinus = new GuiButtonSimple(0, area, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveQuad box = (PrimitiveQuad) gui.selectedPrimitive;
+      box.setTx(box.tx() - 1);
+      xInput.setIntegerValue((int) box.tx());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  xMinus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(xMinus);
+  
+  xPlus = new GuiButtonSimple(0, area, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveQuad box = (PrimitiveQuad) gui.selectedPrimitive;
+      box.setTx(box.tx() + 1);
+      xInput.setIntegerValue((int) box.tx());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  xPlus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(xPlus);
+  
+  xInput = new GuiNumberInputLine(0, area, 25, 12, 5, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveQuad box = (PrimitiveQuad) gui.selectedPrimitive;
+      box.setTx(getIntVal());
+      gui.updateImage();
+      }
+    };
+  xInput.updateRenderPos(col3, totalHeight);
+  xInput.setAsIntegerValue();
+  area.addGuiElement(xInput);
+  
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area, 25, 12, "T:Y");
+  label.updateRenderPos(col1, totalHeight);
+  area.addGuiElement(label);
+  
+  yMinus = new GuiButtonSimple(0, area, 12, 12, "-")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveQuad box = (PrimitiveQuad) gui.selectedPrimitive;
+      box.setTx(box.tx() - 1);
+      xInput.setIntegerValue((int) box.tx());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  yMinus.updateRenderPos(col2, totalHeight);
+  area.addGuiElement(yMinus);
+  
+  yPlus = new GuiButtonSimple(0, area, 12, 12, "+")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveQuad box = (PrimitiveQuad) gui.selectedPrimitive;
+      box.setTy(box.ty() + 1);
+      yInput.setIntegerValue((int) box.ty());
+      box.setCompiled(false);
+      gui.updateImage();
+      }
+    };
+  yPlus.updateRenderPos(col4, totalHeight);
+  area.addGuiElement(yPlus);
+  
+  yInput = new GuiNumberInputLine(0, area, 25, 12, 5, "0")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      PrimitiveQuad box = (PrimitiveQuad) gui.selectedPrimitive;
+      box.setTy(getIntVal());
+      gui.updateImage();
+      }
+    };
+  yInput.updateRenderPos(col3, totalHeight);
+  yInput.setAsIntegerValue();
+  area.addGuiElement(yInput);
+  
+  totalHeight+=12;
+  
+  
+  area.updateTotalHeight(totalHeight);
   }
 
 }

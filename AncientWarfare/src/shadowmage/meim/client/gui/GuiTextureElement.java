@@ -29,7 +29,6 @@ import org.lwjgl.opengl.GL12;
 
 import shadowmage.ancient_framework.client.gui.elements.GuiElement;
 import shadowmage.ancient_framework.client.gui.elements.IGuiElementCallback;
-import shadowmage.ancient_framework.common.config.AWLog;
 
 public class GuiTextureElement extends GuiElement
 {

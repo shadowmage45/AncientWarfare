@@ -28,7 +28,8 @@ import org.lwjgl.opengl.GL11;
 public abstract class Primitive
 {
 
-public float tx, ty;//texture offsets, in texture space (0->1)
+private float tx;//texture offsets, in texture space (0->1)
+private float ty;
 float x, y, z;//origin of this primitive, relative to parent origin and orientation
 
 float rx, ry, rz;//rotation of this primitive, relative to parent orientation
@@ -84,7 +85,8 @@ public float z(){return z;}
 public float rx(){return rx;}
 public float ry(){return ry;}
 public float rz(){return rz;}
-
+public float tx(){return tx;}
+public float ty(){return ty;}
 
 public void setOrigin(float x, float y, float z)
   {
@@ -102,6 +104,17 @@ public void setRotation(float rx, float ry, float rz)
   this.setCompiled(false);
   }
 
+public void setTx(float tx)
+  {
+  if(tx<0){tx = 0;}
+  this.tx = tx;
+  }
+
+public void setTy(float ty)
+  {
+  if(ty<0){ty = 0;}
+  this.ty = ty;
+  }
 
 public abstract void addPrimitiveLines(ArrayList<String> lines);
 
@@ -113,5 +126,6 @@ public void setCompiled(boolean isCompiled)
   }
 
 public abstract void addUVMapToImage(BufferedImage image);
+
 
 }

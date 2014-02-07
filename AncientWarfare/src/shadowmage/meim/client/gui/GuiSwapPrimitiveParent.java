@@ -81,7 +81,7 @@ public void setupControls()
   area = new GuiScrollableArea(0, this, 8, 8, 256-16, 240-16-12-4, 240-16-12-4);
   this.addElement(area);
   ArrayList<ModelPiece> pieces = new ArrayList<ModelPiece>();
-  parentGui.model.getPieces(pieces);
+  GuiModelEditor.model.getPieces(pieces);
   
   int totalHeight = 0;
   

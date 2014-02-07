@@ -23,8 +23,6 @@ package shadowmage.ancient_framework.client.model;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import net.minecraft.client.model.ModelBase;
-
 import org.lwjgl.opengl.GL11;
 
 import shadowmage.ancient_framework.common.config.AWLog;
@@ -57,8 +55,8 @@ public PrimitiveBox(ModelPiece parent, float x1, float y1, float z1, float x2, f
   this.rx = rx;
   this.ry = ry;
   this.rz = rz;
-  this.tx = tx;
-  this.ty = ty;
+  this.setTx(tx);
+  this.setTy(ty);
   }
 
 public void setBounds(float x1, float y1, float z1, float width, float height, float length)
@@ -79,8 +77,8 @@ public Primitive copy()
   box.setBounds(x1, y1, z1, x2-x1, y2-y1, z2-z1);
   box.setOrigin(x, y, z);
   box.setRotation(rx, ry, rz);
-  box.tx = tx;
-  box.ty = ty;
+  box.setTx(tx());
+  box.setTy(ty());
   return box;
   }
 
@@ -95,8 +93,8 @@ protected void renderForDisplayList()
   float w = (x2-x1)*16.f;
   float h = (y2-y1)*16.f;
   float l = (z2-z1)*16.f;
-  float ty = this.ty;
-  float tx = this.tx;
+  float ty = this.ty();
+  float tx = this.tx();
   
   float tx1, ty1, tx2, ty2;
   
@@ -211,7 +209,7 @@ protected void renderForDisplayList()
 public void addPrimitiveLines(ArrayList<String> lines)
   {
   StringBuilder b = new StringBuilder("box=").append(parent.getName()).append(",");
-  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx()).append(",").append(ty()).append(",");
   b.append(x1).append(",").append(y1).append(",").append(z1).append(",").append(x2).append(",").append(y2).append(",").append(z2);
   lines.add(b.toString());
   }
@@ -219,15 +217,15 @@ public void addPrimitiveLines(ArrayList<String> lines)
 @Override
 public void readFromLine(String[] lineBits)
   {
-  String parent = lineBits[0];
+//  String parent = lineBits[0];
   x = StringTools.safeParseFloat(lineBits[1]);
   y = StringTools.safeParseFloat(lineBits[2]);
   z = StringTools.safeParseFloat(lineBits[3]);
   rx = StringTools.safeParseFloat(lineBits[4]);
   ry = StringTools.safeParseFloat(lineBits[5]);
   rz = StringTools.safeParseFloat(lineBits[6]);
-  tx = StringTools.safeParseFloat(lineBits[7]);
-  ty = StringTools.safeParseFloat(lineBits[8]);
+  setTx(StringTools.safeParseFloat(lineBits[7]));
+  setTy(StringTools.safeParseFloat(lineBits[8]));
   x1 = StringTools.safeParseFloat(lineBits[9]);
   y1 = StringTools.safeParseFloat(lineBits[10]);
   z1 = StringTools.safeParseFloat(lineBits[11]);
@@ -239,8 +237,8 @@ public void readFromLine(String[] lineBits)
 @Override
 public void addUVMapToImage(BufferedImage image)
   {
-  int u = (int) tx;
-  int v = (int) ty;
+  int u = (int) tx();
+  int v = (int) ty();
   int w = (int) (x2-x1)*16;
   int h = (int) (y2-y1)*16;
   int l = (int) (z2-z1)*16;

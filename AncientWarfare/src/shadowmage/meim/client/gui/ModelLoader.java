@@ -117,8 +117,8 @@ private ModelBaseAW parseOldModelLines(List<String> lines)
       box.setOrigin(0, 0, 0);
       box.setRotation(0, 0, 0);
       
-      box.tx = tx;
-      box.ty = ty;      
+      box.setTx(tx);
+      box.setTy(ty);      
       piece.addPrimitive(box);
       }
     }

@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_framework.common.utils.Trig;
 

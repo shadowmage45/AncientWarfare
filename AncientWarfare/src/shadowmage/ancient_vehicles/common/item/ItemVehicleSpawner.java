@@ -27,7 +27,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_framework.common.item.AWItemClickable;
 import shadowmage.ancient_framework.common.utils.BlockPosition;
-import shadowmage.ancient_vehicles.common.vehicle.VehicleType;
 
 public class ItemVehicleSpawner extends AWItemClickable
 {

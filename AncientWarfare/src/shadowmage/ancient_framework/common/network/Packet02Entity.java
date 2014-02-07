@@ -22,8 +22,6 @@ package shadowmage.ancient_framework.common.network;
 
 import net.minecraft.entity.Entity;
 import shadowmage.ancient_framework.common.interfaces.IEntityPacketHandler;
-import shadowmage.ancient_framework.common.interfaces.IHandlePacketData;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 

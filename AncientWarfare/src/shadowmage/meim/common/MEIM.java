@@ -32,7 +32,8 @@ public static MEIM instance;
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {
-  MEIMConfig.instance().loadConfig(evt.getSuggestedConfigurationFile());
+  MEIMConfig.instance();
+  MEIMConfig.loadConfig(evt.getSuggestedConfigurationFile());
   MEIMConfig.setLogger(evt.getModLog());
   ItemLoader.load();
   MEIMConfig.saveConfig();

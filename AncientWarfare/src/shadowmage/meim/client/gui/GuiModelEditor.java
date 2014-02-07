@@ -23,12 +23,8 @@ package shadowmage.meim.client.gui;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.LinkedList;
-import java.util.List;
-
 import javax.imageio.ImageIO;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.MathHelper;
@@ -470,7 +466,7 @@ public void copyPiece()
     copyNumber++;
     if(this.selectedPiece.getParent()==null)
       {
-      this.model.addPiece(newPiece);
+      GuiModelEditor.model.addPiece(newPiece);
       }
     else
       {
@@ -485,7 +481,7 @@ public void deletePiece()
   {
   if(this.selectedPiece!=null)
     {
-    this.model.removePiece(selectedPiece);
+    GuiModelEditor.model.removePiece(selectedPiece);
     this.setSelectedPiece(null);
     }
   }

@@ -292,6 +292,31 @@ public static byte getTurnDirection(float yaw, float dest)
   return (byte) (diff < 0 ? -1 : 1);
   }
 
+/**
+ * @param x1
+ * @param x2
+ * @param x3
+ */
+public static float getMin(float... vals)
+  {
+  float min = Float.MAX_VALUE;
+  for(float val : vals)
+    {
+    if(val < min){min = val;}
+    }
+  return min;
+  }
+
+public static float getMax(float... vals)
+  {
+  float max = Float.MIN_VALUE;
+  for(float val : vals)
+    {
+    if(val > max){max = val;}
+    }
+  return max;  
+  }
+
 
 
 }

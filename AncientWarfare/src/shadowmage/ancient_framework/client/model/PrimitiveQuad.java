@@ -48,8 +48,8 @@ protected void renderForDisplayList()
   float w = (x2-x1)*16.f;
   float l = 1.f;//TODO fix this for proper texture handling
   float h = (y2-y1)*16.f;
-  float ty = this.ty;
-  float tx = this.tx;
+  float ty = this.ty();
+  float tx = this.tx();
   
   float tx1, ty1, tx2, ty2;
   
@@ -91,8 +91,8 @@ public Primitive copy()
   box.setBounds(x1, y1, x2-x1, y2-y1);
   box.setOrigin(x, y, z);
   box.setRotation(rx, ry, rz);
-  box.tx = tx;
-  box.ty = ty;
+  box.setTx(tx());
+  box.setTy(ty());
   return box;
   }
 
@@ -100,7 +100,7 @@ public Primitive copy()
 public void addPrimitiveLines(ArrayList<String> lines)
   {
   StringBuilder b = new StringBuilder("quad="+parent.getName()+",");
-  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx()).append(",").append(ty()).append(",");
   b.append(x1).append(",").append(y1).append(",").append(x2).append(",").append(y2);
   lines.add(b.toString());
   }
@@ -108,15 +108,15 @@ public void addPrimitiveLines(ArrayList<String> lines)
 @Override
 public void readFromLine(String[] lineBits)
   {
-  String parent = lineBits[0];
+//  String parent = lineBits[0];
   x = StringTools.safeParseFloat(lineBits[1]);
   y = StringTools.safeParseFloat(lineBits[2]);
   z = StringTools.safeParseFloat(lineBits[3]);
   rx = StringTools.safeParseFloat(lineBits[4]);
   ry = StringTools.safeParseFloat(lineBits[5]);
   rz = StringTools.safeParseFloat(lineBits[6]);
-  tx = StringTools.safeParseFloat(lineBits[7]);
-  ty = StringTools.safeParseFloat(lineBits[8]);
+  setTx(StringTools.safeParseFloat(lineBits[7]));
+  setTy(StringTools.safeParseFloat(lineBits[8]));
   x1 = StringTools.safeParseFloat(lineBits[9]);
   y1 = StringTools.safeParseFloat(lineBits[10]);
   x2 = StringTools.safeParseFloat(lineBits[11]);
@@ -143,9 +143,9 @@ public void addUVMapToImage(BufferedImage image)
   int w = (int) (x2-x1)*16;
   int h = (int) (y2-y1)*16;
   
-  for(int x = (int) tx; x< tx+w; x++)
+  for(int x = (int) tx(); x< tx()+w; x++)
     {
-    for(int y = (int) ty; y<=ty+h; y++)
+    for(int y = (int) ty(); y<=ty()+h; y++)
       {
       image.setRGB(x, y, 0xffff0000);
       }

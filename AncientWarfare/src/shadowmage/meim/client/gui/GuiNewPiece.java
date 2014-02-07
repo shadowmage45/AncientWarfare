@@ -105,8 +105,8 @@ public void setupControls()
         float rx = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().rx();
         float ry = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().ry();
         float rz = parentGui.getSelectedPiece() == null ? 0.f : parentGui.getSelectedPiece().rz();        
-        ModelPiece p = new ModelPiece(parentGui.model, name, x, y, z, rx, ry, rz, parentGui.getSelectedPiece());
-        parentGui.model.addPiece(p);
+        ModelPiece p = new ModelPiece(GuiModelEditor.model, name, x, y, z, rx, ry, rz, parentGui.getSelectedPiece());
+        GuiModelEditor.model.addPiece(p);
         parentGui.setSelectedPiece(p);
         parentGui.setSelectedPrimitive(null);        
         Minecraft.getMinecraft().displayGuiScreen(parentGui);

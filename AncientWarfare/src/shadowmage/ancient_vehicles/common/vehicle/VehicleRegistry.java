@@ -25,12 +25,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.item.AWItemBase;
 import shadowmage.ancient_vehicles.AWVehicles;
 import shadowmage.ancient_vehicles.common.config.AWVehicleStatics;

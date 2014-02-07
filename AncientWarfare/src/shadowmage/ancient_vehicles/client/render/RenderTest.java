@@ -20,20 +20,10 @@
  */
 package shadowmage.ancient_vehicles.client.render;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-
-import org.lwjgl.opengl.GL11;
-
-import shadowmage.ancient_framework.client.model.ModelBaseAW;
 
 public class RenderTest
 {

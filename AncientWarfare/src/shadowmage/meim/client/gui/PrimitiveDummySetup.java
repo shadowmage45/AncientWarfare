@@ -38,10 +38,6 @@ public void addElements(GuiScrollableArea area)
   {
   int totalHeight = 0;
   area.elements.clear();
-  int col1 = 0;
-  int col2 = 25;
-  int col3 = 25+12+2;
-  int col4 = 25+12+2+20+2;
   
   GuiButtonSimple button = new GuiButtonSimple(0, area, 84, 12, "Add Primitive")
     {

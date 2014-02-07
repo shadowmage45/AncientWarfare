@@ -598,7 +598,7 @@ private void addFileControls()
       {
       if(super.handleMousePressed(x, y, num))
         {
-        gui.selectionMode = gui.SELECT_LOAD;
+        gui.selectionMode = GuiModelEditor.SELECT_LOAD;
         Minecraft.getMinecraft().displayGuiScreen(new GuiFileSelect(gui, gui, MEIMConfig.getModelSaveDir(), false));
         }
       return true;
@@ -613,9 +613,9 @@ private void addFileControls()
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && gui.model!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null)
         {
-        gui.selectionMode = gui.SELECT_SAVE;
+        gui.selectionMode = GuiModelEditor.SELECT_SAVE;
         Minecraft.getMinecraft().displayGuiScreen(new GuiFileSelect(gui, gui, MEIMConfig.getModelSaveDir(), true));
         }
       return true;
@@ -630,9 +630,9 @@ private void addFileControls()
     @Override
     public boolean handleMousePressed(int x, int y, int num)
       {
-      if(super.handleMousePressed(x, y, num) && gui.model!=null)
+      if(super.handleMousePressed(x, y, num) && GuiModelEditor.model!=null)
         {
-        gui.selectionMode = gui.SELECT_IMPORT_PIECE;
+        gui.selectionMode = GuiModelEditor.SELECT_IMPORT_PIECE;
         Minecraft.getMinecraft().displayGuiScreen(new GuiFileSelect(gui, gui, MEIMConfig.getModelSaveDir(), false));
         }
       return true;
@@ -651,7 +651,7 @@ private void addFileControls()
         {
         gui.setSelectedPiece(null);
         gui.setSelectedPrimitive(null);
-        gui.model = null;
+        GuiModelEditor.model = null;
         gui.initModel();
         addPrimitiveControls();
         updateButtonValues();
@@ -723,10 +723,10 @@ public void addRightLabels()
   {
   int totalHeight = 0;
   pieceLabelMap.clear();
-  if(gui.model!=null)
+  if(GuiModelEditor.model!=null)
     {
     List<ModelPiece> pieces = new ArrayList<ModelPiece>();
-    gui.model.getPieces(pieces);
+    GuiModelEditor.model.getPieces(pieces);
     
     GuiString label = new GuiString(0, rightPrimitivesPanel, 80, 12, "Pieces:");
     label.updateRenderPos(0, totalHeight);

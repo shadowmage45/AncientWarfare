@@ -65,8 +65,8 @@ public void addControls(GuiScrollableArea area)
     public void onElementActivated()
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
-      box.tx--;
-      xInput.setIntegerValue((int) box.tx);
+      box.setTx(box.tx() - 1);
+      xInput.setIntegerValue((int) box.tx());
       box.setCompiled(false);
       gui.updateImage();
       }
@@ -80,8 +80,8 @@ public void addControls(GuiScrollableArea area)
     public void onElementActivated()
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
-      box.tx++;
-      xInput.setIntegerValue((int) box.tx);
+      box.setTx(box.tx() + 1);
+      xInput.setIntegerValue((int) box.tx());
       box.setCompiled(false);
       gui.updateImage();
       }
@@ -95,11 +95,11 @@ public void addControls(GuiScrollableArea area)
     public void onElementActivated()
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
-      box.tx = getIntVal();
+      box.setTx(getIntVal());
       gui.updateImage();
       }
     };
-  xInput.updateRenderPos(col2, totalHeight);
+  xInput.updateRenderPos(col3, totalHeight);
   xInput.setAsIntegerValue();
   area.addGuiElement(xInput);
   
@@ -116,8 +116,8 @@ public void addControls(GuiScrollableArea area)
     public void onElementActivated()
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
-      box.tx--;
-      xInput.setIntegerValue((int) box.tx);
+      box.setTx(box.tx() - 1);
+      xInput.setIntegerValue((int) box.tx());
       box.setCompiled(false);
       gui.updateImage();
       }
@@ -131,8 +131,8 @@ public void addControls(GuiScrollableArea area)
     public void onElementActivated()
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
-      box.ty++;
-      yInput.setIntegerValue((int) box.ty);
+      box.setTy(box.ty() + 1);
+      yInput.setIntegerValue((int) box.ty());
       box.setCompiled(false);
       gui.updateImage();
       }
@@ -146,11 +146,11 @@ public void addControls(GuiScrollableArea area)
     public void onElementActivated()
       {
       PrimitiveBox box = (PrimitiveBox) gui.selectedPrimitive;
-      box.ty = getIntVal();
+      box.setTy(getIntVal());
       gui.updateImage();
       }
     };
-  yInput.updateRenderPos(col2, totalHeight);
+  yInput.updateRenderPos(col3, totalHeight);
   yInput.setAsIntegerValue();
   area.addGuiElement(yInput);
   

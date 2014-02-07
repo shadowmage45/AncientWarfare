@@ -22,6 +22,7 @@ package shadowmage.ancient_framework.client.model;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.util.MathHelper;
 
@@ -74,12 +75,12 @@ protected void renderForDisplayList()
   float py = 1.f/th;
   
   float u1, v1, u2, v2, u3, v3;
-  u1 = this.u1 * px + this.tx * px;
-  u2 = this.u2 * px + this.tx * px;
-  u3 = this.u3 * px + this.tx * px;
-  v1 = this.v1 * py + this.ty * py;
-  v2 = this.v2 * py + this.ty * py;
-  v3 = this.v3 * py + this.ty * py;
+  u1 = this.u1 * px + this.tx() * px;
+  u2 = this.u2 * px + this.tx() * px;
+  u3 = this.u3 * px + this.tx() * px;
+  v1 = this.v1 * py + this.ty() * py;
+  v2 = this.v2 * py + this.ty() * py;
+  v3 = this.v3 * py + this.ty() * py;
   GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
   GL11.glNormal3f(normalX, normalY, normalZ);
   GL11.glTexCoord2f(u1, v1);
@@ -112,8 +113,8 @@ public Primitive copy()
   box.setBounds(x1, y1, z1, x2, y2, z2, x3, y3, z3);
   box.setOrigin(x, y, z);
   box.setRotation(rx, ry, rz);
-  box.tx = tx;
-  box.ty = ty;
+  box.setTx(tx());
+  box.setTy(ty());
   box.setUV(u1, v1, u2, v2, u3, v3);
   return box;
   }
@@ -122,23 +123,24 @@ public Primitive copy()
 public void addPrimitiveLines(ArrayList<String> lines)
   {
   StringBuilder b = new StringBuilder("triangle=").append(parent.getName()).append(",");
-  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx).append(",").append(ty).append(",");
-  b.append(x1).append(",").append(y1).append(",").append(z1).append(",").append(x2).append(",").append(y2).append(",").append(z2).append(",").append(x3).append(",").append(y3).append(",").append(z3);
+  b.append(x).append(",").append(y).append(",").append(z).append(",").append(rx).append(",").append(ry).append(",").append(rz).append(",").append(tx()).append(",").append(ty()).append(",");
+  b.append(x1).append(",").append(y1).append(",").append(z1).append(",").append(x2).append(",").append(y2).append(",").append(z2).append(",").append(x3).append(",").append(y3).append(",").append(z3).append(",");
+  b.append(u1).append(",").append(v1).append(",").append(u2).append(",").append(v2).append(",").append(u3).append(",").append(v3);
   lines.add(b.toString());
   }
 
 @Override
 public void readFromLine(String[] lineBits)
   {
-  String parent = lineBits[0];
+//  String parent = lineBits[0];
   x = StringTools.safeParseFloat(lineBits[1]);
   y = StringTools.safeParseFloat(lineBits[2]);
   z = StringTools.safeParseFloat(lineBits[3]);
   rx = StringTools.safeParseFloat(lineBits[4]);
   ry = StringTools.safeParseFloat(lineBits[5]);
   rz = StringTools.safeParseFloat(lineBits[6]);
-  tx = StringTools.safeParseFloat(lineBits[7]);
-  ty = StringTools.safeParseFloat(lineBits[8]);
+  setTx(StringTools.safeParseFloat(lineBits[7]));
+  setTy(StringTools.safeParseFloat(lineBits[8]));
   x1 = StringTools.safeParseFloat(lineBits[9]);
   y1 = StringTools.safeParseFloat(lineBits[10]);
   z1 = StringTools.safeParseFloat(lineBits[11]);
@@ -203,14 +205,139 @@ public void setUV(float u1, float v1, float u2, float v2, float u3, float v3)
 
 @Override
 public void addUVMapToImage(BufferedImage image)
+  {  
+  float x, y, x1, y1, x2, y2, x3, y3;
+  x = tx();
+  y = ty();
+    
+  x1 = x + u1;
+  y1 = y + v1;
+  x2 = x + u2;
+  y2 = y + v2;
+  x3 = x + u3;
+  y3 = y + v3;
+  List<Point2i> points = new ArrayList<Point2i>();
+  
+  
+  plotLine2((int)x1, (int)y1, (int)x2, (int)y2, points);
+  for(Point2i point : points)
+    {
+    image.setRGB(point.x, point.y, 0xffff0000);
+    }
+  points.clear();
+  
+  plotLine2((int)x2, (int)y2, (int)x3, (int)y3, points);
+  for(Point2i point : points)
+    {
+    image.setRGB(point.x, point.y, 0xffff0000);
+    }
+  points.clear();
+  
+  plotLine2((int)x3, (int)y3, (int)x1, (int)y1, points);
+  for(Point2i point : points)
+    {
+    image.setRGB(point.x, point.y, 0xffff0000);
+    }
+  points.clear();
+  
+  }
+
+//http://www.sunshine2k.de/coding/java/Bresenham/RasterisingLinesCircles.pdf
+public static void plotLine(int x1, int y1, int x2, int y2, List<Point2i> points)
   {
-  /**
-   * map the triangle onto a flat surface
-   */
-  float d1 = Trig.getDistance(x1, y1, z1, x2, y2, z2);
-  float d2 = Trig.getDistance(x2, y2, z1, x3, y3, z3);
-  float d3 = Trig.getDistance(x3, y3, z3, x1, y1, z1);
+  boolean flipped = false;
+  int x = x1;
+  int y = y1;
+  int dx = Math.abs(x2 - x1);
+  int dy = Math.abs(y2 - y1);
+  int sx = x2 - x1 < 0 ? -1 : 1;
+  int sy = y2 - y1 < 0 ? -1 : 1;
+  if(dy > dx)
+    {
+    int d = dx;
+    dx = dy;
+    dy = d;
+    flipped = true;
+    }
+  float e = 2* dy - dx;
+  for(int i = 1; i<=dx; i++)
+    {
+    points.add(new Point2i(x, y));
+    while(e>=0)
+      {
+      if(flipped){x++;}
+      else{y++;}
+      e = e - 2 * dx;
+      }    
+    if(flipped){y += sy;}
+    else{x += sx;}
+    e = e + 2 * dy;
+    }
+  }
+
+public static void plotLine2(int x1, int y1, int x2, int y2, List<Point2i> points)
+  {
+  int x = x2 < x1 ? x2 : x1;
+  int endX = x==x1 ? x2 : x1;
+  
+  int y = y1;  
+  int dirY = y2 < y1 ? -1 : 1;
+  
+  int deltaX = endX - x;
+  
+  int dy = y2< y1 ? y1-y2 : y2 - y1;
+  
+  float ratio = deltaX!= 0 ? (float)dy / (float)deltaX : 0;
+  
+  float remY = 0;
+  
+  AWLog.logDebug("ratio: "+ratio);
+  for(x = x; x<=endX; x++)
+    {
+    points.add(new Point2i(x, y));
+    remY+=ratio;
+    while(remY>=1)
+      {      
+      y+=dirY;    
+      if(remY>1)
+        {
+        points.add(new Point2i(x, y));
+        }
+      remY-=1;
+      }
+    while(remY<=-1)
+      {     
+      y+=dirY;
+      if(remY<-1)
+        {
+        points.add(new Point2i(x, y));
+        }      
+      remY+=1;
+      }
+    }
+  }
+
+public static void plotTriangle(float x1, float y1, float x2, float y2, float x3, float y3, List<Point2i> points)
+  {
+  float minX, maxX, minY, maxY;
+  minX = Trig.getMin(x1, x2, x3);
+  maxX = Trig.getMax(x1, x2, x3);
+  minY = Trig.getMin(y1, y2, y3);
+  maxY = Trig.getMax(y1, y2, y3);
+  
+  
+  
   }
 
 
+public static class Point2i
+{
+int x;
+int y;
+public Point2i(int x, int y)
+  {
+  this.x = x;
+  this.y = y;
+  }
+}
 }
