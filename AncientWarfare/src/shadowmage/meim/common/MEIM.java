@@ -47,52 +47,6 @@ public void preInit(FMLPreInitializationEvent evt)
   MEIMConfig.setLogger(evt.getModLog());
   ItemLoader.load();
   MEIMConfig.saveConfig();
-//  plotTest();
   }
-
-private void plotTest()
-  {
-  BufferedImage image = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
-  for(int x= 0; x < 256; x++)
-    {
-    for(int y = 0; y <256; y++)
-      {
-      image.setRGB(x, y, 0xff222222);
-      }
-    }
-  
-  List<Point2i> points = new ArrayList<Point2i>();
-  
-  PrimitiveTriangle.plotLine3(0, 0, 10, 10, points);
-  plotPoints(image, points);
-  points.clear();
-  
-  PrimitiveTriangle.plotLine3(10, 10, 20, 0, points);
-  plotPoints(image, points);
-  points.clear();
-  
-  PrimitiveTriangle.plotLine3(0, 0, 20, 0, points);
-  plotPoints(image, points);
-  points.clear();
-  
-  try
-    {
-    ImageIO.write(image, "png", new File("test.png"));
-    } 
-  catch (IOException e)
-    {
-    e.printStackTrace();
-    }
-  }
-
-private void plotPoints(BufferedImage image, List<Point2i> points)
-  {
-  for(Point2i point : points)
-    {
-    image.setRGB(point.x, point.y, 0xffff0000);
-    }
-  }
-
-
 
 }
