@@ -219,121 +219,73 @@ public void addUVMapToImage(BufferedImage image)
   List<Point2i> points = new ArrayList<Point2i>();
   
   
-  plotLine2((int)x1, (int)y1, (int)x2, (int)y2, points);
+  plotLine3((int)x1, (int)y1, (int)x2, (int)y2, points);
   for(Point2i point : points)
     {
     image.setRGB(point.x, point.y, 0xffff0000);
     }
   points.clear();
   
-  plotLine2((int)x2, (int)y2, (int)x3, (int)y3, points);
+  plotLine3((int)x2, (int)y2, (int)x3, (int)y3, points);
   for(Point2i point : points)
     {
     image.setRGB(point.x, point.y, 0xffff0000);
     }
   points.clear();
   
-  plotLine2((int)x3, (int)y3, (int)x1, (int)y1, points);
+  plotLine3((int)x3, (int)y3, (int)x1, (int)y1, points);
   for(Point2i point : points)
     {
     image.setRGB(point.x, point.y, 0xffff0000);
     }
-  points.clear();
-  
+  points.clear();  
   }
 
-//http://www.sunshine2k.de/coding/java/Bresenham/RasterisingLinesCircles.pdf
-public static void plotLine(int x1, int y1, int x2, int y2, List<Point2i> points)
+
+//http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+public static void plotLine3(int x1, int y1, int x2, int y2, List<Point2i> points)
   {
-  boolean flipped = false;
-  int x = x1;
-  int y = y1;
-  int dx = Math.abs(x2 - x1);
-  int dy = Math.abs(y2 - y1);
-  int sx = x2 - x1 < 0 ? -1 : 1;
-  int sy = y2 - y1 < 0 ? -1 : 1;
-  if(dy > dx)
+  int dx, dy, x, y, sx, sy;
+  int err;
+  int e2;
+  dx = Math.abs(x2-x1);
+  dy = Math.abs(y2-y1);
+  if(x1<x2){sx = 1;}
+  else{sx = -1;}
+  if(y1<y2){sy = 1;}
+  else{sy = -1;}
+  err = dx-dy;
+  x = x1;
+  y = y1;
+  while(true)
     {
-    int d = dx;
-    dx = dy;
-    dy = d;
-    flipped = true;
-    }
-  float e = 2* dy - dx;
-  for(int i = 1; i<=dx; i++)
-    {
-    points.add(new Point2i(x, y));
-    while(e>=0)
+    points.add(new Point2i(x,y));
+    if(x==x2 && y==y2){break;}
+    e2 = 2*err;
+    if(e2 > -dy)
       {
-      if(flipped){x++;}
-      else{y++;}
-      e = e - 2 * dx;
-      }    
-    if(flipped){y += sy;}
-    else{x += sx;}
-    e = e + 2 * dy;
-    }
-  }
-
-public static void plotLine2(int x1, int y1, int x2, int y2, List<Point2i> points)
-  {
-  int x = x2 < x1 ? x2 : x1;
-  int endX = x==x1 ? x2 : x1;
-  
-  int y = y1;  
-  int dirY = y2 < y1 ? -1 : 1;
-  
-  int deltaX = endX - x;
-  
-  int dy = y2< y1 ? y1-y2 : y2 - y1;
-  
-  float ratio = deltaX!= 0 ? (float)dy / (float)deltaX : 0;
-  
-  float remY = 0;
-  
-  AWLog.logDebug("ratio: "+ratio);
-  for(x = x; x<=endX; x++)
-    {
-    points.add(new Point2i(x, y));
-    remY+=ratio;
-    while(remY>=1)
-      {      
-      y+=dirY;    
-      if(remY>1)
-        {
-        points.add(new Point2i(x, y));
-        }
-      remY-=1;
+      err = err - dy;
+      x += sx;
       }
-    while(remY<=-1)
-      {     
-      y+=dirY;
-      if(remY<-1)
-        {
-        points.add(new Point2i(x, y));
-        }      
-      remY+=1;
+    if(x==x2&&y==y2)
+      {
+      points.add(new Point2i(x,y));
+      break;
+      }   
+    if(e2 < dx)
+      {
+      err = err + dx;
+      y = y + sy;
       }
     }
   }
 
-public static void plotTriangle(float x1, float y1, float x2, float y2, float x3, float y3, List<Point2i> points)
-  {
-  float minX, maxX, minY, maxY;
-  minX = Trig.getMin(x1, x2, x3);
-  maxX = Trig.getMax(x1, x2, x3);
-  minY = Trig.getMin(y1, y2, y3);
-  maxY = Trig.getMax(y1, y2, y3);
-  
-  
-  
-  }
 
 
 public static class Point2i
 {
-int x;
-int y;
+public int x;
+public int y;
 public Point2i(int x, int y)
   {
   this.x = x;
