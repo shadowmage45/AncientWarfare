@@ -1,15 +1,5 @@
 package shadowmage.meim.common;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
-import shadowmage.ancient_framework.client.model.PrimitiveTriangle.Point2i;
 import shadowmage.meim.common.config.MEIMConfig;
 import shadowmage.meim.common.item.ItemLoader;
 import shadowmage.meim.common.network.NetworkManager;

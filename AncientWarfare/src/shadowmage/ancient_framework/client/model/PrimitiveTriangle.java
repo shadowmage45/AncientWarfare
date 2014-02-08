@@ -28,9 +28,7 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
-import shadowmage.ancient_framework.common.utils.Trig;
 
 public class PrimitiveTriangle extends Primitive
 {
