@@ -21,9 +21,13 @@
 package shadowmage.meim.client.gui;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import shadowmage.ancient_framework.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
@@ -37,6 +41,7 @@ import shadowmage.ancient_framework.client.model.Primitive;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.client.model.PrimitiveQuad;
 import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
+import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 
 public class GuiUVMap extends GuiContainerAdvanced
@@ -48,6 +53,8 @@ GuiButtonSimple textureYSizePlus;
 GuiButtonSimple textureYSizeMinus;
 GuiNumberInputLine textureXSizeInput;
 GuiNumberInputLine textureYSizeInput;
+
+GuiButtonSimple exportUVMap;
 
 GuiScrollableArea textureControlArea;
 GuiScrollableArea primitiveControlArea;
@@ -293,6 +300,26 @@ public void setupControls()
   textureControlArea.addGuiElement(label);
   totalHeight+=12;
   
+  
+  exportUVMap = new GuiButtonSimple(0, textureControlArea, 45, 12, "Export")
+    {
+    @Override
+    public void onElementActivated()
+      {
+      try
+        {
+        ImageIO.write(image, "png", new File(Statics.CONFIG_PATH, "UVExport.png"));
+        } 
+      catch (IOException e)
+        {
+        e.printStackTrace();
+        }
+      }
+    };
+  exportUVMap.updateRenderPos(0, totalHeight);
+  textureControlArea.addGuiElement(exportUVMap);
+  totalHeight+=12;
+  
   textureControlArea.updateTotalHeight(totalHeight);
   
   
@@ -306,10 +333,10 @@ public void setupControls()
 public void updateControls()
   {  
   textureControlArea.updateRenderPos(-guiLeft, -guiTop);
-  textureControlArea.setHeight(30);
+  textureControlArea.setHeight(40);
   
-  primitiveControlArea.updateRenderPos(-guiLeft, -guiTop+30);
-  primitiveControlArea.setHeight(height-30);
+  primitiveControlArea.updateRenderPos(-guiLeft, -guiTop+40);
+  primitiveControlArea.setHeight(height-40);
   this.addPrimitiveControls();
   
   primitiveSelectionArea.updateRenderPos(-guiLeft+width-80, -guiTop);

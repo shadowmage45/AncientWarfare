@@ -23,7 +23,7 @@ package shadowmage.ancient_framework.common.config;
 public class Statics
 {
 
-public static final String CONFIG_PATH = "";
+public static final String CONFIG_PATH = "/config/AncientWarfare";
 public static final String ASSETS_PATH = "/assets/ancientwarfare";
 public static final String TEXTURE_PATH = "textures/";
 public static final String MOD_PREFIX = "ancientwarfare";
