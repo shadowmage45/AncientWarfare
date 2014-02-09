@@ -2,5 +2,6 @@
 #fields are:,,,,,,,,,,,kg*m/s,kg*m/s,,,,,,,,,,,,,,,,,
 #string,int,string,string,string,string,string,boolean,boolean,int,int,int,int,float,float,float,float,float,float,float,float,float,float,float,float,boolean,float,float,float,boolean
 #name,id,model,render,texture,firingHelper,moveType,survival,creative,maxHealth,mass,thrust,launchThrust,w,h,l,turretX,turretY,turretZ,fireX,fireY,fireZ,riderX,riderY,riderZ,riderMovesWithTurret,flagX,flagY,flagZ,flagMovesWithTurret
-vehicle.catapult.mobile.turret,0,catapult.mobile.turret,mobile.turret,models/catapultMobileTurret.png,catapult.mobile.turret,mobile.ground,TRUE,TRUE,120,1200,4200,525,2,2,3,0,0,0,0,0,0,0,0,0,TRUE,0,0,0,FALSE
-vehicle.ballista.mobile.turret,1,ballista.mobile.turret,mobile.turret,models/ballistaMobileTurret.png,ballista.mobile.turret,mobile.ground,TRUE,TRUE,120,1200,4200,525,2,2,3,0,0,0,0,0,0,0,0,0,FALSE,0,0,0,FALSE
+vehicle.catapult.stand,0,catapultStand.m2f,stand,models/catapultStand.png,catapult.stand,stand,TRUE,TRUE,120,1200,4200,525,2,2,3,0,0,0,0,0,0,0,0,0,TRUE,0,0,0,TRUE
+vehicle.catapult.mobile,1,catapultMobile.m2f,mobile,models/catapultMobile.png,catapult.mobile,mobile.ground,TRUE,TRUE,120,1200,4200,525,2,2,3,0,0,0,0,0,0,0,0,0,TRUE,0,0,0,FALSE
+vehicle.ballista.mobile.turret,2,ballista.mobile.turret,mobile.turret,models/ballistaMobileTurret.png,ballista.mobile.turret,mobile.ground,TRUE,TRUE,120,1200,4200,525,2,2,3,0,0,0,0,0,0,0,0,0,FALSE,0,0,0,FALSE

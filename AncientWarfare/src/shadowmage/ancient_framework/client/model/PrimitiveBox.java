@@ -108,14 +108,12 @@ protected void renderForDisplayList()
 
   AWLog.logDebug("tx, ty: "+tx+","+ty);
   AWLog.logDebug("w,l,h: "+w+","+l+","+h);
-//  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
   
   //front side  
   tx1 = (tx + l)*px;  
   ty1 = (th - (ty + l + h))*py;
   tx2 = (tx + l + w)*px;
-  ty2 = (th - (ty + l))*py;  
-  
+  ty2 = (th - (ty + l))*py;    
   GL11.glNormal3f(0, 0, 1);
   GL11.glTexCoord2f(tx1, ty1);
   GL11.glVertex3f(x1, y1, z2);
@@ -125,6 +123,7 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x2, y2, z2);
   GL11.glTexCoord2f(tx1, ty2);
   GL11.glVertex3f(x1, y2, z2);
+  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
    
   ////rear side
   tx1 = (tx + l + l + w)*px;  
@@ -140,6 +139,7 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x1, y2, z1);
   GL11.glTexCoord2f(tx1, ty2);
   GL11.glVertex3f(x2, y2, z1); 
+  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
   
   //right side
   tx1 = (tx + l + w)*px;  
@@ -155,6 +155,7 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x1, y2, z2);
   GL11.glTexCoord2f(tx1, ty2);
   GL11.glVertex3f(x1, y2, z1);
+  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
   
 //  //left side
   tx1 = (tx)*px;  
@@ -170,6 +171,7 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x2, y2, z1);
   GL11.glTexCoord2f(tx1, ty2);
   GL11.glVertex3f(x2, y2, z2);
+  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
   
 //  //top side
   tx1 = (tx + l)*px;  
@@ -185,11 +187,12 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x1, y2, z2);
   GL11.glTexCoord2f(tx1, ty2);
   GL11.glVertex3f(x2, y2, z2);
+  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
   
 //  //bottom side
   tx1 = (tx + l + w)*px;  
   ty1 = (th - (ty + l))*py;
-  tx2 = (tx + l + w + l)*px;
+  tx2 = (tx + l + w + w)*px;
   ty2 = (th - (ty))*py; 
   GL11.glNormal3f(0, -1, 0);
   GL11.glTexCoord2f(tx1, ty1);
@@ -200,6 +203,7 @@ protected void renderForDisplayList()
   GL11.glVertex3f(x1, y1, z1);
   GL11.glTexCoord2f(tx1, ty2);
   GL11.glVertex3f(x2, y1, z1);
+  AWLog.logDebug(String.format("t: %.4f, %.4f, %.4f, %.4f", tx1, ty1, tx2, ty2));
 
     
   GL11.glEnd();
