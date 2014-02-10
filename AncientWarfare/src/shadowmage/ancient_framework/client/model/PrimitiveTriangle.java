@@ -28,7 +28,9 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.utils.StringTools;
+import shadowmage.ancient_framework.common.utils.Trig;
 
 public class PrimitiveTriangle extends Primitive
 {
@@ -36,6 +38,7 @@ public class PrimitiveTriangle extends Primitive
 float x1, y1, z1, x2, y2, z2, x3, y3, z3;
 float u1, v1, u2, v2, u3, v3;//texture uv's...saved to file, as I have no idea how to dynamically calc a triangle uv map
 float normalX, normalY, normalZ;//normal for lighting...should be calc'd when setBounds is called
+float cx, cy;//triangle center point -- used for rotation of uv vertices around triangle center
 /**
  * @param parent
  */
@@ -59,6 +62,8 @@ public float u3(){return u3;}
 public float v1(){return v1;}
 public float v2(){return v2;}
 public float v3(){return v3;}
+public float cx(){return cx;}
+public float cy(){return cy;}
 
 @Override
 protected void renderForDisplayList()
@@ -102,6 +107,45 @@ public void reverseVertexOrder()
   y3 = y;
   z3 = z;
   this.setBounds(x1, y1, z1, x2, y2, z1, x3, y3, z3);
+  }
+
+public void rotateTriangleUV(float degrees)
+  {
+  /**
+   * grab triangle center(calc'd when UV is set) 
+   * find angle and length for each corner
+   * rotate by degrees, recompute new angle, set new corner point at new angle * length
+   */
+  float u1, v1, u2, v2, u3, v3;
+  float dx = u1() - cx();
+  float dy = v1() - cy();
+  float length = MathHelper.sqrt_float(dx*dx+dy*dy);
+  double radianAngle = Math.atan2(dx, dy);
+  radianAngle += degrees * Trig.TORADIANS;  
+  u1 = (float) Math.sin(radianAngle) * length;
+  v1 = (float) Math.cos(radianAngle) * length;
+  
+  dx = u2() -cx();
+  dy = v2() -cy();
+  length = MathHelper.sqrt_float(dx*dx+dy*dy);
+  radianAngle = Math.atan2(dx, dy);
+  radianAngle += degrees * Trig.TORADIANS;  
+  u2 = (float) Math.sin(radianAngle) * length;
+  v2 = (float) Math.cos(radianAngle) * length;
+  
+  dx = u3() - cx();
+  dy = v3() - cy();
+  length = MathHelper.sqrt_float(dx*dx+dy*dy);
+  radianAngle = Math.atan2(dx, dy);
+  radianAngle += degrees * Trig.TORADIANS;  
+  u3 = (float) Math.sin(radianAngle) * length;
+  v3 = (float) Math.cos(radianAngle) * length;
+  
+
+  AWLog.logDebug(String.format("orig: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f  new: %.2f, %.2f, %.2f, %.2f, %.2f, %.2f", u1(), v1(), u2(), v2(), u3(), v3(), u1, v1, u2, v2, u3, v3));
+  
+  setUV(u1, v1, u2, v2, u3, v3);
+  setCompiled(false);
   }
 
 @Override
@@ -148,16 +192,14 @@ public void readFromLine(String[] lineBits)
   x3 = StringTools.safeParseFloat(lineBits[15]);
   y3 = StringTools.safeParseFloat(lineBits[16]);
   z3 = StringTools.safeParseFloat(lineBits[17]);
-  if(lineBits.length>18)
-    {
-    u1 = StringTools.safeParseFloat(lineBits[18]);
-    v1 = StringTools.safeParseFloat(lineBits[19]);
-    u2 = StringTools.safeParseFloat(lineBits[20]);
-    v2 = StringTools.safeParseFloat(lineBits[21]);
-    u3 = StringTools.safeParseFloat(lineBits[22]);
-    v3 = StringTools.safeParseFloat(lineBits[23]);    
-    }
-  setBounds(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+  u1 = StringTools.safeParseFloat(lineBits[18]);
+  v1 = StringTools.safeParseFloat(lineBits[19]);
+  u2 = StringTools.safeParseFloat(lineBits[20]);
+  v2 = StringTools.safeParseFloat(lineBits[21]);
+  u3 = StringTools.safeParseFloat(lineBits[22]);
+  v3 = StringTools.safeParseFloat(lineBits[23]);    
+  calcNormal();   
+  calcCenter();
   }
 
 public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3)
@@ -171,7 +213,30 @@ public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2
   this.z1 = z1;
   this.z2 = z2;
   this.z3 = z3;
-  
+  this.calcNormal();
+  this.calcCenter(); 
+  this.setCompiled(false);
+  }
+
+public void setUV(float u1, float v1, float u2, float v2, float u3, float v3)
+  {
+  this.u1 = u1;
+  this.v1 = v1;
+  this.u2 = u2;
+  this.v2 = v2;
+  this.u3 = u3;
+  this.v3 = v3;    
+  calcCenter();
+  }
+
+private void calcCenter()
+  {
+  cx = (u1+u2+u3)/3;
+  cy = (v1+v2+v3)/3;
+  }
+
+private void calcNormal()
+  {
   float vx, vy, vz, wx, wy, wz;
   vx = x2-x1;
   vy = y2-y1;
@@ -188,17 +253,6 @@ public void setBounds(float x1, float y1, float z1, float x2, float y2, float z2
   normalX/=norm;
   normalY/=norm;
   normalZ/=norm;
-  this.setCompiled(false);
-  }
-
-public void setUV(float u1, float v1, float u2, float v2, float u3, float v3)
-  {
-  this.u1 = u1;
-  this.v1 = v1;
-  this.u2 = u2;
-  this.v2 = v2;
-  this.u3 = u3;
-  this.v3 = v3;
   }
 
 @Override
@@ -214,6 +268,13 @@ public void addUVMapToImage(BufferedImage image)
   y2 = y + v2;
   x3 = x + u3;
   y3 = y + v3;
+  if(x1<0){x1 = 0;}
+  if(x2<0){x2 = 0;}
+  if(x3<0){x3 = 0;}
+  if(y1<0){y1 = 0;}
+  if(y2<0){y2 = 0;}
+  if(y3<0){y3 = 0;}
+  
   List<Point2i> points = new ArrayList<Point2i>();
   
   
@@ -236,7 +297,9 @@ public void addUVMapToImage(BufferedImage image)
     {
     image.setRGB(point.x, point.y, 0xffff0000);
     }
-  points.clear();  
+  points.clear();
+  
+  image.setRGB((int)(tx()+cx()), (int)(ty()+cy()), 0xffff0000);
   }
 
 
@@ -279,6 +342,11 @@ public static void plotLine3(int x1, int y1, int x2, int y2, List<Point2i> point
   }
 
 
+public void setCenterx(float cx, float cy)
+  {
+  this.cx = cx;
+  this.cy = cy;
+  }
 
 public static class Point2i
 {
@@ -290,4 +358,6 @@ public Point2i(int x, int y)
   this.y = y;
   }
 }
+
+
 }

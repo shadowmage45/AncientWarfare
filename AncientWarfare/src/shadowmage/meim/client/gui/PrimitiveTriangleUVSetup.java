@@ -20,11 +20,17 @@
  */
 package shadowmage.meim.client.gui;
 
+import net.minecraft.util.MathHelper;
+
+import org.lwjgl.input.Keyboard;
+
 import shadowmage.ancient_framework.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_framework.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_framework.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_framework.client.gui.elements.GuiString;
 import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
+import shadowmage.ancient_framework.common.config.AWLog;
+import shadowmage.ancient_framework.common.utils.Trig;
 
 public class PrimitiveTriangleUVSetup extends PrimitiveUVSetup
 {
@@ -490,7 +496,45 @@ public void addControls(GuiScrollableArea area)
   totalHeight+=12;
   
   
+  GuiButtonSimple rp = new GuiButtonSimple(0, area, 24, 12, "R-")
+    {
+    @Override
+    public void onElementActivated()
+      {      
+      rotateTriangleUV((PrimitiveTriangle)gui.selectedPrimitive, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? -5 : -1);
+      }
+    };
+  rp.updateRenderPos(0, totalHeight);
+  area.addGuiElement(rp);
+  
+  rp = new GuiButtonSimple(0, area, 24, 12, "R+")
+    {
+    @Override
+    public void onElementActivated()
+      {      
+      rotateTriangleUV((PrimitiveTriangle)gui.selectedPrimitive, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 5 : 1);
+      }
+    };
+  rp.updateRenderPos(26, totalHeight);
+  area.addGuiElement(rp);
+  
+  totalHeight+=12;
+  
+  
+  
   area.updateTotalHeight(totalHeight); 
+  }
+
+private void rotateTriangleUV(PrimitiveTriangle t, float degrees)
+  {
+  t.rotateTriangleUV(degrees);
+  gui.updateImage();
+  u1Input.setValue(t.u1());
+  v1Input.setValue(t.v1());
+  u2Input.setValue(t.u2());
+  v2Input.setValue(t.v2());
+  u3Input.setValue(t.u3());
+  v3Input.setValue(t.v3());
   }
 
 }
