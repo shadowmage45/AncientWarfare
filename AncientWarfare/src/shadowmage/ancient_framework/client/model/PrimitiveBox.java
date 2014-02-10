@@ -250,48 +250,49 @@ public void addUVMapToImage(BufferedImage image)
   /**
    * front face
    */
-  for(x = u + l; x <= u + l + w; x++)
+  for(x = u + l; x < u + l + w; x++)
     {
-    for(y = v + l; y<= v+ l + h; y++)
+    for(y = v + l; y< v+ l + h; y++)
       {
       image.setRGB(x, y, 0xffff0000);
       }
     }
   //left face
-  for(x = u ; x<= u + l; x++)
+  for(x = u ; x< u + l; x++)
     {
-    for(y = v+l; y<= v+l+h; y++)
+    for(y = v+l; y< v+l+h; y++)
       {
       image.setRGB(x, y, 0xff00aa00);
       }
     }
   //right face
-  for(x = u + l + w ; x<= u + l + w + l; x++)
+  for(x = u + l + w ; x< u + l + w + l; x++)
     {
-    for(y = v+l; y<= v+l+h; y++)
+    for(y = v+l; y< v+l+h; y++)
       {
       image.setRGB(x, y, 0xff00ff00);
       }
     }
   //rear face
-  for(x = u + l + w + l ; x<= u + l + w + l + w; x++)
+  for(x = u + l + w + l ; x< u + l + w + l + w; x++)
     {
-    for(y = v+l; y<= v+l+h; y++)
+    for(y = v+l; y< v+l+h; y++)
       {
       image.setRGB(x, y, 0xffaa0000);
       }
     }
   //top face
-  for(x = u + l; x<= u +l +w; x++)
+  for(x = u + l; x< u +l +w; x++)
     {
-    for(y = v; y<= v+l; y++)
+    for(y = v; y< v+l; y++)
       {
       image.setRGB(x, y, 0xff0000ff);
       }
     }
-  for(x = u + l + w; x<= u +l + w + l; x++)
+  //bottom face
+  for(x = u + l + w; x < u + l + w + w; x++)
     {
-    for(y = v; y<= v+l; y++)
+    for(y = v; y< v+l; y++)
       {
       image.setRGB(x, y, 0xff0000aa);
       }

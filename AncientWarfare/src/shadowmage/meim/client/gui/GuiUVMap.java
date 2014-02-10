@@ -41,6 +41,7 @@ import shadowmage.ancient_framework.client.model.Primitive;
 import shadowmage.ancient_framework.client.model.PrimitiveBox;
 import shadowmage.ancient_framework.client.model.PrimitiveQuad;
 import shadowmage.ancient_framework.client.model.PrimitiveTriangle;
+import shadowmage.ancient_framework.common.config.AWLog;
 import shadowmage.ancient_framework.common.config.Statics;
 import shadowmage.ancient_framework.common.container.ContainerBase;
 
@@ -308,6 +309,8 @@ public void setupControls()
       {
       try
         {
+        File file = new File(Statics.CONFIG_PATH, "UVExport.png");
+        AWLog.logDebug("filePath:"+file.getAbsolutePath());
         ImageIO.write(image, "png", new File(Statics.CONFIG_PATH, "UVExport.png"));
         } 
       catch (IOException e)
