@@ -345,6 +345,7 @@ public void addUVMapToImage(BufferedImage image)
 //http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 //http://www.mathworks.com/matlabcentral/fileexchange/21057-3d-bresenhams-line-generation/content/bresenham_line3d.m
 //http://www.luberth.com/plotter/line3d.c.txt.html
+//http://www.ict.griffith.edu.au/anthony/info/graphics/bresenham.procs
 public static void plotLine3(int x1, int y1, int x2, int y2, List<Point2i> points)
   {
   int dx, dy, x, y, sx, sy;
