@@ -227,6 +227,7 @@ public void setUV(float u1, float v1, float u2, float v2, float u3, float v3)
   this.u3 = u3;
   this.v3 = v3;    
   calcCenter();
+  this.setCompiled(false);
   }
 
 private void calcCenter()
@@ -235,6 +236,9 @@ private void calcCenter()
   cy = (v1+v2+v3)/3;
   }
 
+/**
+ * reclac the normal for this triangle.  should be called whenever the vertex coordinates change
+ */
 private void calcNormal()
   {
   float vx, vy, vz, wx, wy, wz;
@@ -253,10 +257,14 @@ private void calcNormal()
   normalX/=norm;
   normalY/=norm;
   normalZ/=norm;
+  this.setCompiled(false);
   }
 
 /**
- * recalc the UV for this triangle based on side-lengths, with u1/v1 being upper-left on the texture, u2/v2 being right, and u3/v3 being bottom
+ * recalc the UV for this triangle based on side-lengths, 
+ * with u1/v1 being upper-left on the texture, 
+ * u2/v2 being right, 
+ * and u3/v3 being bottom
  */
 public void recalcUV()
   {  
@@ -283,6 +291,7 @@ public void recalcUV()
   v3 = v1 + (float)(Math.cos(cosC*Trig.TORADIANS) * c);
     
   this.calcCenter();
+  this.setCompiled(false);
   }
 
 @Override
@@ -334,6 +343,8 @@ public void addUVMapToImage(BufferedImage image)
 
 
 //http://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+//http://www.mathworks.com/matlabcentral/fileexchange/21057-3d-bresenhams-line-generation/content/bresenham_line3d.m
+//http://www.luberth.com/plotter/line3d.c.txt.html
 public static void plotLine3(int x1, int y1, int x2, int y2, List<Point2i> points)
   {
   int dx, dy, x, y, sx, sy;
