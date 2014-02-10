@@ -521,6 +521,27 @@ public void addControls(GuiScrollableArea area)
   totalHeight+=12;
   
   
+  rp = new GuiButtonSimple(0, area, 24, 12, "RC")
+    {
+    @Override
+    public void onElementActivated()
+      {      
+      PrimitiveTriangle t = (PrimitiveTriangle)gui.selectedPrimitive;
+      t.recalcUV();
+      t.setCompiled(false);
+      gui.updateImage();
+      u1Input.setValue(t.u1());
+      v1Input.setValue(t.v1());
+      u2Input.setValue(t.u2());
+      v2Input.setValue(t.v2());
+      u3Input.setValue(t.u3());
+      v3Input.setValue(t.v3());
+      }
+    };
+  rp.updateRenderPos(0, totalHeight);
+  area.addGuiElement(rp);
+  
+  totalHeight+=12;
   
   area.updateTotalHeight(totalHeight); 
   }

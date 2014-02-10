@@ -255,6 +255,46 @@ private void calcNormal()
   normalZ/=norm;
   }
 
+/**
+ * recalc the UV for this triangle based on side-lengths, with u1/v1 being upper-left on the texture, u2/v2 being right, and u3/v3 being bottom
+ */
+public void recalcUV()
+  {  
+  //1 = a, 2 = b, 3 = c
+  float a = Trig.getDistance(x1, y1, z1, x2, y2, z2) * 16.f;
+  float b = Trig.getDistance(x2, y2, z2, x3, y3, z3) * 16.f;
+  float c = Trig.getDistance(x3, y3, z3, x1, y1, z1) * 16.f;
+  
+  float cosA = (b*b + c*c - a*a) / 2*(b*c);
+  cosA = (float) Math.pow((float) Math.cos(cosA), -1.f);
+  AWLog.logDebug("cosA: "+(cosA*Trig.TODEGREES));
+  
+  float cosB = (c*c + a*a - b*b) / 2*(c*a);
+  cosB = (float) Math.pow((float) Math.cos(cosB), -1.f);
+  AWLog.logDebug("cosB: "+(cosB*Trig.TODEGREES));
+  
+  float cosC = (180.f - (cosA*Trig.TODEGREES) - (cosB * Trig.TODEGREES))*Trig.TORADIANS;
+  
+  AWLog.logDebug("cosC: "+(cosC*Trig.TODEGREES));
+  AWLog.logDebug("total: "+((cosA+cosB+cosC)*Trig.TODEGREES));
+    
+  AWLog.logDebug("a, b, c: "+a+","+b+","+c);
+  
+  u1 = 0;
+  v1 = 0;
+  
+  u2 = u1 + a;
+  v2 = 0;
+  
+  
+  
+  u3 = u1 + (float)(Math.sin(cosC*Trig.TORADIANS) * c);
+  v3 = v1 + (float)(Math.cos(cosC*Trig.TORADIANS) * c);
+  
+  
+  this.calcCenter();
+  }
+
 @Override
 public void addUVMapToImage(BufferedImage image)
   {  
