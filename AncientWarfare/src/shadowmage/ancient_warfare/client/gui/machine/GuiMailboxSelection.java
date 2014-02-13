@@ -105,6 +105,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override
@@ -211,6 +212,7 @@ public void updateControls()
     element++;
     }
   area.updateTotalHeight(y);
+  
   }
 
 Set<GuiString> boxNames = new HashSet<GuiString>();
