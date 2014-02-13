@@ -1,6 +1,7 @@
 package shadowmage.ancient_warfare.client.gui;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -454,6 +455,11 @@ protected void drawTooltips(int mouseX, int mouseY, float partialTick)
     {
     this.renderItemStack(tooltipStack, tooltipStackX, tooltipStackY, mouseX, mouseY, true, true, true, false);
     }
+  for(DelayedTooltip t : this.delayedTooltips)
+    {
+    super.drawItemStackTooltip(t.stack, t.x, t.y);
+    }
+  this.delayedTooltips.clear();
   this.tooltipStack = null;
   }
 
@@ -468,17 +474,6 @@ public void drawScreen(int par1, int par2, float par3)
   GL11.glPushMatrix();
   this.drawExtraForeground(par1, par2, par3);
   GL11.glPopMatrix();
-  
-  Slot slot;
-  for(int i = 0; i < this.inventorySlots.inventorySlots.size(); i++)
-    {
-    slot = this.inventorySlots.getSlot(i);
-    if(slot!=null && slot.getHasStack() && isMouseInAdjustedArea(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, par1, par2))
-      {      
-      this.drawItemStackTooltip(slot.getStack(), par1, par2);
-      break;
-      }
-    }
   
   GL11.glPushMatrix();
   this.drawTooltips(par1, par2, par3);
@@ -808,23 +803,21 @@ protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3,
 @Override
 protected void drawItemStackTooltip(ItemStack par1ItemStack, int par2, int par3)
   {
-  super.drawItemStackTooltip(par1ItemStack, par2, par3);
-//  List list = par1ItemStack.getTooltip(this.mc.thePlayer, this.mc.gameSettings.advancedItemTooltips);
-//
-//  for (int k = 0; k < list.size(); ++k)
-//    {
-//    if (k == 0)
-//      {
-//      list.set(k, "\u00a7" + Integer.toHexString(par1ItemStack.getRarity().rarityColor) + (String)list.get(k));
-//      }
-//    else
-//      {
-//      list.set(k, EnumChatFormatting.GRAY + (String)list.get(k));
-//      }
-//    }
-////  this.func_102021_a(par1List, par2, par3)
-////  this.drawHoveringText(list, par2, par3, getFontRenderer());
-//  func_102021_a(list, par2, par3);
+  delayedTooltips.add(new DelayedTooltip(par1ItemStack, par2, par3));
   }
 
+private List<DelayedTooltip> delayedTooltips = new ArrayList<DelayedTooltip>();
+
+private class DelayedTooltip
+{
+ItemStack stack;
+int x;
+int y;
+private DelayedTooltip(ItemStack stack, int x, int y)
+  {
+  this.stack = stack;
+  this.x = x;
+  this.y = y;
+  }
+}
 }
