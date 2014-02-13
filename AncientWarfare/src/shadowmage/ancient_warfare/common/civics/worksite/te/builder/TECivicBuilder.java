@@ -38,6 +38,7 @@ public class TECivicBuilder extends TEWorkSite
 {
 private BuilderTicked builder;
 private boolean shouldRemove = false;
+private boolean hasStarted = false;
 
 public TECivicBuilder()
   {
@@ -80,7 +81,6 @@ public void updateEntity()
     this.removeBuilder();
     this.worldObj.setBlock(xCoord, yCoord, zCoord, 0);
     }
-//  Config.logDebug("updating builder TE");
   }
 
 /************************************************WORK SITE*************************************************/
@@ -105,7 +105,7 @@ protected void scan()
 @Override
 public void doWork(IWorker npc)
   {
-//  Config.logDebug("ticking builder");
+  this.hasStarted = true;
   this.tickBuilder();
   this.updateHasWork();
   }
@@ -113,11 +113,8 @@ public void doWork(IWorker npc)
 @Override
 protected void doWork(IWorker npc, WorkPoint p)
   {
-  // TODO Auto-generated method stub
-
-//  Config.logDebug("ticking builder2");
+  
   }
-
 
 @Override
 protected TargetType validateWorkPoint(WorkPoint p)
@@ -184,13 +181,17 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
       this.builder.tickTimer = 1;
       }
     }  
+  par1nbtTagCompound.setBoolean("started", hasStarted);
   }
 
 @Override
 public IInventory[] getInventoryToDropOnBreak()
   {  
-//  String name = getStructureName();
-//  InventoryTools.dropItemInWorld(worldObj, ItemCivicBuilder.getCivicBuilderItem(name), xCoord, yCoord, zCoord);
+  if(!hasStarted)
+    {
+    String name = getStructureName();
+    InventoryTools.dropItemInWorld(worldObj, ItemCivicBuilder.getCivicBuilderItem(name), xCoord, yCoord, zCoord);
+    }
   return super.getInventoryToDropOnBreak();
   }
 
@@ -202,6 +203,7 @@ public void writeToNBT(NBTTagCompound par1nbtTagCompound)
     {
     par1nbtTagCompound.setCompoundTag("builder", this.builder.getNBTTag());
     }
+  this.hasStarted = par1nbtTagCompound.getBoolean("started");
   }
 
 
