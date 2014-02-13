@@ -232,11 +232,12 @@ public void repackIntoItem()
       itemTag.setByte("slot", (byte) i);
       inv.appendTag(itemTag);
       }
+    this.setCurrentItemOrArmor(i, null);
     }
   stack.getTagCompound().getCompoundTag("AWNpcSpawner").setInteger("hunger", npcUpkeepTicks);
   stack.getTagCompound().getCompoundTag("AWNpcSpawner").setTag("inventory", inv);
   GameDataTracker.instance().removeNpcEntry(this);
-  this.isDead = true;
+  this.worldObj.removeEntity(this);
   }
 
 /**
@@ -655,7 +656,7 @@ protected boolean canDespawn()
 public void setDead()
   {
   super.setDead();
-  if(this.worldObj!=null && !this.worldObj.isRemote && this.inventory.getSizeInventory()>0)
+  if(this.worldObj!=null && !this.worldObj.isRemote && this.getHealth() <= 0.f)
     {
     InventoryTools.dropInventoryInWorld(worldObj, inventory, posX, posY, posZ);
     InventoryTools.dropInventoryInWorld(worldObj, specInventory, posX, posY, posZ);
