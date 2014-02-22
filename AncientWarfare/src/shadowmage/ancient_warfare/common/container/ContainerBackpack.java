@@ -52,7 +52,14 @@ public ContainerBackpack(EntityPlayer openingPlayer)
     slotNum = x;
     xPos = 8 + x * 18;
     yPos = 162 + 3*18; 
-    this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));      
+    if(x==player.inventory.currentItem)
+      {
+      this.addSlotToContainer(new SlotNoPull(openingPlayer.inventory, x, xPos, yPos));      
+      }
+    else
+      {
+      this.addSlotToContainer(new Slot(openingPlayer.inventory, x, xPos, yPos));      
+      }      
     }
   for (y = 0; y < 3; ++y)
     {
@@ -82,6 +89,7 @@ public ContainerBackpack(EntityPlayer openingPlayer)
       }
     } 
   }
+
 
 @Override
 public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int slotClickedIndex)

@@ -21,6 +21,7 @@
 package shadowmage.ancient_warfare.client.gui.npc;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
@@ -80,6 +81,17 @@ public void setupControls()
 @Override
 public void updateControls()
   {
+  }
+
+@Override
+protected boolean checkHotbarKeys(int par1)
+  {
+  return false;
+//  if(par1==player.inventory.currentItem)
+//    {
+//    return false;    
+//    }
+//  return super.checkHotbarKeys(par1);
   }
 
 }
