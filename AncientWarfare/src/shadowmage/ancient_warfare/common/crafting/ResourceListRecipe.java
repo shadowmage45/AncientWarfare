@@ -298,8 +298,8 @@ protected void handleContainerItem(IInventory inventory, ItemStack stack, TileEn
     }
   if (itemstack2 != null)
     {
-    InventoryTools.tryMergeStack(inventory, itemstack2, -1);
-    if(te!=null)
+    itemstack2 = InventoryTools.tryMergeStack(inventory, itemstack2, -1);
+    if(itemstack2!=null && te!=null)
       {
       InventoryTools.dropItemInWorld(te.worldObj, itemstack2, te.xCoord, te.yCoord, te.zCoord);      
       }
