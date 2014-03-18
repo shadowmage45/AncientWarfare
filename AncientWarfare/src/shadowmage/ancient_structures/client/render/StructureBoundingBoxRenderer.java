@@ -62,14 +62,18 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     return;
     }
-  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator || item==AWStructuresItemLoader.civicBuilder)
+  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator)
     {
     renderBuildBoundingBox(player, stack, evt.partialTicks);
     }
   else if(item==AWStructuresItemLoader.structureScanner)
     {
     renderScannerBoundingBox(player, stack, evt.partialTicks);
-    }  
+    }
+  else if(item==AWStructuresItemLoader.civicBuilder)
+    {
+    renderTickedBuilderBoxes(player, stack, evt.partialTicks);
+    }
   }
 
 StructureBB bb = new StructureBB(new BlockPosition(), new BlockPosition()){};
@@ -119,6 +123,11 @@ private void renderBuildBoundingBox(EntityPlayer player, ItemStack stack, float 
   BlockPosition pos2 = bb.max.copy();
   pos2.offset(1, 1, 1);
   renderBoundingBox(player, pos1, pos2, delta);
+  }
+
+private void renderTickedBuilderBoxes(EntityPlayer player, ItemStack stack, float delta)
+  {
+  
   }
 
 private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta)

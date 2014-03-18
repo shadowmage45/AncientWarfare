@@ -37,6 +37,7 @@ import shadowmage.ancient_structures.common.template.build.validation.StructureV
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
+import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
@@ -48,7 +49,7 @@ ItemStructureSettings settings = new ItemStructureSettings();
 
 public ContainerStructureScanner(EntityPlayer openingPlayer, int x, int y, int z)
   {
-  super(openingPlayer, x, y, z );
+  super(openingPlayer, null);
   if(player.worldObj.isRemote)
     {
     return;

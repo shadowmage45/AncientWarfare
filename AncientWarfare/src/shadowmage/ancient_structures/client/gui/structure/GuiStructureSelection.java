@@ -25,7 +25,6 @@ import java.util.Collections;
 
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_structures.common.config.AWLog;
-import shadowmage.ancient_structures.common.container.ContainerBase;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
@@ -36,6 +35,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerBase;
 
 /**
  * creative structure builder

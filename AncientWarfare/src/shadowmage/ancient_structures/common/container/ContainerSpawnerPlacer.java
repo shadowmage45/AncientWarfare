@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
+import shadowmage.ancient_warfare.common.container.ContainerBase;
 
 public class ContainerSpawnerPlacer extends ContainerBase
 {
@@ -37,7 +38,7 @@ public String mobID = "Pig";
  */
 public ContainerSpawnerPlacer(EntityPlayer openingPlayer, int x, int y, int z)
   {
-  super(openingPlayer, x, y, z);
+  super(openingPlayer, null);
   ItemStack builderItem = player.inventory.getCurrentItem(); 
   if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("spawnData"))
     {

@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_structures.common.item;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
@@ -29,6 +28,7 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class AWStructuresItemLoader
 {
@@ -65,6 +65,7 @@ public void registerItems()
   this.registerItemSingle(structureBuilderCreative, "item.single.structureBuilderInstant", "item.single.structureBuilderInstant.description", "item.single.structureBuilderInstant.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(structureGenerator, "item.single.structureGenerator", "item.single.structureGenerator.description", "item.single.structureGenerator.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(spawnerPlacer, "item.single.spawnerPlacer", "item.single.spawnerPlacer.description", "item.single.spawnerPlacer.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(civicBuilder, "item.single.civicBuilder", "item.single.civicBuilder.description", "item.single.civicBuilder.tooltip");
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)

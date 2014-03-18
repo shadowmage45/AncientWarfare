@@ -22,15 +22,8 @@
  */
 package shadowmage.ancient_structures.client.proxy;
 
-import java.util.Arrays;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.world.WorldServer;
 import shadowmage.ancient_warfare.common.network.PacketBase;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class CommonProxy
 {

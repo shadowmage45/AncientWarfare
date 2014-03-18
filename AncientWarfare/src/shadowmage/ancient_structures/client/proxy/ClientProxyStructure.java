@@ -20,8 +20,8 @@
  */
 package shadowmage.ancient_structures.client.proxy;
 
-import shadowmage.ancient_structures.client.render.StructureBoundingBoxRenderer;
 import net.minecraftforge.common.MinecraftForge;
+import shadowmage.ancient_structures.client.render.StructureBoundingBoxRenderer;
 
 
 public class ClientProxyStructure extends CommonProxy// extends ClientProxyBase

@@ -20,24 +20,22 @@
  */
 package shadowmage.ancient_structures.common.item;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.StructureTemplateClient;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
-import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.item.AWItemClickable;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.network.GUIHandler;
-import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import cpw.mods.fml.relauncher.Side;
@@ -47,6 +45,9 @@ public class ItemCivicBuilder extends AWItemClickable
 {
 
 private Icon icon;
+
+private List<ItemStack> displayCache = new ArrayList<ItemStack>();
+
 /**
  * @param itemID
  */
@@ -72,71 +73,46 @@ public void registerIcons(IconRegister par1IconRegister)
 /**
  * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
  */
+
+ItemStructureSettings displaySettings = new ItemStructureSettings();
 @SideOnly(Side.CLIENT)
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-//  List<StructureClientInfo> info = StructureManager.instance().getClientStructures();
-//  ItemStack stack;
-//  NBTTagCompound tag;
-//  for(StructureClientInfo c : info)
-//    {    
-//    if(!c.survival)
-//      {
-//      continue;
-//      }
-//    stack = new ItemStack(this,1);
-//    tag = new NBTTagCompound();
-//    tag.setString("name", c.name);
-//    stack.setTagInfo("structData", tag);
-//    par3List.add(stack);
-//    }
+  Collection<StructureTemplateClient> templates = StructureTemplateManager.instance().getClientStructures();
+  if(templates.size()!=displayCache.size())
+    {
+    displayCache.clear();
+    ItemStack stack;
+    for(StructureTemplateClient template : templates)
+      {
+      stack = new ItemStack(this,1,0);
+      displaySettings.clearSettings();
+      displaySettings.setName(template.name);
+      displaySettings.setSettingsFor(stack, displaySettings);      
+      }    
+    }  
+  par3List.addAll(displayCache);
   }
 
 public static ItemStack getCivicBuilderItem(String structure)
   {
-  /**
-   * TODO fix this using item-data class
-   */
+  ItemStructureSettings displaySettings = new ItemStructureSettings();
+  displaySettings.setName(structure);
+
   ItemStack stack = new ItemStack(AWStructuresItemLoader.civicBuilder.itemID,1,0);
-  NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("name", structure);
-  stack.setTagInfo("structData", tag);
+  displaySettings.setSettingsFor(stack, displaySettings);  
   return stack;
   }
-
-//@Override
-//public boolean attemptConstruction(World world, ProcessedStructure struct, BlockPosition hit, int face, StructureBuildSettings settings)
-//  {
-//  if(struct.isLocked())
-//    {
-//    return false;
-//    }
-//  BlockPosition offsetHit = hit.copy();
-//  offsetHit.moveForward(face, -struct.zOffset + 1 + struct.getClearingBuffer());
-//  CivicRegistry.instance().setCivicBlock(world, hit.x, hit.y, hit.z, Civic.builder.getGlobalID());
-//
-//  TECivicBuilder te = (TECivicBuilder)world.getBlockTileEntity(hit.x, hit.y, hit.z);
-//  if(te!=null)
-//    { 
-//    BuilderTicked builder = new BuilderTicked(world, struct, face, offsetHit);
-//    builder.startConstruction();
-//    builder.setOverrides(-1, false, false, true);
-//    te.setBuilder(builder);
-//    struct.addBuilder(builder);    
-//    return true;
-//    }  
-//  return false;
-//  } 
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {  
-  if(!world.isRemote && !player.isSneaking())
-    {
-    GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SELECT, player, player.worldObj, 0, 0, 0);    
-    return true;
-    }    
+//  if(!world.isRemote && !player.isSneaking())
+//    {
+//    GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SELECT, player, player.worldObj, 0, 0, 0);    
+//    return true;
+//    }    
   return true;
   }
 
@@ -158,6 +134,10 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       return true;
       }
     hit.offsetForMCSide(side);
+    /**
+     * TODO place builder block on hit position
+     * offset struct build-position by struct z-offset, so builder is outside of struct BB
+     */
     AWLog.logDebug("constructing template: "+template);    
     StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
     builder.instantConstruction();

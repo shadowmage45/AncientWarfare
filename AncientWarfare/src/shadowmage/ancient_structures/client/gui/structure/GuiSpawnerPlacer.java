@@ -26,13 +26,13 @@ import java.util.Iterator;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_structures.common.container.ContainerBase;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerBase;
 
 public class GuiSpawnerPlacer extends GuiContainerAdvanced
 {

@@ -30,8 +30,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
+import shadowmage.ancient_warfare.common.container.ContainerBase;
 
-public class ContainerCSB extends shadowmage.ancient_structures.common.container.ContainerBase
+public class ContainerCSB extends ContainerBase
 {
 
 public String structureName = "";
@@ -44,7 +45,7 @@ ItemStructureSettings settings = new ItemStructureSettings();
  */
 public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z) 
   {
-  super(openingPlayer, x, y, z);
+  super(openingPlayer, null);
   if(player.worldObj.isRemote)
     {
     return;

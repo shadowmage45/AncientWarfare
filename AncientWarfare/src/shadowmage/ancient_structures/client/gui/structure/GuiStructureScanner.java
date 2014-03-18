@@ -29,7 +29,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import shadowmage.ancient_structures.common.config.AWLog;
-import shadowmage.ancient_structures.common.container.ContainerBase;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType.ValidationProperty;
@@ -43,6 +42,7 @@ import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.GuiTextInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class GuiStructureScanner extends GuiContainerAdvanced
