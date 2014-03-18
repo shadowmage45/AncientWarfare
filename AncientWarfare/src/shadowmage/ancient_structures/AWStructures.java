@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import net.minecraft.entity.player.EntityPlayer;
+import shadowmage.ancient_structures.client.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
@@ -37,7 +38,6 @@ import shadowmage.ancient_structures.common.utils.AWMod;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.proxy.CommonProxy;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -55,7 +55,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 
-@Mod( modid = "AncientStructures", name="Ancient Structures", version=Config.VERSION, dependencies="required-after:AncientWarfareCore")
+@Mod( modid = "AncientStructures", name="Ancient Structures", version=Config.VERSION, dependencies="required-after:AncientWarfare")
 @NetworkMod
 (
 clientSideRequired = true,
@@ -66,7 +66,7 @@ versionBounds="["+Config.VERSION+",)"
 public class AWStructures extends AWMod implements  IPlayerTracker
 {
 
-@SidedProxy(clientSide = "shadowmage.ancient_structures.client.proxy.ClientProxyStructure", serverSide = "shadowmage.ancient_framework.common.proxy.CommonProxy")
+@SidedProxy(clientSide = "shadowmage.ancient_structures.client.proxy.ClientProxyStructure", serverSide = "shadowmage.ancient_structures.client.proxy.CommonProxy")
 public static CommonProxy proxy;
 @Instance("AncientStructures")
 public static AWStructures instance;  
@@ -83,17 +83,14 @@ public void loadConfiguration(File config, Logger log)
 public void preInit(FMLPreInitializationEvent evt) 
   {  
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  AWLog.setLogger(evt.getModLog());
   AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Config.VERSION);
   pluginManager = new StructurePluginManager();   
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
   TemplateLoader.instance().initializeAndExportDefaults(path);  
   BlockDataManager.loadBlockList();
   AWStructuresItemLoader.instance().registerItems();
-//  PacketHandler.registerPacketType(6, Packet06StructureData.class);
   GameRegistry.registerPlayerTracker(instance);
-//  GUIHandler.instance().registerContainer(Statics.guiStructureBuilderCreative, ContainerCSB.class);
-//  GUIHandler.instance().registerContainer(Statics.guiStructureScannerCreative, ContainerStructureScanner.class);
-//  GUIHandler.instance().registerContainer(Statics.guiSpawnerPlacer, ContainerSpawnerPlacer.class);
   GameRegistry.registerWorldGenerator(WorldStructureGenerator.instance());
   AWGameData.addDataClass("AWStructureMap", StructureMap.class);
   proxy.registerClientData();

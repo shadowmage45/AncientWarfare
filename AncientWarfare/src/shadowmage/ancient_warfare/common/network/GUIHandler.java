@@ -27,6 +27,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.client.gui.structure.GuiSpawnerPlacer;
+import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
+import shadowmage.ancient_structures.client.gui.structure.GuiStructureSelection;
+import shadowmage.ancient_structures.common.container.ContainerCSB;
+import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
+import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHall;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHallInfo;
@@ -177,22 +183,15 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case WARZONE_CONTROL:
   return new ContainerWarzones(player);
   
-//  case STRUCTURE_SELECT:
-//  return new ContainerCSB(player);
-//  
-//  case STRUCTURE_SCANNER:
-//  return new ContainerStructureScanner(player);
-//  
-//  case STRUCTURE_BUILD_DIRECT:
-//  return new ContainerSurvivalBuilder(player);
-//  
-//  case STRUCTURE_EDITOR:  
-//  return new ContainerEditor(player);
-//  
-//  case STRUCTURE_SCAN_EDIT:
-//  ContainerEditor edit = new ContainerEditor(player);
-//  return edit;
+  case STRUCTURE_SELECT:
+  return new ContainerCSB(player, x, y, z);
   
+  case STRUCTURE_SCANNER:
+  return new ContainerStructureScanner(player, x, y, z);
+  
+  case SPAWNER_PLACER:
+  return new ContainerSpawnerPlacer(player, x, y, z);
+    
   case SETTINGS:
   return new ContainerSettings(player);
   
@@ -416,21 +415,15 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case WARZONE_CONTROL:
   return new GuiWarzones(new ContainerWarzones(player));
   
-//  case STRUCTURE_SELECT:
-//  return new GuiCSB(new ContainerCSB(player));
-//  
-//  case STRUCTURE_SCANNER:
-//  return new GuiStructureScanner(new ContainerStructureScanner(player));
-//  
-//  case STRUCTURE_BUILD_DIRECT:
-//  return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
-//  
-//  case STRUCTURE_EDITOR:  
-//  return new GuiEditorSelect(new ContainerEditor(player));
-//  
-//  case STRUCTURE_SCAN_EDIT:  
-//  return new GuiEditorSelect(new ContainerEditor(player));
+  case STRUCTURE_SELECT:
+  return new GuiStructureSelection(new ContainerCSB(player, x, y, z));
   
+  case STRUCTURE_SCANNER:
+  return new GuiStructureScanner(new ContainerStructureScanner(player, x, y, z));
+  
+  case SPAWNER_PLACER:
+  return new GuiSpawnerPlacer(new ContainerSpawnerPlacer(player, x, y, z));
+    
   case SETTINGS:
   return new GuiClientSettings(player, new ContainerSettings(player));
   

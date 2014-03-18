@@ -54,7 +54,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
   {  
   if(!world.isRemote && !player.isSneaking())
     {
-    GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_BUILD_DIRECT, player, player.worldObj, 0, 0, 0);    
+    GUIHandler.instance().openGUI(GUIHandler.STRUCTURE_SELECT, player, player.worldObj, 0, 0, 0);    
     return true;
     }    
   return true;

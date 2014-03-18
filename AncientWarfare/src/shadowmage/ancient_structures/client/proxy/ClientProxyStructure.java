@@ -20,8 +20,11 @@
  */
 package shadowmage.ancient_structures.client.proxy;
 
+import shadowmage.ancient_structures.client.render.StructureBoundingBoxRenderer;
+import net.minecraftforge.common.MinecraftForge;
 
-public class ClientProxyStructure// extends ClientProxyBase
+
+public class ClientProxyStructure extends CommonProxy// extends ClientProxyBase
 {
 
 public ClientProxyStructure()
@@ -29,39 +32,10 @@ public ClientProxyStructure()
   
   }
 
-//@Override
-//public void registerGuis()
-//  {
-//  GUIHandler.instance().registerGui(Statics.guiStructureBuilderCreative, GuiStructureSelection.class);
-//  GUIHandler.instance().registerGui(Statics.guiStructureScannerCreative, GuiStructureScanner.class);
-//  GUIHandler.instance().registerGui(Statics.guiSpawnerPlacer, GuiSpawnerPlacer.class);
-//  }
-//
-//@Override
-//public void registerKeybinds()
-//  {
-//  // TODO Auto-generated method stub
-//  
-//  }
-//
-//@Override
-//public void registerTickHandlers()
-//  {
-//  // TODO Auto-generated method stub
-//  
-//  }
-//
-//@Override
-//public void registerRenderers()
-//  {
-//  // TODO Auto-generated method stub
-//  
-//  }
-//
-//@Override
-//public void registerEventHandlers()
-//  {
-//  MinecraftForge.EVENT_BUS.register(StructureBoundingBoxRenderer.instance());
-//  }
+@Override
+public void registerClientData()
+  {
+  MinecraftForge.EVENT_BUS.register(StructureBoundingBoxRenderer.instance());
+  }
 
 }

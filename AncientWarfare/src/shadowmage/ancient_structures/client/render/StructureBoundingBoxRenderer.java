@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
@@ -61,14 +62,14 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     return;
     }
-//  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator)
-//    {
-//    renderBuildBoundingBox(player, stack, evt.partialTicks);
-//    }
-//  else if(item==AWStructuresItemLoader.structureScanner)
-//    {
-//    renderScannerBoundingBox(player, stack, evt.partialTicks);
-//    }  
+  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator)
+    {
+    renderBuildBoundingBox(player, stack, evt.partialTicks);
+    }
+  else if(item==AWStructuresItemLoader.structureScanner)
+    {
+    renderScannerBoundingBox(player, stack, evt.partialTicks);
+    }  
   }
 
 StructureBB bb = new StructureBB(new BlockPosition(), new BlockPosition()){};
@@ -123,8 +124,8 @@ private void renderBuildBoundingBox(EntityPlayer player, ItemStack stack, float 
 private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta)
   {
   AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x, max.y, max.z);
-//  RenderTools.adjustBBForPlayerPos(bb, player, delta);
-//  RenderTools.drawOutlinedBoundingBox(bb, 1.f, 1.f, 1.f);
+  RenderTools.adjustBBForPlayerPos(bb, player, delta);
+  RenderTools.drawOutlinedBoundingBox(bb, 1.f, 1.f, 1.f);
   }
 
 }

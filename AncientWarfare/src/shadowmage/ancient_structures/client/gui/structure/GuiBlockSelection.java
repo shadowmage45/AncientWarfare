@@ -77,7 +77,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-
+  area.updateGuiPos(guiLeft, guiTop);
   }
 
 @Override

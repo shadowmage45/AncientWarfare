@@ -20,10 +20,15 @@
  */
 package shadowmage.ancient_structures.common.item;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.item.AWItemBase;
+import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
+import shadowmage.ancient_warfare.common.registry.entry.Description;
 
 public class AWStructuresItemLoader
 {
@@ -48,28 +53,67 @@ public String getTranslatedTabLabel()
   }  
 };//need to declare this instance prior to any items that use it as their creative tab
 
-//public static ItemStructureScanner structureScanner = new ItemStructureScanner(config, "item.structurescanner");
-//public static ItemBuilderCreative structureBuilderCreative = new ItemBuilderCreative(config, "item.structurebuilder");
-//public static ItemSpawnerPlacer spawnerPlacer = new ItemSpawnerPlacer(config, "item.spawnerplacer");
-//public static ItemStructureGenerator structureGenerator = new ItemStructureGenerator(config, "item.structuregenerator");
+public static ItemStructureScanner structureScanner = new ItemStructureScanner(Config.getItemID("item.single.structureScanner", 24022));
+public static ItemBuilderCreative structureBuilderCreative = new ItemBuilderCreative(Config.getItemID("item.single.structureBuilderInstant", 24023));
+public static ItemSpawnerPlacer spawnerPlacer = new ItemSpawnerPlacer(Config.getItemID("item.single.spawnerPlacer", 24024));
+public static ItemStructureGenerator structureGenerator = new ItemStructureGenerator(Config.getItemID("item.single.structureGenerator", 24025));
 
 public void registerItems()
   {
-//  structureScanner.addDisplayStack(0, new ItemStack(structureScanner));
-//  structureScanner.addDisplayName(0, structureScanner.getUnlocalizedName());
-//  structureScanner.addIcon(0, "ancientwarfare:structure/structureScanner");
-//  
-//  structureBuilderCreative.addDisplayStack(0, new ItemStack(structureBuilderCreative));
-//  structureBuilderCreative.addDisplayName(0, structureBuilderCreative.getUnlocalizedName());
-//  structureBuilderCreative.addIcon(0, "ancientwarfare:structure/structureBuilder");
-//
-//  spawnerPlacer.addDisplayStack(0, new ItemStack(spawnerPlacer));
-//  spawnerPlacer.addDisplayName(0, spawnerPlacer.getUnlocalizedName());
-//  spawnerPlacer.addIcon(0, "ancientwarfare:structure/spawnerPlacer");
-//  
-//  structureGenerator.addDisplayStack(0, new ItemStack(structureGenerator));
-//  structureGenerator.addDisplayName(0, structureGenerator.getUnlocalizedName());
-//  structureGenerator.addIcon(0, "ancientwarfare:structure/structureGenerator");
+  this.registerItemSingle(structureScanner, "item.single.structureScanner", "item.single.structureScanner.description", "item.single.structureScanner.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+  this.registerItemSingle(structureBuilderCreative, "item.single.structureBuilderInstant", "item.single.structureBuilderInstant.description", "item.single.structureBuilderInstant.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(structureGenerator, "item.single.structureGenerator", "item.single.structureGenerator.description", "item.single.structureGenerator.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  this.registerItemSingle(spawnerPlacer, "item.single.spawnerPlacer", "item.single.spawnerPlacer.description", "item.single.spawnerPlacer.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+  }
+
+public Description registerItemSubtyped(AWItemBase item, String baseName)
+  {
+  Description d = DescriptionRegistry2.instance().registerItem(item, false);
+  GameRegistry.registerItem(item, baseName);
+  return d;
+  }
+
+public Description registerItemSingle(Item item, String name, String desc, String tip)
+  {
+  Description d = DescriptionRegistry2.instance().registerItem(item, true);
+  d.setName(name, 0);
+  d.setDescription(desc, 0);
+  d.addTooltip(tip, 0);  
+  GameRegistry.registerItem(item, name);
+  return d;
+  }
+
+public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name, String desc, String tooltip)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  if(d!=null)
+    {
+    d.setName(name, damage);
+    d.setDescription(desc, damage);
+    d.addTooltip(tooltip, damage);  
+    }  
+  return d;
+  }
+
+public Description addSubtypeInfoToItem(AWItemBase item, int damage, String name)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  if(d!=null)
+    {
+    d.setName(name, damage);   
+    }  
+  return d;
+  }
+
+public Description addSubtypeInfoWithIconTexture(AWItemBase item, int damage, String name, String texture)
+  {
+  Description d = DescriptionRegistry2.instance().getDescriptionFor(item.itemID);
+  if(d!=null)
+    {
+    d.setName(name, damage);   
+    d.setIconTexture(texture, damage);
+    }  
+  return d;
   }
 
 }

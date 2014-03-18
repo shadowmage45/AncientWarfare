@@ -26,6 +26,10 @@ death.attack.AWMissile.player=%1$s was killed by missile damage by %2$s
 # single items
 item.single.structureScanner=Structure Scanner
 item.single.structureScanner.tooltip=Creative Mode Scanning Tool
+item.single.structureGenerator=Structure Random Generator
+item.single.structureGenerator.tooltip=Generates as-per world-gen
+item.single.spawnerPlacer=Monster Spawner Placer
+item.single.spawnerPlacer.tooltip=Places Mob Spawners
 item.single.structureBuilderTicked=Creative Builder Ticked
 item.single.structureBuilderTicked.tooltip=Build Structures Slowly
 item.single.structureBuilderInstant=Creative Builder Instant
