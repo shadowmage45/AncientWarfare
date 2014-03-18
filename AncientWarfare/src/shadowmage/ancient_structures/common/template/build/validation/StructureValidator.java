@@ -50,6 +50,7 @@ public final StructureValidationType validationType;
 private int selectionWeight;
 private int clusterValue;
 private int minDuplicateDistance;
+private boolean survival;
 private boolean worldGenEnabled;
 private boolean isUnique;//should this structure generate only once?
 private boolean preserveBlocks;//should this structure preserve any existing blocks when a rule '0' is encountered?
@@ -89,6 +90,7 @@ protected void write(BufferedWriter writer) throws IOException
  */
 public void readFromTag(NBTTagCompound tag)
   {
+  survival = tag.getBoolean("survival");
   worldGenEnabled = tag.getBoolean("enableWorldGen");
   isUnique = tag.getBoolean("unique");
   preserveBlocks = tag.getBoolean("preserveBlocks");
@@ -178,7 +180,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   List<String> tagLines = new ArrayList<String>();
   Iterator<String> it = lines.iterator();
   String line;
-  boolean unique = false, worldGen = false, biome = false, dimension = false, blocks = false;
+  boolean unique = false, worldGen = false, biome = false, dimension = false, blocks = false, survival = false;
   int selectionWeight=1, clusterValue=1, duplicate=1, maxLeveling = 0, maxFill = 0, borderSize = 0;
   int[] dimensions = null;
   Set<String> biomes = new HashSet<String>();
@@ -188,6 +190,7 @@ public static final StructureValidator parseValidator(List<String> lines)
     {   
     if(line.toLowerCase().startsWith("type=")){type = StringTools.safeParseString("=", line);}
     else if(line.toLowerCase().startsWith("unique=")){unique = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("survival=")){survival = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("worldgenenabled=")){worldGen = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("biomewhitelist=")){biome = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelise=")){dimension = StringTools.safeParseBoolean("=", line);}
@@ -231,6 +234,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   validator.biomeWhiteList = biome;
   validator.biomeList = biomes;
   validator.worldGenEnabled = worldGen; 
+  validator.survival = survival;
   validator.isUnique = unique;
   validator.preserveBlocks = blocks;
   validator.clusterValue = clusterValue;
@@ -247,6 +251,8 @@ public static final StructureValidator parseValidator(List<String> lines)
 public static final void writeValidator(BufferedWriter out, StructureValidator validator) throws IOException
   {
   out.write("type="+validator.validationType.getName());  
+  out.newLine();
+  out.write("suvival="+validator.survival);  
   out.newLine();
   out.write("worldGenEnabled="+validator.worldGenEnabled);  
   out.newLine();

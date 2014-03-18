@@ -238,6 +238,8 @@ public void updateControls()
   
   totalHeight += 8;
   
+  totalHeight = addBooleanProp(22, "survival", "Available in Survival: ", false, totalHeight);
+  
   totalHeight = addBooleanProp(13, "enableWorldGen", "Enable World Gen: ", false, totalHeight);
   totalHeight = addBooleanProp(14, "unique", "Is Unique: ", false, totalHeight);
   totalHeight = addBooleanProp(15, "preserveBlocks", "Preserve Blocks: ", false, totalHeight);
@@ -250,7 +252,7 @@ public void updateControls()
   totalHeight = addIntegerProp(20, "maxLeveling", "Max Leveling: ", 0, totalHeight);
   totalHeight = addIntegerProp(21, "maxFill", "Max Underfill: ", 0, totalHeight);
   
-  int elementNum = 22;
+  int elementNum = 23;
   for(ValidationProperty prop : currentValidationType.getValidationProperties())
     {
     if(prop.clz == int.class)

@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.container;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_structures.common.config.AWLog;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 
 public class ContainerCSB extends shadowmage.ancient_structures.common.container.ContainerBase
@@ -48,10 +50,10 @@ public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();
-//  if(builderItem==null || builderItem.getItem()==null || (builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative && builderItem.getItem()!=AWStructuresItemLoader.structureGenerator))
-//    {
-//    return;
-//    } 
+  if(builderItem==null || builderItem.getItem()==null || (builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative && builderItem.getItem()!=AWStructuresItemLoader.structureGenerator))
+    {
+    return;
+    } 
   ItemStructureSettings.getSettingsFor(builderItem, settings);
   }
 
@@ -79,14 +81,14 @@ public void handleInitData(NBTTagCompound tag)
 public List<NBTTagCompound> getInitData()
   {  
   ItemStack builderItem = player.inventory.getCurrentItem();  
-//  if(builderItem!=null && (builderItem.getItem() == AWStructuresItemLoader.structureBuilderCreative || builderItem.getItem()==AWStructuresItemLoader.structureGenerator) && builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData") && builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
-//    {
-//    NBTTagCompound tag = new NBTTagCompound();
-//    tag.setString("name", builderItem.getTagCompound().getCompoundTag("structData").getString("name"));    
-//    ArrayList<NBTTagCompound> initList = new ArrayList<NBTTagCompound>();    
-//    initList.add(tag);
-//    return initList;
-//    } 
+  if(builderItem!=null && (builderItem.getItem() == AWStructuresItemLoader.structureBuilderCreative || builderItem.getItem()==AWStructuresItemLoader.structureGenerator) && builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("structData") && builderItem.getTagCompound().getCompoundTag("structData").hasKey("name"))
+    {
+    NBTTagCompound tag = new NBTTagCompound();
+    tag.setString("name", builderItem.getTagCompound().getCompoundTag("structData").getString("name"));    
+    ArrayList<NBTTagCompound> initList = new ArrayList<NBTTagCompound>();    
+    initList.add(tag);
+    return initList;
+    } 
   return Collections.emptyList();
   }
 
@@ -98,12 +100,12 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     {
     return;
     }
-//  ItemStack builderItem = player.inventory.getCurrentItem();  
-//  if(builderItem==null || builderItem.getItem()==null || (builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative &&builderItem.getItem()!=AWStructuresItemLoader.structureGenerator))
-//    {
-//    return;
-//    }
-//  ItemStructureSettings.setSettingsFor(builderItem, settings);  
+  ItemStack builderItem = player.inventory.getCurrentItem();  
+  if(builderItem==null || builderItem.getItem()==null || (builderItem.getItem()!=AWStructuresItemLoader.structureBuilderCreative &&builderItem.getItem()!=AWStructuresItemLoader.structureGenerator))
+    {
+    return;
+    }
+  ItemStructureSettings.setSettingsFor(builderItem, settings);  
   }
 
 @Override
