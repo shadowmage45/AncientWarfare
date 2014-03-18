@@ -155,7 +155,35 @@ public List<ItemStack> getResourceList()
 
 private void compactStackList(List<ItemStack> stacks)
   {
-  
+  List<ItemStack> out = new ArrayList<ItemStack>();
+  int id;
+  int dmg;
+  int transfer;
+  for(ItemStack inStack : stacks)
+    {
+    id = inStack.itemID;
+    dmg = inStack.getItemDamage();
+    for(ItemStack outStack : out)
+      {
+      if(outStack.stackSize < outStack.getMaxStackSize() && id==outStack.itemID && dmg==outStack.getItemDamage() && ItemStack.areItemStackTagsEqual(inStack, outStack))
+        {
+        transfer = inStack.stackSize;
+        transfer = transfer + outStack.stackSize > outStack.getMaxStackSize() ? outStack.getMaxStackSize()-outStack.stackSize: transfer;
+        inStack.stackSize-=transfer;
+        outStack.stackSize+=transfer;        
+        if(inStack.stackSize<=0)
+          {
+          break;//break outStack iterator loop, as inStack has been used up
+          }
+        }
+      }        
+    if(inStack.stackSize>0)
+      {
+      out.add(new ItemStack(id, inStack.stackSize, dmg));
+      }
+    }  
+  stacks.clear();
+  stacks.addAll(out);
   }
 
 }
