@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.network.Packet07StructureData;
 
 public class StructureTemplateManager
@@ -56,7 +57,7 @@ public void addTemplate(StructureTemplate template)
   loadedTemplates.put(template.name, template);
   StructureTemplateClient cl = new StructureTemplateClient(template);
   serverCopyOfClientTemplates.put(cl.name, cl);
-  
+      
   NBTTagCompound tag = new NBTTagCompound();
   cl.writeToNBT(tag);    
   Packet07StructureData pkt = new Packet07StructureData();
@@ -67,6 +68,7 @@ public void addTemplate(StructureTemplate template)
 public void addTemplate(StructureTemplateClient template)
   {
   clientTemplates.put(template.name, template);
+  AWCraftingManager.instance().addStructureRecipe(template);
   }
 
 public void onPlayerConnect(EntityPlayer player)

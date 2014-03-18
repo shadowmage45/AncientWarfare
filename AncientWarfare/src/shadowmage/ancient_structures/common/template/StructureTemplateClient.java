@@ -121,5 +121,10 @@ public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   return template;
   }
 
+public List<ItemStack> getResourceList()
+  {
+  return resourceList;
+  }
+
 
 }

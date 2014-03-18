@@ -37,6 +37,7 @@ import shadowmage.ancient_structures.common.template.build.validation.StructureV
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -92,6 +93,7 @@ public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2
   if(include)
     {
     StructureTemplateManager.instance().addTemplate(template);    
+    AWCraftingManager.instance().addStructureRecipe(template);
     }
   TemplateExporter.exportTo(template, new File(include ? TemplateLoader.includeDirectory : TemplateLoader.outputDirectory));
   return true;

@@ -33,6 +33,9 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
+import shadowmage.ancient_structures.common.template.StructureTemplate;
+import shadowmage.ancient_structures.common.template.StructureTemplateClient;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.types.ICivicType;
@@ -613,16 +616,30 @@ protected void addGateRecipes()
 
 protected void addStructureRecipes()
   {
-//  ResourceListRecipe recipe;
-//  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
-//    {
-//    if(structure==null){continue;}
-//    recipe = structure.constructRecipe();
-//    if(recipe!=null)
-//      {
-//      this.structureRecipesServer.add(recipe);
-//      }
-//    }
+  ArrayList<StructureTemplate> templates = new ArrayList<StructureTemplate>();
+  StructureTemplateManager.instance().getSurvivalTemplates(templates);
+  ResourceListRecipe recipe;
+  for(StructureTemplate template : templates)
+    {
+    recipe = constructStructureRecipe(template.name, template.getResourceList());
+    this.structureRecipesServer.add(recipe);
+    }
+  }
+
+private ResourceListRecipe constructStructureRecipe(String name, List<ItemStack> resources)
+  {
+  
+  return null;
+  }
+
+public void addStructureRecipe(StructureTemplate template)
+  {
+  this.structureRecipesServer.add(constructStructureRecipe(template.name, template.getResourceList()));
+  }
+
+public void addStructureRecipe(StructureTemplateClient template)
+  {
+  this.structureRecipesClient.add(constructStructureRecipe(template.name, template.getResourceList()));
   }
 
 protected void addNpcRecipes()
@@ -892,51 +909,7 @@ protected void addAmmoRecipes()
   this.componentRecipes.add(recipe);
   }
 
-//public void addStructureRecipe(ProcessedStructure struct)
-//  {
-//  if(struct==null || !struct.survival){return;}
-//  ResourceListRecipe recipe = null;
-//  for(ResourceListRecipe test : this.structureRecipesServer)
-//    {
-//    if(test.getDisplayName().equals(struct.name))
-//      {
-//      recipe = test;
-//      break;
-//      }
-//    }
-//  if(recipe!=null)
-//    {
-//    this.structureRecipesServer.remove(recipe);
-//    }
-//  recipe = struct.constructRecipe();
-//  if(recipe!=null)
-//    {
-//    this.structureRecipesServer.add(recipe);
-//    }
-//  }
 
-//public void addStructureRecipe(StructureClientInfo info)
-//  {
-//  if(info==null || !info.survival){return;}
-//  ResourceListRecipe recipe = null;
-//  for(ResourceListRecipe test : this.structureRecipesClient)
-//    {
-//    if(test.getDisplayName().equals(info.name))
-//      {
-//      recipe = test;
-//      break;
-//      }
-//    }
-//  if(recipe!=null)
-//    {
-//    this.structureRecipesClient.remove(recipe);
-//    }
-//  recipe = info.constructRecipe();
-//  if(recipe!=null)
-//    {
-//    this.structureRecipesClient.add(recipe);
-//    }
-//  }
 
 public void resetClientData()
   {
