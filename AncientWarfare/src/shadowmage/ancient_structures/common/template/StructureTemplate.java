@@ -20,6 +20,10 @@
  */
 package shadowmage.ancient_structures.common.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -41,6 +45,7 @@ public final int xOffset, yOffset, zOffset;
 private TemplateRule[] templateRules;
 private TemplateRuleEntity[] entityRules;
 private short[] templateData;
+List<ItemStack> resourceList;
 
 /**
  * world generation placement validation settings
@@ -121,6 +126,36 @@ public String toString()
   return b.toString();
   }
 
+public List<ItemStack> getResourceList()
+  {
+  if(resourceList==null)
+    {
+    TemplateRule rule;
+    List<ItemStack> stacks = new ArrayList<ItemStack>();
+    for(int x = 0; x < this.xSize; x++)
+      {
+      for(int y = 0; y < this.ySize; y++)
+        {
+        for(int z = 0; z < this.zSize; z++)
+          {
+          rule = getRuleAt(x, y, z);
+          if(rule!=null)
+            {
+            rule.addResources(stacks);
+            }
+          }
+        }
+      }
+    compactStackList(stacks);
+    resourceList = new ArrayList<ItemStack>();
+    resourceList.addAll(stacks);
+    }
+  return resourceList;
+  }
 
+private void compactStackList(List<ItemStack> stacks)
+  {
+  
+  }
 
 }

@@ -20,7 +20,12 @@
  */
 package shadowmage.ancient_structures.common.template;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import shadowmage.ancient_structures.common.config.AWLog;
 
 public class StructureTemplateClient
@@ -28,6 +33,7 @@ public class StructureTemplateClient
 
 public final String name;
 public final int xSize, ySize, zSize, xOffset, yOffset, zOffset;
+List<ItemStack> resourceList = new ArrayList<ItemStack>();
 
 public StructureTemplateClient(StructureTemplate template)
   {
@@ -39,6 +45,7 @@ public StructureTemplateClient(StructureTemplate template)
   this.xOffset = template.xOffset;
   this.yOffset = template.yOffset;
   this.zOffset = template.zOffset;  
+  resourceList.addAll(template.getResourceList());
   }
 
 public StructureTemplateClient(String name, int x, int y, int z, int xo, int yo, int zo)
@@ -63,11 +70,20 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("xo", xOffset);
   tag.setInteger("yo", yOffset);
   tag.setInteger("zo", zOffset);
+  
+  NBTTagList stackList = new NBTTagList();
+  NBTTagCompound stackTag;
+  for(ItemStack stack : this.resourceList)
+    {
+    stackTag = new NBTTagCompound();
+    stack.writeToNBT(stackTag);
+    stackList.appendTag(stackTag);
+    }
+  tag.setTag("resourceList", stackList);
   }
 
 public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
-  {
-	
+  {	
   String name = tag.getString("name");
   int x = tag.getInteger("x");
   int y = tag.getInteger("y");
@@ -75,8 +91,23 @@ public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   int xo = tag.getInteger("xo");
   int yo = tag.getInteger("yo");
   int zo = tag.getInteger("zo");
+  
   AWLog.logDebug("reading client structure name: "+name);
-  return new StructureTemplateClient(name, x, y, z, xo, yo, zo);
+  StructureTemplateClient template =  new StructureTemplateClient(name, x, y, z, xo, yo, zo);
+  
+  NBTTagList stackList = tag.getTagList("resourceList");
+  NBTTagCompound stackTag;
+  ItemStack stack;
+  for(int i = 0; i < stackList.tagCount(); i++)
+    {
+    stackTag = (NBTTagCompound) stackList.tagAt(i);
+    stack = ItemStack.loadItemStackFromNBT(stackTag);
+    if(stack!=null)
+      {
+      template.resourceList.add(stack);
+      }
+    }
+  return template;
   }
 
 
