@@ -62,7 +62,7 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
     {
     return;
     }
-  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator)
+  if(item==AWStructuresItemLoader.structureBuilderCreative || item==AWStructuresItemLoader.structureGenerator || item==AWStructuresItemLoader.civicBuilder)
     {
     renderBuildBoundingBox(player, stack, evt.partialTicks);
     }

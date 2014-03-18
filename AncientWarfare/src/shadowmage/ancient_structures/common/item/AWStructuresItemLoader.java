@@ -57,6 +57,7 @@ public static ItemStructureScanner structureScanner = new ItemStructureScanner(C
 public static ItemBuilderCreative structureBuilderCreative = new ItemBuilderCreative(Config.getItemID("item.single.structureBuilderInstant", 24023));
 public static ItemSpawnerPlacer spawnerPlacer = new ItemSpawnerPlacer(Config.getItemID("item.single.spawnerPlacer", 24024));
 public static ItemStructureGenerator structureGenerator = new ItemStructureGenerator(Config.getItemID("item.single.structureGenerator", 24025));
+public static ItemCivicBuilder civicBuilder = new ItemCivicBuilder(Config.getItemID("item.multi.civicBuilder", 24026));
 
 public void registerItems()
   {

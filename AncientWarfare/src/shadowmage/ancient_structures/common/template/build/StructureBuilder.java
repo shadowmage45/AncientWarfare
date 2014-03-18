@@ -33,18 +33,18 @@ public class StructureBuilder
 
 protected StructureTemplate template;
 protected World world;
-protected BlockPosition buildOrigin;
-protected int buildFace;
-protected int turns;
-protected int maxPriority = 4;
-protected int currentPriority;//current build priority...may not be needed anymore?
-protected int currentX, currentY, currentZ;//coords in template
+protected BlockPosition buildOrigin;//
+protected int buildFace;//
+protected int turns;//
+protected int maxPriority = 4;//
+protected int currentPriority;//current build priority...may not be needed anymore?//
+protected int currentX, currentY, currentZ;//coords in template//
 protected int destXSize, destYSize, destZSize;
 protected BlockPosition destination;
 
-protected StructureBB bb;
+protected StructureBB bb;//
 
-protected boolean isFinished = false;
+protected boolean isFinished = false;//
 
 public StructureBuilder(World world, StructureTemplate template, int face, int x, int y, int z)
   {
@@ -73,6 +73,16 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
    * initialize the first target destination so that the structure is ready to start building when called on to build
    */
   incrementDestination();
+  }
+
+protected StructureBuilder()
+  {
+  
+  }
+
+public boolean isFinished()
+  {
+  return isFinished;
   }
 
 public void instantConstruction()
