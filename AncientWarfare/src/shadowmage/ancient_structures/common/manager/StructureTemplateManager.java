@@ -53,7 +53,7 @@ public void addTemplate(StructureTemplate template)
     }
   loadedTemplates.put(template.name, template);
   StructureTemplateClient cl = new StructureTemplateClient(template);
-  addTemplate(cl);
+//  addTemplate(cl);//removed due to cross-thread access of clientTemplates hashMap
   
   NBTTagCompound tag = new NBTTagCompound();
   cl.writeToNBT(tag);    
