@@ -252,7 +252,7 @@ public static final void writeValidator(BufferedWriter out, StructureValidator v
   {
   out.write("type="+validator.validationType.getName());  
   out.newLine();
-  out.write("suvival="+validator.survival);  
+  out.write("survival="+validator.survival);  
   out.newLine();
   out.write("worldGenEnabled="+validator.worldGenEnabled);  
   out.newLine();

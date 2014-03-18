@@ -201,8 +201,8 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
           {          
           break;
           }
-        }
-      validation = StructureValidator.parseValidator(groupedLines);    
+        }  
+      validation = StructureValidator.parseValidator(groupedLines);      
       groupedLines.clear();
       }
     

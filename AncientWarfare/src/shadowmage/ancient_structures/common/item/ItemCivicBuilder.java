@@ -56,6 +56,7 @@ public ItemCivicBuilder(int itemID)
   super(itemID, true);
   this.hasLeftClick = true;
   this.setMaxStackSize(1);  
+  this.setCreativeTab(AWStructuresItemLoader.structureTab);
   }
 
 @Override
@@ -79,20 +80,24 @@ ItemStructureSettings displaySettings = new ItemStructureSettings();
 @Override
 public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
-  Collection<StructureTemplateClient> templates = StructureTemplateManager.instance().getClientStructures();
+  ArrayList<StructureTemplateClient> templates = new ArrayList<StructureTemplateClient>();
+  StructureTemplateManager.instance().getClientSurvivalTemplates(templates);
+  AWLog.logDebug("attempting add of civic builder items.  templates size: "+templates.size());
   if(templates.size()!=displayCache.size())
     {
     displayCache.clear();
     ItemStack stack;
     for(StructureTemplateClient template : templates)
-      {
+      {      
       stack = new ItemStack(this,1,0);
       displaySettings.clearSettings();
       displaySettings.setName(template.name);
-      displaySettings.setSettingsFor(stack, displaySettings);      
+      displaySettings.setSettingsFor(stack, displaySettings);  
+      displayCache.add(stack);    
       }    
     }  
   par3List.addAll(displayCache);
+//  super.getSubItems(par1, par2CreativeTabs, par3List);
   }
 
 public static ItemStack getCivicBuilderItem(String structure)
