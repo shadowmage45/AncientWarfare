@@ -584,4 +584,9 @@ protected void prePlacementBorder(World world, StructureTemplate template, Struc
       }
     }
   }
+
+public boolean isSurvival()
+  {
+  return survival;
+  }
 }

@@ -34,6 +34,7 @@ public class StructureTemplateClient
 public final String name;
 public final int xSize, ySize, zSize, xOffset, yOffset, zOffset;
 List<ItemStack> resourceList = new ArrayList<ItemStack>();
+public boolean survival;
 
 public StructureTemplateClient(StructureTemplate template)
   {
@@ -44,7 +45,8 @@ public StructureTemplateClient(StructureTemplate template)
   this.zSize = template.zSize;
   this.xOffset = template.xOffset;
   this.yOffset = template.yOffset;
-  this.zOffset = template.zOffset;  
+  this.zOffset = template.zOffset;
+  this.survival = template.getValidationSettings().isSurvival();
   resourceList.addAll(template.getResourceList());
   }
 
@@ -64,6 +66,7 @@ public void writeToNBT(NBTTagCompound tag)
   {
 	AWLog.logDebug("writing client structure name: "+name);
   tag.setString("name", name);
+  tag.setBoolean("survival", survival);
   tag.setInteger("x", xSize);
   tag.setInteger("y", ySize);
   tag.setInteger("z", zSize);
@@ -71,20 +74,24 @@ public void writeToNBT(NBTTagCompound tag)
   tag.setInteger("yo", yOffset);
   tag.setInteger("zo", zOffset);
   
-  NBTTagList stackList = new NBTTagList();
-  NBTTagCompound stackTag;
-  for(ItemStack stack : this.resourceList)
+  if(survival)
     {
-    stackTag = new NBTTagCompound();
-    stack.writeToNBT(stackTag);
-    stackList.appendTag(stackTag);
+    NBTTagList stackList = new NBTTagList();
+    NBTTagCompound stackTag;
+    for(ItemStack stack : this.resourceList)
+      {
+      stackTag = new NBTTagCompound();
+      stack.writeToNBT(stackTag);
+      stackList.appendTag(stackTag);
+      }
+    tag.setTag("resourceList", stackList);    
     }
-  tag.setTag("resourceList", stackList);
   }
 
 public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   {	
   String name = tag.getString("name");
+  boolean survival = tag.getBoolean("survival");
   int x = tag.getInteger("x");
   int y = tag.getInteger("y");
   int z = tag.getInteger("z");
@@ -94,19 +101,23 @@ public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   
   AWLog.logDebug("reading client structure name: "+name);
   StructureTemplateClient template =  new StructureTemplateClient(name, x, y, z, xo, yo, zo);
+  template.survival = survival;
   
-  NBTTagList stackList = tag.getTagList("resourceList");
-  NBTTagCompound stackTag;
-  ItemStack stack;
-  for(int i = 0; i < stackList.tagCount(); i++)
+  if(tag.hasKey("resourceList"))
     {
-    stackTag = (NBTTagCompound) stackList.tagAt(i);
-    stack = ItemStack.loadItemStackFromNBT(stackTag);
-    if(stack!=null)
+    NBTTagList stackList = tag.getTagList("resourceList");
+    NBTTagCompound stackTag;
+    ItemStack stack;
+    for(int i = 0; i < stackList.tagCount(); i++)
       {
-      template.resourceList.add(stack);
+      stackTag = (NBTTagCompound) stackList.tagAt(i);
+      stack = ItemStack.loadItemStackFromNBT(stackTag);
+      if(stack!=null)
+        {
+        template.resourceList.add(stack);
+        }
       }
-    }
+    }  
   return template;
   }
 
