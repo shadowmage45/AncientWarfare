@@ -25,8 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
@@ -103,12 +105,12 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     {
     return;
     }
-//  ItemStack builderItem = player.inventory.getCurrentItem();  
-//  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureScanner)
-//    {
-//    return;
-//    }
-//  ItemStructureSettings.setSettingsFor(builderItem, settings); 
+  ItemStack builderItem = player.inventory.getCurrentItem();  
+  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureScanner)
+    {
+    return;
+    }
+  ItemStructureSettings.setSettingsFor(builderItem, settings); 
   }
 
 @Override

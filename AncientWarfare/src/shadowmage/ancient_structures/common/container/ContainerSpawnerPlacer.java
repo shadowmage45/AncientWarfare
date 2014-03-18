@@ -26,6 +26,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 
 public class ContainerSpawnerPlacer extends ContainerBase
 {
@@ -74,15 +75,15 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     return;
     }
   ItemStack builderItem = player.inventory.getCurrentItem();  
-//  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.spawnerPlacer)
-//    {
-//    return;
-//    }
-//  if(!builderItem.hasTagCompound() || !builderItem.getTagCompound().hasKey("spawnData"))
-//    {
-//    builderItem.setTagInfo("spawnData", new NBTTagCompound());
-//    }
-//  builderItem.getTagCompound().getCompoundTag("spawnData").setString("mobID", mobID);
+  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.spawnerPlacer)
+    {
+    return;
+    }
+  if(!builderItem.hasTagCompound() || !builderItem.getTagCompound().hasKey("spawnData"))
+    {
+    builderItem.setTagInfo("spawnData", new NBTTagCompound());
+    }
+  builderItem.getTagCompound().getCompoundTag("spawnData").setString("mobID", mobID);
   }
 
 @Override
