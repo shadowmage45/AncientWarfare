@@ -639,7 +639,10 @@ private ResourceListRecipe constructStructureRecipe(String name, List<ItemStack>
   
   for(ItemStack resStack : resources)
     {
-    recipe.addResource(resStack.copy(), stack.stackSize, false, false);
+    ItemStackWrapperCrafting wrap = new ItemStackWrapperCrafting(resStack.getItem(), resStack.stackSize, resStack.getItemDamage(), false);
+    recipe.addResource(wrap);
+    wrap.setQuantity(resStack.stackSize);
+    wrap.setRemainingNeeded(resStack.stackSize);
     }
   
   return recipe;
