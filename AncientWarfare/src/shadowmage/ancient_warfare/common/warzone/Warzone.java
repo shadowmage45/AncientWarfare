@@ -53,8 +53,8 @@ public boolean isPositionInZone(int x, int y, int z)
 
 public void readFromNBT(NBTTagCompound tag)
   {
-  min.readFromNBT(tag.getCompoundTag("min"));
-  max.readFromNBT(tag.getCompoundTag("max"));
+  min.read(tag.getCompoundTag("min"));
+  max.read(tag.getCompoundTag("max"));
   }
 
 public void writeToNBT(NBTTagCompound tag)

@@ -25,7 +25,6 @@ package shadowmage.ancient_warfare.common.network;
 import net.minecraft.nbt.NBTTagCompound;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.tracker.ResearchTracker;
 import shadowmage.ancient_warfare.common.tracker.TeamTracker;
@@ -119,21 +118,6 @@ public void execute()
       Config.instance().handleClientInit(tag.getCompoundTag("configData"));
       }
     }  
-
-  /**
-   * structure information, completely handled in structManager
-   */
-  if(this.packetData.hasKey("struct"))
-    {
-    if(world.isRemote)
-      {
-      StructureManager.instance().handlePacketDataClient(packetData.getCompoundTag("struct"));
-      }
-    else
-      {
-      StructureManager.instance().handlePacketDataServer(packetData.getCompoundTag("struct"));
-      }
-    }
 
   /**
    * team update tag..

@@ -109,12 +109,12 @@ public void loadFromItem(ItemStack item)
     if(data.hasKey("pos1"))
       {
       hasPos1 = true;
-      pos1.readFromNBT(data.getCompoundTag("pos1"));
+      pos1.read(data.getCompoundTag("pos1"));
       }
     if(data.hasKey("pos2"))
       {
       hasPos2 = true;
-      pos2.readFromNBT(data.getCompoundTag("pos2"));
+      pos2.read(data.getCompoundTag("pos2"));
       }
     }
   }

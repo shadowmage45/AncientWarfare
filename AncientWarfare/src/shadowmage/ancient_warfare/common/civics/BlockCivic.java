@@ -28,16 +28,12 @@ import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.block.AWBlockContainer;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
-import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
-import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.item.ItemCivicBuilder;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
@@ -152,10 +148,6 @@ public Icon getIcon(int side, int meta)
 @Override
 public int idDropped(int par1, Random par2Random, int par3)
   {
-  if(blockNum*16 + par1==Civic.builder.getGlobalID())
-    {
-    return 0;
-    }
   return ItemLoader.civicPlacer.itemID;
   }
 
@@ -182,14 +174,7 @@ protected ItemStack createStackedBlock(int par1)
 public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
   {
   ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-  if(blockNum*16 + metadata==Civic.builder.getGlobalID())
-    {
-   
-    }
-  else
-    {
-    ret.add(createStackedBlock(metadata));    
-    }
+  ret.add(createStackedBlock(metadata));  
   return ret;
   }
 

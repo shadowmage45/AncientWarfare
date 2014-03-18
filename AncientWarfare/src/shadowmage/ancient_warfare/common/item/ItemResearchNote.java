@@ -22,10 +22,8 @@ package shadowmage.ancient_warfare.common.item;
 
 import java.util.List;
 
-import net.minecraft.client.gui.ChatClickData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;

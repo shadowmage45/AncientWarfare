@@ -40,23 +40,23 @@ public static final AWItemBase vehicleUpgrade = new ItemVehicleUpgrade(Config.ge
 public static final AWItemBase ammoItem = new ItemAmmo(Config.getItemID("itemMulti.vehicleAmmo", 24002, "Base item for all vehicle ammunition types"));
 public static final AWItemBase vehicleSpawner = new ItemVehicleSpawner(Config.getItemID("itemMulti.vehicleSpawner", 24003, "Base item for all vehicle-spawning items"));
 public static final AWItemBase componentItem = new ItemComponent(Config.getItemID("itemMulti.component", 24004, "Base item for all components and misc items"), true);
-public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 24005, "Item used to scan structures"));
-public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 24006, "Creative-Mode Selectable Structure Builder"));
-public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 24007, "Survival mode builder, uses blocks from inventory"));
-public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 24008, "Creative-mode slow (ticked) builder"));
+//public static final AWItemBase structureScanner = new ItemStructureScanner(Config.getItemID("itemSingle.structureScanner", 24005, "Item used to scan structures"));
+//public static final AWItemBase structureCreativeBuilder = new ItemBuilderInstant(Config.getItemID("itemSingle.structureBuilderCreative", 24006, "Creative-Mode Selectable Structure Builder"));
+//public static final AWItemBase structureBuilderDirect = new ItemBuilderDirect(Config.getItemID("itemSingle.builderDirect", 24007, "Survival mode builder, uses blocks from inventory"));
+//public static final AWItemBase structureCreativeBuilderTicked = new ItemBuilderTicked(Config.getItemID("itemSingle.structureBuilderCreativeTicked", 24008, "Creative-mode slow (ticked) builder"));
 public static final AWItemBase structureEditor = new ItemCreativeEditor(Config.getItemID("itemSingle.templateEditor", 24009, "Creative-mode template editor"));
 public static final AWItemBase armorItem = new ItemVehicleArmor(Config.getItemID("itemMulti.vehicleArmor", 24010, "Vehicle Armor Component"));
 public static final AWItemBase npcSpawner = new ItemNpcSpawner(Config.getItemID("itemMulti.npcSpawner", 24011, "Npc Spawning Item"));
 public static final AWItemBase npcCommandBaton = new ItemNpcCommandBaton(Config.getItemID("itemMulti.commandBaton", 24012, "Npc Command Batons"));
 public static final AWItemBase civicPlacer = new ItemCivicPlacer(Config.getItemID("itemMulti.civiPlacer", 24024, "Constructs Civic Buildings/Sites"));
-public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 24014, "Constructs Structures using Civics"));
+//public static final AWItemBase civicBuilder = new ItemCivicBuilder(Config.getItemID("itemMulti.civicBuilder", 24014, "Constructs Structures using Civics"));
 public static final AWItemBase courierRouteSlip = new ItemCourierSlip(Config.getItemID("itemMulti.courierSlip", 24015, "Holds Routing Info for a Courier"));
 public static final AWItemBase gateSpawner = new ItemGateSpawner(Config.getItemID("itemMulti.gateSpawner", 24016, "Base gate spawning item."));
 public static final ItemFood rations = new ItemRation(Config.getItemID("itemSingle.foodRation", 24017, "Food rations for soldiers and npcs."));
 public static final AWItemBase researchNotes = (AWItemBase) new ItemResearchNote(Config.getItemID("itemMulti.researchNotes", 24018, "Research notes"));
 public static final AWItemBase backpack = new ItemBackpack(Config.getItemID("itemMulti.backpack", 24019, "Backpack"));
 public static final AWItemBase researchBook = new ItemResearchBook(Config.getItemID("itemSingle.researchBook", 24020, "Research book to save research progress"));
-public static final AWItemBase structureGenerator = new ItemStructureGenerator(Config.getItemID("itemSingle.structureGenerator", 24020, "Generates as per world gen"));
+//public static final AWItemBase structureGenerator = new ItemStructureGenerator(Config.getItemID("itemSingle.structureGenerator", 24020, "Generates as per world gen"));
 public static final AWItemBase warzoneConfigurator = new ItemWarzoneConfigurator(Config.getItemID("item.single.warzoneConfigurator", 24021, "Configures new warzones"));
 
 public static final ItemStack wood1 = new ItemStack(componentItem, 1, 0);
@@ -121,10 +121,10 @@ public void load()
 
 private void loadItems()
   {  
-  this.registerItemSingle(structureCreativeBuilderTicked, "item.single.structureBuilderTicked", "item.single.structureBuilderTicked.description", "item.single.structureBuilderTicked.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureScanner, "item.single.structureScanner", "item.single.structureScanner.description", "item.single.structureScanner.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
-  this.registerItemSingle(structureCreativeBuilder, "item.single.structureBuilderInstant", "item.single.structureBuilderInstant.description", "item.single.structureBuilderInstant.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
-  this.registerItemSingle(structureBuilderDirect, "item.single.structureBuilderDirect", "item.single.structureBuilderDirect.description", "item.single.structureBuilderDirect.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+//  this.registerItemSingle(structureCreativeBuilderTicked, "item.single.structureBuilderTicked", "item.single.structureBuilderTicked.description", "item.single.structureBuilderTicked.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+//  this.registerItemSingle(structureScanner, "item.single.structureScanner", "item.single.structureScanner.description", "item.single.structureScanner.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
+//  this.registerItemSingle(structureCreativeBuilder, "item.single.structureBuilderInstant", "item.single.structureBuilderInstant.description", "item.single.structureBuilderInstant.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
+//  this.registerItemSingle(structureBuilderDirect, "item.single.structureBuilderDirect", "item.single.structureBuilderDirect.description", "item.single.structureBuilderDirect.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
   this.registerItemSingle(structureEditor, "item.single.structureEditor", "item.single.structureEditor.description", "item.single.structureEditor.tooltip").setIconTexture("ancientwarfare:builder/testIcon1", 0);
   this.registerItemSubtyped(ammoItem, "ammo");
   this.registerItemSubtyped(vehicleSpawner, "vehicleSpawner");
@@ -135,7 +135,7 @@ private void loadItems()
   this.addSubtypeInfoToItem(npcCommandBaton, 0, "item.baton.0", "item.baton.0.description","item.baton.0.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,0)).setIconTexture("ancientwarfare:npc/baton1", 0);
   this.addSubtypeInfoToItem(npcCommandBaton, 1, "item.baton.1", "item.baton.0.description","item.baton.1.tooltip").addDisplayStack(new ItemStack(npcCommandBaton,1,1)).setIconTexture("ancientwarfare:npc/baton3", 1);
   this.registerItemSubtyped(civicPlacer, "civicItem");
-  this.registerItemSingle(civicBuilder, "item.single.civicBuilder", "item.single.civicBuilder.description", "item.single.civicBuilder.tooltip");
+//  this.registerItemSingle(civicBuilder, "item.single.civicBuilder", "item.single.civicBuilder.description", "item.single.civicBuilder.tooltip");
   this.registerItemSubtyped(courierRouteSlip, "routingSlip");
   this.addSubtypeInfoToItem(courierRouteSlip, 0, "item.routingSlip.0","item.routingSlip.0.description","item.routingSlip.0.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,0)).setIconTexture("ancientwarfare:npc/route1", 0);
   this.addSubtypeInfoToItem(courierRouteSlip, 1, "item.routingSlip.1","item.routingSlip.1.description","item.routingSlip.1.tooltip").addDisplayStack(new ItemStack(courierRouteSlip,1,1)).setIconTexture("ancientwarfare:npc/route2", 1);
@@ -151,7 +151,7 @@ private void loadItems()
     
   this.registerItemSubtyped(researchNotes, "researchNotes");
   this.registerItemSingle(researchBook, "item.single.researchBook", "item.single.researchBook.description", "item.single.researchBook.tooltip").setIconTexture("ancientwarfare:misc/researchBook", 0);
-  this.registerItemSingle(structureGenerator, "WG-StructureGenerator", "Generates structures using world gen settings", "Generates structures using world gen settings").setIconTexture("ancientwarfare:builder/structureScanner1", 0);    
+//  this.registerItemSingle(structureGenerator, "WG-StructureGenerator", "Generates structures using world gen settings", "Generates structures using world gen settings").setIconTexture("ancientwarfare:builder/structureScanner1", 0);    
   this.registerItemSingle(warzoneConfigurator, "item.single.warzoneConfigurator", "item.single.warzoneConfigurator.description", "item.single.warzoneConfigurator.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
   
   /**

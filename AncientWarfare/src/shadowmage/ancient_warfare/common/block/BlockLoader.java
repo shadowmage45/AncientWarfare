@@ -33,7 +33,6 @@ import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnCow;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnMooshroom;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnPig;
 import shadowmage.ancient_warfare.common.civics.worksite.te.barn.TEBarnSheep;
-import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCactus;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCarrot;
 import shadowmage.ancient_warfare.common.civics.worksite.te.farm.TEFarmCocoa;
@@ -74,7 +73,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class BlockLoader
 {
 
-public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3750, "Placeholder block for ticked-structure builders."));
+//public static final Block builder = new BlockBuilder(Config.getBlockID("blockSingle.builder", 3750, "Placeholder block for ticked-structure builders."));
 public static final Block civicBlock1 = new BlockCivic(Config.getBlockID("blockMulti.civic1", 3751, "Civic Block 1"), "CivicBlock1", 0);
 public static final Block civicBlock2 = new BlockCivic(Config.getBlockID("blockMulti.civic2", 3752, "Civic Block 2"), "CivicBlock2", 1);
 public static final Block civicBlock3 = new BlockCivic(Config.getBlockID("blockMulti.civic3", 3753, "Civic Block 3"), "CivicBlock3", 2);
@@ -109,7 +108,7 @@ public static BlockLoader instance()
 
 public void load()
   {
-  registerBlock(builder, "block.single.builder"); 
+//  registerBlock(builder, "block.single.builder"); 
   registerBlockWithItem(warehouseStorage, "Warehouse Storage", AWItemBlockBase.class);
   ((BlockWarehouseStorage) warehouseStorage).registerBlockInfo();
   registerBlock(gateProxy, "block.single.gateproxy");
@@ -124,7 +123,7 @@ public void load()
   ((BlockReinforced)reinforced).registerBlockInfo();  
   GameRegistry.registerTileEntity(TEAWBlockReinforced.class, "Reinforced Block");
       
-  GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
+//  GameRegistry.registerTileEntity(TEBuilder.class, "AWBuilder");
   GameRegistry.registerTileEntity(TEGateProxy.class, "AWGateProxyTE");
   GameRegistry.registerTileEntity(TEWorkSiteFarm.class, "AWFarmSiteTE");   
   GameRegistry.registerTileEntity(TEFarmWheat.class, "Wheat Farm");
@@ -144,7 +143,7 @@ public void load()
   GameRegistry.registerTileEntity(TETreeFarmSpruce.class, "Tree Farm Spruce");
   GameRegistry.registerTileEntity(TETreeFarmBirch.class, "Tree Farm Birch");
   GameRegistry.registerTileEntity(TETreeFarmJungle.class, "Tree Farm Jungle");
-  GameRegistry.registerTileEntity(TECivicBuilder.class, "Civic Builder");
+//  GameRegistry.registerTileEntity(TECivicBuilder.class, "Civic Builder");
   GameRegistry.registerTileEntity(TECivicTownHall.class, "Town Hall");
   GameRegistry.registerTileEntity(TEBarnPig.class, "Pig Farm");
   GameRegistry.registerTileEntity(TEBarnCow.class, "Cow Farm");

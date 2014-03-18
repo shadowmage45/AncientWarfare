@@ -54,10 +54,6 @@ import shadowmage.ancient_warfare.client.gui.npc.GuiNpcCourier;
 import shadowmage.ancient_warfare.client.gui.settings.GuiClientSettings;
 import shadowmage.ancient_warfare.client.gui.settings.GuiDebugInfo;
 import shadowmage.ancient_warfare.client.gui.settings.GuiWarzones;
-import shadowmage.ancient_warfare.client.gui.structure.GuiCSB;
-import shadowmage.ancient_warfare.client.gui.structure.GuiEditorSelect;
-import shadowmage.ancient_warfare.client.gui.structure.GuiStructureScanner;
-import shadowmage.ancient_warfare.client.gui.structure.GuiSurvivalBuilder;
 import shadowmage.ancient_warfare.client.gui.teams.GuiTeamView;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleAmmoSelection;
 import shadowmage.ancient_warfare.client.gui.vehicle.GuiVehicleInventory;
@@ -69,7 +65,6 @@ import shadowmage.ancient_warfare.common.container.ContainerAWAutoCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerAWCrafting;
 import shadowmage.ancient_warfare.common.container.ContainerBackpack;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
-import shadowmage.ancient_warfare.common.container.ContainerCSB;
 import shadowmage.ancient_warfare.common.container.ContainerChunkloaderDeluxe;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTE;
 import shadowmage.ancient_warfare.common.container.ContainerCivicTownHallInfo;
@@ -79,7 +74,6 @@ import shadowmage.ancient_warfare.common.container.ContainerCommandBaton;
 import shadowmage.ancient_warfare.common.container.ContainerCourierRoutingSlip;
 import shadowmage.ancient_warfare.common.container.ContainerDebugInfo;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
-import shadowmage.ancient_warfare.common.container.ContainerEditor;
 import shadowmage.ancient_warfare.common.container.ContainerFoodProcessor;
 import shadowmage.ancient_warfare.common.container.ContainerGateControl;
 import shadowmage.ancient_warfare.common.container.ContainerMailbox;
@@ -88,8 +82,6 @@ import shadowmage.ancient_warfare.common.container.ContainerNpcBase;
 import shadowmage.ancient_warfare.common.container.ContainerNpcCourier;
 import shadowmage.ancient_warfare.common.container.ContainerResearch;
 import shadowmage.ancient_warfare.common.container.ContainerSettings;
-import shadowmage.ancient_warfare.common.container.ContainerStructureScanner;
-import shadowmage.ancient_warfare.common.container.ContainerSurvivalBuilder;
 import shadowmage.ancient_warfare.common.container.ContainerTeamControl;
 import shadowmage.ancient_warfare.common.container.ContainerTrashcan;
 import shadowmage.ancient_warfare.common.container.ContainerVehicle;
@@ -143,6 +135,7 @@ public static final int CHUNKLOADER_DEULXE = 19;
 public static final int FOOD_PROCESSOR = 20;
 public static final int WARZONE_CONTROL = 21;
 public static final int GATE_CONTROL = 22;
+public static final int SPAWNER_PLACER = 23;
 
 public static final int BACKPACK = 39;
 public static final int INFO = 40;
@@ -184,21 +177,21 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case WARZONE_CONTROL:
   return new ContainerWarzones(player);
   
-  case STRUCTURE_SELECT:
-  return new ContainerCSB(player);
-  
-  case STRUCTURE_SCANNER:
-  return new ContainerStructureScanner(player);
-  
-  case STRUCTURE_BUILD_DIRECT:
-  return new ContainerSurvivalBuilder(player);
-  
-  case STRUCTURE_EDITOR:  
-  return new ContainerEditor(player);
-  
-  case STRUCTURE_SCAN_EDIT:
-  ContainerEditor edit = new ContainerEditor(player);
-  return edit;
+//  case STRUCTURE_SELECT:
+//  return new ContainerCSB(player);
+//  
+//  case STRUCTURE_SCANNER:
+//  return new ContainerStructureScanner(player);
+//  
+//  case STRUCTURE_BUILD_DIRECT:
+//  return new ContainerSurvivalBuilder(player);
+//  
+//  case STRUCTURE_EDITOR:  
+//  return new ContainerEditor(player);
+//  
+//  case STRUCTURE_SCAN_EDIT:
+//  ContainerEditor edit = new ContainerEditor(player);
+//  return edit;
   
   case SETTINGS:
   return new ContainerSettings(player);
@@ -423,20 +416,20 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   case WARZONE_CONTROL:
   return new GuiWarzones(new ContainerWarzones(player));
   
-  case STRUCTURE_SELECT:
-  return new GuiCSB(new ContainerCSB(player));
-  
-  case STRUCTURE_SCANNER:
-  return new GuiStructureScanner(new ContainerStructureScanner(player));
-  
-  case STRUCTURE_BUILD_DIRECT:
-  return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
-  
-  case STRUCTURE_EDITOR:  
-  return new GuiEditorSelect(new ContainerEditor(player));
-  
-  case STRUCTURE_SCAN_EDIT:  
-  return new GuiEditorSelect(new ContainerEditor(player));
+//  case STRUCTURE_SELECT:
+//  return new GuiCSB(new ContainerCSB(player));
+//  
+//  case STRUCTURE_SCANNER:
+//  return new GuiStructureScanner(new ContainerStructureScanner(player));
+//  
+//  case STRUCTURE_BUILD_DIRECT:
+//  return new GuiSurvivalBuilder(new ContainerSurvivalBuilder(player));
+//  
+//  case STRUCTURE_EDITOR:  
+//  return new GuiEditorSelect(new ContainerEditor(player));
+//  
+//  case STRUCTURE_SCAN_EDIT:  
+//  return new GuiEditorSelect(new ContainerEditor(player));
   
   case SETTINGS:
   return new GuiClientSettings(player, new ContainerSettings(player));

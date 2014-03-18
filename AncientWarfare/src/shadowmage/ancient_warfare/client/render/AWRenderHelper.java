@@ -38,13 +38,6 @@ import shadowmage.ancient_warfare.common.civics.TECivic;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.interfaces.IScannerItem;
-import shadowmage.ancient_warfare.common.item.ItemBuilderBase;
-import shadowmage.ancient_warfare.common.item.ItemBuilderDirect;
-import shadowmage.ancient_warfare.common.item.ItemCivicPlacer;
-import shadowmage.ancient_warfare.common.item.ItemGateSpawner;
-import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.item.ItemStructureScanner;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -124,52 +117,52 @@ private void adjustPositionsForScanBB(BlockPosition p1, BlockPosition p2)
     }
   }
 
-private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilderBase item, float partialTick)
-  {
-  if(player==null || stack==null || item== null)
-    {
-    return;
-    }  
-  StructureClientInfo info = item.getStructureForStack(stack);    
-  if(info==null)
-    {
-    return;
-    }
-  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
-  if(hit==null)
-    {
-    return;
-    }
-  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
-  BlockPosition originalHit = hit.copy();
-  hit.y-=info.yOffset;
-  hit = this.offsetForWorldRender(hit, face);  
-
-  if(item.renderBuilderBlockBB())
-    {
-    hit.moveForward(face, -info.zOffset + 1 + info.clearingBuffer);
-    } 
-
-  AxisAlignedBB bb = info.getBBForRender(hit, face);  
-  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
-  if(item.renderBuilderBlockBB())
-    {
-    bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
-    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
-    }
-
-  if(info.maxClearing > 0|| info.clearingBuffer >0)
-    {
-    bb = info.getClearingBBForRender(hit, face);
-    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.8f, 0.f, 0.f);
-    }
-
-  if(info.maxLeveling >0)
-    {
-    bb = info.getLevelingBBForRender(hit, face);
-    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.3f, 0.8f, 0.3f);
-    }
-  }
+//private void renderStructureBB(EntityPlayer player, ItemStack stack, ItemBuilderBase item, float partialTick)
+//  {
+//  if(player==null || stack==null || item== null)
+//    {
+//    return;
+//    }  
+//  StructureClientInfo info = item.getStructureForStack(stack);    
+//  if(info==null)
+//    {
+//    return;
+//    }
+//  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+//  if(hit==null)
+//    {
+//    return;
+//    }
+//  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+//  BlockPosition originalHit = hit.copy();
+//  hit.y-=info.yOffset;
+//  hit = this.offsetForWorldRender(hit, face);  
+//
+//  if(item.renderBuilderBlockBB())
+//    {
+//    hit.moveForward(face, -info.zOffset + 1 + info.clearingBuffer);
+//    } 
+//
+//  AxisAlignedBB bb = info.getBBForRender(hit, face);  
+//  BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.8f, 0.2f, 0.8f);
+//  if(item.renderBuilderBlockBB())
+//    {
+//    bb = AxisAlignedBB.getBoundingBox(originalHit.x, originalHit.y, originalHit.z, originalHit.x+1, originalHit.y+1, originalHit.z+1);
+//    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(.02D, .02D, .02D), 0.3f, 0.3f, 0.8f);
+//    }
+//
+//  if(info.maxClearing > 0|| info.clearingBuffer >0)
+//    {
+//    bb = info.getClearingBBForRender(hit, face);
+//    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.8f, 0.f, 0.f);
+//    }
+//
+//  if(info.maxLeveling >0)
+//    {
+//    bb = info.getLevelingBBForRender(hit, face);
+//    BoundingBoxRender.drawOutlinedBoundingBox(adjustBBForPlayerPos(bb, player, partialTick).contract(0.1d, 0.1d, 0.1d), 0.3f, 0.8f, 0.3f);
+//    }
+//  }
 
 public BlockPosition offsetForWorldRender(BlockPosition hit, int face)
   {
@@ -236,29 +229,29 @@ public void handleRenderLastEvent(RenderWorldLastEvent evt)
   int id = stack.itemID;
 
   //return id== ItemLoader.structureBuilderDirect.itemID || id == ItemLoader.structureCreativeBuilder.itemID || id == ItemLoader.structureCreativeBuilderTicked.itemID || id==ItemLoader.civicBuilder.itemID || id==ItemLoader.structureGenerator.itemID;
-  if(item==ItemLoader.structureBuilderDirect || item==ItemLoader.structureCreativeBuilder || item==ItemLoader.structureCreativeBuilderTicked || item==ItemLoader.civicBuilder || item==ItemLoader.structureGenerator)
-    {
-    this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
-    }  
-  if(item==ItemLoader.structureBuilderDirect)
-    {
-    if(ItemBuilderDirect.isScanning(stack))
-      {
-      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks, true);      
-      }
-    }
-  else if(item==ItemLoader.structureScanner)
-    {
-    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
-    }
-  else if(item==ItemLoader.civicPlacer)
-    {
-    this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks, true);
-    }
-  else if(item==ItemLoader.gateSpawner)
-    {
-    this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks, false);
-    }
+//  if(item==ItemLoader.structureBuilderDirect || item==ItemLoader.structureCreativeBuilder || item==ItemLoader.structureCreativeBuilderTicked || item==ItemLoader.civicBuilder || item==ItemLoader.structureGenerator)
+//    {
+//    this.renderStructureBB(player, stack, (ItemBuilderBase)stack.getItem(), evt.partialTicks);
+//    }  
+//  if(item==ItemLoader.structureBuilderDirect)
+//    {
+//    if(ItemBuilderDirect.isScanning(stack))
+//      {
+//      this.renderScannerBB(player, stack, (ItemBuilderDirect)stack.getItem(), evt.partialTicks, true);      
+//      }
+//    }
+//  else if(item==ItemLoader.structureScanner)
+//    {
+//    this.renderScannerBB(player, stack, (ItemStructureScanner)stack.getItem(), evt.partialTicks, true);
+//    }
+//  else if(item==ItemLoader.civicPlacer)
+//    {
+//    this.renderScannerBB(player, stack, (ItemCivicPlacer)stack.getItem(), evt.partialTicks, true);
+//    }
+//  else if(item==ItemLoader.gateSpawner)
+//    {
+//    this.renderScannerBB(player, stack, (ItemGateSpawner)stack.getItem(), evt.partialTicks, false);
+//    }
   }
 
 public static void renderCivicBoundingBoxes(World world, EntityPlayer player, float partialTick)

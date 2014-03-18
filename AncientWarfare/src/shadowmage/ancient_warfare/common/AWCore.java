@@ -56,9 +56,6 @@ import shadowmage.ancient_warfare.common.tracker.PlayerTracker;
 import shadowmage.ancient_warfare.common.utils.ServerPerformanceMonitor;
 import shadowmage.ancient_warfare.common.utils.ServerTicker;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
-import shadowmage.ancient_warfare.common.world_gen.LootGenerator;
-import shadowmage.ancient_warfare.common.world_gen.VillageGenerator;
-import shadowmage.ancient_warfare.common.world_gen.WorldGenManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -118,11 +115,6 @@ public void preInit(FMLPreInitializationEvent evt)
    * register eventHandler
    */
   MinecraftForge.EVENT_BUS.register(AWEventHandler.instance());
-
-  /**
-   * register worldGenHandler
-   */
-  GameRegistry.registerWorldGenerator(WorldGenManager.instance());
 
   /**
    * register chunk loader 
@@ -185,14 +177,11 @@ public void load(FMLPostInitializationEvent evt)
   {  
   Config.log("Ancient Warfare Post-Init started");
 
-  AWStructureModule.instance().load();
-  VillageGenerator.load();
   NpcRegistry.instance().registerNPCs(); 
   CivicRegistry.instance().registerCivics();
   Gate.registerGateTypes();
   ResearchGoal.load();
   AWCraftingManager.instance().loadRecipes();
-  LootGenerator.instance().addLootToTables();
   /**
    * and finally, save the config in case there were any changes made during init
    */

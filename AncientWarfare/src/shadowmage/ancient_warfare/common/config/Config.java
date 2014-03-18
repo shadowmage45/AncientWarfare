@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
-import shadowmage.ancient_warfare.common.AWStructureModule;
 import shadowmage.ancient_warfare.common.npcs.INpcType;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 
@@ -301,13 +300,7 @@ public void setWorldGenInfo()
 
 private void setStructureInfo()
   {
-  boolean exportDefaults = config.get("structure-management", "exportdefaults", true, "Re-export default included structures, in case they have been changed in any way, or need files regenerated").getBoolean(true);
-  if(exportDefaults)
-    {
-    config.get("structure-management", "exportdefaults", false).set(false);
-    AWStructureModule.instance().setExportDefaults();
-    }  
-  this.enableVillageGen = config.get("structure-management", "enableVillageStructures", true, "If true, will generate additional Ancient Warfare structures in villages").getBoolean(true);
+
   }
 
 public void handleClientInit(NBTTagCompound tag)

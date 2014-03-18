@@ -40,7 +40,6 @@ import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.gates.IGateType;
 import shadowmage.ancient_warfare.common.gates.types.Gate;
 import shadowmage.ancient_warfare.common.item.ItemLoader;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.npcs.NpcTypeBase;
 import shadowmage.ancient_warfare.common.plugins.PluginProxy;
 import shadowmage.ancient_warfare.common.registry.ArmorRegistry;
@@ -48,8 +47,6 @@ import shadowmage.ancient_warfare.common.registry.VehicleUpgradeRegistry;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoal;
 import shadowmage.ancient_warfare.common.research.ResearchGoalNumbers;
-import shadowmage.ancient_warfare.common.structures.data.ProcessedStructure;
-import shadowmage.ancient_warfare.common.structures.data.StructureClientInfo;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import shadowmage.ancient_warfare.common.utils.InventoryTools;
 import shadowmage.ancient_warfare.common.utils.ItemStackWrapperCrafting;
@@ -616,16 +613,16 @@ protected void addGateRecipes()
 
 protected void addStructureRecipes()
   {
-  ResourceListRecipe recipe;
-  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
-    {
-    if(structure==null){continue;}
-    recipe = structure.constructRecipe();
-    if(recipe!=null)
-      {
-      this.structureRecipesServer.add(recipe);
-      }
-    }
+//  ResourceListRecipe recipe;
+//  for(ProcessedStructure structure : StructureManager.instance().getSurvivalModeStructures())
+//    {
+//    if(structure==null){continue;}
+//    recipe = structure.constructRecipe();
+//    if(recipe!=null)
+//      {
+//      this.structureRecipesServer.add(recipe);
+//      }
+//    }
   }
 
 protected void addNpcRecipes()
@@ -895,51 +892,51 @@ protected void addAmmoRecipes()
   this.componentRecipes.add(recipe);
   }
 
-public void addStructureRecipe(ProcessedStructure struct)
-  {
-  if(struct==null || !struct.survival){return;}
-  ResourceListRecipe recipe = null;
-  for(ResourceListRecipe test : this.structureRecipesServer)
-    {
-    if(test.getDisplayName().equals(struct.name))
-      {
-      recipe = test;
-      break;
-      }
-    }
-  if(recipe!=null)
-    {
-    this.structureRecipesServer.remove(recipe);
-    }
-  recipe = struct.constructRecipe();
-  if(recipe!=null)
-    {
-    this.structureRecipesServer.add(recipe);
-    }
-  }
+//public void addStructureRecipe(ProcessedStructure struct)
+//  {
+//  if(struct==null || !struct.survival){return;}
+//  ResourceListRecipe recipe = null;
+//  for(ResourceListRecipe test : this.structureRecipesServer)
+//    {
+//    if(test.getDisplayName().equals(struct.name))
+//      {
+//      recipe = test;
+//      break;
+//      }
+//    }
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesServer.remove(recipe);
+//    }
+//  recipe = struct.constructRecipe();
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesServer.add(recipe);
+//    }
+//  }
 
-public void addStructureRecipe(StructureClientInfo info)
-  {
-  if(info==null || !info.survival){return;}
-  ResourceListRecipe recipe = null;
-  for(ResourceListRecipe test : this.structureRecipesClient)
-    {
-    if(test.getDisplayName().equals(info.name))
-      {
-      recipe = test;
-      break;
-      }
-    }
-  if(recipe!=null)
-    {
-    this.structureRecipesClient.remove(recipe);
-    }
-  recipe = info.constructRecipe();
-  if(recipe!=null)
-    {
-    this.structureRecipesClient.add(recipe);
-    }
-  }
+//public void addStructureRecipe(StructureClientInfo info)
+//  {
+//  if(info==null || !info.survival){return;}
+//  ResourceListRecipe recipe = null;
+//  for(ResourceListRecipe test : this.structureRecipesClient)
+//    {
+//    if(test.getDisplayName().equals(info.name))
+//      {
+//      recipe = test;
+//      break;
+//      }
+//    }
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesClient.remove(recipe);
+//    }
+//  recipe = info.constructRecipe();
+//  if(recipe!=null)
+//    {
+//    this.structureRecipesClient.add(recipe);
+//    }
+//  }
 
 public void resetClientData()
   {

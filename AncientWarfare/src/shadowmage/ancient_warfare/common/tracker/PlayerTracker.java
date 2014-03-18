@@ -28,7 +28,6 @@ import net.minecraft.world.World;
 import shadowmage.ancient_warfare.common.AWCore;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.interfaces.INBTTaggable;
-import shadowmage.ancient_warfare.common.manager.StructureManager;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.tracker.entry.PlayerEntry;
 import cpw.mods.fml.common.IPlayerTracker;
@@ -75,7 +74,6 @@ public void onPlayerLogin(EntityPlayer player)
     {
     return;
     }
-  StructureManager.instance().handlePlayerLogin(player);  
   TeamTracker.instance().onPlayerLogin(player);
   ResearchTracker.instance().onPlayerLogin(player);
   NBTTagCompound initTag = new NBTTagCompound();

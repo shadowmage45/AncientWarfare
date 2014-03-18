@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.OrderedLoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import shadowmage.ancient_warfare.common.block.TEBuilder;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.machine.TEChunkLoader;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -79,11 +78,11 @@ public void ticketsLoaded(List<Ticket> tickets, World world)
       {
       tag = tag.getCompoundTag("buildTE");
       BlockPosition tePos = new BlockPosition(tag.getCompoundTag("pos"));
-      TEBuilder builder = (TEBuilder) world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
-      if(builder!=null)
-        {
-        builder.setTicket(tk);
-        }
+//      TEBuilder builder = (TEBuilder) world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
+//      if(builder!=null)
+//        {
+//        builder.setTicket(tk);
+//        }
       }  
     else if(tag!=null && tag.hasKey("chunkTE"))
       {

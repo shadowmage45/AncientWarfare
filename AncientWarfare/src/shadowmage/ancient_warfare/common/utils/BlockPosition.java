@@ -28,6 +28,7 @@ import net.minecraft.util.MathHelper;
 
 public class BlockPosition
 {
+
 public int x;
 public int y;
 public int z;
@@ -53,26 +54,30 @@ public BlockPosition(double x, double y, double z)
 
 public BlockPosition(NBTTagCompound tag)
   {
-  this.readFromNBT(tag);
+  read(tag);
   }
 
-public final void readFromNBT(NBTTagCompound tag)
-  {
-  this.x = tag.getInteger("x");
-  this.y = tag.getInteger("y");
-  this.z = tag.getInteger("z");
-  }
-
-/**
- * COPY constructor.  does not grab any references, makes a NEW object.
- * pos != this
- * @param pos
- */
 public BlockPosition(BlockPosition pos)
   {
   this.x = pos.x;
   this.y = pos.y;
   this.z = pos.z;
+  }
+
+public BlockPosition reassign(int x, int y, int z)
+  {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  return this;
+  }
+
+public final BlockPosition read(NBTTagCompound tag)
+  {
+  this.x = tag.getInteger("x");
+  this.y = tag.getInteger("y");
+  this.z = tag.getInteger("z");
+  return this;
   }
 
 public void updateFromEntityPosition(Entity ent)
@@ -113,6 +118,13 @@ public BlockPosition offsetBy(BlockPosition offsetVector)
   this.y += offsetVector.y;
   this.z += offsetVector.z;
   return this;
+  }
+
+public void offset(int x, int y, int z)
+  {
+  this.x += x;
+  this.y += y;
+  this.z += z;
   }
 
 /**
