@@ -33,6 +33,8 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
+import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
@@ -628,18 +630,35 @@ protected void addStructureRecipes()
 
 private ResourceListRecipe constructStructureRecipe(String name, List<ItemStack> resources)
   {
+  ItemStructureSettings settings = new ItemStructureSettings();
+  settings.setName(name);
+  ItemStack stack = new ItemStack(AWStructuresItemLoader.civicBuilder,1,0);
+  settings.setSettingsFor(stack, settings);
+  ResourceListRecipe recipe = new ResourceListRecipe(stack, RecipeType.STRUCTURE);
+  recipe.setDisplayName(name);
   
-  return null;
+  for(ItemStack resStack : resources)
+    {
+    recipe.addResource(resStack.copy(), stack.stackSize, false, false);
+    }
+  
+  return recipe;
   }
 
 public void addStructureRecipe(StructureTemplate template)
   {
-  this.structureRecipesServer.add(constructStructureRecipe(template.name, template.getResourceList()));
+  if(template.getValidationSettings().isSurvival())
+    {
+    this.structureRecipesServer.add(constructStructureRecipe(template.name, template.getResourceList()));    
+    }
   }
 
 public void addStructureRecipe(StructureTemplateClient template)
   {
-  this.structureRecipesClient.add(constructStructureRecipe(template.name, template.getResourceList()));
+  if(template.survival)
+    {
+    this.structureRecipesClient.add(constructStructureRecipe(template.name, template.getResourceList()));    
+    }
   }
 
 protected void addNpcRecipes()
