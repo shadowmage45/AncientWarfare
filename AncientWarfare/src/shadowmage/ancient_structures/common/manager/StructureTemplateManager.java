@@ -38,6 +38,7 @@ private static StructureTemplateManager instance = new StructureTemplateManager(
 public static StructureTemplateManager instance(){return instance;}
 
 private HashMap<String,StructureTemplate> loadedTemplates = new HashMap<String,StructureTemplate>();
+private HashMap<String,StructureTemplateClient> serverCopyOfClientTemplates = new HashMap<String,StructureTemplateClient>();
 private HashMap<String,StructureTemplateClient> clientTemplates = new HashMap<String,StructureTemplateClient>();
 
 public void addTemplate(StructureTemplate template)
@@ -53,7 +54,7 @@ public void addTemplate(StructureTemplate template)
     }
   loadedTemplates.put(template.name, template);
   StructureTemplateClient cl = new StructureTemplateClient(template);
-//  addTemplate(cl);//removed due to cross-thread access of clientTemplates hashMap
+  serverCopyOfClientTemplates.put(cl.name, cl);
   
   NBTTagCompound tag = new NBTTagCompound();
   cl.writeToNBT(tag);    
@@ -70,7 +71,7 @@ public void addTemplate(StructureTemplateClient template)
 public void onPlayerConnect(EntityPlayer player)
   {
   NBTTagList list = new NBTTagList();
-  for(StructureTemplateClient cl : clientTemplates.values())
+  for(StructureTemplateClient cl : serverCopyOfClientTemplates.values())
     {
     NBTTagCompound tag = new NBTTagCompound();
     cl.writeToNBT(tag);
