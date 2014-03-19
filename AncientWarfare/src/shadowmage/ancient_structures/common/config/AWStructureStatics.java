@@ -92,7 +92,11 @@ public void initializeValues()
             "ThrownPotion",
             "WitherBoss",
             "WitherSkull",
-            "XPOrb"
+            "XPOrb",
+            "AncientWarfare.entity.npc",
+            "AncientWarfare.entity.missile",
+            "AncientWarfare.entity.vehicle",
+            "AncientWarfare.entity.gate"
         };  
   defaultExcludedEntities = config.get(excludedEntitiesCategory, "excluded_entities", defaultExcludedEntities).getStringList();
   
