@@ -1,6 +1,9 @@
 New features since last test release:
 /********** 03-19-14 **********/
 
+                **** CAUTION / WARNING / IMPORTANT!! ****
+**** BACKUP YOUR WORLD AND CONFIG FILES BEFORE UPDATING TO THIS VERSION ****
+
 * NEW (Major) - New Structure Module and template system.
     This system completely replaces the old template and world-gen system.  The 
     template format has changed substantially -- old templates will no longer
@@ -21,13 +24,21 @@ New features since last test release:
     directory.  In order to finish the update, you will need to exit minecraft,
     and manually copy and overwrite the templates from /export to /included 
     (make sure to backup your originals first in case there were problems during
-    conversion).    
+    conversion).  Converted templates will be filled in with best-guess validation
+    settings, though all will use the default 'ground' type of validation.  For more
+    advanced templates and world-generation setup, you will/may need to go through
+    your templates and set their validation properties manually.  (template auto-
+    conversion may not be present in the 1.7 release, so get your templates converted
+    and world-gen figured out now!)
         
     You WILL need to setup world-generation again.  World generation validation settings
     are now stored per-structure, in the template itself.  There is a section/header for
     'validation' that contains all of the validation settings for that structure.  Several
     different types of validation are available -- some with additional options that must be
-    specified in the validation data block.
+    specified in the validation data block.  Although converted templates will have default
+    validation settings, none will be flagged as enabled for world-gen.  At the very minimum
+    you should go through and set 'worldGenEnabled' to 'true' for any templates that you wish
+    to spawn during world-gen.
     
     The validation types available are:
     ground (normal validation type)
@@ -39,7 +50,7 @@ New features since last test release:
     sky (floating in the sky, not touching ground at all)
     
     underground, water, island, underwater, and sky all have additional validation
-    parameters that must be set in the validation block -- the best way to see the format
+    parameters that must be set in the validation data/tag block -- the best way to see the format
     for these is to scan a structure and set it to that validation type. 
     
     World-generation uses the same type of setup for cluster value and weight as the
