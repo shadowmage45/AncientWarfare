@@ -179,19 +179,19 @@ public static void loadBlockList()
   BlockInfo.setInventoryBlock(id, 0, Block.dirt.blockID, 0, 1);  
   
   id = Block.flowerPot.blockID;
+
+  addBlock(Block.deadBush);
+  addBlock(Block.cauldron);
+  addBlock(Block.tallGrass);
   
   for(int i = 0; i <16; i++)
     {
     BlockInfo.setInventoryBlock(id, i, Item.flowerPot.itemID, 0, 1);
-//    BlockInfo.setInventoryBlock(Block.cauldron.blockID, i, Item.cauldron.itemID, 0, 1);
+    BlockInfo.setInventoryBlock(Block.deadBush.blockID, i, Item.seeds.itemID, 0, 1);
+    BlockInfo.setInventoryBlock(Block.tallGrass.blockID, i, Item.seeds.itemID, 0, 1);
+    BlockInfo.setInventoryBlock(Block.cauldron.blockID, i, Item.cauldron.itemID, 0, 1);
     }
   
-  addBlock(Block.deadBush);
-  addBlock(Block.cauldron);
-  addBlock(Block.tallGrass);
-  BlockInfo.setInventoryBlock(Block.deadBush.blockID, 0, Item.seeds.itemID, 0, 1);
-  BlockInfo.setInventoryBlock(Block.cauldron.blockID, 0, Item.cauldron.itemID, 0, 1);
-  BlockInfo.setInventoryBlock(Block.tallGrass.blockID, 0, Item.seeds.itemID, 0, 1);
   load17names();
   }
 
