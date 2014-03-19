@@ -69,6 +69,7 @@ public static boolean renderHostileNames = false;
 public static boolean renderNpcFlags = true;
 public static boolean allowFriendlyFire = false;
 public static boolean enableNpcTeleportHome = true;
+public static boolean backpacksEnabled = true;
 
 public static boolean updatedVersion = false;
 public static String configVersion = "";
@@ -253,6 +254,8 @@ public void setCoreInfo()
   this.renderNpcFlags = config.get("a-general-options", "render_npc_flags", true, "Enable/Disable rendering of NPC Team flags.").getBoolean(true);
   this.allowFriendlyFire = config.get("a-general-options", "allow_friendly_fire", false, "If true, soldiers can/will injure other friendly soldiers with arrows/ammunitions").getBoolean(false);
   this.mailDimensionalTime = config.get("a-general-options", "mailbox_dimensional_delay", mailDimensionalTime, "Delay introduced for cross-dimensional mail in ticks. Any mail sent across dimensions will take this number of ticks to arrive").getInt(mailDimensionalTime);
+  this.backpacksEnabled = config.get("a-general-options", "backpacks_enabled", true, "Enable/disable the opening of the backpack GUI (essentially enabling/disabling backpacks)").getBoolean(true);
+  
   /**
    * performance options
    */

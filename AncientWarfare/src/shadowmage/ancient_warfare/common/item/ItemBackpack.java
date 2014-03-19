@@ -29,6 +29,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import shadowmage.ancient_warfare.client.render.AWRenderHelper;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.inventory.AWInventoryBasic;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
@@ -81,7 +82,7 @@ public Icon getIconFromDamage(int par1)
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  if(!world.isRemote)
+  if(!world.isRemote && Config.backpacksEnabled)
     {
     GUIHandler.instance().openGUI(GUIHandler.BACKPACK, player, world, 0, 0, 0);
     }
