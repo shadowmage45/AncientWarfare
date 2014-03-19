@@ -77,4 +77,9 @@ New features since last test release:
     no room is available in the input inventory.
 * FIX -- Fix an issue in the auto-crafting station where it would eat buckets from any recipes
     that had buckets of water / lava.  The crafting-station should now return an empty bucket
-    into the input grid (or drop on ground if no space is available).        
+    into the input grid (or drop on ground if no space is available).  
+* FIX -- Fix a few block-to-item mappings in survival-mode structure building.  Note:  Resource
+    lists for structure-recipes are now constructed dynamically at runtime from the template / 
+    rules / plugins.  There is no more edit-able resource-list in the template -- it is up to the
+    plugin author to ensure that all supported blocks are mapped properly.  For vanilla block/item
+    support, that would be me.          
