@@ -26,6 +26,7 @@ import java.util.Iterator;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
@@ -108,6 +109,7 @@ public void setupControls()
   GuiButtonSimple button;
   while(it.hasNext() && (name=it.next())!=null)
     {
+    if(AWStructureStatics.excludedSpawnerEntities.contains(name)){continue;}
     button = (GuiButtonSimple) new GuiButtonSimple(i+10, area, 256-16-20, 14, name).updateRenderPos(0, i*16);
     area.elements.add(button);
     buttonToName.put(button, name);

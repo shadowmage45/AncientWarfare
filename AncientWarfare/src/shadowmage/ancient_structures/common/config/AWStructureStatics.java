@@ -21,6 +21,8 @@
 package shadowmage.ancient_structures.common.config;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class AWStructureStatics extends ModConfiguration
@@ -34,8 +36,11 @@ public static int maxClusterValue = 500;
 public static int randomChance = 75;
 public static int randomRange = 1000;
 public static int spawnProtectionRange = 0;
+public static Set<String> excludedSpawnerEntities = new HashSet<String>();
 
 private static String worldGenCategory = "a_world-gen_settings";
+private static String villageGenCategory = "b_village-gen_settings";
+private static String excludedEntitiesCategory = "c_excluded_spawner_entities";
 
 /**
  * @param configFile
@@ -63,7 +68,39 @@ public void initializeValues()
   maxClusterValue = config.get(worldGenCategory, "max_cluster_value", maxClusterValue).getInt(maxClusterValue);
   randomChance = config.get(worldGenCategory, "random_chance", randomChance).getInt(randomChance);
   randomRange = config.get(worldGenCategory, "random_range", randomRange).getInt(randomRange);
-  spawnProtectionRange = config.get(worldGenCategory, "spawn_protection_chunk_radius", spawnProtectionRange).getInt(spawnProtectionRange);  
+  spawnProtectionRange = config.get(worldGenCategory, "spawn_protection_chunk_radius", spawnProtectionRange).getInt(spawnProtectionRange);
+  
+  String[] defaultExcludedEntities = new String[]
+        {
+            "EnderCrystal",
+            "EnderDragon",
+            "EyeOfEnderSignal",
+            "FallingSand",
+            "Fireball",
+            "FireworksRocketEntity",
+            "Item",
+            "ItemFrame",
+            "LeashKnot",
+            "Mob",
+            "Monster",
+            "Painting",
+            "PrimedTnt",
+            "SmallFireball",
+            "Snowball",
+            "ThrownEnderpearl",
+            "ThrownExpBottle",
+            "ThrownPotion",
+            "WitherBoss",
+            "WitherSkull",
+            "XPOrb"
+        };  
+  defaultExcludedEntities = config.get(excludedEntitiesCategory, "excluded_entities", defaultExcludedEntities).getStringList();
+  
+  for(String st : defaultExcludedEntities)
+    {
+    excludedSpawnerEntities.add(st);
+    }
+  
   this.config.save();
   }
 
