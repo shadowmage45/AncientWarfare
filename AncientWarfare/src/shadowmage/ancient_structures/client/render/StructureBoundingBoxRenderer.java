@@ -104,7 +104,7 @@ private void renderScannerBoundingBox(EntityPlayer player, ItemStack stack, floa
     min = BlockTools.getMin(pos1, pos2);
     max = BlockTools.getMax(pos1, pos2);
     max.offset(1, 1, 1);
-    renderBoundingBox(player, min, max, delta);
+    renderBoundingBox(player, min, max, delta, 1, 1, 1);
     }
   }
 
@@ -122,15 +122,33 @@ private void renderBuildBoundingBox(EntityPlayer player, ItemStack stack, float 
   BlockPosition pos1 = bb.min;
   BlockPosition pos2 = bb.max.copy();
   pos2.offset(1, 1, 1);
-  renderBoundingBox(player, pos1, pos2, delta);
+  renderBoundingBox(player, pos1, pos2, delta, 1, 1, 1);
   }
 
 private void renderTickedBuilderBoxes(EntityPlayer player, ItemStack stack, float delta)
   {
+  ItemStructureSettings.getSettingsFor(stack, settings);
+  if(!settings.hasName()){return;}
+  String name = settings.name();
+  StructureTemplateClient structure = StructureTemplateManager.instance().getClientTemplate(name);
+  if(structure==null){return;}
+  BlockPosition hit = BlockTools.getBlockClickedOn(player, player.worldObj, true);
+  if(hit==null){return;}
+  BlockPosition hit2 = hit.copy();
+  int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+  hit.moveForward(face, structure.zSize - 1 - structure.zOffset + 1);
+  bb.setFromStructure(hit.x, hit.y, hit.z, face, structure.xSize, structure.ySize, structure.zSize, structure.xOffset, structure.yOffset, structure.zOffset);
+  BlockPosition pos1 = bb.min;
+  BlockPosition pos2 = bb.max.copy();
+  pos2.offset(1, 1, 1);
+  renderBoundingBox(player, pos1, pos2, delta, 1, 1, 1);
   
+  BlockPosition hit3 = hit2.copy();
+  hit3.offset(1, 1, 1);
+  renderBoundingBox(player, hit2, hit3, delta, 1, 1, 1);
   }
 
-private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta)
+private void renderBoundingBox(EntityPlayer player, BlockPosition min, BlockPosition max, float delta, float r, float g, float b)
   {
   AxisAlignedBB bb = AxisAlignedBB.getAABBPool().getAABB(min.x, min.y, min.z, max.x, max.y, max.z);
   RenderTools.adjustBBForPlayerPos(bb, player, delta);

@@ -21,7 +21,6 @@
 package shadowmage.ancient_structures.common.item;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -35,7 +34,11 @@ import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
+import shadowmage.ancient_structures.common.template.build.StructureBuilderTicked;
+import shadowmage.ancient_warfare.common.civics.types.Civic;
+import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
 import shadowmage.ancient_warfare.common.item.AWItemClickable;
+import shadowmage.ancient_warfare.common.registry.CivicRegistry;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 import cpw.mods.fml.relauncher.Side;
@@ -97,7 +100,6 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
       }    
     }  
   par3List.addAll(displayCache);
-//  super.getSubItems(par1, par2CreativeTabs, par3List);
   }
 
 public static ItemStack getCivicBuilderItem(String structure)
@@ -139,13 +141,25 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       return true;
       }
     hit.offsetForMCSide(side);
-    /**
-     * TODO place builder block on hit position
-     * offset struct build-position by struct z-offset, so builder is outside of struct BB
-     */
-    AWLog.logDebug("constructing template: "+template);    
-    StructureBuilder builder = new StructureBuilder(world, template, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), hit.x, hit.y, hit.z);
-    builder.instantConstruction();
+    
+    BlockPosition hit2 = hit.copy();//hit2 is where the builder block will go
+    
+    int face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
+    hit.moveForward(face, template.zSize - 1 - template.zOffset + 1);
+    
+    CivicRegistry.instance().setCivicBlock(world, hit2.x, hit2.y, hit2.z, Civic.builder.getGlobalID());
+    
+    TECivicBuilder te = (TECivicBuilder)world.getBlockTileEntity(hit2.x, hit2.y, hit2.z);
+    if(te!=null)
+      {
+      StructureBuilderTicked builder = new StructureBuilderTicked(world, template, face, hit.x, hit.y, hit.z);
+      te.setBuilder(builder);
+      AWLog.logDebug("setting builder for te...");
+      }
+    else
+      {
+      AWLog.logDebug("Could not set builder for te...te was null!!");
+      }
     }  
   else
     {

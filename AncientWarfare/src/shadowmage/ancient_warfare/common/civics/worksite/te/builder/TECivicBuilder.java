@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.item.ItemCivicBuilder;
 import shadowmage.ancient_structures.common.template.build.StructureBuilderTicked;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;
@@ -63,6 +64,7 @@ public void updateEntity()
   if(builder==null)
     {
     Config.logError("Invalid builder in TE detected in builder block");
+    this.shouldRemove = true;
     return;
     }  
   
@@ -90,10 +92,10 @@ public void updateEntity()
 @Override
 protected void updateHasWork()
   {
-  boolean hasWork = false;
-  if(this.builder!=null && !this.builder.isFinished())
+  boolean hasWork = true;
+  if(this.builder==null || this.builder.isFinished())
     {
-    hasWork =true;
+    hasWork = false;
     }
   this.setHasWork(hasWork);
   }
@@ -138,10 +140,8 @@ protected void validateWorkPoints()
 
 public void setBuilder(StructureBuilderTicked builder)
   {
-  if(this.builder==null)
-    {
-    this.builder = builder;
-    }
+  this.builder = builder;
+  AWLog.logDebug("set builder for te...: "+this+" b: "+this.builder);
   }
 
 public void removeBuilder()
@@ -151,9 +151,15 @@ public void removeBuilder()
 
 protected void tickBuilder()
   {
+  AWLog.logDebug("attempting ticking builder ....");
   if(builder!=null && !builder.isFinished())
     {
+    AWLog.logDebug("actually ticking builder ....");
     builder.tick();    
+    }
+  else
+    {
+    this.shouldRemove = true;
     }
   }
 
@@ -182,12 +188,12 @@ public void readFromNBT(NBTTagCompound par1nbtTagCompound)
 @Override
 public IInventory[] getInventoryToDropOnBreak()
   {  
-  if(!hasStarted)
+  if(!hasStarted && builder!=null)
     {
     String name = getStructureName();
     InventoryTools.dropItemInWorld(worldObj, ItemCivicBuilder.getCivicBuilderItem(name), xCoord, yCoord, zCoord);
     }
-  return super.getInventoryToDropOnBreak();
+  return null;
   }
 
 @Override

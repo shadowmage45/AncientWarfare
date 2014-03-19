@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.common.template.build;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -77,7 +78,8 @@ public StructureBuilder(World world, StructureTemplate template, int face, int x
 
 protected StructureBuilder()
   {
-  
+  destination = new BlockPosition();
+  buildOrigin = new BlockPosition();
   }
 
 public boolean isFinished()
@@ -114,6 +116,7 @@ protected void placeCurrentPosition()
   TemplateRule rule = template.getRuleAt(currentX, currentY, currentZ);
   if(rule!=null)
     {
+    AWLog.logDebug("placing rule: "+rule + " at: "+destination.x + ", "+destination.y + ", "+destination.z);
     placeRule(rule);
     }
   else
@@ -132,7 +135,8 @@ protected void placeCurrentPosition()
 
 protected void placeAir()
   {
-  world.setBlockToAir(destination.x, destination.y, destination.z);  
+  template.getValidationSettings().handleClearAction(world, destination.x, destination.y, destination.z, template, bb);
+//  world.setBlockToAir(destination.x, destination.y, destination.z);  
   }
 
 protected void placeRule(TemplateRule rule)
