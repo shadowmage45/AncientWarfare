@@ -41,6 +41,7 @@ import shadowmage.ancient_structures.common.utils.AWMod;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 import shadowmage.ancient_warfare.common.config.Config;
+import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -123,6 +124,7 @@ public void postInit(FMLPostInitializationEvent evt)
   TemplateLoader.instance().loadTemplates();
   config.saveConfig();
   config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 
+  AWCraftingManager.instance().addStructureRecipes();
   }
 
 @Override

@@ -179,7 +179,7 @@ public ResourceListRecipe getStructureRecipeFor(String name)
   {
   for(ResourceListRecipe recipe : this.structureRecipesServer)
     {
-    if(recipe.getDisplayName().toLowerCase().equals(name.toLowerCase()))
+    if(recipe.getLocalizedDisplayName().toLowerCase().equals(name.toLowerCase()))
       {
       return recipe;
       }
@@ -232,6 +232,7 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
   return a.resources.size() == b.resources.size();
   }
 
+
 /**
  * should be called from AWCore during final INIT stages
  */
@@ -244,7 +245,7 @@ public void loadRecipes()
   this.addAmmoRecipes();//done
   this.addNpcRecipes();//?? not done
   this.addVehicleRecipes();//NEEDS MATERIALS
-  this.addStructureRecipes();//dynamic-done
+//  this.addStructureRecipes();//dynamic-done
   this.addResearchRecipes();//done  
   this.addAlchemyRecipes();
   
@@ -616,7 +617,7 @@ protected void addGateRecipes()
     }
   }
 
-protected void addStructureRecipes()
+public void addStructureRecipes()
   {
   ArrayList<StructureTemplate> templates = new ArrayList<StructureTemplate>();
   StructureTemplateManager.instance().getSurvivalTemplates(templates);
