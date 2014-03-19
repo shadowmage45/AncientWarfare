@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_warfare.common.civics.CivicWorkType;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerDummy;
@@ -116,11 +118,32 @@ protected boolean tryStartCrafting()
       stack = layoutInventory.getStackInSlot(i);
       if(stack==null){continue;}
       InventoryTools.tryRemoveItems(inventory, stack, 1, craftMatrix);
+      if(stack.getItem().hasContainerItem())
+        {
+        handleContainerItem(inventory, stack, this);
+        }
       }
     return true;
     }
   this.isWorking = false;
   return false;
+  }
+
+protected void handleContainerItem(IInventory inventory, ItemStack stack, TileEntity te)
+  {
+  ItemStack itemstack2 = stack.getItem().getContainerItemStack(stack);
+  if (itemstack2.isItemStackDamageable() && itemstack2.getItemDamage() > itemstack2.getMaxDamage())
+    {
+    itemstack2 = null;
+    }
+  if (itemstack2 != null)
+    {
+    itemstack2 = InventoryTools.tryMergeStack(inventory, itemstack2, -1);
+    if(itemstack2!=null && te!=null)
+      {
+      InventoryTools.dropItemInWorld(te.worldObj, itemstack2, te.xCoord, te.yCoord, te.zCoord);      
+      }
+    }
   }
 
 @Override
