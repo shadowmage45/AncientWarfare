@@ -22,9 +22,13 @@ package shadowmage.ancient_structures.common.utils;
 
 import java.util.HashMap;
 
+import cpw.mods.fml.common.Mod.EventHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent;
 import shadowmage.ancient_structures.common.config.AWLog;
 
 public class AWGameData
@@ -103,6 +107,16 @@ public static void resetTrackedData()
 public static void handlePacketData(String name, NBTTagCompound data)
   {
 
+  }
+
+@ForgeSubscribe
+public void onWorldLoad(WorldEvent.Load evt)
+  {
+  AWLog.logDebug("receiving world load event...");
+  if(evt.world instanceof WorldServer)
+    {
+    handleWorldLoad(evt.world);    
+    }
   }
 
 }

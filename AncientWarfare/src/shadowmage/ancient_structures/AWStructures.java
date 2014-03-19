@@ -24,6 +24,9 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import shadowmage.ancient_structures.client.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
@@ -63,7 +66,7 @@ serverSideRequired = true,
 versionBounds="["+Config.VERSION+",)"
 )
 
-public class AWStructures extends AWMod implements  IPlayerTracker
+public class AWStructures extends AWMod implements IPlayerTracker
 {
 
 @SidedProxy(clientSide = "shadowmage.ancient_structures.client.proxy.ClientProxyStructure", serverSide = "shadowmage.ancient_structures.client.proxy.CommonProxy")
@@ -93,6 +96,7 @@ public void preInit(FMLPreInitializationEvent evt)
   GameRegistry.registerPlayerTracker(instance);
   GameRegistry.registerWorldGenerator(WorldStructureGenerator.instance());
   AWGameData.addDataClass("AWStructureMap", StructureMap.class);
+  MinecraftForge.EVENT_BUS.register( new AWGameData());
   proxy.registerClientData();
   AWLog.log("Ancient Warfare Structures Pre-Init finished.");
   }
@@ -158,5 +162,7 @@ public void onPlayerChangedDimension(EntityPlayer player){}
 
 @Override
 public void onPlayerRespawn(EntityPlayer player){}
+
+
 
 }
