@@ -43,7 +43,7 @@ public static CreativeTabs structureTab = new CreativeTabs("Ancient Structures")
 @Override
 public Item getTabIconItem()
   {  
-  return Item.stick;
+  return structureScanner;
   }
 
 @Override
