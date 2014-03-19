@@ -637,14 +637,35 @@ private ResourceListRecipe constructStructureRecipe(String name, List<ItemStack>
   ResourceListRecipe recipe = new ResourceListRecipe(stack, RecipeType.STRUCTURE);
   recipe.setDisplayName(name);
   
+  List<ItemStackWrapperCrafting> recipeResources =  new ArrayList<ItemStackWrapperCrafting>();
+  
+  boolean found;
   for(ItemStack resStack : resources)
     {
-    ItemStackWrapperCrafting wrap = new ItemStackWrapperCrafting(resStack.getItem(), resStack.stackSize, resStack.getItemDamage(), false);
-    recipe.addResource(wrap);
-    wrap.setQuantity(resStack.stackSize);
-    wrap.setRemainingNeeded(resStack.stackSize);
+    found = false;
+    for(ItemStackWrapperCrafting recWrap : recipeResources)
+      {
+      if(recWrap.matches(resStack))
+        {
+        recWrap.setQuantity(recWrap.getQuantity()+resStack.stackSize);
+        recWrap.setRemainingNeeded(recWrap.getQuantity());
+        found = true;
+        break;
+        }
+      }
+    if(!found)
+      {
+      ItemStackWrapperCrafting wrap = new ItemStackWrapperCrafting(resStack.getItem(), resStack.stackSize, resStack.getItemDamage(), false);
+      
+      wrap.setQuantity(resStack.stackSize);
+      wrap.setRemainingNeeded(resStack.stackSize);
+      recipeResources.add(wrap);
+      }
     }
-  
+  for(ItemStackWrapperCrafting recWrap : recipeResources)
+    {
+    recipe.addResource(recWrap);
+    }
   return recipe;
   }
 
