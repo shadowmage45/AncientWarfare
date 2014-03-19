@@ -308,7 +308,7 @@ private void setStructureInfo()
 
 public void handleClientInit(NBTTagCompound tag)
   {
-  if(tag.hasKey("cm"))
+  if(tag.hasKey("disableResearch"))
     {
     this.disableResearch = tag.getBoolean("disableResearch");
     }
