@@ -109,10 +109,4 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
   ItemStructureSettings.setSettingsFor(builderItem, settings);  
   }
 
-@Override
-public void handleRawPacketData(NBTTagCompound tag)
-  {
-  this.handlePacketData(tag);
-  }
-
 }

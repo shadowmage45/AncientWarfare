@@ -24,9 +24,7 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
 import shadowmage.ancient_structures.client.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;

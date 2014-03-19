@@ -33,7 +33,6 @@ import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;
-import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 import shadowmage.ancient_structures.common.template.build.StructureBuilderTicked;
 import shadowmage.ancient_warfare.common.civics.types.Civic;
 import shadowmage.ancient_warfare.common.civics.worksite.te.builder.TECivicBuilder;
@@ -159,6 +158,15 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
     else
       {
       AWLog.logDebug("Could not set builder for te...te was null!!");
+      }
+    if(!player.capabilities.isCreativeMode)
+      {
+      ItemStack stack1 = player.inventory.getCurrentItem();
+      stack1.stackSize--;
+      if(stack1.stackSize<=0)
+        {
+        player.inventory.setInventorySlotContents(player.inventory.currentItem, null);
+        }      
       }
     }  
   else

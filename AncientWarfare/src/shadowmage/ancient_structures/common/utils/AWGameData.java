@@ -22,7 +22,6 @@ package shadowmage.ancient_structures.common.utils;
 
 import java.util.HashMap;
 
-import cpw.mods.fml.common.Mod.EventHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;

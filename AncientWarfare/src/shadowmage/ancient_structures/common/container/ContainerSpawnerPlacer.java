@@ -87,11 +87,4 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
   builderItem.getTagCompound().getCompoundTag("spawnData").setString("mobID", mobID);
   }
 
-@Override
-public void handleRawPacketData(NBTTagCompound tag)
-  {
-  // TODO Auto-generated method stub
-  
-  }
-
 }

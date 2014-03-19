@@ -92,13 +92,21 @@ public static int[] safeParseIntArray(String regex, String test)
 
 public static int[] parseIntArray(String csv)
   {
-  String[] splits = csv.split(",");
-  int[] array = new int[splits.length];
-  for(int i = 0; i< splits.length; i++)
+  try
     {
-    array[i]=Integer.parseInt(splits[i].trim());
+
+    String[] splits = csv.split(",");
+    int[] array = new int[splits.length];
+    for(int i = 0; i< splits.length; i++)
+      {
+      array[i]=Integer.parseInt(splits[i].trim());
+      }
+    return array;	
     }
-  return array;
+  catch(NumberFormatException e)
+    {
+    return new int[0];
+    }
   }
 
 /**
@@ -230,7 +238,7 @@ public static int safeParseInt(String num)
     }
   catch(NumberFormatException e)
     {
-    
+
     }
   return 0;
   }
@@ -243,7 +251,7 @@ public static double safeParseDouble(String num)
     }
   catch(NumberFormatException e)
     {
-    
+
     }
   return 0;
   }
@@ -256,7 +264,7 @@ public static long safeParseLong(String num)
     }
   catch(NumberFormatException e)
     {
-    
+
     }
   return 0;
   }
@@ -269,7 +277,7 @@ public static byte safeParseByte(String num)
     }
   catch(NumberFormatException e)
     {
-    
+
     }
   return 0;
   }
@@ -343,16 +351,16 @@ public static boolean isNumber(String test)
  * @throws IOException
  */
 public static byte[] getByteArray(List<String> lines) throws UnsupportedEncodingException, IOException
+{
+ByteArrayOutputStream baos = new ByteArrayOutputStream();
+for(String line : lines)
   {
-  ByteArrayOutputStream baos = new ByteArrayOutputStream();
-  for(String line : lines)
-    {
-    line = line +"\n";
-    baos.write(line.getBytes("UTF-8"));
-    }
-  byte[] allBytes = baos.toByteArray();
-  return allBytes;
+  line = line +"\n";
+  baos.write(line.getBytes("UTF-8"));
   }
+byte[] allBytes = baos.toByteArray();
+return allBytes;
+}
 
 /**
  * read a list of lines from a byte[] as UTF-8 encoded chars
@@ -360,17 +368,17 @@ public static byte[] getByteArray(List<String> lines) throws UnsupportedEncoding
  * @return
  */
 public static List<String> getLines(byte[] bytes)
-  {
-  ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-  List<String> lines = new ArrayList<String>();
-  Scanner scan = new Scanner(bais, "UTF-8");
-  while(scan.hasNext())
-    {    
-    lines.add(scan.nextLine());
-    }
-  scan.close();
-  return lines;
+{
+ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+List<String> lines = new ArrayList<String>();
+Scanner scan = new Scanner(bais, "UTF-8");
+while(scan.hasNext())
+  {    
+  lines.add(scan.nextLine());
   }
+scan.close();
+return lines;
+}
 
 public static String removeCharAt(String line, int x)
   {

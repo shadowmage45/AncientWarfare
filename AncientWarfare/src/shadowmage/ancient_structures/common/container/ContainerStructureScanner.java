@@ -28,6 +28,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.item.ItemStructureSettings;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
@@ -37,8 +38,11 @@ import shadowmage.ancient_structures.common.template.build.validation.StructureV
 import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
 import shadowmage.ancient_structures.common.template.scan.TemplateScanner;
+import shadowmage.ancient_warfare.common.AWCore;
+import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_warfare.common.network.Packet03GuiComs;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import shadowmage.ancient_warfare.common.utils.BlockTools;
 
@@ -54,17 +58,18 @@ public ContainerStructureScanner(EntityPlayer openingPlayer, int x, int y, int z
     {
     return;
     }
-//  ItemStack builderItem = player.inventory.getCurrentItem();
-//  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureScanner)
-//    {
-//    return;
-//    } 
-//  ItemStructureSettings.getSettingsFor(builderItem, settings);
+  ItemStack builderItem = player.inventory.getCurrentItem();
+  if(builderItem==null || builderItem.getItem()==null || builderItem.getItem()!=AWStructuresItemLoader.structureScanner)
+    {
+    return;
+    } 
+  ItemStructureSettings.getSettingsFor(builderItem, settings);
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
+  AWLog.logDebug("receiving server-packet data");
   if(tag.hasKey("export"))
     {
     boolean include = tag.getBoolean("export");
@@ -76,6 +81,21 @@ public void handlePacketData(NBTTagCompound tag)
     {
     settings.clearSettings();
     }
+  }
+
+@Override
+public void sendDataToServer(NBTTagCompound tag)
+  {
+  if(!player.worldObj.isRemote)
+    {
+    Config.logError("Attempt to send data to server FROM server");
+    Exception e = new IllegalAccessException();
+    e.printStackTrace();
+    return;
+    }
+  Packet03GuiComs pkt = new Packet03GuiComs();
+  pkt.setData(tag);
+  AWCore.proxy.sendPacketToServer(pkt);
   }
 
 public boolean scanStructure(World world, BlockPosition pos1, BlockPosition pos2, BlockPosition key, int face, String name, boolean include, NBTTagCompound tag)
@@ -126,13 +146,6 @@ public void handleInitData(NBTTagCompound tag)
 public List<NBTTagCompound> getInitData()
   {  
   return Collections.emptyList();
-  }
-
-@Override
-public void handleRawPacketData(NBTTagCompound tag)
-  {
-  // TODO Auto-generated method stub
-  
   }
 
 }
