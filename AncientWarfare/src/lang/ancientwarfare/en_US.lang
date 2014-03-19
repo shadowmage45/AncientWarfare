@@ -24,6 +24,8 @@ death.attack.AWMissile=%1$s was killed by missile damage
 death.attack.AWMissile.player=%1$s was killed by missile damage by %2$s
 
 # single items
+item.single.warzoneConfigurator=Warzone Configuration Tool
+item.single.warzoneConfigurator.tooltip=Configures Block Protection Areas
 item.single.structureScanner=Structure Scanner
 item.single.structureScanner.tooltip=Creative Mode Scanning Tool
 item.single.structureGenerator=Structure Random Generator
