@@ -30,7 +30,9 @@ import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
+import shadowmage.ancient_warfare.client.gui.elements.GuiNumberInputLine;
 import shadowmage.ancient_warfare.client.gui.elements.GuiScrollableArea;
+import shadowmage.ancient_warfare.client.gui.elements.GuiString;
 import shadowmage.ancient_warfare.client.gui.elements.IGuiElement;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.container.ContainerBase;
@@ -38,31 +40,51 @@ import shadowmage.ancient_warfare.common.container.ContainerBase;
 public class GuiSpawnerPlacer extends GuiContainerAdvanced
 {
 
+GuiButtonSimple done;
 ContainerSpawnerPlacer container;
 GuiScrollableArea area;
+GuiScrollableArea area2;
 
 HashMap<IGuiElement, String> buttonToName = new HashMap<IGuiElement, String>();
 /**
  * @param container
  */
-public GuiSpawnerPlacer(ContainerBase container)
+public GuiSpawnerPlacer(ContainerBase container)  
   {
   super(container);
   this.container = (ContainerSpawnerPlacer) container;
-  this.shouldCloseOnVanillaKeys = true;
+  this.shouldCloseOnVanillaKeys = false;
   }
 
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  if(buttonToName.containsKey(element))
+  if(element==done)
     {
     NBTTagCompound tag = new NBTTagCompound();
-    String mobID = buttonToName.get(element);
-    tag.setString("mobID", mobID);
-    this.sendDataToServer(tag);
-    this.container.mobID = mobID;
+    tag.setString("mobID", container.mobID);
+    tag.setInteger("minSpawnDelay", container.minSpawnDelay);
+    tag.setInteger("maxSpawnDelay", container.maxSpawnDelay);
+    tag.setInteger("spawnCount", container.spawnCount);
+    tag.setInteger("maxNearbyEntities", container.maxNearbyEntities);
+    tag.setInteger("activatingRangeFromPlayer", container.activatingRangeFromPlayer);
+    tag.setInteger("spawnRange", container.spawnRange);   
+    
+    this.sendDataToServer(tag); 
+    this.closeGUI();
     }
+//  if(buttonToName.containsKey(element))
+//    {
+//    NBTTagCompound tag = new NBTTagCompound();
+//    String mobID = buttonToName.get(element);
+//    tag.setString("mobID", mobID);
+//    this.sendDataToServer(tag);
+//    this.container.mobID = mobID;
+//    }
+//  else
+//    {
+//    
+//    }
   }
 
 @Override
@@ -98,9 +120,18 @@ public void updateScreenContents()
 @Override
 public void setupControls()
   {
-  Collection<String> names = EntityList.stringToClassMapping.keySet();
-  area = new GuiScrollableArea(1, this, 8, 8+18+4, getXSize()-16, getYSize()-16-18-8, names.size()*16);
+
   this.guiElements.clear();
+  
+  done = new GuiButtonSimple(0, this, 55, 12, "Done");
+  done.updateRenderPos(getXSize()-8-55, 8);
+  this.guiElements.put(0, done);
+  
+  Collection<String> names = EntityList.stringToClassMapping.keySet();
+  int areaHeight = (getYSize()-16-18-8)/2;
+  int area1Y = 8+18+4;
+  int area2Y = area1Y + areaHeight;
+  area = new GuiScrollableArea(1, this, 8, area1Y, getXSize()-16, areaHeight, names.size()*16);
   this.guiElements.put(1, area);
   
   Iterator<String> it= names.iterator();
@@ -115,6 +146,130 @@ public void setupControls()
     buttonToName.put(button, name);
     i++;
     }  
+  area.updateTotalHeight(area.elements.size()*16);
+  
+  area2 = new GuiScrollableArea(2, this, 8, area2Y, getXSize()-16, areaHeight, areaHeight);
+  this.guiElements.put(2, area2);
+
+  
+  int totalHeight = 0;
+  GuiString label;
+  GuiNumberInputLine input;
+  
+  label = new GuiString(0, area2, 100, 12, "minSpawnDelay");
+  label.updateRenderPos(0, totalHeight);
+  area2.elements.add(label);
+  
+  input = new GuiNumberInputLine(0, area2, 50, 12, 4, "")
+    {
+    @Override
+    public void onValueUpdated(float value)
+      {
+      container.minSpawnDelay = getIntVal();
+      }
+    };
+  input.setAsIntegerValue();
+  input.setIntegerValue(container.minSpawnDelay);
+  input.updateRenderPos(160, totalHeight);
+  area2.elements.add(input);
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area2, 100, 12, "maxSpawnDelay");
+  label.updateRenderPos(0, totalHeight);
+  area2.elements.add(label);
+  
+  input = new GuiNumberInputLine(0, area2, 50, 12, 4, "")
+    {
+    @Override
+    public void onValueUpdated(float value)
+      {
+      container.maxSpawnDelay = getIntVal();
+      }
+    };
+  input.setAsIntegerValue();
+  input.setIntegerValue(container.maxSpawnDelay);
+  input.updateRenderPos(160, totalHeight);
+  area2.elements.add(input);
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area2, 100, 12, "spawnCount");
+  label.updateRenderPos(0, totalHeight);
+  area2.elements.add(label);
+  
+  input = new GuiNumberInputLine(0, area2, 50, 12, 4, "")
+    {
+    @Override
+    public void onValueUpdated(float value)
+      {
+      container.spawnCount = getIntVal();
+      }
+    };
+  input.setAsIntegerValue();
+  input.setIntegerValue(container.spawnCount);
+  input.updateRenderPos(160, totalHeight);
+  area2.elements.add(input);
+  totalHeight+=12;
+    
+  
+  label = new GuiString(0, area2, 100, 12, "maxNearbyEntities");
+  label.updateRenderPos(0, totalHeight);
+  area2.elements.add(label);
+  
+  input = new GuiNumberInputLine(0, area2, 50, 12, 4, "")
+    {
+    @Override
+    public void onValueUpdated(float value)
+      {
+      container.maxNearbyEntities = getIntVal();
+      }
+    };
+  input.setAsIntegerValue();
+  input.setIntegerValue(container.maxNearbyEntities);
+  input.updateRenderPos(160, totalHeight);
+  area2.elements.add(input);
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area2, 100, 12, "activatingRangeFromPlayer");
+  label.updateRenderPos(0, totalHeight);
+  area2.elements.add(label);
+  
+  input = new GuiNumberInputLine(0, area2, 50, 12, 4, "")
+    {
+    @Override
+    public void onValueUpdated(float value)
+      {
+      container.activatingRangeFromPlayer = getIntVal();
+      }
+    };
+  input.setAsIntegerValue();
+  input.setIntegerValue(container.activatingRangeFromPlayer);
+  input.updateRenderPos(160, totalHeight);
+  area2.elements.add(input);
+  totalHeight+=12;
+  
+  
+  label = new GuiString(0, area2, 100, 12, "spawnRange");
+  label.updateRenderPos(0, totalHeight);
+  area2.elements.add(label);
+  
+  input = new GuiNumberInputLine(0, area2, 50, 12, 4, "")
+    {
+    @Override
+    public void onValueUpdated(float value)
+      {
+      container.maxSpawnDelay = getIntVal();
+      }
+    };
+  input.setAsIntegerValue();
+  input.setIntegerValue(container.spawnRange);
+  input.updateRenderPos(160, totalHeight);
+  area2.elements.add(input);
+  totalHeight+=12;
+  
+  area2.updateTotalHeight(totalHeight);
   }
 
 @Override

@@ -123,6 +123,7 @@ public boolean handleMouseWheel(int x, int y, int wheel)
       this.text = formatterThreeDec.format(floatVal);
       }
     this.parent.onElementActivated(this);
+    this.onValueUpdated(floatVal);
     return true;
     }
   return false;
@@ -134,6 +135,12 @@ protected void handleCharAction(char ch)
   super.handleCharAction(ch);
   this.floatVal = StringTools.safeParseFloat(text);
   this.parent.onElementActivated(this);
+  this.onValueUpdated(floatVal);
+  }
+
+public void onValueUpdated(float value)
+  {
+  
   }
 
 public int getIntVal()
@@ -167,6 +174,7 @@ public void setText(String text)
     {
     this.text = formatterThreeDec.format(floatVal);
     }
+  this.onValueUpdated(floatVal);
   }
 
 public void setValue(float val)
