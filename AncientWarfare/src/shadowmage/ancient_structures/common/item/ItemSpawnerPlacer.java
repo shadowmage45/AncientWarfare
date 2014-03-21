@@ -42,12 +42,13 @@ public ItemSpawnerPlacer(int id)
   {
   super(id, false);
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
+  this.hasLeftClick = false;
   }
 
 @Override
 public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  if(world.isRemote || player==null || stack==null){return false;}  
+  if(world.isRemote || player==null || stack==null){return true;}  
   if(player.capabilities.isCreativeMode && player.isSneaking())
     {
     GUIHandler.instance().openGUI(GUIHandler.SPAWNER_PLACER, player, player.worldObj, 0, 0, 0);
@@ -81,7 +82,7 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
 @Override
 public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack, BlockPosition hit, int side)
   {
-  return false;
+  return true;
   }
 
 @Override

@@ -48,7 +48,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
   {
   if(player==null || world.isRemote || hit==null)
     {
-    return false;
+    return true;
     }
   ItemStructureSettings.getSettingsFor(stack, buildSettings);
   if(buildSettings.hasName())
