@@ -73,18 +73,6 @@ public void onElementActivated(IGuiElement element)
     this.sendDataToServer(tag); 
     this.closeGUI();
     }
-//  if(buttonToName.containsKey(element))
-//    {
-//    NBTTagCompound tag = new NBTTagCompound();
-//    String mobID = buttonToName.get(element);
-//    tag.setString("mobID", mobID);
-//    this.sendDataToServer(tag);
-//    this.container.mobID = mobID;
-//    }
-//  else
-//    {
-//    
-//    }
   }
 
 @Override

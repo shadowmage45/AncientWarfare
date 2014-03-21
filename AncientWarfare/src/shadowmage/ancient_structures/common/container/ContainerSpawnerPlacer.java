@@ -69,7 +69,6 @@ public ContainerSpawnerPlacer(EntityPlayer openingPlayer, int x, int y, int z)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  AWLog.logDebug("receiving data packet to container");
   if(tag.hasKey("mobID"))
     {
     this.mobID = tag.getString("mobID");
