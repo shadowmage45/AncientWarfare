@@ -13,5 +13,21 @@
   "parent":"",
   "screenshots": [],
   "dependencies": ["mod_MinecraftForge"]
+},
+{
+  "modid": "AncientStructures",
+  "name": "Ancient Warfare Structures Module",
+  "version": "@VERSION@",
+  "mcversion": "1.6.4",
+  "description": "Adds Structure Building tools and World Generation",
+  "credits": "me2005 (structures), jodi850 (structures/testing), MohawkyMagoo (many ideas)",
+  "logoFile": "/assets/ancientwarfare/textures/items/castle.png",
+  "url": "http://ancientwarfare.wikispaces.com/",
+  "updateUrl": "",
+  "authors": [ "shadowmage4513" ],
+  "parent":"",
+  "screenshots": [],
+  "dependencies": ["mod_MinecraftForge"]
 }
+
 ]
