@@ -60,10 +60,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
     world.setBlock(hit.x, hit.y, hit.z, Block.mobSpawner.blockID);
     if(stack.hasTagCompound() && stack.getTagCompound().hasKey("spawnData"))
       {
-      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("spawnData");
-      String mobID = tag.getString("mobID");
-      TileEntityMobSpawner te = (TileEntityMobSpawner) world.getBlockTileEntity(hit.x, hit.y, hit.z);
-      te.getSpawnerLogic().setMobID(mobID);
+      NBTTagCompound tag = stack.getTagCompound().getCompoundTag("spawnData");      
+      TileEntityMobSpawner te = (TileEntityMobSpawner) world.getBlockTileEntity(hit.x, hit.y, hit.z);      
+      te.getSpawnerLogic().readFromNBT(tag);  
       world.markBlockForUpdate(hit.x, hit.y, hit.z);      
       }
     if(!player.capabilities.isCreativeMode)
@@ -91,9 +90,14 @@ public void addInformation(ItemStack stack, EntityPlayer player, List list, bool
   if(stack.hasTagCompound() && stack.getTagCompound().hasKey("spawnData"))
     {
     NBTTagCompound tag = stack.getTagCompound().getCompoundTag("spawnData");
-    String mobID = tag.getString("mobID");
-    list.add("Mob to place in spawner:");
-    list.add(mobID);
+    String mobID = tag.getString("EntityID");
+    list.add("Mob to place in spawner:" + mobID);
+    list.add("MinSpawnDelay: " + tag.getShort("MinSpawnDelay"));
+    list.add("MaxSpawnDelay: " + tag.getShort("MaxSpawnDelay"));
+    list.add("SpawnCount: " + tag.getShort("SpawnCount"));
+    list.add("MaxNearbyEntities: " + tag.getShort("MaxNearbyEntities"));
+    list.add("RequiredPlayerRange: " + tag.getShort("RequiredPlayerRange"));
+    list.add("SpawnRange: " + tag.getShort("SpawnRange"));
     }  
   }
 

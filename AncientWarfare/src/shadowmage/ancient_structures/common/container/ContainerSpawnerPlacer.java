@@ -56,28 +56,29 @@ public ContainerSpawnerPlacer(EntityPlayer openingPlayer, int x, int y, int z)
   if(builderItem.hasTagCompound() && builderItem.getTagCompound().hasKey("spawnData"))
     {
     NBTTagCompound tag = builderItem.getTagCompound().getCompoundTag("spawnData");
-    this.mobID = tag.getString("mobID");
-    this.minSpawnDelay = tag.getInteger("minSpawnDelay");
-    this.maxSpawnDelay = tag.getInteger("maxSpawnDelay");
-    this.spawnCount = tag.getInteger("spawnCount");
-    this.maxNearbyEntities = tag.getInteger("maxNearbyEntities");
-    this.activatingRangeFromPlayer = tag.getInteger("activatingRangeFromPlayer");
-    this.spawnRange = tag.getInteger("spawnRange");
+    this.mobID = tag.getString("EntityId");
+    this.minSpawnDelay = tag.getShort("MinSpawnDelay");
+    this.maxSpawnDelay = tag.getShort("MaxSpawnDelay");
+    this.spawnCount = tag.getShort("SpawnCount");
+    this.maxNearbyEntities = tag.getShort("MaxNearbyEntities");
+    this.activatingRangeFromPlayer = tag.getShort("RequiredPlayerRange");
+    this.spawnRange = tag.getShort("SpawnRange");
     }
   }
 
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  if(tag.hasKey("mobID"))
+  if(tag.hasKey("EntityId"))
     {
-    this.mobID = tag.getString("mobID");
-    this.minSpawnDelay = tag.getInteger("minSpawnDelay");
-    this.maxSpawnDelay = tag.getInteger("maxSpawnDelay");
-    this.spawnCount = tag.getInteger("spawnCount");
-    this.maxNearbyEntities = tag.getInteger("maxNearbyEntities");
-    this.activatingRangeFromPlayer = tag.getInteger("activatingRangeFromPlayer");
-    this.spawnRange = tag.getInteger("spawnRange");
+    AWLog.logDebug("receiving data packet at container");
+    this.mobID = tag.getString("EntityId");
+    this.minSpawnDelay = tag.getShort("MinSpawnDelay");
+    this.maxSpawnDelay = tag.getShort("MaxSpawnDelay");
+    this.spawnCount = tag.getShort("SpawnCount");
+    this.maxNearbyEntities = tag.getShort("MaxNearbyEntities");
+    this.activatingRangeFromPlayer = tag.getShort("RequiredPlayerRange");
+    this.spawnRange = tag.getShort("SpawnRange");
     }
   }
 
@@ -91,13 +92,13 @@ public void handleInitData(NBTTagCompound tag)
 public List<NBTTagCompound> getInitData()
   {
   NBTTagCompound tag = new NBTTagCompound(); 
-  tag.setString("mobID", mobID);
-  tag.setInteger("minSpawnDelay", minSpawnDelay);
-  tag.setInteger("maxSpawnDelay", maxSpawnDelay);
-  tag.setInteger("spawnCount", spawnCount);
-  tag.setInteger("maxNearbyEntities", maxNearbyEntities);
-  tag.setInteger("activatingRangeFromPlayer", activatingRangeFromPlayer);
-  tag.setInteger("spawnRange", spawnRange); 
+  tag.setString("EntityId", mobID);
+  tag.setShort("MinSpawnDelay", (short) minSpawnDelay);
+  tag.setShort("MaxSpawnDelay", (short) maxSpawnDelay);
+  tag.setShort("SpawnCount", (short) spawnCount);
+  tag.setShort("MaxNearbyEntities", (short) maxNearbyEntities);
+  tag.setShort("RequiredPlayerRange", (short) activatingRangeFromPlayer);
+  tag.setShort("SpawnRange", (short) spawnRange);  
   ArrayList<NBTTagCompound> list = new ArrayList<NBTTagCompound>();  
   list.add(tag);  
   return list;
@@ -110,13 +111,13 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
   if(par1EntityPlayer.worldObj.isRemote)
     {
     NBTTagCompound tag = new NBTTagCompound(); 
-    tag.setString("mobID", mobID);
-    tag.setInteger("minSpawnDelay", minSpawnDelay);
-    tag.setInteger("maxSpawnDelay", maxSpawnDelay);
-    tag.setInteger("spawnCount", spawnCount);
-    tag.setInteger("maxNearbyEntities", maxNearbyEntities);
-    tag.setInteger("activatingRangeFromPlayer", activatingRangeFromPlayer);
-    tag.setInteger("spawnRange", spawnRange); 
+    tag.setString("EntityId", mobID);
+    tag.setShort("MinSpawnDelay", (short) minSpawnDelay);
+    tag.setShort("MaxSpawnDelay", (short) maxSpawnDelay);
+    tag.setShort("SpawnCount", (short) spawnCount);
+    tag.setShort("MaxNearbyEntities", (short) maxNearbyEntities);
+    tag.setShort("RequiredPlayerRange", (short) activatingRangeFromPlayer);
+    tag.setShort("SpawnRange", (short) spawnRange);  
     sendDataToServer(tag);    
     return;
     }
@@ -130,13 +131,13 @@ public void onContainerClosed(EntityPlayer par1EntityPlayer)
     builderItem.setTagInfo("spawnData", new NBTTagCompound());
     }
   NBTTagCompound tag = new NBTTagCompound();
-  tag.setString("mobID", mobID);
-  tag.setInteger("minSpawnDelay", minSpawnDelay);
-  tag.setInteger("maxSpawnDelay", maxSpawnDelay);
-  tag.setInteger("spawnCount", spawnCount);
-  tag.setInteger("maxNearbyEntities", maxNearbyEntities);
-  tag.setInteger("activatingRangeFromPlayer", activatingRangeFromPlayer);
-  tag.setInteger("spawnRange", spawnRange);   
+  tag.setString("EntityId", mobID);
+  tag.setShort("MinSpawnDelay", (short) minSpawnDelay);
+  tag.setShort("MaxSpawnDelay", (short) maxSpawnDelay);
+  tag.setShort("SpawnCount", (short) spawnCount);
+  tag.setShort("MaxNearbyEntities", (short) maxNearbyEntities);
+  tag.setShort("RequiredPlayerRange", (short) activatingRangeFromPlayer);
+  tag.setShort("SpawnRange", (short) spawnRange);  
   builderItem.getTagCompound().setTag("spawnData", tag);
 
   }

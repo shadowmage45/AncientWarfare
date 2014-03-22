@@ -26,6 +26,7 @@ import java.util.Iterator;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
@@ -59,17 +60,21 @@ public GuiSpawnerPlacer(ContainerBase container)
 @Override
 public void onElementActivated(IGuiElement element)
   {
-  if(element==done)
+  if(buttonToName.containsKey(element))
     {
+    container.mobID = buttonToName.get(element);
+    }
+  else if(element==done)
+    {    
+    AWLog.logDebug("sending data packet to container");
     NBTTagCompound tag = new NBTTagCompound();
-    tag.setString("mobID", container.mobID);
-    tag.setInteger("minSpawnDelay", container.minSpawnDelay);
-    tag.setInteger("maxSpawnDelay", container.maxSpawnDelay);
-    tag.setInteger("spawnCount", container.spawnCount);
-    tag.setInteger("maxNearbyEntities", container.maxNearbyEntities);
-    tag.setInteger("activatingRangeFromPlayer", container.activatingRangeFromPlayer);
-    tag.setInteger("spawnRange", container.spawnRange);   
-    
+    tag.setString("EntityId", container.mobID);
+    tag.setShort("MinSpawnDelay", (short) container.minSpawnDelay);
+    tag.setShort("MaxSpawnDelay", (short) container.maxSpawnDelay);
+    tag.setShort("SpawnCount", (short) container.spawnCount);
+    tag.setShort("MaxNearbyEntities", (short) container.maxNearbyEntities);
+    tag.setShort("RequiredPlayerRange", (short) container.activatingRangeFromPlayer);
+    tag.setShort("SpawnRange", (short) container.spawnRange);     
     this.sendDataToServer(tag); 
     this.closeGUI();
     }
