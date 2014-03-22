@@ -62,10 +62,10 @@ New features since last test release:
     to determine what mobs to exclude.  Default excluded mobs are any vanilla mob that would
     cause a crash.  Admins will need to alter the list to suit whatever mod-pack they are using.
     Loads the mob-list @ runtime, so it should show _all_ registered/spawnable mobs except for
-    those in the exclusions list.  (the 1.7.2+ version of this item also allows for editing all
-    of the spawner data-fields, including the necessity to have players nearby, the player-check range,
-    max spawns, etc).  The config options for the exlusion settings can be found in the 
-    AncientStructures.cfg file in your main config directory.
+    those in the exclusions list.  Also allows for editing all of the spawner data-fields, 
+    including the necessity to have players nearby, the player-check range, max spawns, etc).
+    The config options for the exlusion settings can be found in the AncientStructures.cfg file
+    in your main config directory.
 * NEW -- Added the ability to disable the use of backpacks via config file.  Because the
     backpacks are used in recipes, I could not remove the items -- however, the new config
     option disables the ability to open the backpack GUI, and essentially turns the backpack
