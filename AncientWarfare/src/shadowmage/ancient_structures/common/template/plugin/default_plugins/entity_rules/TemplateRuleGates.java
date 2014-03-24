@@ -26,6 +26,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
@@ -75,16 +76,39 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   {
   BlockPosition p1 = pos1.copy();
   BlockPosition p2 = pos2.copy();
-  EntityGate gate = new EntityGate(world);
-  gate.setPosition(x+0.5d, y, z+0.5d);
-  gate.setGateType(Gate.getGateByID(gateType));
-  
+    
   BlockTools.rotateAroundOrigin(p1, turns);
   BlockTools.rotateAroundOrigin(p2, turns);
   
-  gate.pos1 = p1;
-  gate.pos2 = p2;
-  world.spawnEntityInWorld(gate);
+  p1.offset(x, y, z);
+  p2.offset(x, y, z);
+  
+  int face = (2 + turns)%4;
+  
+  BlockPosition min = BlockTools.getMin(pos1, pos2);
+  BlockPosition max = BlockTools.getMax(pos1, pos2);
+  for(int x1 = min.x; x1 <=max.x ;x1++)
+    {
+    for(int y1 = min.y; y1 <=max.y ;y1++)
+      {
+      for(int z1 = min.z; z1 <=max.z ;z1++)
+        {
+        world.setBlockToAir(x1, y1, z1);
+        }
+      }
+    }
+    
+  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByID(gateType), (byte)face);
+  
+  if(gate!=null)
+    {
+    world.spawnEntityInWorld(gate);
+    }
+  else
+    {
+    AWLog.logDebug("returned null gate for construction from construct gate...");
+    }
+  
   }
 
 @Override

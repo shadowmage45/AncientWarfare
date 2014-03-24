@@ -37,6 +37,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class BlockTools
@@ -768,9 +769,11 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
 
 public static BlockPosition rotateAroundOrigin(BlockPosition pos, int turns)
   {
+  AWLog.logDebug("rotating position: "+pos +" by: "+turns +" turns");
   for(int i = 0; i < turns; i++)
     {
     rotateAroundOrigin(pos);
+    AWLog.logDebug("new position: "+pos);
     }
   return pos;
   }
@@ -781,6 +784,26 @@ public static BlockPosition rotateAroundOrigin(BlockPosition pos)
   int z = pos.z;
   boolean xNeg = x<0;
   boolean zNeg = z<0;
+//  if(!xNeg && !zNeg)//first quadrant
+//    {
+//    pos.x = z;
+//    pos.z = -x;
+//    }
+//  else if(xNeg && !zNeg)//second quadrant
+//    {
+//    pos.x = z;
+//    pos.z = -x;
+//    }
+//  else if(xNeg && zNeg)//third quadrant
+//    {
+//    pos.x = z;
+//    pos.z = -x;
+//    }
+//  else//!xNeg && zNeg
+//    {
+//    pos.x = z;
+//    pos.z = -x;
+//    }  
   if(!xNeg && !zNeg)//first quadrant
     {
     pos.x = -z;
@@ -800,7 +823,7 @@ public static BlockPosition rotateAroundOrigin(BlockPosition pos)
     {
     pos.x = -z;
     pos.z = x;
-    }
+    }  
   return pos;
   }
 

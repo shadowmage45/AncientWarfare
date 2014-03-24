@@ -101,11 +101,13 @@ protected void placeEntities()
   TemplateRuleEntity[] rules = template.getEntityRules();
   for(TemplateRuleEntity rule : rules)
     {
-    if(rule==null){continue;}
+    if(rule==null){continue;}        
     destination.x = rule.x;
     destination.y = rule.y;
     destination.z = rule.z;
-    BlockTools.rotateInArea(destination, destXSize, destZSize, turns);
+        
+    BlockTools.rotateInArea(destination, template.xSize, template.zSize, turns);
+    
     destination.offsetBy(bb.min);
     rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);
     }
