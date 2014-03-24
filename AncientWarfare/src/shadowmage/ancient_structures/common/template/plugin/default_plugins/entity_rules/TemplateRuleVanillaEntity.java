@@ -35,6 +35,7 @@ public class TemplateRuleVanillaEntity extends TemplateRuleEntity
 
 public String mobID;
 public float xOffset;
+public float yOffset;
 public float zOffset;
 public float rotation;
 
@@ -49,6 +50,7 @@ public TemplateRuleVanillaEntity(World world, Entity entity, int turns, int x, i
   if(z1<0){z1++;}
   xOffset = BlockTools.rotateFloatX(x1, z1, turns);
   zOffset = BlockTools.rotateFloatZ(x1, z1, turns);
+  yOffset = (float)(entity.posY % 1.d);
   }
 
 public TemplateRuleVanillaEntity()
@@ -63,7 +65,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   float x1 = BlockTools.rotateFloatX(xOffset, zOffset, turns);
   float z1 = BlockTools.rotateFloatZ(xOffset, zOffset, turns);
   float yaw = (rotation + 90.f * turns)%360.f;
-  e.setPosition(x+x1, y, z+z1);
+  e.setPosition(x+x1, y+yOffset, z+z1);
   e.rotationYaw = yaw;
   world.spawnEntityInWorld(e);
   }
@@ -74,6 +76,7 @@ public void writeRuleData(NBTTagCompound tag)
   tag.setString("mobID", mobID);
   tag.setFloat("xOffset", xOffset);
   tag.setFloat("zOffset", zOffset);
+  tag.setFloat("yOffset", yOffset);
   tag.setFloat("rotation", rotation);
   }
 
@@ -83,6 +86,7 @@ public void parseRuleData(NBTTagCompound tag)
   mobID = tag.getString("mobID");
   xOffset = tag.getFloat("xOffset");
   zOffset = tag.getFloat("zOffset");
+  yOffset = tag.getFloat("yOffset");
   rotation = tag.getFloat("rotation");
   }
 
