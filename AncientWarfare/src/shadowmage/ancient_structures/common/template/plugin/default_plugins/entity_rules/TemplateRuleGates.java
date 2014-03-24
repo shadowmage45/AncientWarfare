@@ -37,6 +37,7 @@ public class TemplateRuleGates extends TemplateRuleEntity
 {
 
 String gateType;
+int orientation;
 BlockPosition pos1 = new BlockPosition();
 BlockPosition pos2 = new BlockPosition();
 
@@ -62,7 +63,7 @@ public TemplateRuleGates(World world, Entity entity, int turns, int x, int y, in
   BlockTools.rotateAroundOrigin(pos2, turns);
   this.pos1 = pos1;
   this.pos2 = pos2;
-  
+  this.orientation = (gate.gateOrientation + turns)%4;
   this.gateType = Gate.getGateNameFor(gate);
   }
 
@@ -82,9 +83,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   
   p1.offset(x, y, z);
   p2.offset(x, y, z);
-  
-  int face = (2 + turns)%4;
-  
+    
   BlockPosition min = BlockTools.getMin(pos1, pos2);
   BlockPosition max = BlockTools.getMax(pos1, pos2);
   for(int x1 = min.x; x1 <=max.x ;x1++)
@@ -98,7 +97,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
       }
     }
     
-  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByName(gateType), (byte)face);
+  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByName(gateType), (byte)((orientation+turns)%4));
   
   if(gate!=null)
     {
@@ -114,6 +113,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
 public void parseRuleData(NBTTagCompound tag)
   {
   gateType = tag.getString("gateType");
+  orientation = tag.getByte("orientation");
   NBTTagCompound pTag = tag.getCompoundTag("pos1");
   pos1.read(pTag);
   pTag = tag.getCompoundTag("pos2");
@@ -124,6 +124,7 @@ public void parseRuleData(NBTTagCompound tag)
 public void writeRuleData(NBTTagCompound tag)
   {
   tag.setString("gateType", gateType);
+  tag.setByte("orientation", (byte)orientation);
   NBTTagCompound pTag = new NBTTagCompound();
   pos1.writeToNBT(pTag);
   tag.setCompoundTag("pos1", pTag);
