@@ -105,17 +105,17 @@ public void setupControls()
 private void addBlock(int elementNum, int y, int x, Block block)
   {
   GuiString label = new GuiString(elementNum, area, 100, 12, BlockDataManager.getBlockName(block));
-  label.updateRenderPos(x, y);
+  label.updateRenderPos(x, y+2);
   area.elements.add(label);
   
   GuiItemStack item = new GuiItemStack(elementNum, area);
-  item.updateRenderPos(x+110, y);
+  item.updateRenderPos(x+140, y);
   item.isClickable = false;
   item.setItemStack(new ItemStack(block));
   area.elements.add(item);
   
   GuiCheckBoxSimple box = new GuiCheckBoxSimple(elementNum, area, 16, 16);
-  box.updateRenderPos(x+130, y);
+  box.updateRenderPos(x+160, y);
   area.elements.add(box);
   
   blockBoxes.put(box, block);
