@@ -22,6 +22,7 @@ package shadowmage.ancient_warfare.common.gates.types;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +31,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_warfare.common.block.BlockLoader;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
@@ -60,6 +60,18 @@ public static final Gate doubleIron = new GateDoubleIron(9);
 
 public static final Gate rotatingBridge = new GateRotatingBridge(12);
 
+public static final HashMap<String, Integer> gateIDByName = new HashMap<String, Integer>();
+
+static
+{
+gateIDByName.put("gate.verticalWooden", 0);
+gateIDByName.put("gate.verticalIron", 1);
+gateIDByName.put("gate.singleWood", 4);
+gateIDByName.put("gate.singleIron", 5);
+gateIDByName.put("gate.doubleWood", 8);
+gateIDByName.put("gate.doubleIron", 9);
+gateIDByName.put("gate.drawbridge", 12);
+}
 
 protected int globalID = 0;
 protected String displayName = "";
@@ -161,6 +173,35 @@ public boolean canActivate(EntityGate gate, boolean open)
 public boolean canSoldierActivate()
   {
   return canSoldierInteract;
+  }
+
+public static String getGateNameFor(EntityGate gate)
+  {
+  int id = gate.getGateType().getGlobalID();
+  return getGateNameFor(id);
+  }
+
+public static String getGateNameFor(int id)
+  {
+  int gateID;
+  for(String key : gateIDByName.keySet())
+    {
+    gateID = gateIDByName.get(key);
+    if(gateID==id)
+      {
+      return key;
+      }
+    }
+  return "gate.verticalWooden";
+  }
+
+public static Gate getGateByName(String name)
+  {
+  if(gateIDByName.containsKey(name))
+    {
+    return getGateByID(gateIDByName.get(name));
+    }
+  return basicWood;  
   }
 
 public static Gate getGateByID(int id)

@@ -36,7 +36,7 @@ import shadowmage.ancient_warfare.common.utils.BlockPosition;
 public class TemplateRuleGates extends TemplateRuleEntity
 {
 
-int gateType = 0;
+String gateType;
 BlockPosition pos1 = new BlockPosition();
 BlockPosition pos2 = new BlockPosition();
 
@@ -63,7 +63,7 @@ public TemplateRuleGates(World world, Entity entity, int turns, int x, int y, in
   this.pos1 = pos1;
   this.pos2 = pos2;
   
-  this.gateType = gate.getGateType().getGlobalID();
+  this.gateType = Gate.getGateNameFor(gate);
   }
 
 public TemplateRuleGates()
@@ -98,7 +98,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
       }
     }
     
-  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByID(gateType), (byte)face);
+  EntityGate gate = Gate.constructGate(world, p1, p2, Gate.getGateByName(gateType), (byte)face);
   
   if(gate!=null)
     {
@@ -107,14 +107,13 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   else
     {
     AWLog.logDebug("returned null gate for construction from construct gate...");
-    }
-  
+    }  
   }
 
 @Override
 public void parseRuleData(NBTTagCompound tag)
   {
-  gateType = tag.getInteger("gateType");
+  gateType = tag.getString("gateType");
   NBTTagCompound pTag = tag.getCompoundTag("pos1");
   pos1.read(pTag);
   pTag = tag.getCompoundTag("pos2");
@@ -124,7 +123,7 @@ public void parseRuleData(NBTTagCompound tag)
 @Override
 public void writeRuleData(NBTTagCompound tag)
   {
-  tag.setInteger("gateType", gateType);
+  tag.setString("gateType", gateType);
   NBTTagCompound pTag = new NBTTagCompound();
   pos1.writeToNBT(pTag);
   tag.setCompoundTag("pos1", pTag);
