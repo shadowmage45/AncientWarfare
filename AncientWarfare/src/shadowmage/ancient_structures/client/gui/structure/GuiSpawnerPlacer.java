@@ -107,7 +107,7 @@ public void renderExtraBackGround(int mouseX, int mouseY, float partialTime)
 @Override
 public void updateScreenContents()
   {
-  area.updateGuiPos(guiLeft, guiTop);
+  area.updateGuiPos(guiLeft, guiTop);  
   }
 
 @Override
@@ -124,28 +124,28 @@ public void setupControls()
   int areaHeight = (getYSize()-16-18-8)/2;
   int area1Y = 8+18+4;
   int area2Y = area1Y + areaHeight;
-  area = new GuiScrollableArea(1, this, 8, area1Y, getXSize()-16, areaHeight, names.size()*16);
+  area = new GuiScrollableArea(1, this, 8, area1Y, getXSize()-16, areaHeight, areaHeight);
   this.guiElements.put(1, area);
   
   Iterator<String> it= names.iterator();
   String name;
-  int i = 0;
+  int totalHeight = 0;
   GuiButtonSimple button;
   while(it.hasNext() && (name=it.next())!=null)
     {
     if(AWStructureStatics.excludedSpawnerEntities.contains(name)){continue;}
-    button = (GuiButtonSimple) new GuiButtonSimple(i+10, area, 256-16-20, 14, name).updateRenderPos(0, i*16);
+    button = (GuiButtonSimple) new GuiButtonSimple(0, area, 256-16-20, 14, name).updateRenderPos(0, totalHeight);
     area.elements.add(button);
     buttonToName.put(button, name);
-    i++;
+    totalHeight+=16;
     }  
-  area.updateTotalHeight(area.elements.size()*16);
+  area.updateTotalHeight(totalHeight);
   
   area2 = new GuiScrollableArea(2, this, 8, area2Y, getXSize()-16, areaHeight, areaHeight);
   this.guiElements.put(2, area2);
 
   
-  int totalHeight = 0;
+  totalHeight = 0;
   GuiString label;
   GuiNumberInputLine input;
   
