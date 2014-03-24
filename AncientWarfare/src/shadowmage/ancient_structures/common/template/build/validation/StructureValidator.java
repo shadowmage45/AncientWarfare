@@ -193,7 +193,7 @@ public static final StructureValidator parseValidator(List<String> lines)
     else if(line.toLowerCase().startsWith("survival=")){survival = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("worldgenenabled=")){worldGen = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("biomewhitelist=")){biome = StringTools.safeParseBoolean("=", line);}
-    else if(line.toLowerCase().startsWith("dimensionwhitelise=")){dimension = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimension = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("preserveblocks=")){blocks = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("dimensionlist=")){dimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("biomelist=")){StringTools.safeParseStringsToSet(biomes, "=", line, true);}
