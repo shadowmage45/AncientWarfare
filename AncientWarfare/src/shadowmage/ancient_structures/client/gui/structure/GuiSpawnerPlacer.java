@@ -20,9 +20,12 @@
  */
 package shadowmage.ancient_structures.client.gui.structure;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
@@ -127,7 +130,11 @@ public void setupControls()
   area = new GuiScrollableArea(1, this, 8, area1Y, getXSize()-16, areaHeight, areaHeight);
   this.guiElements.put(1, area);
   
-  Iterator<String> it= names.iterator();
+  List<String> sortedNames = new ArrayList<String>();
+  sortedNames.addAll(names);
+  Collections.sort(sortedNames);
+  
+  Iterator<String> it= sortedNames.iterator();
   String name;
   int totalHeight = 0;
   GuiButtonSimple button;
