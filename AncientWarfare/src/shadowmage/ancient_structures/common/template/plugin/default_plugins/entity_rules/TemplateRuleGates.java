@@ -136,7 +136,7 @@ public void writeRuleData(NBTTagCompound tag)
 @Override
 public void addResources(List<ItemStack> resources)
   {
-
+  resources.add(Gate.getItemToConstruct(Gate.getGateByName(gateType).getGlobalID()));
   }
 
 @Override
