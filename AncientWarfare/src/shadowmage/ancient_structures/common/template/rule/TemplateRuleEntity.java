@@ -34,11 +34,23 @@ public abstract class TemplateRuleEntity extends TemplateRule
 
 public int x, y, z;
 
+/**
+ * scanner-constructor.  called when scanning an entity.
+ * @param world the world containing the scanned area
+ * @param entity the entity being scanned
+ * @param turns how many 90' turns to rotate entity for storage in template
+ * @param x world x-coord of the enitty (floor(posX)
+ * @param y world y-coord of the enitty (floor(posY)
+ * @param z world z-coord of the enitty (floor(posZ)
+ */
 public TemplateRuleEntity(World world, Entity entity, int turns, int x, int y, int z)
   {
 
   }
 
+/**
+ * load-from disc constructor
+ */
 public TemplateRuleEntity()
   {
   

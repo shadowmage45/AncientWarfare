@@ -766,6 +766,44 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
   return realKey;
   }
 
+public static BlockPosition rotateAroundOrigin(BlockPosition pos, int turns)
+  {
+  for(int i = 0; i < turns; i++)
+    {
+    rotateAroundOrigin(pos);
+    }
+  return pos;
+  }
+
+public static BlockPosition rotateAroundOrigin(BlockPosition pos)
+  {
+  int x = pos.x;
+  int z = pos.z;
+  boolean xNeg = x<0;
+  boolean zNeg = z<0;
+  if(!xNeg && !zNeg)//first quadrant
+    {
+    pos.x = -z;
+    pos.z = x;
+    }
+  else if(xNeg && !zNeg)//second quadrant
+    {
+    pos.x = -z;
+    pos.z = x;
+    }
+  else if(xNeg && zNeg)
+    {
+    pos.x = -z;
+    pos.z = -x;
+    }
+  else//!xNeg && zNeg
+    {
+    pos.x = -z;
+    pos.z = x;
+    }
+  return pos;
+  }
+
 public static BlockPosition rotateInArea(BlockPosition pos, int xSize, int zSize, int turns)
   {
   int xSize1 = xSize;

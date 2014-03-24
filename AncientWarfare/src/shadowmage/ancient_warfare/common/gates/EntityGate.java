@@ -58,8 +58,6 @@ public class EntityGate extends Entity implements IEntityAdditionalSpawnData, IE
 public BlockPosition pos1;
 public BlockPosition pos2;
 
-public Pos3f gatePos = null;
-
 public float edgePosition;//the bottom/opening edge of the gate (closed should correspond to pos1)
 public float edgeMax;//the 'fully extended' position of the gate
 

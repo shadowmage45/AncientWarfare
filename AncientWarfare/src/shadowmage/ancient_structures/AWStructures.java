@@ -36,10 +36,12 @@ import shadowmage.ancient_structures.common.template.load.TemplateLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.utils.AWGameData;
 import shadowmage.ancient_structures.common.utils.AWMod;
+import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_structures.common.world_gen.StructureMap;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
+import shadowmage.ancient_warfare.common.utils.BlockPosition;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -121,8 +123,9 @@ public void postInit(FMLPostInitializationEvent evt)
   WorldGenStructureManager.instance().loadBiomeList();
   TemplateLoader.instance().loadTemplates();
   config.saveConfig();
-  config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages."); 
+  config.log("Adding recipes for survival mode structures.");
   AWCraftingManager.instance().addStructureRecipes();
+  config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages.");
   }
 
 @Override
@@ -162,7 +165,5 @@ public void onPlayerChangedDimension(EntityPlayer player){}
 
 @Override
 public void onPlayerRespawn(EntityPlayer player){}
-
-
 
 }
