@@ -34,22 +34,52 @@ public class GuiScrollableArea extends GuiScrollableAreaSimple
 public GuiScrollableArea(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalHeight)
   {
   super(elementNum, parent, x, y, w, h, w, totalHeight); 
-  this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, h, totalHeight, h);
-  this.scrollBar.updateRenderPos(w-16, 0);
+  addScrollElements();
+//  this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, h-32, totalHeight, h-32);
+//  this.scrollBar.updateRenderPos(w-16, 0+16);
+//  this.scrollUp = new GuiButtonSimple(elementNum, this, 16, 16, "U");
+//  this.scrollUp.updateRenderPos(w-16, 0);
+//  this.scrollDown = new GuiButtonSimple(elementNum, this, 16, 16, "D");
+//  this.scrollDown.updateRenderPos(w-16, h-16);
   }
 
 @Override
 public void setHeight(int height)
   {
   super.setHeight(height);
-  this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, height, totalHeight, height);
-  this.scrollBar.updateRenderPos(width-16, 0);
+  addScrollElements();
+  }
+
+private void addScrollElements()
+  {
+  this.scrollBar = new GuiScrollBarSimple(elementNum, this, 16, height-32, totalHeight, height-32);
+  this.scrollBar.updateRenderPos(width-16, 16);
+  this.scrollUp = new GuiButtonSimple(elementNum, this, 16, 16, "U")
+    {
+    @Override
+    public boolean handleMouseReleased(int x, int y, int num)
+      {      
+      scrollBar.updateHandlePos(-3);
+      return true;
+      }
+    };
+  this.scrollUp.updateRenderPos(width-16, 0);
+  this.scrollDown = new GuiButtonSimple(elementNum, this, 16, 16, "D")
+    {
+    @Override
+    public boolean handleMouseReleased(int x, int y, int num)
+      {      
+      scrollBar.updateHandlePos(3);
+      return true;
+      }
+    };
+  this.scrollDown.updateRenderPos(width-16, height-16);
   }
 
 @Override
 public void updateTotalHeight(int height)
   {
   this.totalHeight = height;
-  this.scrollBar.updateHandleHeight(totalHeight, this.height);  
+  this.scrollBar.updateHandleHeight(totalHeight, this.height-32);  
   }
 }

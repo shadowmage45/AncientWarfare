@@ -45,6 +45,8 @@ public List<GuiElement> elements = new ArrayList<GuiElement>();
 
 protected GuiContainerAdvanced parentGui;
 
+GuiButtonSimple scrollUp;
+GuiButtonSimple scrollDown;
 GuiScrollBarSimple scrollBar;
 
 public GuiScrollableAreaSimple(int elementNum, GuiContainerAdvanced parent, int x, int y, int w,  int h, int totalWidth, int totalHeight)
@@ -90,6 +92,10 @@ public void drawElement(int mouseX, int mouseY)
     this.scrollPosY = this.scrollBar.getTopIndexForSet(totalHeight, height);  
     this.scrollBar.updateGuiPos(0, 0);
     this.scrollBar.drawElement(mouseX, mouseY-scrollPosY);
+    
+    this.scrollUp.drawElement(mouseX, mouseY);
+    this.scrollDown.drawElement(mouseX, mouseY);
+    
     GL11.glPopMatrix();
     }
   for(GuiElement el : this.elements)
@@ -151,6 +157,8 @@ public void onMousePressed(int x, int y, int num)
     if(this.scrollBar!=null)
       {
       this.scrollBar.onMousePressed(adjX, adjY, num);  
+      this.scrollUp.onMousePressed(adjX, adjY, num);
+      this.scrollDown.onMousePressed(adjX, adjY, num);
       }
     for(GuiElement el : this.elements)
       {
@@ -168,6 +176,8 @@ public void onMouseReleased(int x, int y, int num)
   if(this.scrollBar!=null)
     {
     this.scrollBar.onMouseReleased(adjX, adjY, num);
+    this.scrollUp.onMouseReleased(adjX, adjY, num);
+    this.scrollDown.onMouseReleased(adjX, adjY, num);
     }
   for(GuiElement el : this.elements)
     {
@@ -193,9 +203,13 @@ public void onMouseMoved(int x, int y, int num)
   if(this.scrollBar!=null)
     {
     this.scrollBar.isMouseOver = false;
+    this.scrollUp.isMouseOver = false;
+    this.scrollDown.isMouseOver = false;
     if(over)
       {
       this.scrollBar.onMouseMoved(adjX, adjY, num);
+      this.scrollUp.onMouseMoved(adjX, adjY, num);
+      this.scrollDown.onMouseMoved(adjX, adjY, num);
       }
     }
   super.onMouseMoved(x, y, num);  
@@ -315,7 +329,7 @@ public boolean handleKeyInput(char ch, int keyNum)
 
 @Override
 public void onElementActivated(IGuiElement element)
-  {
+  {  
   this.parent.onElementActivated(element);
   }
 

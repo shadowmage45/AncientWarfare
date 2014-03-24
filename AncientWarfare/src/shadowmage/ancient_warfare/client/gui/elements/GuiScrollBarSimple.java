@@ -123,6 +123,11 @@ private void updateHandleDisplayPos(int yDelta)
     }
   }
 
+public void updateHandlePos(int delta)
+  {
+  updateHandleDisplayPos(delta);
+  }
+
 /**
  *  update the size of the handle, relative to the size of the underlying elementSet
  *  should be called BEFORE updateHandlePos, and before getTopIndex...
