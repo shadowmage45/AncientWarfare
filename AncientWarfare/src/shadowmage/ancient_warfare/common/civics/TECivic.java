@@ -265,6 +265,7 @@ public void broadcastWork(int maxRange)
   List<NpcBase> npcList = worldObj.getEntitiesWithinAABB(NpcBase.class, bb);
   for(NpcBase npc : npcList)
     {
+    if(npc==null || npc.npcType==null || npc.npcType.getWorkTypes(npc.rank)==null){continue;}//wtf..should never happen
     if(isHostile(npc.teamNum))      
       {
       if(npc.npcType.isCombatUnit())
