@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
+import shadowmage.ancient_structures.common.config.AWLog;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -49,8 +50,15 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   tag.setInteger("y", y);
   tag.setInteger("z", z);
   TileEntity te = world.getBlockTileEntity(x, y, z);
-  te.readFromNBT(tag);
-  world.markBlockForUpdate(x, y, z);
+  if(te!=null)
+    {
+    te.readFromNBT(tag);
+    world.markBlockForUpdate(x, y, z);    
+    }
+  else
+    {
+    AWLog.logError("Severe error when building template rule.  No tile found to read tile data at: "+x+","+y+","+z+" for rule: "+blockName+" :: "+meta);
+    }
   }
 
 @Override
