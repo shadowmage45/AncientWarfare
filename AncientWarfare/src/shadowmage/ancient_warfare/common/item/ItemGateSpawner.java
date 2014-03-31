@@ -133,6 +133,9 @@ public boolean onUsedFinal(World world, EntityPlayer player, ItemStack stack, Bl
             }
           }
         }
+      tag.removeTag("pos1");
+      tag.removeTag("pos2");
+      stack.setTagCompound(tag);
       }
     else
       {
