@@ -32,6 +32,7 @@ public StructureBuilderWorldGen(World world, StructureTemplate template, int fac
   super(world, template, face, x, y, z);
   }
 
+@Override
 protected void placeAir()
   {
   if(!template.getValidationSettings().isPreserveBlocks())
