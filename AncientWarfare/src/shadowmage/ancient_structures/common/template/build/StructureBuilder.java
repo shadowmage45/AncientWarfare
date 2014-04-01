@@ -138,7 +138,6 @@ protected void placeCurrentPosition()
 protected void placeAir()
   {
   template.getValidationSettings().handleClearAction(world, destination.x, destination.y, destination.z, template, bb);
-//  world.setBlockToAir(destination.x, destination.y, destination.z);  
   }
 
 protected void placeRule(TemplateRule rule)
