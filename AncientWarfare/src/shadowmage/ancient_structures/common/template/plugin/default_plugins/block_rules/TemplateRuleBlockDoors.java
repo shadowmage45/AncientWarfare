@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemDoor;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
@@ -43,9 +44,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns); 
   if(world.getBlockId(x, y-1, z)!=block.blockID)//this is the bottom door block, call placeDoor from our block...
     {
-    world.setBlock(x, y, z, block.blockID, meta, 0);    
-    world.setBlock(x, y+1, z, block.blockID, 8, 2);
-    world.setBlockMetadataWithNotify(x, y, z, localMeta, 2);
+    ItemDoor.placeDoorBlock(world, x, y, z, localMeta%4, block);
     }
   }
 
