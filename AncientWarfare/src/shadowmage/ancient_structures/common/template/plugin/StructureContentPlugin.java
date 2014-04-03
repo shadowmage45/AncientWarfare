@@ -26,7 +26,8 @@ public abstract class StructureContentPlugin
 
 /**
  * implementing classes should use this callback to register any 
- * block handlers with the passed in manager
+ * block handlers with the passed in manager<br>
+ * call manager.registerBlockHandler() to register your rule classes
  * @param manager
  */
 public abstract void addHandledBlocks(StructurePluginManager manager);
@@ -34,6 +35,7 @@ public abstract void addHandledBlocks(StructurePluginManager manager);
 /**
  * implementing classes should use this callback to register any 
  * entity handlers with the passed in manager
+ * call manager.registerEntityHandler() to register your rule classes
  * @param manager
  */
 public abstract void addHandledEntities(StructurePluginManager manager);

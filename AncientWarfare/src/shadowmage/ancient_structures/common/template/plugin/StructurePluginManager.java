@@ -169,7 +169,7 @@ public TemplateRuleEntity getRuleForEntity(World world, Entity entity, int turns
   return null;//TODO
   }
 
-public void registerEntityHandler(String pluginName, Class<?extends Entity> entityClass, Class<? extends TemplateRule> ruleClass)
+public void registerEntityHandler(String pluginName, Class<?extends Entity> entityClass, Class<? extends TemplateRuleEntity> ruleClass)
   {
   if(ruleByID.containsKey(pluginName))
     {
@@ -185,7 +185,7 @@ public void registerEntityHandler(String pluginName, Class<?extends Entity> enti
   pluginByEntity.put(entityClass, pluginName);
   }
 
-public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRule> ruleClass)
+public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRuleBlock> ruleClass)
   {  
   if(ruleByID.containsKey(pluginName))
     {
