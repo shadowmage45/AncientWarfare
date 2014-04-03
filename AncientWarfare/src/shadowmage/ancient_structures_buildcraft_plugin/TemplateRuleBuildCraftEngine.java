@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
 public class TemplateRuleBuildCraftEngine extends TemplateRuleBlock
@@ -52,6 +53,7 @@ public TemplateRuleBuildCraftEngine(World world, int x, int y, int z, Block bloc
       d = d.getRotation(ForgeDirection.UP);
       }
     orientation = d;
+    AWLog.logDebug("read post-rotation orientation of: "+orientation);
     engine.writeToNBT(engineTag);
     }
   this.engineType = meta;
@@ -77,7 +79,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     {
     d = d.getRotation(ForgeDirection.UP);
     }  
-  world.setBlock(x, y, z, BuildCraftEnergy.engineBlock.blockID, engineType, 3);
+  world.setBlock(x, y, z, BuildCraftEnergy.engineBlock.blockID, engineType, 2);
   TileEntity te = world.getBlockTileEntity(x, y, z);
   if(te instanceof TileEngine)
     {
@@ -85,6 +87,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     engine.readFromNBT(engineTag);
     engine.orientation = d;
     world.markBlockForUpdate(x, y, z);
+    AWLog.logDebug("set engine orientation to: " +d);
     }
   }
 
@@ -99,7 +102,7 @@ public void parseRuleData(NBTTagCompound tag)
 @Override
 public void writeRuleData(NBTTagCompound tag)
   {
-  tag.setInteger("oreintation", orientation.ordinal());
+  tag.setInteger("orientation", orientation.ordinal());
   tag.setInteger("engineType", engineType);
   tag.setTag("engineTag", engineTag);
   }

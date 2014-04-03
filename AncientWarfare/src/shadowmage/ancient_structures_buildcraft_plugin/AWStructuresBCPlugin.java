@@ -55,7 +55,7 @@ versionBounds="["+Config.VERSION+",)"
 
 public class AWStructuresBCPlugin
 {
-@Instance("AncientStructures")
+@Instance("AncientStructuresBCPlugin")
 public static AWStructuresBCPlugin instance;  
 
 @EventHandler
