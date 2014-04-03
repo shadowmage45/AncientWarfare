@@ -119,13 +119,11 @@ public void postInit(FMLPostInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Post-Init started");  
   pluginManager.loadPlugins();
-
   WorldGenStructureManager.instance().loadBiomeList();
   TemplateLoader.instance().loadTemplates();
-  config.saveConfig();
-  config.log("Adding recipes for survival mode structures.");
   AWCraftingManager.instance().addStructureRecipes();
   config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages.");
+  config.saveConfig();
   }
 
 @Override

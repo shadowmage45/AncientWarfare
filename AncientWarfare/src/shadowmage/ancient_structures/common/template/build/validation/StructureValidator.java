@@ -36,6 +36,7 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_structures.common.config.AWLog;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
@@ -496,7 +497,7 @@ protected void borderLeveling(World world, int x, int z, StructureTemplate templ
     }
   int y = bb.min.y + template.yOffset + step - 1;
   Block block = Block.blocksList[world.getBlockId(x, y, z)];
-  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
+  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !AWStructureStatics.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
     {
     world.setBlock(x, y, z, fillBlockID);
     }  
@@ -518,7 +519,7 @@ protected void borderFill(World world, int x, int z, StructureTemplate template,
   for(int y = maxFillY; y>1; y--)
     {
     block = Block.blocksList[world.getBlockId(x, y, z)];
-    if(block==null || WorldStructureGenerator.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==Block.waterMoving))
+    if(block==null || AWStructureStatics.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==Block.waterMoving))
       {
       world.setBlock(x, y, z, fillBlockID);
       }

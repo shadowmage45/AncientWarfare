@@ -25,6 +25,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import net.minecraft.block.Block;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
+
 public class AWStructureStatics extends ModConfiguration
 {
 
@@ -37,10 +40,12 @@ public static int randomChance = 75;
 public static int randomRange = 1000;
 public static int spawnProtectionRange = 0;
 public static Set<String> excludedSpawnerEntities = new HashSet<String>();
+public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
 private static String worldGenCategory = "a_world-gen_settings";
 private static String villageGenCategory = "b_village-gen_settings";
 private static String excludedEntitiesCategory = "c_excluded_spawner_entities";
+private static String worldGenBlocks = "d_world_gen_skippable_blocks";
 
 /**
  * @param configFile
@@ -227,6 +232,24 @@ public void initializeValues()
     {
     excludedSpawnerEntities.add(st);
     }
+  
+  String[] defaultSkippableBlocks = new String[]    
+    {
+        BlockDataManager.getBlockName(Block.cactus),
+        BlockDataManager.getBlockName(Block.vine),
+        BlockDataManager.getBlockName(Block.tallGrass),
+        BlockDataManager.getBlockName(Block.wood),
+        BlockDataManager.getBlockName(Block.plantRed),
+        BlockDataManager.getBlockName(Block.plantYellow),
+        BlockDataManager.getBlockName(Block.deadBush),
+        BlockDataManager.getBlockName(Block.leaves),
+        BlockDataManager.getBlockName(Block.snow)
+    };
+  defaultSkippableBlocks = config.get(worldGenBlocks, "skippable_blocks", defaultSkippableBlocks).getStringList();
+  for(String st : defaultSkippableBlocks)
+    {
+    skippableWorldGenBlocks.add(st);
+    } 
   
   this.config.save();
   }
