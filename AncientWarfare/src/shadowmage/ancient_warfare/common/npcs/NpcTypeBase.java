@@ -109,7 +109,7 @@ public NpcLevelEntry getLevelEntry(int level)
     {
     return this.levelEntries.get(level);
     }  
-  return null;
+  return this.levelEntries.isEmpty() ? null : this.levelEntries.get(0);
   }
 
 @Override
