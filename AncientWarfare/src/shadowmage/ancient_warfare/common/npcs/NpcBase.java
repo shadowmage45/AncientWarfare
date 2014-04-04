@@ -315,6 +315,7 @@ public int getAttackDamage()
 
 public int getAmountRepaired()
   {
+  if(this.npcType==null || this.npcType.getLevelEntry(rank)==null){return 0;}//TODO hack fix for NPE -- need to find what is corrupting the NPCs and fix that
   int repair = this.npcType.getLevelEntry(rank).getHealingDone();
   if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
     {
@@ -325,6 +326,7 @@ public int getAmountRepaired()
 
 public int getAmountHealed()
   {
+  if(this.npcType==null || this.npcType.getLevelEntry(rank)==null){return 0;}//TODO hack fix for NPE -- need to find what is corrupting the NPCs and fix that
   int heal = this.npcType.getLevelEntry(rank).getHealingDone();
   if(this.wayNav.getCommander()!=null && this.getDistanceToEntity(wayNav.getCommander())<20.d)
     {
