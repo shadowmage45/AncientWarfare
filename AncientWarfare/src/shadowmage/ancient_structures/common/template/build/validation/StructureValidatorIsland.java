@@ -74,7 +74,7 @@ protected void write(BufferedWriter out) throws IOException
 @Override
 protected void setDefaultSettings(StructureTemplate template)
   {
-  this.validTargetBlocks.addAll(WorldStructureGenerator.defaultTargetBlocks);
+  this.setTargetBlocks(WorldStructureGenerator.defaultTargetBlocks);
   this.minWaterDepth = template.yOffset/2;
   this.maxWaterDepth = template.yOffset;      
   }
@@ -112,7 +112,7 @@ public void preGeneration(World world, int x, int y, int z, int face,  Structure
       for(int by = bb.min.y-1; by>0; by--)
         {        
         block = Block.blocksList[world.getBlockId(bx, by, bz)];
-        if(block!=null && validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
+        if(block!=null && targetBlocksContains(BlockDataManager.getBlockName(block)))
           {
           break;
           }

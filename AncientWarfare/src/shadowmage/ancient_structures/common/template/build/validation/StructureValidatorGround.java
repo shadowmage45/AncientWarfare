@@ -39,9 +39,9 @@ public StructureValidatorGround()
 public boolean shouldIncludeForSelection(World world, int x, int y, int z, int face, StructureTemplate template)
   {
   Block block = Block.blocksList[world.getBlockId(x, y-1, z)];
-  if(block==null || !validTargetBlocks.contains(BlockDataManager.getBlockName(block)))
+  if(block==null || !targetBlocksContains(BlockDataManager.getBlockName(block)))
     {
-    AWLog.logDebug("rejecting template: "+template.name+" for non-target block:"+BlockDataManager.getBlockName(block));
+    AWLog.logDebug("rejecting template: "+template.name+" for non-target block:"+BlockDataManager.getBlockName(block) +" at "+x+","+y+","+z);
     return false;
     }
   return true;

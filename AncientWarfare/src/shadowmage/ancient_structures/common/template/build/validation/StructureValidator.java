@@ -66,7 +66,7 @@ int maxLeveling;
 int maxFill;
 int borderSize;
 
-Set<String> validTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
+private Set<String> validTargetBlocks;//list of accepted blocks which the structure may be built upon or filled over -- 100% of blocks directly below the structure must meet this list
 
 protected StructureValidator(StructureValidationType validationType)
   {
@@ -76,6 +76,13 @@ protected StructureValidator(StructureValidationType validationType)
   minDuplicateDistance = 8;
   biomeList = new HashSet<String>();
   validTargetBlocks = new HashSet<String>();
+  }
+
+protected boolean targetBlocksContains(String blockName)
+  {
+  String tileName = blockName.startsWith("tile.") ? blockName : "tile."+blockName;
+  String noTileName = blockName.startsWith("tile.") ? blockName.substring(5): blockName;
+  return validTargetBlocks.contains(tileName) || validTargetBlocks.contains(noTileName);
   }
 
 protected void readFromLines(List<String> lines)
@@ -352,6 +359,11 @@ public final void setTargetBlocks(Collection<String> targetBlocks)
   this.validTargetBlocks.addAll(targetBlocks);
   }
 
+public final void addTargetBlock(String blockName)
+  {
+  validTargetBlocks.add(blockName);
+  }
+
 public final void setBiomeList(Collection<String> biomes)
   {
   this.biomeList.clear();
@@ -497,7 +509,7 @@ protected void borderLeveling(World world, int x, int z, StructureTemplate templ
     }
   int y = bb.min.y + template.yOffset + step - 1;
   Block block = Block.blocksList[world.getBlockId(x, y, z)];
-  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !AWStructureStatics.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)))
+  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !AWStructureStatics.skippableBlocksContains(BlockDataManager.getBlockName(block)))
     {
     world.setBlock(x, y, z, fillBlockID);
     }  
@@ -519,7 +531,7 @@ protected void borderFill(World world, int x, int z, StructureTemplate template,
   for(int y = maxFillY; y>1; y--)
     {
     block = Block.blocksList[world.getBlockId(x, y, z)];
-    if(block==null || AWStructureStatics.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==Block.waterMoving))
+    if(block==null || AWStructureStatics.skippableBlocksContains(BlockDataManager.getBlockName(block)) || (block==Block.waterStill || block==Block.waterMoving))
       {
       world.setBlock(x, y, z, fillBlockID);
       }

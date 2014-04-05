@@ -60,7 +60,7 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       return true;
       }
     hit.offsetForMCSide(side);
-    if(!template.getValidationSettings().shouldIncludeForSelection(world, hit.x, hit.y+template.yOffset, hit.z, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), template))
+    if(!template.getValidationSettings().shouldIncludeForSelection(world, hit.x, hit.y, hit.z, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), template))
       {
       return true;
       }

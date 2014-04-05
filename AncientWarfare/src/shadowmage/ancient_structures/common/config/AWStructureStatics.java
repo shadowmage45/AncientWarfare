@@ -40,7 +40,7 @@ public static int randomChance = 75;
 public static int randomRange = 1000;
 public static int spawnProtectionRange = 0;
 public static Set<String> excludedSpawnerEntities = new HashSet<String>();
-public static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
+private static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 
 private static String worldGenCategory = "a_world-gen_settings";
 private static String villageGenCategory = "b_village-gen_settings";
@@ -245,6 +245,7 @@ public void initializeValues()
         BlockDataManager.getBlockName(Block.leaves),
         BlockDataManager.getBlockName(Block.snow),
         BlockDataManager.getBlockName(Block.blockSnow),
+        BlockDataManager.getBlockName(Block.web),
         "tile.Coral4",
         "tile.Coral3",
         "tile.Coral2",
@@ -355,7 +356,12 @@ public void initializeValues()
         "tile.hl_raspberryBush",
         "tile.hl_blueberryBush",
         "tile.hl_thornbush",
-        "tile.hl_cotton"
+        "tile.hl_cotton",
+        "tile.fossilsBlock",
+        "tile.floraBlock",
+        "tile.decorationsBlock",
+        "tile.stoneStalactiteBlock",
+        "tile.sandstoneStalactiteBlock",
     };
   defaultSkippableBlocks = config.get(worldGenBlocks, "skippable_blocks", defaultSkippableBlocks).getStringList();
   for(String st : defaultSkippableBlocks)
@@ -364,6 +370,13 @@ public void initializeValues()
     } 
   
   this.config.save();
+  }
+
+public static boolean skippableBlocksContains(String blockName)
+  {
+  String tileName = blockName.startsWith("tile.") ? blockName : "tile."+blockName;
+  String noTileName = blockName.startsWith("tile.") ? blockName.substring(5): blockName;
+  return skippableWorldGenBlocks.contains(tileName) || skippableWorldGenBlocks.contains(noTileName);
   }
 
 }

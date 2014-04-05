@@ -133,7 +133,7 @@ public static int getTargetY(World world, int x, int z, boolean skipWater)
     if(id==0){continue;}
     block = Block.blocksList[id];
     if(block==null){continue;}
-    if(AWStructureStatics.skippableWorldGenBlocks.contains(BlockDataManager.getBlockName(block))){continue;}
+    if(AWStructureStatics.skippableBlocksContains(BlockDataManager.getBlockName(block))){continue;}
     if(skipWater && (id==Block.waterMoving.blockID || id==Block.waterStill.blockID)){continue;}
     return y;
     }
@@ -180,7 +180,7 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
     {
     if(bb.collidesWith(entry.getBB()))
       {
-      AWLog.logDebug("rejected for invalid placement, intersects with other structure");
+      AWLog.logDebug("rejected for invalid placement, intersects with other structure at: "+entry.getBB());
       return false;
       }
     }  
