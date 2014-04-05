@@ -246,6 +246,7 @@ public void initializeValues()
         BlockDataManager.getBlockName(Block.snow),
         BlockDataManager.getBlockName(Block.blockSnow),
         BlockDataManager.getBlockName(Block.web),
+        BlockDataManager.getBlockName(Block.cocoaPlant),
         "tile.Coral4",
         "tile.Coral3",
         "tile.Coral2",
@@ -268,7 +269,7 @@ public void initializeValues()
         "tile.bop.wood1",
         "tile.bop.wood2",
         "tile.bop.wood3",
-        "tile.bop.wood4",
+        "tile.bop.leaves4",
         "tile.bop.leaves1",
         "tile.bop.leaves2",
         "tile.bop.leaves3",
@@ -286,10 +287,10 @@ public void initializeValues()
         "tile.bop.plants",
         "tile.bop.bamboo",
         "tile.bop.moss",
-        "tile.bop.mud",
         "tile.bop.treeMoss",
         "tile.bop.mushrooms",
         "tile.bop.coral",
+        "tile.bop.hive",
         "tile.lotr:fruitWood",
         "tile.lotr:fruitLeaves",
         "tile.lotr:mordorMoss",
@@ -362,6 +363,7 @@ public void initializeValues()
         "tile.decorationsBlock",
         "tile.stoneStalactiteBlock",
         "tile.sandstoneStalactiteBlock",
+
     };
   defaultSkippableBlocks = config.get(worldGenBlocks, "skippable_blocks", defaultSkippableBlocks).getStringList();
   for(String st : defaultSkippableBlocks)
