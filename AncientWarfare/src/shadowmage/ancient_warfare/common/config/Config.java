@@ -42,7 +42,7 @@ public static String configPath = "";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static final boolean DEBUG = true;
+public static boolean DEBUG = true;
 
 //***************************************************LOADED CONFIGS******************************************//
 
@@ -232,6 +232,11 @@ public void setCoreInfo()
     this.updatedVersion = true;
     config.get("version", "version", VERSION, "The mod version used to last save this config").set(VERSION);
     }
+  
+  /**
+   * TODO debug options
+   */
+  this.DEBUG = config.get("a-general-options", "Enable Debug", true).getBoolean(true);
   
   /**
    * general options
