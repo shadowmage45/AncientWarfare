@@ -390,7 +390,6 @@ public void onElementActivated(IGuiElement element)
   if(this.typeButtonMap.containsKey(element))
     {    
     this.currentValidationType = this.typeButtonMap.get(element);
-    AWLog.logDebug("updating current validation type to: "+this.currentValidationType);
     this.refreshGui();
     }
   else if(element==this.biomeSelectButton)

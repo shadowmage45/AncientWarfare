@@ -114,10 +114,7 @@ private void generateAt(int chunkX, int chunkZ, World world, IChunkProvider chun
   int face = rng.nextInt(4);
   StructureTemplate template = WorldGenStructureManager.instance().selectTemplateForGeneration(world, rng, x, y, z, face, AWStructureStatics.chunkSearchRadius);  
   int remainingClusterValue = WorldGenStructureManager.instance().getRemainingValue();//TODO use this to alter the random chance/range values to favor generating in clusters  
-  if(Config.DEBUG)
-    {
-    AWLog.logDebug("Template selection took: "+(System.currentTimeMillis()-t1)+" ms.");
-    }
+  AWLog.logDebug("Template selection took: "+(System.currentTimeMillis()-t1)+" ms.");
   if(template==null){return;} 
   StructureMap map = AWGameData.get(world, "AWStructureMap", StructureMap.class);
   if(attemptStructureGenerationAt(world, x, y, z, face, template, map))
@@ -183,7 +180,7 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
     {
     if(bb.collidesWith(entry.getBB()))
       {
-      AWLog.logDebug("invalid placement, intersects with other structure");
+      AWLog.logDebug("rejected for invalid placement, intersects with other structure");
       return false;
       }
     }  

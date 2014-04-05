@@ -141,7 +141,6 @@ protected void validateWorkPoints()
 public void setBuilder(StructureBuilderTicked builder)
   {
   this.builder = builder;
-  AWLog.logDebug("set builder for te...: "+this+" b: "+this.builder);
   }
 
 public void removeBuilder()
@@ -151,10 +150,8 @@ public void removeBuilder()
 
 protected void tickBuilder()
   {
-  AWLog.logDebug("attempting ticking builder ....");
   if(builder!=null && !builder.isFinished())
     {
-    AWLog.logDebug("actually ticking builder ....");
     builder.tick();    
     }
   else

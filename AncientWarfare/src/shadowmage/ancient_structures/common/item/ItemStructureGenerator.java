@@ -59,7 +59,11 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       player.addChatMessage("no structure found to build...");
       return true;
       }
-    hit.offsetForMCSide(side);        
+    hit.offsetForMCSide(side);
+    if(!template.getValidationSettings().shouldIncludeForSelection(world, hit.x, hit.y+template.yOffset, hit.z, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), template))
+      {
+      return true;
+      }
     if(WorldStructureGenerator.instance().attemptStructureGenerationAt(world, hit.x, hit.y, hit.z, BlockTools.getPlayerFacingFromYaw(player.rotationYaw), template, AWGameData.get(world, "AWStructureMap", StructureMap.class)))
       {
       AWLog.logDebug("constructing template: "+template);

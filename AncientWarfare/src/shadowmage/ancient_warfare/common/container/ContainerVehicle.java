@@ -67,7 +67,6 @@ public ContainerVehicle(EntityPlayer openingPlayer,  IEntityContainerSynch synch
   invHeight = invHeight > 3*18 ? 3*18 : invHeight;
   extrasY = storageY + (invHeight==0 ? 0 : 10) + invHeight;
   playerY = extrasY + 4 + 10 + 2*18;
-  Config.logDebug("set player inventory to: "+playerY);
   this.addPlayerSlots(player, 8, playerY, 4);
   
   for (y = 0; y < 2; y++)

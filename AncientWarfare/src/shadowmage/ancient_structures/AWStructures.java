@@ -85,14 +85,14 @@ public void loadConfiguration(File config, Logger log)
 
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
-  {  
+  {   
+  BlockDataManager.loadBlockList();
   this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   AWLog.setLogger(evt.getModLog());
   AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Config.VERSION);
   pluginManager = new StructurePluginManager();   
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
-  TemplateLoader.instance().initializeAndExportDefaults(path);  
-  BlockDataManager.loadBlockList();
+  TemplateLoader.instance().initializeAndExportDefaults(path); 
   AWStructuresItemLoader.instance().registerItems();
   GameRegistry.registerPlayerTracker(instance);
   GameRegistry.registerWorldGenerator(WorldStructureGenerator.instance());

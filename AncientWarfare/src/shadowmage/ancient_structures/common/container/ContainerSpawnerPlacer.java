@@ -71,7 +71,6 @@ public void handlePacketData(NBTTagCompound tag)
   {
   if(tag.hasKey("EntityId"))
     {
-    AWLog.logDebug("receiving data packet at container");
     this.mobID = tag.getString("EntityId");
     this.minSpawnDelay = tag.getShort("MinSpawnDelay");
     this.maxSpawnDelay = tag.getShort("MaxSpawnDelay");

@@ -61,7 +61,6 @@ public ContainerCSB(EntityPlayer openingPlayer, int x, int y, int z)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  AWLog.logDebug("rec info...");
   if(tag.hasKey("name"))
     {
     this.settings.setName(tag.getString("name")); 

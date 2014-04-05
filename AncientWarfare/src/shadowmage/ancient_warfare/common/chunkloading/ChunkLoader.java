@@ -91,7 +91,7 @@ public void ticketsLoaded(List<Ticket> tickets, World world)
       TileEntity te =  world.getBlockTileEntity(tePos.x, tePos.y, tePos.z);
       if(te instanceof TEChunkLoader)
         {
-        Config.logDebug("sending chunk ticket to TE on load");
+//        Config.logDebug("sending chunk ticket to TE on load");
         ((TEChunkLoader)te).setTicket(tk);
         }
       }

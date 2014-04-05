@@ -118,7 +118,6 @@ protected void placeCurrentPosition()
   TemplateRule rule = template.getRuleAt(currentX, currentY, currentZ);
   if(rule!=null)
     {
-    AWLog.logDebug("placing rule: "+rule + " at: "+destination.x + ", "+destination.y + ", "+destination.z);
     placeRule(rule);
     }
   else

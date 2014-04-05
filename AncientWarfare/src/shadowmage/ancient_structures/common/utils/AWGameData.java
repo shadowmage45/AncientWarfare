@@ -79,16 +79,13 @@ public static void markDirty(WorldSavedData data)
 
 public static void handleWorldLoad(World world)
   {
-  AWLog.logDebug("loading world-saved data set");
   WorldSavedData data;
   for(String name : datasToLoad.keySet())
     {
-    AWLog.logDebug("loading data set for: "+name);
     data = gameDatas.get(name);
     if(data==null)
       {
       data = get(world, name, datasToLoad.get(name));
-      AWLog.logDebug("loaded new data set for: "+name+" :: "+data);   
       }
     }
   }
@@ -111,7 +108,6 @@ public static void handlePacketData(String name, NBTTagCompound data)
 @ForgeSubscribe
 public void onWorldLoad(WorldEvent.Load evt)
   {
-  AWLog.logDebug("receiving world load event...");
   if(evt.world instanceof WorldServer)
     {
     handleWorldLoad(evt.world);    

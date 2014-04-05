@@ -238,7 +238,6 @@ protected boolean areResourceListsIdentical(ResourceListRecipe a, ResourceListRe
  */
 public void loadRecipes()
   {
-  Config.logDebug("LOADING RECIPES");
   this.addGateRecipes();//done
   this.addCivicRecipes();//done
   this.addUpgradeRecipes();//done

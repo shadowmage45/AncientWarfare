@@ -106,7 +106,6 @@ protected void forceChunk(ChunkCoordIntPair chunk)
     Config.log("Forcing chunk: "+chunk.chunkXPos+","+chunk.chunkZPos);
     ForgeChunkManager.forceChunk(tk, chunk);
     this.forcedChunks.add(chunk);
-    Config.logDebug("forced chunks size: "+this.forcedChunks.size());
     }
   }
 

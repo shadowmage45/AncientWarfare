@@ -58,14 +58,14 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   regSlotY = 4 + 10 + (regLabel ? 10: 0);//border, civic label, inventory label
   int regSlotHeight = (invSize/9 + (invSize%9==0 ? 0 : 1)) *18;  
   
-  Config.logDebug("regSLotY: "+regSlotY + " H: "+regSlotHeight);
+//  Config.logDebug("regSLotY: "+regSlotY + " H: "+regSlotHeight);
   
   invSize = teBase.getCivic().getResourceSlotSize();
   resLabel = invSize > 0 ? true : false;
   resSlotY = regSlotY+regSlotHeight + (resLabel ? 14 : 0);
   int resSlotHeight = (invSize/9 + (invSize%9==0 ? 0 : 1)) *18;   
   
-  Config.logDebug("resSlotY: "+resSlotY + " H: "+resSlotHeight);
+//  Config.logDebug("resSlotY: "+resSlotY + " H: "+resSlotHeight);
   
   invSize = teBase.getCivic().getSpecResourceSlotSize();
   specLabel = invSize > 0 ? true : false;
@@ -76,7 +76,7 @@ public ContainerCivicTE(EntityPlayer openingPlayer, TECivic te)
   
   playerSlotsY = specSlotY+specSlotHeight+4+10;//bottom of spec slot + buffer + label
   
-  Config.logDebug("specLabel: "+specLabel + " specSlotY: "+specSlotY + " specH: "+specSlotHeight +  " playerSlotY: "+playerSlotsY);
+//  Config.logDebug("specLabel: "+specLabel + " specSlotY: "+specSlotY + " specH: "+specSlotHeight +  " playerSlotY: "+playerSlotsY);
   
   this.addPlayerSlots(openingPlayer, 8, playerSlotsY, 4);//158   
   this.addResourceSlots(resSlotY);
@@ -137,7 +137,6 @@ protected void addSpecSlots(int yStart)
   for(x = 0; x < teBase.getCivic().getSpecResourceSlotSize(); x++)
     {
     xPos = 8 + x * 18;
-    Config.logDebug("adding spec resource slot " +slotNum + " at: "+xPos + ","+yPos);
     Slot slot = new SlotResourceOnly(teBase, slotNum, xPos, yPos, teBase.getCivic().getSpecResourceItemFilters());
     this.addSlotToContainer(slot);   
     slotNum++;

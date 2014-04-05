@@ -148,7 +148,6 @@ protected void doWork(IWorker npc, WorkPoint p)
       }
     else
       { 
-      Config.logDebug("using bonemeal on: "+p);
       if(inventory.containsAtLeast(bonemealFilter, 3))
         {
         inventory.tryRemoveItems(bonemealFilter, 3);

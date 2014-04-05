@@ -64,7 +64,6 @@ public StructureTemplateClient(String name, int x, int y, int z, int xo, int yo,
 
 public void writeToNBT(NBTTagCompound tag)
   {
-	AWLog.logDebug("writing client structure name: "+name + " survival: "+survival);
   tag.setString("name", name);
   tag.setBoolean("survival", survival);
   tag.setInteger("x", xSize);
@@ -99,7 +98,6 @@ public static StructureTemplateClient readFromNBT(NBTTagCompound tag)
   int yo = tag.getInteger("yo");
   int zo = tag.getInteger("zo");
   
-  AWLog.logDebug("reading client structure name: "+name + " survival: "+survival);
   StructureTemplateClient template =  new StructureTemplateClient(name, x, y, z, xo, yo, zo);
   template.survival = survival;
   

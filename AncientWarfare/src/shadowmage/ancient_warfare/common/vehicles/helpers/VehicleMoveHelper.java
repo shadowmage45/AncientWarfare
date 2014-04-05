@@ -319,7 +319,6 @@ protected void handleSubmarineMovement()
   float maxY = 0.2f;
   if(powerInput!=0)
     {
-    Config.logDebug("adjusting vertical based on power input!!");
     if(Math.abs(vehicle.motionY)<maxY)
       {
       float percent = (float) (Math.abs(vehicle.motionY) / maxY);
@@ -451,7 +450,6 @@ protected void applyThrottleInput()
   if(this.powerInput!=0)
     {
     this.throttle += 0.025f * (float)this.powerInput;
-    Config.logDebug("set throttle to: "+throttle);
     }
   this.throttle = this.throttle < 0.f ? 0.f : this.throttle > 1.f ? 1.f : this.throttle;  
   }
@@ -519,7 +517,6 @@ protected void applyTurnInput(float inputFactor)
     {
     boolean reverse = (turnInput ==-1 && turnMotion>0) || (turnInput ==1 && turnMotion<0);
     float maxSpeed = vehicle.currentStrafeSpeedMax * weightAdjust;
-    Config.logDebug("max strafe speed: "+vehicle.currentStrafeSpeedMax + " current: "+turnMotion);
     float percent = 1 - (Math.abs(turnMotion)/maxSpeed);
     percent = reverse ? 1.f : percent;
     float changeFactor = percent * (turnInput*2) * inputFactor;
@@ -555,7 +552,6 @@ protected void detectCrash()
     {
     if(!wasOnGround || crashSpeed)
       {
-      Config.logDebug("CRASH");
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
         {
         EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;
@@ -571,7 +567,6 @@ protected void detectCrash()
     {
     if(vertCrashSpeed && !wasOnGround)
       {
-      Config.logDebug(" VERT CRASH");
       if(!vehicle.worldObj.isRemote && vehicle.riddenByEntity instanceof EntityPlayer)
         {
         EntityPlayer player = (EntityPlayer) vehicle.riddenByEntity;

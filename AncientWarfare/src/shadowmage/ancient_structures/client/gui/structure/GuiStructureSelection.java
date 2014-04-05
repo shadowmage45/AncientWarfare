@@ -168,7 +168,6 @@ public void onElementActivated(IGuiElement button)
       { 
       return;
       }
-    AWLog.logDebug("sending datas...");
     this.forceUpdate = true;
     NBTTagCompound tag = new NBTTagCompound();
     tag.setString("name", this.clientStructures.get(index).name);

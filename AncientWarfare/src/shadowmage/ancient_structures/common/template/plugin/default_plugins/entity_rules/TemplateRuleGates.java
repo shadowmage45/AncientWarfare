@@ -103,10 +103,6 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     {
     world.spawnEntityInWorld(gate);
     }
-  else
-    {
-    AWLog.logDebug("returned null gate for construction from construct gate...");
-    }  
   }
 
 @Override

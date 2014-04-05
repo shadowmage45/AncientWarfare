@@ -194,7 +194,6 @@ public void readFromNBT(NBTTagCompound tag)
 public void onFiringUpdate()
   {  
   this.maxMissiles = vehicle.firingHelper.getMissileLaunchCount();
-  Config.logDebug("set missiles to fire to: "+this.maxMissiles);
   vehicle.firingHelper.startLaunching();  
   }
 

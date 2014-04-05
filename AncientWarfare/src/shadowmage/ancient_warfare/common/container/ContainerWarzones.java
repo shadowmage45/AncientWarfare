@@ -50,7 +50,6 @@ public void handlePacketData(NBTTagCompound tag)
   {
   if(tag.hasKey("zoneList"))
     {
-    Config.logDebug("handlePacketData handling zoneList packet");
     this.readWarzones(tag);
     this.refreshGui();
     }
@@ -65,7 +64,6 @@ public void handlePacketData(NBTTagCompound tag)
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
-  Config.logDebug("receiving init data...passing to handlePacket..");
   this.handlePacketData(tag);
   }
 
@@ -107,7 +105,6 @@ private NBTTagCompound getZoneListTag()
 
 private void readWarzones(NBTTagCompound tag)
   {
-  Config.logDebug("reading zones tag...");
   this.zoneList.clear();
   NBTTagList zoneList = tag.getTagList("zoneList");
   NBTTagCompound zoneTag;
@@ -119,7 +116,6 @@ private void readWarzones(NBTTagCompound tag)
     zone.readFromNBT(zoneTag);
     this.zoneList.add(zone);
     }
-  Config.logDebug("read: "+this.zoneList.size() + " zones from tag");
   }
 
 

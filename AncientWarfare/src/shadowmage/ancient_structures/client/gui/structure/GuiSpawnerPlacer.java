@@ -69,7 +69,6 @@ public void onElementActivated(IGuiElement element)
     }
   else if(element==done)
     {    
-    AWLog.logDebug("sending data packet to container");
     NBTTagCompound tag = new NBTTagCompound();
     tag.setString("EntityId", container.mobID);
     tag.setShort("MinSpawnDelay", (short) container.minSpawnDelay);

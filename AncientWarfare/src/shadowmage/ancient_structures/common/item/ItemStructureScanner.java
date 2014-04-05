@@ -43,7 +43,6 @@ public ItemStructureScanner(int id)
   this.setMaxStackSize(1);  
   this.hasLeftClick = true;
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
-  AWLog.logDebug("set creative tab for structure scanner to: "+AWStructuresItemLoader.structureTab);
   }
 
 /**

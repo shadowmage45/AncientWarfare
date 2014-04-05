@@ -84,7 +84,6 @@ public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
   {
   ArrayList<StructureTemplateClient> templates = new ArrayList<StructureTemplateClient>();
   StructureTemplateManager.instance().getClientSurvivalTemplates(templates);
-  AWLog.logDebug("attempting add of civic builder items.  templates size: "+templates.size());
   if(templates.size()!=displayCache.size())
     {
     displayCache.clear();
@@ -153,11 +152,6 @@ public boolean onUsedFinalLeft(World world, EntityPlayer player, ItemStack stack
       {
       StructureBuilderTicked builder = new StructureBuilderTicked(world, template, face, hit.x, hit.y, hit.z);
       te.setBuilder(builder);
-      AWLog.logDebug("setting builder for te...");
-      }
-    else
-      {
-      AWLog.logDebug("Could not set builder for te...te was null!!");
       }
     if(!player.capabilities.isCreativeMode)
       {

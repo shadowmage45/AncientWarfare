@@ -54,7 +54,6 @@ public StructureMap()
 @Override
 public void readFromNBT(NBTTagCompound nbttagcompound)
   {
-  AWLog.logDebug("reading structure map from nbt...");
   NBTTagCompound mapTag = nbttagcompound.getCompoundTag("map");
   map.readFromNBT(mapTag);
   }
@@ -62,7 +61,6 @@ public void readFromNBT(NBTTagCompound nbttagcompound)
 @Override
 public void writeToNBT(NBTTagCompound nbttagcompound)
   {
-  AWLog.logDebug("writing structure map to nbt...");
   NBTTagCompound mapTag = new NBTTagCompound();
   map.writeToNBT(mapTag);
   nbttagcompound.setTag("map", mapTag);

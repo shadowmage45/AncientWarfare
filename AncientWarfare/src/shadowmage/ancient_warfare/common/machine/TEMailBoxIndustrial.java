@@ -84,7 +84,6 @@ public void updateEntity()
           float dist = Trig.getDistance(xCoord, yCoord, zCoord, data.posX(), data.posY(), data.posZ());
           data.addIncomingItem(stack, (int)dist*5);
           this.setInventorySlotContents(slot, null);
-          Config.logDebug("adding stack to mail route for: "+destination + " time: "+((int)dist*5));
           } 
         }
       }  

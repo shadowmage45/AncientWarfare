@@ -252,7 +252,6 @@ public void handlePacketData(NBTTagCompound tag)
     ItemStack result = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("result"));
     ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(result);
     te.setRecipe(recipe);
-    Config.logDebug("receiving set recipe packet: " + result + " rec: " +recipe);    
     }
   if(tag.hasKey("start"))
     {

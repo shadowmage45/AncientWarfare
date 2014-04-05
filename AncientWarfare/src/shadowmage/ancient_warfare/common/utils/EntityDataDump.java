@@ -42,7 +42,6 @@ public EntityDataDump()
 
 public static void dumpEntityData()
   {
-  Config.logDebug("dumping entity data to file");
   List<String> entityNames = new ArrayList<String>();
   String name;
   for(Object obj : EntityList.classToStringMapping.values())

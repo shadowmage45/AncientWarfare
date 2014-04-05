@@ -58,7 +58,6 @@ public StructureTemplate parseTemplate(File file)
       {
       templateLines.add(scan.nextLine());
       }
-    AWLog.logDebug("parsing templateLines for: "+file.getAbsolutePath());
     try
       {
       return parseTemplateLines(file, templateLines);

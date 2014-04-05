@@ -123,7 +123,6 @@ public void addNewZone(World world, Warzone zone)
     this.warzones.put(world.provider.dimensionId, new ArrayList<Warzone>());    
     }
   this.warzones.get(world.provider.dimensionId).add(zone);
-  Config.logDebug("added warzone to list, it now contains: "+this.warzones.get(world.provider.dimensionId).size() + " warzones");
   }
 
 public Collection<Warzone> getWarzones(World world)

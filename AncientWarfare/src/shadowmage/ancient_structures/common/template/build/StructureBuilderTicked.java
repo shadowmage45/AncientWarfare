@@ -44,10 +44,8 @@ public StructureBuilderTicked()//nbt-constructor
 
 public void tick()
   {
-  AWLog.logDebug("ticking builder...");
   if(!this.isFinished)
     {
-    AWLog.logDebug("placing current position!!");
     this.placeCurrentPosition();    
     }
   }

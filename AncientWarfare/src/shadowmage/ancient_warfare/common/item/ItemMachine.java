@@ -57,8 +57,7 @@ public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, i
         {
         face = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
         face = (face+2)%4;
-        face = BlockTools.getForgeDirectionFromCardinal(face).ordinal();   
-        Config.logDebug("converted side: "+face);
+        face = BlockTools.getForgeDirectionFromCardinal(face).ordinal(); 
         }
       ForgeDirection direction = ForgeDirection.getOrientation(face);
       if(!te.facesOpposite)

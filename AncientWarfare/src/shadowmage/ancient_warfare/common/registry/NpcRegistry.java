@@ -149,7 +149,6 @@ public static Entity getNpcForType(int num, World world, int level, int team)
     if(!type.isBandit())
       {
       npc.teamNum = team;
-      Config.logDebug("handling npc update from NPC spawn (NpcRegistry.getNpcForType(...))");
       GameDataTracker.instance().handleNpcUpdate(npc);      
       }
     return npc;

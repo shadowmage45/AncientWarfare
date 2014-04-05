@@ -47,7 +47,6 @@ public TemplateRuleEntityLogic(World world, Entity entity, int turns, int x, int
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  AWLog.logDebug("placing entity in world at: "+x+","+y+","+z +  " of type: "+this.mobID);
   Entity e = EntityList.createEntityByName(mobID, world);
   NBTTagList list = tag.getTagList("Pos");
   if(list.tagCount()>=3)

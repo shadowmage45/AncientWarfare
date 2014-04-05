@@ -69,7 +69,6 @@ public ContainerStructureScanner(EntityPlayer openingPlayer, int x, int y, int z
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  AWLog.logDebug("receiving server-packet data");
   if(tag.hasKey("export"))
     {
     boolean include = tag.getBoolean("export");

@@ -769,11 +769,9 @@ public static BlockPosition offsetBuildKey(int face, BlockPosition pos1, BlockPo
 
 public static BlockPosition rotateAroundOrigin(BlockPosition pos, int turns)
   {
-  AWLog.logDebug("rotating position: "+pos +" by: "+turns +" turns");
   for(int i = 0; i < turns; i++)
     {
     rotateAroundOrigin(pos);
-    AWLog.logDebug("new position: "+pos);
     }
   return pos;
   }
