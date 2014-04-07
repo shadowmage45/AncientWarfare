@@ -26,6 +26,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.biome.BiomeGenBase;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
 import shadowmage.ancient_warfare.client.gui.elements.GuiCheckBoxSimple;
@@ -92,12 +93,11 @@ public void setupControls()
   for(BiomeGenBase biome : BiomeGenBase.biomeList)
     {
     if(biome==null || biome.biomeName==null || biome.biomeName.equals("")){continue;}
-    totalHeight = addBiome(elementNum, totalHeight, biome.biomeName);
+    totalHeight = addBiome(elementNum, totalHeight, AWStructureStatics.getBiomeName(biome));
     elementNum++;
     }    
   area.updateTotalHeight(totalHeight);
   }
-
 
 private int addBiome(int elementNum, int targetY, String name)
   {

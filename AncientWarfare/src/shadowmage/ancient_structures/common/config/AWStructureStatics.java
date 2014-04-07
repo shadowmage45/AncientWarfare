@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import shadowmage.ancient_warfare.common.AWCore;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Property;
 
@@ -475,6 +476,41 @@ public static boolean skippableBlocksContains(String blockName)
 public static Set<String> getUserDefinedTargetBlocks()
   {
   return worldGenTargetBlocks;
+  }
+
+public static String getBiomeName(BiomeGenBase biome)
+  {
+  if(biomeAliasByClass.containsKey(biome.getClass()))
+    {
+    return biomeAliasByClass.get(biome.getClass());
+    }
+  return biome.biomeName;
+  }
+
+public static BiomeGenBase getBiomeByName(String name)
+  {
+  if(biomeAliasByName.containsKey(name))
+    {
+    Class clz = biomeAliasByName.get(name);
+    for(BiomeGenBase b : BiomeGenBase.biomeList)
+      {
+      if(clz.equals(b.getClass()))
+        {
+        return b;
+        }
+      }
+    }
+  else
+    {
+    for(BiomeGenBase b : BiomeGenBase.biomeList)
+      {
+      if(b.biomeName.equals(name))
+        {
+        return b;
+        }
+      }
+    }
+  return null;
   }
 
 }

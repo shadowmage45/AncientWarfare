@@ -55,7 +55,8 @@ public void loadBiomeList()
     {
     biome = BiomeGenBase.biomeList[i];
     if(biome==null){continue;}
-    templatesByBiome.put(biome.biomeName.toLowerCase(), new HashSet<StructureTemplate>());
+    String name = AWStructureStatics.getBiomeName(biome).toLowerCase();
+    templatesByBiome.put(name, new HashSet<StructureTemplate>());    
     }
   }
 
@@ -112,7 +113,8 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   int foundValue, chunkDistance;
   float foundDistance, mx, mz;
    
-  String biomeName = world.getBiomeGenForCoords(x, z).biomeName.toLowerCase();
+  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
+  String biomeName = AWStructureStatics.getBiomeName(biome);
   Collection<StructureEntry> genEntries = map.getEntriesNear(world, x, z, chunkSearchRange, false, searchCache);
   
   foundValue = 0;
