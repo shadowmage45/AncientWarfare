@@ -22,6 +22,7 @@ package shadowmage.ancient_structures.common.config;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -241,18 +242,18 @@ public void initializeValues()
   
   String[] defaultSkippableBlocks = new String[]    
     {
-        BlockDataManager.getBlockName(Block.cactus),
-        BlockDataManager.getBlockName(Block.vine),
-        BlockDataManager.getBlockName(Block.tallGrass),
-        BlockDataManager.getBlockName(Block.wood),
-        BlockDataManager.getBlockName(Block.plantRed),
-        BlockDataManager.getBlockName(Block.plantYellow),
-        BlockDataManager.getBlockName(Block.deadBush),
-        BlockDataManager.getBlockName(Block.leaves),
-        BlockDataManager.getBlockName(Block.snow),
-        BlockDataManager.getBlockName(Block.blockSnow),
-        BlockDataManager.getBlockName(Block.web),
-        BlockDataManager.getBlockName(Block.cocoaPlant),
+        "cactus",
+        "vine",
+        "tallgrass",
+        "log",
+        "red_flower",
+        "yellow_flower",
+        "deadbush",
+        "leaves",
+        "snow_layer",
+        "snow",
+        "web",
+        "cocoa",
         "tile.Coral4",
         "tile.Coral3",
         "tile.Coral2",
@@ -369,37 +370,37 @@ public void initializeValues()
         "tile.decorationsBlock",
         "tile.stoneStalactiteBlock",
         "tile.sandstoneStalactiteBlock",
-        "tile.TFLog  ",
-        "tile.TFLeaves  ",
-        "tile.TFPlant  ",
-        "tile.TFRoots  ",
-        "tile.TFMagicLog  ",
-        "tile.TFMagicLeaves  ",
-        "tile.TFMoonworm  ",
-        "tile.TFMagicLogSpecial  ",
-        "tile.TFTowerStone  ",
-        "tile.PamWeeeFlowers:vine_white  ",
-        "tile.PamWeeeFlowers:vine_orange  ",
-        "tile.PamWeeeFlowers:vine_magenta  ",
-        "tile.PamWeeeFlowers:vine_lightblue  ",
-        "tile.PamWeeeFlowers:vine_yellow  ",
-        "tile.PamWeeeFlowers:vine_lime  ",
-        "tile.PamWeeeFlowers:vine_pink  ",
-        "tile.PamWeeeFlowers:vine_darkgrey  ",
-        "tile.PamWeeeFlowers:vine_lightgrey  ",
-        "tile.PamWeeeFlowers:vine_cyan  ",
-        "tile.PamWeeeFlowers:vine_purple  ",
-        "tile.PamWeeeFlowers:vine_blue  ",
-        "tile.PamWeeeFlowers:vine_brown  ",
-        "tile.PamWeeeFlowers:vine_green  ",
-        "tile.PamWeeeFlowers:vine_red  ",
+        "tile.TFLog",
+        "tile.TFLeaves",
+        "tile.TFPlant",
+        "tile.TFRoots",
+        "tile.TFMagicLog",
+        "tile.TFMagicLeaves",
+        "tile.TFMoonworm",
+        "tile.TFMagicLogSpecial",
+        "tile.TFTowerStone",
+        "tile.PamWeeeFlowers:vine_white",
+        "tile.PamWeeeFlowers:vine_orange",
+        "tile.PamWeeeFlowers:vine_magenta",
+        "tile.PamWeeeFlowers:vine_lightblue",
+        "tile.PamWeeeFlowers:vine_yellow",
+        "tile.PamWeeeFlowers:vine_lime",
+        "tile.PamWeeeFlowers:vine_pink",
+        "tile.PamWeeeFlowers:vine_darkgrey",
+        "tile.PamWeeeFlowers:vine_lightgrey",
+        "tile.PamWeeeFlowers:vine_cyan",
+        "tile.PamWeeeFlowers:vine_purple",
+        "tile.PamWeeeFlowers:vine_blue",
+        "tile.PamWeeeFlowers:vine_brown",
+        "tile.PamWeeeFlowers:vine_green",
+        "tile.PamWeeeFlowers:vine_red",
         "tile.PamWeeeFlowers:vine_black",
         "tile.flowerCrop",
         "tile.PamHarvestCraft:blueberrycrop_2",
-        "tile.PamHarvestCraft:strawberrycrop_2  ",
-        "tile.PamHarvestCraft:seaweedcrop_2  ",
-        "tile.PamHarvestCraft:rhubarbcrop_2  ",
-        "tile.PamHarvestCraft:rutabagacrop_2  ",
+        "tile.PamHarvestCraft:strawberrycrop_2",
+        "tile.PamHarvestCraft:seaweedcrop_2",
+        "tile.PamHarvestCraft:rhubarbcrop_2",
+        "tile.PamHarvestCraft:rutabagacrop_2",
         "tile.PamHarvestCraft:whitemushroomcrop_2",
         "tile.PamHarvestCraft:candleberrycrop_2",
         "tile.PamHarvestCraft:blackberrycrop_2",
@@ -420,7 +421,7 @@ public void initializeValues()
   
   String[] targetBlocks = new String[]
     {
-        
+        "tile.bop.wood1"
     };
   targetBlocks = config.get(AWStructureStatics.targetBlocks, "target_blocks", targetBlocks).getStringList();
   for(String st : targetBlocks)
@@ -436,6 +437,11 @@ public static boolean skippableBlocksContains(String blockName)
   String tileName = blockName.startsWith("tile.") ? blockName : "tile."+blockName;
   String noTileName = blockName.startsWith("tile.") ? blockName.substring(5): blockName;
   return skippableWorldGenBlocks.contains(tileName) || skippableWorldGenBlocks.contains(noTileName);
+  }
+
+public static Set<String> getUserDefinedTargetBlocks()
+  {
+  return worldGenTargetBlocks;
   }
 
 }

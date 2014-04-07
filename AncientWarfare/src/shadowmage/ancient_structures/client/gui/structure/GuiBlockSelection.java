@@ -31,6 +31,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_structures.common.config.AWLog;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;
 import shadowmage.ancient_warfare.client.gui.elements.GuiButtonSimple;
@@ -112,6 +113,14 @@ public void setupControls()
   for(int i = 0; i <256; i++)
     {
     block = Block.blocksList[i];
+    if(block==null){continue;}
+    addBlock(elementNum, totalHeight, 0, block); 
+    totalHeight += 18;
+    }
+  
+  for(String name : AWStructureStatics.getUserDefinedTargetBlocks())
+    {
+    block = BlockDataManager.getBlockByName(name);
     if(block==null){continue;}
     addBlock(elementNum, totalHeight, 0, block); 
     totalHeight += 18;

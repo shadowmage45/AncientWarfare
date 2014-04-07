@@ -85,11 +85,10 @@ public void loadConfiguration(File config, Logger log)
 
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
-  {   
-  BlockDataManager.loadBlockList();
-  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
+  {    
   AWLog.setLogger(evt.getModLog());
   AWLog.log("Ancient Warfare Structures Starting Loading.  Version: "+Config.VERSION);
+  this.loadConfiguration(evt.getSuggestedConfigurationFile(), evt.getModLog());
   pluginManager = new StructurePluginManager();   
   String path = evt.getModConfigurationDirectory().getAbsolutePath();
   TemplateLoader.instance().initializeAndExportDefaults(path); 
@@ -106,6 +105,7 @@ public void preInit(FMLPreInitializationEvent evt)
 public void init(FMLInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Init started.");
+  BlockDataManager.loadBlockList();//needs to be called during init, as not all mods would have registered blocks during AW's pre-init phase
   /**
    * listen for plugin registration
    * TODO 
