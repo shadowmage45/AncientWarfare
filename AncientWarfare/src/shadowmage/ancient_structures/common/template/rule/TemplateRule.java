@@ -51,7 +51,7 @@ public int ruleNumber = -1;
  */
 public TemplateRule()
   {
- 
+
   }
 
 /**
@@ -72,11 +72,11 @@ public abstract void addResources(List<ItemStack> resources);
 public abstract boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass);
 
 public void writeRule(BufferedWriter out) throws IOException
-  {
-  NBTTagCompound tag = new NBTTagCompound();
-  writeRuleData(tag);
-  writeTag(out, tag);
-  }
+{
+NBTTagCompound tag = new NBTTagCompound();
+writeRuleData(tag);
+writeTag(out, tag);
+}
 
 public void parseRule(int ruleNumber, List<String> lines)
   {
@@ -86,19 +86,19 @@ public void parseRule(int ruleNumber, List<String> lines)
   }
 
 public final void writeTag(BufferedWriter out, NBTTagCompound tag) throws IOException
+{
+out.write("tag:");
+out.newLine();
+List<String> tagData = new ArrayList<String>();
+NBTTools.writeNBTToLines(tag, tagData);
+for(String line : tagData)
   {
-  out.write("tag:");
-  out.newLine();
-  List<String> tagData = new ArrayList<String>();
-  NBTTools.writeNBTToLines(tag, tagData);
-  for(String line : tagData)
-    {
-    out.write(line);
-    out.newLine();
-    }
-  out.write(":endtag");
+  out.write(line);
   out.newLine();
   }
+out.write(":endtag");
+out.newLine();
+}
 
 public final NBTTagCompound readTag(List<String> ruleData)
   {
@@ -125,33 +125,33 @@ public final NBTTagCompound readTag(List<String> ruleData)
   }
 
 public final static void writeRuleLines(TemplateRule rule, BufferedWriter out, String ruleType) throws IOException
+{
+if(rule==null)
   {
-  if(rule==null)
-    {
-    return;
-    }
-  String id = AWStructures.instance.pluginManager.getPluginNameFor(rule.getClass());
-  if(id==null)
-    {
-    return;
-    }
-  out.write(ruleType+":");
-  out.newLine();
-  out.write("plugin="+id);
-  out.newLine();
-  out.write("number="+rule.ruleNumber);
-  out.newLine();
-  out.write("data:");
-  out.newLine();
-  rule.writeRule(out);
-  out.write(":enddata");
-  out.newLine();
-  out.write(":end"+ruleType);
-  out.newLine();
-  out.newLine();
+  return;
   }
+String id = AWStructures.instance.pluginManager.getPluginNameFor(rule.getClass());
+if(id==null)
+  {
+  return;
+  }
+out.write(ruleType+":");
+out.newLine();
+out.write("plugin="+id);
+out.newLine();
+out.write("number="+rule.ruleNumber);
+out.newLine();
+out.write("data:");
+out.newLine();
+rule.writeRule(out);
+out.write(":enddata");
+out.newLine();
+out.write(":end"+ruleType);
+out.newLine();
+out.newLine();
+}
 
-public static final TemplateRule getRule(List<String> ruleData, String ruleType)
+public static final TemplateRule getRule(List<String> ruleData, String ruleType) throws TemplateRuleException
   {
   Iterator<String> it = ruleData.iterator();
   String name = null;
@@ -192,6 +192,10 @@ public static final TemplateRule getRule(List<String> ruleData, String ruleType)
       }
     }
   Class<?extends TemplateRule> clz = AWStructures.instance.pluginManager.getRuleByName(name);
+  if(clz==null)
+    {
+    throw new TemplateRuleException("Could not locate plugin for rule type: "+name);
+    }
   if(name==null || ruleNumber<0 || ruleDataPackage.size()==0 || clz==null)
     {
     throw new IllegalArgumentException("Not enough data to create template rule.\n"+
@@ -200,7 +204,6 @@ public static final TemplateRule getRule(List<String> ruleData, String ruleType)
         "ruleDataPackage.size:"+ruleDataPackage.size()+"\n"+
         "ruleClass: "+clz);
     }
-  
   try
     {    
     TemplateRule rule = clz.getConstructor().newInstance();    
@@ -233,5 +236,14 @@ public static final TemplateRule getRule(List<String> ruleData, String ruleType)
     }
   return null;
   }
+
+public static class TemplateRuleException extends Exception
+{
+
+public TemplateRuleException(String message) 
+  {
+  super(message);
+  }
+}
 
 }

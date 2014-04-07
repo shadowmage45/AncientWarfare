@@ -33,6 +33,7 @@ import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
+import shadowmage.ancient_structures.common.template.rule.TemplateRule.TemplateRuleException;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.StringTools;
 
@@ -68,7 +69,7 @@ public StructureTemplate parseTemplate(File file)
       }   
     catch(Exception e2)
       {
-      throw new IllegalArgumentException("Error parsing template: "+file.getName() +" at line: "+ (lineNumber+1) + " for line: "+templateLines.get(lineNumber));
+      throw new IllegalArgumentException("Error parsing template: "+file.getName() +" at line: "+ (lineNumber+1) + " for line: "+templateLines.get(lineNumber) +" actual excception: "+e2.getMessage());
       }
     } 
   catch (FileNotFoundException e)
@@ -220,16 +221,23 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
           break;
           }
         }
-      TemplateRule rule = parseRule(groupedLines, "rule");
-      if(rule!=null)
+      try
         {
-        parsedRules.add(rule);
-        if(rule.ruleNumber>highestParsedRule)
+        TemplateRule rule = parseRule(groupedLines, "rule");
+        if(rule!=null)
           {
-          highestParsedRule = rule.ruleNumber;
+          parsedRules.add(rule);
+          if(rule.ruleNumber>highestParsedRule)
+            {
+            highestParsedRule = rule.ruleNumber;
+            }
           }
+        groupedLines.clear();
         }
-      groupedLines.clear();
+      catch(TemplateRuleException e)
+        {
+        e.printStackTrace();
+        }
       } 
     
     /**
@@ -247,12 +255,19 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
           break;
           }
         }
-      TemplateRuleEntity rule = (TemplateRuleEntity) parseRule(groupedLines, "entity");
-      if(rule!=null)
+      try
         {
-        parsedEntities.add(rule);
+        TemplateRuleEntity rule = (TemplateRuleEntity) parseRule(groupedLines, "entity");
+        if(rule!=null)
+          {
+          parsedEntities.add(rule);
+          }
+        groupedLines.clear();
         }
-      groupedLines.clear();
+      catch(TemplateRuleException e)
+        {
+        e.printStackTrace();
+        }
       } 
     
     /**
@@ -297,7 +312,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
   return constructTemplate(name, xSize, ySize, zSize, xOffset, yOffset, zOffset, templateData, ruleArray, entityRuleArray, validation);  
   }
 
-private TemplateRule parseRule(List<String> templateLines, String ruleType)
+private TemplateRule parseRule(List<String> templateLines, String ruleType) throws TemplateRuleException
   {
   return TemplateRule.getRule(templateLines, ruleType);
   }
