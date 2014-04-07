@@ -394,10 +394,12 @@ public void onElementActivated(IGuiElement element)
     }
   else if(element==this.biomeSelectButton)
     {
+    this.stashValues();
     Minecraft.getMinecraft().displayGuiScreen(new GuiBiomeSelection(this));    
     }  
   else if(element==this.blockSelectButton)
     {
+    this.stashValues();
     Minecraft.getMinecraft().displayGuiScreen(new GuiBlockSelection(this));
     }
   this.name = nameBox.getText(); 
