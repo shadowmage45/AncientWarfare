@@ -40,6 +40,9 @@ public static BlockDataManager instance()
   return INSTANCE;
   }
 
+private static HashMap<Block, String> regNamesByBlock = new HashMap<Block, String>();
+private static HashMap<String, Block> blocksByRegName = new HashMap<String, Block>();
+
 public static void loadBlockList()
   {
   addBlock(0, "air");
@@ -193,6 +196,19 @@ public static void loadBlockList()
     }
   
   load17names();
+  loadRegNames();
+  }
+
+private static void loadRegNames()
+  {
+  Block block = null;
+  for(int i = 0; i < 4096; i++)
+    {
+    block = Block.blocksList[i];
+    if(block==null){continue;}
+    blocksByRegName.put(block.getUnlocalizedName(), block);
+    regNamesByBlock.put(block, block.getUnlocalizedName());
+    }
   }
 
 public static int getBlockPriority(int id, int meta)
@@ -250,12 +266,20 @@ public static int getRotatedMeta(Block block, int meta, int rotationAmt)
 
 public static Block getBlockByName(String name)
   {
-  return blocksBy17Name.containsKey(name)? blocksBy17Name.get(name) : Block.stone;
+  if(blocksBy17Name.containsKey(name))
+    {
+    return blocksBy17Name.get(name);
+    }
+  else if(blocksByRegName.containsKey(name))
+    {
+    return blocksByRegName.get(name);
+    }
+  return Block.stone;
   }
 
 public static String getBlockName(Block block)
   {
-  return namesFor17.containsKey(block) ? namesFor17.get(block) : block.getUnlocalizedName();
+  return namesFor17.containsKey(block) ? namesFor17.get(block) : block==null? "NULL" : block.getUnlocalizedName();
   }
 
 private static HashMap<Block, String> namesFor17 = new HashMap<Block, String>();
