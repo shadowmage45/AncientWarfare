@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures;
 
 import java.io.File;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -163,5 +164,64 @@ public void onPlayerChangedDimension(EntityPlayer player){}
 
 @Override
 public void onPlayerRespawn(EntityPlayer player){}
+
+private void clusterValueTest()
+  {
+  int[][] chunkMap = new int[40][40];
+  int[] structureValues = new int []{1,1,3,5,10,12,17,20,25,30,50,80,120};
+  Random rng = new Random();
+  
+  int remainingValue = 0;
+  int chosenValue = 0;
+  for(int x = 0; x < 40; x++)
+    {
+    for(int z = 0; z< 40; z++)
+      {
+      if(rng.nextFloat()>0.075f){continue;}//default 7.5% chance to generate
+      remainingValue = 200 - countValues(x, z, chunkMap);
+      
+      if(remainingValue<=0){continue;}//could not place any structure
+      while(true)
+        {
+        chosenValue = structureValues[rng.nextInt(structureValues.length)];
+        if(chosenValue<=remainingValue){break;}
+        }      
+      chunkMap[x][z]=chosenValue;      
+      }
+    }
+  
+  String output = "";
+  for(int z = 0; z < 40; z++)
+    {
+    for(int x = 0; x< 40; x++)
+      {      
+      output = output + chunkMap[x][z];
+      if(x<39){output = output+",";}
+      }
+    if(z<39){output = output+"\n";}
+    }
+  AWLog.logDebug("chunk map test output: "+output);
+  }
+
+private int countValues(int startX, int startZ, int[][] chunkMap)
+  {
+  startX-=8;
+  startZ-=8;
+  int endX = startX+17;
+  int endZ = startZ+17;
+  if(startX<0){startX=0;}
+  if(startZ<0){startZ=0;}
+  if(endX>40){endX=40;}
+  if(endZ>40){endZ=40;}
+  int value = 0;
+  for(int x = startX; x< endX; x++)
+    {
+    for(int z = startZ; z<endZ; z++)
+      {
+      value += chunkMap[x][z];
+      }
+    }  
+  return value;
+  }
 
 }
