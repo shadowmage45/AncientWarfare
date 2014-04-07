@@ -169,16 +169,20 @@ public String getStructureName()
 public void readFromNBT(NBTTagCompound par1nbtTagCompound)
   {
   super.readFromNBT(par1nbtTagCompound);
-  if(par1nbtTagCompound.hasKey("builder"))
+  if(par1nbtTagCompound.hasKey("builderData"))
     {
-    NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builder");
+    NBTTagCompound builder = par1nbtTagCompound.getCompoundTag("builderData");
     this.builder = new StructureBuilderTicked();
     this.builder.readFromNBT(builder);
     if(this.builder.invalid)
       {
       this.shouldRemove = true;
       }
-    }  
+    } 
+  else
+    {
+    this.shouldRemove = true;
+    }
   par1nbtTagCompound.setBoolean("started", hasStarted);
   }
 
@@ -201,7 +205,7 @@ public void writeToNBT(NBTTagCompound par1nbtTagCompound)
     {
     NBTTagCompound tag = new NBTTagCompound();
     builder.writeToNBT(tag);
-    par1nbtTagCompound.setCompoundTag("builder", tag);
+    par1nbtTagCompound.setCompoundTag("builderData", tag);
     }
   this.hasStarted = par1nbtTagCompound.getBoolean("started");
   }
