@@ -39,7 +39,6 @@ public Logger logger;
 private boolean debug = false;
 public static boolean updatedVersion = false;
 public static boolean autoExportOnUpdate = false;
-public static boolean shouldExport = false;
 
 public ModConfiguration(File configFile, Logger log, String version)
   {

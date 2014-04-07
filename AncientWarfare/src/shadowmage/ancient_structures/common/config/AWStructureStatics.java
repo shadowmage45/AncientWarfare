@@ -38,6 +38,7 @@ public class AWStructureStatics extends ModConfiguration
 public static String templateExtension = "aws";
 public static boolean enableVillageGen = true;
 public static boolean enableStructureGeneration = true;
+public static boolean shouldExport = false;
 public static int chunkSearchRadius = 16;
 public static int maxClusterValue = 500;
 public static int randomChance = 75;
@@ -71,17 +72,17 @@ public AWStructureStatics(File configFile, Logger log, String version)
 public void initializeCategories()
   {
   this.config.addCustomCategoryComment(worldGenCategory, "Settings that effect all world-structure-generation.");
-  this.config.addCustomCategoryComment(villageGenCategory, "Settings that effect the generation of vanilla villages");
-  this.config.addCustomCategoryComment(excludedEntitiesCategory, "Entities that will not show up in the Mob Spawner Placer entity selection list");
+  this.config.addCustomCategoryComment(villageGenCategory, "Settings that effect the generation of vanilla villages.\nCurrently there are no village-generation options, and no structures will generate in villages.");
+  this.config.addCustomCategoryComment(excludedEntitiesCategory, "Entities that will not show up in the Mob Spawner Placer entity selection list.\nAdd any mobs here that will crash if spawned via the vanilla mob-spawner (usually complex NBT-defined entities).");
   this.config.addCustomCategoryComment(worldGenBlocks, "Blocks that should be skipped/ignored during world gen -- should list all plant blocks/logs/foliage");
-  this.config.addCustomCategoryComment(targetBlocks, "List of target blocks to add to the target-block selection GUI.  \n Vanilla block names should be listed as the 1.7 registered name. \nMod blocks should be listed as 'tile.'+registeredBlockName");
-  this.config.addCustomCategoryComment(biomeMap, "Custom-mapped biome names to be used in templates.  This alias list must be shared if you wish to share your templates that use these custom aliases");
+  this.config.addCustomCategoryComment(targetBlocks, "List of target blocks to add to the target-block selection GUI.\nVanilla block names should be listed as the 1.7 registered name. \nMod blocks should be listed as 'tile.'+registeredBlockName");
+  this.config.addCustomCategoryComment(biomeMap, "Custom-mapped biome names to be used in templates.\nBiomes should be specified by their fully-qualifed class-name.\nThis alias list must be shared if you wish to share your templates that use these custom aliases.");
   }
 
 @Override
 public void initializeValues()
   {
-  templateExtension = config.get(worldGenCategory, "template_extension", "aws").getString();
+  templateExtension = config.get(worldGenCategory, "template_extension", "aws", "The template extension that will be searched for when\nloading templates and used for any new-scanned templates.").getString();
   enableVillageGen = config.get(worldGenCategory, "enable_village_generation", enableVillageGen).getBoolean(enableVillageGen);
   enableStructureGeneration = config.get(worldGenCategory, "enable_structure_generation", enableStructureGeneration).getBoolean(enableStructureGeneration);
   chunkSearchRadius = config.get(worldGenCategory, "validation_chunk_radius", chunkSearchRadius).getInt(chunkSearchRadius);
@@ -89,6 +90,8 @@ public void initializeValues()
   randomChance = config.get(worldGenCategory, "random_chance", randomChance).getInt(randomChance);
   randomRange = config.get(worldGenCategory, "random_range", randomRange).getInt(randomRange);
   spawnProtectionRange = config.get(worldGenCategory, "spawn_protection_chunk_radius", spawnProtectionRange).getInt(spawnProtectionRange);
+  
+  shouldExport = config.get(worldGenCategory, "export_defaults", shouldExport, "If true, will re-export the included structure templates.\nShould be re-set after every update that adds or changes templates.").getBoolean(shouldExport);
   
   String[] defaultExcludedEntities = new String[]
         {
