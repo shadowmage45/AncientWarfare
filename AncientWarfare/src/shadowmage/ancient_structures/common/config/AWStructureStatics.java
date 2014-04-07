@@ -41,11 +41,13 @@ public static int randomRange = 1000;
 public static int spawnProtectionRange = 0;
 public static Set<String> excludedSpawnerEntities = new HashSet<String>();
 private static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
+private static HashSet<String> worldGenTargetBlocks = new HashSet<String>();
 
 private static String worldGenCategory = "a_world-gen_settings";
 private static String villageGenCategory = "b_village-gen_settings";
 private static String excludedEntitiesCategory = "c_excluded_spawner_entities";
 private static String worldGenBlocks = "d_world_gen_skippable_blocks";
+private static String targetBlocks = "e_world_gen_target_blocks";
 
 /**
  * @param configFile
@@ -61,6 +63,10 @@ public AWStructureStatics(File configFile, Logger log, String version)
 public void initializeCategories()
   {
   this.config.addCustomCategoryComment(worldGenCategory, "Settings that effect all world-structure-generation.");
+  this.config.addCustomCategoryComment(villageGenCategory, "Settings that effect the generation of vanilla villages");
+  this.config.addCustomCategoryComment(excludedEntitiesCategory, "Entities that will not show up in the Mob Spawner Placer entity selection list");
+  this.config.addCustomCategoryComment(worldGenBlocks, "Blocks that should be skipped/ignored during world gen -- should list all plant blocks/logs/foliage");
+  this.config.addCustomCategoryComment(targetBlocks, "List of target blocks to add to the target-block selection GUI.  \n Vanilla block names should be listed as the 1.7 registered name. \nMod blocks should be listed as 'tile.'+registeredBlockName");
   }
 
 @Override
@@ -363,13 +369,64 @@ public void initializeValues()
         "tile.decorationsBlock",
         "tile.stoneStalactiteBlock",
         "tile.sandstoneStalactiteBlock",
-
+        "tile.TFLog  ",
+        "tile.TFLeaves  ",
+        "tile.TFPlant  ",
+        "tile.TFRoots  ",
+        "tile.TFMagicLog  ",
+        "tile.TFMagicLeaves  ",
+        "tile.TFMoonworm  ",
+        "tile.TFMagicLogSpecial  ",
+        "tile.TFTowerStone  ",
+        "tile.PamWeeeFlowers:vine_white  ",
+        "tile.PamWeeeFlowers:vine_orange  ",
+        "tile.PamWeeeFlowers:vine_magenta  ",
+        "tile.PamWeeeFlowers:vine_lightblue  ",
+        "tile.PamWeeeFlowers:vine_yellow  ",
+        "tile.PamWeeeFlowers:vine_lime  ",
+        "tile.PamWeeeFlowers:vine_pink  ",
+        "tile.PamWeeeFlowers:vine_darkgrey  ",
+        "tile.PamWeeeFlowers:vine_lightgrey  ",
+        "tile.PamWeeeFlowers:vine_cyan  ",
+        "tile.PamWeeeFlowers:vine_purple  ",
+        "tile.PamWeeeFlowers:vine_blue  ",
+        "tile.PamWeeeFlowers:vine_brown  ",
+        "tile.PamWeeeFlowers:vine_green  ",
+        "tile.PamWeeeFlowers:vine_red  ",
+        "tile.PamWeeeFlowers:vine_black",
+        "tile.flowerCrop",
+        "tile.PamHarvestCraft:blueberrycrop_2",
+        "tile.PamHarvestCraft:strawberrycrop_2  ",
+        "tile.PamHarvestCraft:seaweedcrop_2  ",
+        "tile.PamHarvestCraft:rhubarbcrop_2  ",
+        "tile.PamHarvestCraft:rutabagacrop_2  ",
+        "tile.PamHarvestCraft:whitemushroomcrop_2",
+        "tile.PamHarvestCraft:candleberrycrop_2",
+        "tile.PamHarvestCraft:blackberrycrop_2",
+        "tile.PamHarvestCraft:raspberrycrop_2",
+        "tile.PamHarvestCraft:cranberrycrop_2",
+        "tile.PamHarvestCraft:kiwicrop_2",
+        "tile.PamHarvestCraft:sunflowercrop_2",
+        "tile.PamHarvestCraft:spiceleafcrop_2",
+        "tile.PamHarvestCraft:cottoncrop_2",
+        "tile.PamHarvestCraft:grapecrop_2"
     };
+  
   defaultSkippableBlocks = config.get(worldGenBlocks, "skippable_blocks", defaultSkippableBlocks).getStringList();
   for(String st : defaultSkippableBlocks)
     {
     skippableWorldGenBlocks.add(st);
     } 
+  
+  String[] targetBlocks = new String[]
+    {
+        
+    };
+  targetBlocks = config.get(AWStructureStatics.targetBlocks, "target_blocks", targetBlocks).getStringList();
+  for(String st : targetBlocks)
+    {
+    worldGenTargetBlocks.add(st);
+    }
   
   this.config.save();
   }
