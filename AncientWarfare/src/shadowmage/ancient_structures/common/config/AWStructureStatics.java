@@ -21,13 +21,15 @@
 package shadowmage.ancient_structures.common.config;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import net.minecraft.block.Block;
-import shadowmage.ancient_structures.common.manager.BlockDataManager;
+import shadowmage.ancient_warfare.common.AWCore;
+import net.minecraftforge.common.ConfigCategory;
+import net.minecraftforge.common.Property;
 
 public class AWStructureStatics extends ModConfiguration
 {
@@ -44,11 +46,15 @@ public static Set<String> excludedSpawnerEntities = new HashSet<String>();
 private static HashSet<String> skippableWorldGenBlocks = new HashSet<String>();
 private static HashSet<String> worldGenTargetBlocks = new HashSet<String>();
 
+private static HashMap<Class, String> biomeAliasByClass = new HashMap<Class, String>();
+private static HashMap<String, Class> biomeAliasByName = new HashMap<String, Class>();
+
 private static String worldGenCategory = "a_world-gen_settings";
 private static String villageGenCategory = "b_village-gen_settings";
 private static String excludedEntitiesCategory = "c_excluded_spawner_entities";
 private static String worldGenBlocks = "d_world_gen_skippable_blocks";
 private static String targetBlocks = "e_world_gen_target_blocks";
+private static String biomeMap = "f_biome_aliases";
 
 /**
  * @param configFile
@@ -68,6 +74,7 @@ public void initializeCategories()
   this.config.addCustomCategoryComment(excludedEntitiesCategory, "Entities that will not show up in the Mob Spawner Placer entity selection list");
   this.config.addCustomCategoryComment(worldGenBlocks, "Blocks that should be skipped/ignored during world gen -- should list all plant blocks/logs/foliage");
   this.config.addCustomCategoryComment(targetBlocks, "List of target blocks to add to the target-block selection GUI.  \n Vanilla block names should be listed as the 1.7 registered name. \nMod blocks should be listed as 'tile.'+registeredBlockName");
+  this.config.addCustomCategoryComment(biomeMap, "Custom-mapped biome names to be used in templates.  This alias list must be shared if you wish to share your templates that use these custom aliases");
   }
 
 @Override
@@ -419,6 +426,9 @@ public void initializeValues()
     skippableWorldGenBlocks.add(st);
     } 
   
+  /**
+   * TODO add initial default values for target blocks to this list...
+   */
   String[] targetBlocks = new String[]
     {
         "tile.bop.wood1"
@@ -428,7 +438,30 @@ public void initializeValues()
     {
     worldGenTargetBlocks.add(st);
     }
-  
+    
+  ConfigCategory biomeAliasCategory = config.getCategory(biomeMap);
+  String fqcn;
+  Class foundClass;
+  String alias;
+  for(Entry<String, Property> entry : biomeAliasCategory.entrySet())
+    {
+    fqcn = entry.getKey();
+    alias = entry.getValue().getString();
+    try
+      {
+      foundClass = AWCore.instance.getClass().forName(fqcn);
+      if(foundClass!=null)
+        {        
+        AWLog.logDebug("mapping alias for class: "+foundClass+"  alias: "+alias);
+        biomeAliasByClass.put(foundClass, alias);
+        biomeAliasByName.put(alias, foundClass);
+        }
+      } 
+    catch (ClassNotFoundException e)
+      {
+      e.printStackTrace();
+      }
+    }    
   this.config.save();
   }
 
