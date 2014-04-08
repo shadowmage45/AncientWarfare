@@ -193,10 +193,12 @@ private void fillFromBiomes()
   
   Set<BiomeGenBase> biomesToSearch = new HashSet<BiomeGenBase>();
   
+  String biomeName;
   for(BiomeGenBase biome : BiomeGenBase.biomeList)
     {
     if(biome==null){continue;}
-    if(whitelist && selectedBiomes.contains(biome.biomeName) || !whitelist && !selectedBiomes.contains(biome.biomeName))
+    biomeName = AWStructureStatics.getBiomeName(biome);
+    if(whitelist && selectedBiomes.contains(biomeName) || !whitelist && !selectedBiomes.contains(biomeName))
       {
       biomesToSearch.add(biome);
       }
