@@ -447,6 +447,30 @@ public void initializeValues()
   HashMap<String, String> defaultAliasMap = new HashMap<String, String>();
   
   /**
+  *
+   Bop Alps with Highlands Alps
+   Bop Steppe with Highlands Steppe
+   Bop Scrubland with EBXL Scrubland
+   Bop Tropics with Highlands Tropics
+   Bop Wasteland with EBXL Wasteland
+   Bop Tundra with Highlands Tundra
+   Bop Tundra with EBXL Tundra
+   Bop Meadow with Highlands Meadow with EBXL Meadow
+   Bop Rainforest with Highlands Rainforest with EBXL Rainforest
+   Bop Shrubland with EBXL Shrubland
+   Bop Redwood Forest with Highlands Redwood Forest with EBXL Redwood Forest
+   Bop Outback with Highlands Outback
+   Bop Marsh with EBXL Marsh
+   Bop Bog with Highlands Bog
+   Bop Canyon with Highlands Canyon
+   Bop Mesa with Highlands Mesa
+   Bop Glacier with EBXL Glacier with Highlands Glacier
+   Bop Birch Forest with EBXL Birch Forest
+   Bop Savanna with EBXL Savanna
+   Bop Temperate Rainforest with EBXL Temperate Rainforest
+  */
+  
+  /**
    * BOP default mappings
    */
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenAlps", "bop.alps");
@@ -484,31 +508,7 @@ public void initializeValues()
   defaultAliasMap.put("highlands.biome.BiomeGenCanyon", "highlands.canyon");
   defaultAliasMap.put("highlands.biome.BiomeGenMesa", "highlands.mesa");
   defaultAliasMap.put("highlands.biome.BiomeGenGlacier", "highlands.glacier");
-  
-  /**
-  *
-   Bop Alps with Highlands Alps
-   Bop Steppe with Highlands Steppe
-   Bop Scrubland with EBXL Scrubland
-   Bop Tropics with Highlands Tropics
-   Bop Wasteland with EBXL Wasteland
-   Bop Tundra with Highlands Tundra
-   Bop Tundra with EBXL Tundra
-   Bop Meadow with Highlands Meadow with EBXL Meadow
-   Bop Rainforest with Highlands Rainforest with EBXL Rainforest
-   Bop Shrubland with EBXL Shrubland
-   Bop Redwood Forest with Highlands Redwood Forest with EBXL Redwood Forest
-   Bop Outback with Highlands Outback
-   Bop Marsh with EBXL Marsh
-   Bop Bog with Highlands Bog
-   Bop Canyon with Highlands Canyon
-   Bop Mesa with Highlands Mesa
-   Bop Glacier with EBXL Glacier with Highlands Glacier
-   Bop Birch Forest with EBXL Birch Forest
-   Bop Savanna with EBXL Savanna
-   Bop Temperate Rainforest with EBXL Temperate Rainforest
-  */
-  
+    
   /**
    * EBXL default mappings
    */
@@ -522,8 +522,7 @@ public void initializeValues()
   defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeGlacier", "ebxl.glacier");
   defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeBirchForest", "ebxl.birch_forest");
   defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeSavanna", "ebxl.savanna");
-  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeTemporateRainforest", "ebxl.temperate_rainforest");
-  
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeTemporateRainforest", "ebxl.temperate_rainforest");  
   
   String value;
   for(String key : defaultAliasMap.keySet())//initialize default alias map
