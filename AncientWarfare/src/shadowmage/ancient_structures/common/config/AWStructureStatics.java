@@ -497,6 +497,7 @@ public static BiomeGenBase getBiomeByName(String name)
     Class clz = biomeAliasByName.get(name);
     for(BiomeGenBase b : BiomeGenBase.biomeList)
       {
+      if(b==null){continue;}
       if(clz.equals(b.getClass()))
         {
         return b;
@@ -507,6 +508,7 @@ public static BiomeGenBase getBiomeByName(String name)
     {
     for(BiomeGenBase b : BiomeGenBase.biomeList)
       {
+      if(b==null){continue;}
       if(b.biomeName.equals(name))
         {
         return b;
