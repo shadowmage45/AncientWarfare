@@ -505,7 +505,7 @@ public void initializeValues()
   defaultAliasMap.put("highlands.biome.BiomeGenRedwoodForest", "highlands.redwood_forest");
   defaultAliasMap.put("highlands.biome.BiomeGenOutback", "highlands.outback");
   defaultAliasMap.put("highlands.biome.BiomeGenBog", "highlands.bog");
-  defaultAliasMap.put("highlands.biome.BiomeGenCanyon", "highlands.canyon");
+  defaultAliasMap.put("highlands.biome.BiomeGenCliffs", "highlands.canyon");
   defaultAliasMap.put("highlands.biome.BiomeGenMesa", "highlands.mesa");
   defaultAliasMap.put("highlands.biome.BiomeGenGlacier", "highlands.glacier");
     
