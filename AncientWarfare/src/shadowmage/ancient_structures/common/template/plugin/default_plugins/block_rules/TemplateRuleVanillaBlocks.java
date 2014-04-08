@@ -78,12 +78,30 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
 @Override
 public void addResources(List<ItemStack> resources)
   {
+  boolean found = false;
   Block block = BlockDataManager.getBlockByName(blockName);
   IDPairCount count = BlockInfo.getInventoryBlock(block.blockID, meta);
   if(count!=null && count.id>0)
     {
-    resources.add(new ItemStack(count.id, count.count, count.meta));    
+    resources.add(new ItemStack(count.id, count.count, count.meta));
     }
+//  if(count==null || count.id==0)
+//    {
+//    return;    
+//    }
+//  for(ItemStack stack : resources)
+//    {
+//    if(stack.itemID==count.id && stack.getItemDamage()==count.meta && stack.stackSize<stack.getMaxStackSize())
+//      {
+//      stack.stackSize+=count.count;
+//      found = true;
+//      break;
+//      }
+//    }
+//  if(!found)
+//    {
+//    resources.add(new ItemStack(count.id, count.count, count.meta));
+//    }
   }
 
 @Override

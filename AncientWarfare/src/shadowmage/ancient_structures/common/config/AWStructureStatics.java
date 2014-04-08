@@ -487,7 +487,7 @@ public static String getBiomeName(BiomeGenBase biome)
     {
     return biomeAliasByClass.get(biome.getClass());
     }
-  return biome.biomeName;
+  return biome.biomeName.toLowerCase();
   }
 
 public static BiomeGenBase getBiomeByName(String name)

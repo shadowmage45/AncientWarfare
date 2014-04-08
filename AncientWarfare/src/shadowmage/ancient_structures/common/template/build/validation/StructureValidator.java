@@ -149,6 +149,7 @@ protected void setDefaultSettings(StructureTemplate template)
   this.borderSize = size;
   this.maxLeveling = template.ySize-template.yOffset;
   this.maxFill = size;
+  this.survival = false;
   }
 
 /**

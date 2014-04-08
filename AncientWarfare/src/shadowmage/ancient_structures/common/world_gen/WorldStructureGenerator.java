@@ -82,8 +82,10 @@ public void generate(Random random, int chunkX, int chunkZ, World world, IChunkP
     {
     return;
     }
-  if(!AWStructureStatics.enableStructureGeneration){return;}
-//  if(rng.nextInt(10)>0){return;}
+  if(!AWStructureStatics.enableStructureGeneration)
+    {
+    return;
+    }
   if(isGenerating)
     {
     delayedChunks.add(new DelayedGenerationEntry(chunkX, chunkZ, world, chunkGenerator, chunkProvider));
@@ -185,10 +187,11 @@ public boolean attemptStructureGenerationAt(World world, int x, int y, int z, in
       }
     }  
   generate = template.getValidationSettings().validatePlacement(world, x, y, z, face, template, bb);
-  if(Config.DEBUG)
+  if(!generate)
     {
-    AWLog.logDebug("validation took: "+(System.currentTimeMillis()-t1+" ms"));   
+    AWLog.logDebug("validation was rejected by template: "+template);
     }
+  AWLog.logDebug("validation took: "+(System.currentTimeMillis()-t1+" ms"));
   if(generate)
     {    
     t2 = System.currentTimeMillis();

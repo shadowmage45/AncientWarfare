@@ -21,9 +21,12 @@
 package shadowmage.ancient_structures.common.template;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -184,12 +187,7 @@ private void compactStackList(List<ItemStack> stacks)
     }  
   stacks.clear();
   stacks.addAll(out);
-  
-//  AWLog.logDebug("compacted resource list for structure: "+name);
-//  for(ItemStack stack : stacks)
-//    {
-//    AWLog.logDebug(stack.toString());
-//    }
   }
+
 
 }

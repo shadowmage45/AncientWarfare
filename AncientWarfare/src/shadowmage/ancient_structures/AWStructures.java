@@ -106,6 +106,7 @@ public void preInit(FMLPreInitializationEvent evt)
 public void init(FMLInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Init started.");
+  AWLog.log("Loading block names and mappings for structure system.");
   BlockDataManager.loadBlockList();//needs to be called during init, as not all mods would have registered blocks during AW's pre-init phase
   /**
    * listen for plugin registration
@@ -119,9 +120,13 @@ public void init(FMLInitializationEvent evt)
 public void postInit(FMLPostInitializationEvent evt)
   {
   config.log("Ancient Warfare Structures Post-Init started");  
+  config.log("Loading plugins...");
   pluginManager.loadPlugins();
+  config.log("Loading biome list...");
   WorldGenStructureManager.instance().loadBiomeList();
+  config.log("Loading Structure templates...");
   TemplateLoader.instance().loadTemplates();
+  config.log("Loading Creating recipes for survival-mode structures...");
   AWCraftingManager.instance().addStructureRecipes();
   config.log("Ancient Warfare Structures Post-Init completed.  Successfully completed all loading stages.");
   config.saveConfig();

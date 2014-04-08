@@ -31,6 +31,7 @@ import java.util.Set;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
@@ -55,7 +56,7 @@ public void loadBiomeList()
     {
     biome = BiomeGenBase.biomeList[i];
     if(biome==null){continue;}
-    String name = AWStructureStatics.getBiomeName(biome).toLowerCase();
+    String name = AWStructureStatics.getBiomeName(biome);
     templatesByBiome.put(name, new HashSet<StructureTemplate>());    
     }
   }
@@ -141,7 +142,13 @@ public StructureTemplate selectTemplateForGeneration(World world, Random rng, in
   remainingValueCache = AWStructureStatics.maxClusterValue - foundValue;
   Collection<String> generatedUniques = map.getGeneratedUniques();
   Set<StructureTemplate> potentialStructures = templatesByBiome.get(biomeName);
-  if(potentialStructures==null || potentialStructures.isEmpty()){return null;}
+  AWLog.logDebug("checking structurse for biome: "+biomeName);
+  if(potentialStructures==null || potentialStructures.isEmpty())
+    {
+	AWLog.logDebug("found no entry for biome: "+biomeName);
+	return null;
+	}
+  AWLog.logDebug("found: "+potentialStructures.size()+" potential structures for biome: "+biomeName);
   StructureValidator settings;
   int dim = world.provider.dimensionId;
   for(StructureTemplate template : potentialStructures)//loop through initial structures, only adding to 2nd list those which meet biome, unique, value, and minDuplicate distance settings
