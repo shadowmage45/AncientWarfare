@@ -524,6 +524,8 @@ public void initializeValues()
   defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeSavanna", "ebxl.savanna");
   defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeTemporateRainforest", "ebxl.temperate_rainforest");  
   
+  //plains, swampland, ocean, junglehills, jungle, foresthills, extreme hills, desert, 
+  
   String value;
   for(String key : defaultAliasMap.keySet())//initialize default alias map
     {
