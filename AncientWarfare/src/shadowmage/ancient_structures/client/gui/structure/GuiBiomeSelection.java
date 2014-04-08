@@ -21,6 +21,7 @@
 package shadowmage.ancient_structures.client.gui.structure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -88,14 +89,22 @@ public void setupControls()
   this.guiElements.put(1, new GuiString(1, this, 220, 10, "Select Biomes: ").updateRenderPos(8, 10));  
   this.guiElements.put(2, this.area = new GuiScrollableArea(2, this, 8, 18+10+4, getXSize()-16, getYSize() - 20-18-4, 8));
   
+  List<String> biomeNames = new ArrayList<String>();
   int totalHeight = 0;
   int elementNum = 3;
+  
+  
   for(BiomeGenBase biome : BiomeGenBase.biomeList)
     {
     if(biome==null || biome.biomeName==null || biome.biomeName.equals("")){continue;}
-    totalHeight = addBiome(elementNum, totalHeight, AWStructureStatics.getBiomeName(biome));
+    biomeNames.add(AWStructureStatics.getBiomeName(biome));
+    }
+  Collections.sort(biomeNames);
+  for(String biomeName : biomeNames)
+    {
+    totalHeight = addBiome(elementNum, totalHeight, biomeName);
     elementNum++;
-    }    
+    }
   area.updateTotalHeight(totalHeight);
   }
 
