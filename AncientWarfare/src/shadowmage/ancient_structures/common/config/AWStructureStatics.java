@@ -443,30 +443,12 @@ public void initializeValues()
     worldGenTargetBlocks.add(st);
     }
   
-  /**
-   *
-    Bop Alps with Highlands Alps
-    Bop Steppe with Highlands Steppe
-    Bop Scrubland with EBXL Scrubland
-    Bop Tropics with Highlands Tropics
-    Bop Wasteland with EBXL Wasteland
-    Bop Tundra with Highlands Tundra
-    Bop Meadow with Highlands Meadow with EBXL Meadow
-    Bop Rainforest with Highlands Rainforest with EBXL Rainforest
-    Bop Shrubland with EBXL Shrubland
-    Bop Redwood Forest with Highlands Redwood Forest with EBXL Redwood Forest
-    Bop Outback with Highlands Outback
-    Bop Marsh with EBXL Marsh
-    Bop Bog with Highlands Bog
-    Bop Canyon with Highlands Canyon
-    Bop Mesa with Highlands Mesa
-    Bop Glacier with EBXL Glacier with Highlands Glacier
-    Bop Birch Forest with EBXL Birch Forest
-    Bop Savanna with EBXL Savanna
-    Bop Tundra with EBXL Tundra with Highlands Tundra
-    Bop Temperate Rainforest with EBXL Temperate Rainforest
-   */
+
   HashMap<String, String> defaultAliasMap = new HashMap<String, String>();
+  
+  /**
+   * BOP default mappings
+   */
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenAlps", "bop.alps");
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenSteppe", "bop.steppe");
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenScrubland", "bop.scrubland");
@@ -484,9 +466,63 @@ public void initializeValues()
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenMesa", "bop.mesa");
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenGlacier", "bop.glacier");
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenSavanna", "bop.savanna");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenBirchForest", "bop.birch_forest");
   defaultAliasMap.put("biomesoplenty.biomes.BiomeGenTemperateRainforest", "bop.temperate_rainforest");
+    
+  /**
+   * HIGHLANDS default mappings
+   */
+  defaultAliasMap.put("highlands.biome.BiomeGenAlps", "highlands.alps");
+  defaultAliasMap.put("highlands.biome.BiomeGenSteppe", "highlands.steppe");
+  defaultAliasMap.put("highlands.biome.BiomeGenTropics", "highlands.tropics");
+  defaultAliasMap.put("highlands.biome.BiomeGenTundra", "highlands.tundra");
+  defaultAliasMap.put("highlands.biome.BiomeGenMeadow", "highlands.meadow");
+  defaultAliasMap.put("highlands.biome.BiomeGenRainforest", "highlands.rainforest");
+  defaultAliasMap.put("highlands.biome.BiomeGenRedwoodForest", "highlands.redwood_forest");
+  defaultAliasMap.put("highlands.biome.BiomeGenOutback", "highlands.outback");
+  defaultAliasMap.put("highlands.biome.BiomeGenBog", "highlands.bog");
+  defaultAliasMap.put("highlands.biome.BiomeGenCanyon", "highlands.canyon");
+  defaultAliasMap.put("highlands.biome.BiomeGenMesa", "highlands.mesa");
+  defaultAliasMap.put("highlands.biome.BiomeGenGlacier", "highlands.glacier");
   
+  /**
+  *
+   Bop Alps with Highlands Alps
+   Bop Steppe with Highlands Steppe
+   Bop Scrubland with EBXL Scrubland
+   Bop Tropics with Highlands Tropics
+   Bop Wasteland with EBXL Wasteland
+   Bop Tundra with Highlands Tundra
+   Bop Tundra with EBXL Tundra
+   Bop Meadow with Highlands Meadow with EBXL Meadow
+   Bop Rainforest with Highlands Rainforest with EBXL Rainforest
+   Bop Shrubland with EBXL Shrubland
+   Bop Redwood Forest with Highlands Redwood Forest with EBXL Redwood Forest
+   Bop Outback with Highlands Outback
+   Bop Marsh with EBXL Marsh
+   Bop Bog with Highlands Bog
+   Bop Canyon with Highlands Canyon
+   Bop Mesa with Highlands Mesa
+   Bop Glacier with EBXL Glacier with Highlands Glacier
+   Bop Birch Forest with EBXL Birch Forest
+   Bop Savanna with EBXL Savanna
+   Bop Temperate Rainforest with EBXL Temperate Rainforest
+  */
   
+  /**
+   * EBXL default mappings
+   */
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeShrubland", "ebxl.shrubland");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeWasteland", "ebxl.wasteland");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeTundra", "ebxl.tundra");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeMeadow", "ebxl.meadow");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeRainforest", "ebxl.rainforest");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeRedwoodForest", "ebxl.redwood_forest");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeMarsh", "ebxl.marsh");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeGlacier", "ebxl.glacier");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeBirchForest", "ebxl.birch_forest");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeSavanna", "ebxl.savanna");
+  defaultAliasMap.put("extrabiomes.module.summa.biome.BiomeTemporateRainforest", "ebxl.temperate_rainforest");
   
   
   String value;
@@ -516,7 +552,7 @@ public void initializeValues()
       } 
     catch (ClassNotFoundException e)
       {
-      e.printStackTrace();
+      AWLog.log("Could not locate biome class for name: "+fqcn+".  Biome alias will not be added.  alias: "+alias);
       }
     }    
   this.config.save();
