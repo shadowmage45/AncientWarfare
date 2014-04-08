@@ -442,6 +442,59 @@ public void initializeValues()
     {
     worldGenTargetBlocks.add(st);
     }
+  
+  /**
+   *
+    Bop Alps with Highlands Alps
+    Bop Steppe with Highlands Steppe
+    Bop Scrubland with EBXL Scrubland
+    Bop Tropics with Highlands Tropics
+    Bop Wasteland with EBXL Wasteland
+    Bop Tundra with Highlands Tundra
+    Bop Meadow with Highlands Meadow with EBXL Meadow
+    Bop Rainforest with Highlands Rainforest with EBXL Rainforest
+    Bop Shrubland with EBXL Shrubland
+    Bop Redwood Forest with Highlands Redwood Forest with EBXL Redwood Forest
+    Bop Outback with Highlands Outback
+    Bop Marsh with EBXL Marsh
+    Bop Bog with Highlands Bog
+    Bop Canyon with Highlands Canyon
+    Bop Mesa with Highlands Mesa
+    Bop Glacier with EBXL Glacier with Highlands Glacier
+    Bop Birch Forest with EBXL Birch Forest
+    Bop Savanna with EBXL Savanna
+    Bop Tundra with EBXL Tundra with Highlands Tundra
+    Bop Temperate Rainforest with EBXL Temperate Rainforest
+   */
+  HashMap<String, String> defaultAliasMap = new HashMap<String, String>();
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenAlps", "bop.alps");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenSteppe", "bop.steppe");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenScrubland", "bop.scrubland");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenTropics", "bop.tropics");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenWasteland", "bop.wasteland");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenTundra", "bop.tundra");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenMeadow", "bop.meadow");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenRainforest", "bop.rainforest");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenShrubland", "bop.shrubland");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenRedwoodForest", "bop.redwood_forest");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenOutback", "bop.outback");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenMarsh", "bop.marsh");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenBog", "bop.bog");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenCanyon", "bop.canyon");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenMesa", "bop.mesa");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenGlacier", "bop.glacier");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenSavanna", "bop.savanna");
+  defaultAliasMap.put("biomesoplenty.biomes.BiomeGenTemperateRainforest", "bop.temperate_rainforest");
+  
+  
+  
+  
+  String value;
+  for(String key : defaultAliasMap.keySet())//initialize default alias map
+    {
+    value = defaultAliasMap.get(key);    
+    config.get(biomeMap, key, value);
+    }
     
   ConfigCategory biomeAliasCategory = config.getCategory(biomeMap);
   String fqcn;
