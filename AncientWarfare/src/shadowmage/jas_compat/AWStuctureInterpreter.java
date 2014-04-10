@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.SpawnListEntry;
@@ -55,7 +56,10 @@ public Collection<String> getStructureKeys()
 @Override
 public Collection<SpawnListEntry> getStructureSpawnList(String structureKey)
   {
-  return Collections.emptyList();
+  List<SpawnListEntry> list = new ArrayList<SpawnListEntry>();
+  SpawnListEntry entry = new SpawnListEntry(EntityPig.class, 1, 1, 1);
+  list.add(entry);
+  return list;
   }
 
 @Override
