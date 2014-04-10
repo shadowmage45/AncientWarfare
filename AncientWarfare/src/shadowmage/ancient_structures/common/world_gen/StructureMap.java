@@ -37,6 +37,8 @@ import shadowmage.ancient_structures.common.utils.GameData;
 public class StructureMap extends GameData
 {
 
+public static final String name = "AWStructureMap";
+
 private StructureDimensionMap map;
 
 public StructureMap(String name)
@@ -47,7 +49,7 @@ public StructureMap(String name)
 
 public StructureMap()
   {
-  super("AWStructureMap");
+  super(name);
   map = new StructureDimensionMap();
   }
 
