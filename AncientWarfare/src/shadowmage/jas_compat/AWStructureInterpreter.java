@@ -81,10 +81,8 @@ public Collection<SpawnListEntry> getStructureSpawnList(String structureKey)
   {
   if(structureGroupDefaultSpawnEntries.containsKey(structureKey))
     {
-    AWLog.logDebug("returning spawn set for" +structureKey+ " of: "+structureGroupDefaultSpawnEntries.get(structureKey));
     return structureGroupDefaultSpawnEntries.get(structureKey);
     }
-  AWLog.logDebug("returning empty set for spawn list...");
   return Collections.emptyList();
   }
 
@@ -110,7 +108,6 @@ public String areCoordsStructure(World world, int xCoord, int yCoord, int zCoord
     return null;
     }
   structureGroup = getStructureGroup(structureName);
-  AWLog.logDebug("returning structure group found: "+structureGroup);
   return (structureGroup==null || structureGroup.isEmpty()) ? null : structureGroup;
   }
 
@@ -131,6 +128,10 @@ private String getStructureGroup(String structureName)
   return structureGroupMap.get(structureName);
   }
 
+/**
+ * loads structure groups and spawn lists from the passed in config file.
+ * @param config
+ */
 public void loadStructureGroups(Configuration config)
   {
   config.addCustomCategoryComment(GROUP_CATEGORY, "Each entry defines a structure group.\n" +
@@ -178,8 +179,8 @@ public void loadStructureGroups(Configuration config)
   		"There is one sub-category per structure group.\n" +
   		"Keys for the sub-categories are the entity names.\n" +
   		"Values are the weight/spawn settings for that entity.\n" +
-  		"Entries follow the JAS entity-entry convention.\n" +
-      "(Name=weight-min-max-???)\n" +
+  		"Entries follow use the MC convention for definitions:\n" +
+      "(Name=weight-min-max)\n" +
   		"If no entry is found, it will be defaulted to Zombie, 4-4-4-4.\n" +
   		"These lists can further be customized in the JAS per-world settings\n" +
   		"located in the file StructureSpawns.cfg.\n\n" +
@@ -194,13 +195,6 @@ public void loadStructureGroups(Configuration config)
       "  }\n");
   
   category = config.getCategory(GROUP_SPAWNS_CATEGORY);
-  
-//  if(!category.containsKey("teststructuregroup"))
-//    {
-//    ConfigCategory cat2 = new ConfigCategory("teststructuregroup", category);
-//    cat2.put("Zombie", new Property("Zombie", "4-4-4-4", Type.INTEGER));    
-//    }
-  
     
   Set<ConfigCategory> children = category.getChildren();
   
@@ -217,22 +211,20 @@ public void loadStructureGroups(Configuration config)
     entryList = new ArrayList<SpawnListEntry>();
     entrySet = child.entrySet();
     group = child.getQualifiedName().replace(GROUP_SPAWNS_CATEGORY+".", "");
-    AWLog.logDebug("examining group: "+group+"  has entry set size of: "+entrySet.size());
     for(Entry<String, Property> entry : entrySet)
       {
-      AWLog.logDebug("examining entry from category: "+group+ " :: "+entry);
       name = entry.getKey();
       clz = (Class) EntityList.stringToClassMapping.get(name);
       if(clz==null)
         {
-        AWLog.logDebug("could not locate entity class for: "+clz);
+        AWLog.logError("could not locate entity class for: "+name+" while loading entity group for:"+group+". Please verify the entity name and fix the config file.");
         continue;
         }
       settings = entry.getValue().getString();
       splitSettings = settings.split("-", -1);
-      if(splitSettings==null || splitSettings.length<4)
+      if(splitSettings==null || splitSettings.length<3)
         {
-        AWLog.logDebug("settings length is <4!! : "+settings);
+        AWLog.logError("Entity spawn settings length is <3!! Entity : "+name+" Settings: "+settings+".  Please verify this entry and fix the error in order to load this entity setting.");
         continue;
         }
       spawnEntry = new SpawnListEntry(clz, Integer.parseInt(splitSettings[0]), Integer.parseInt(splitSettings[1]), Integer.parseInt(splitSettings[2]));
@@ -242,7 +234,7 @@ public void loadStructureGroups(Configuration config)
       {
       structureGroupDefaultSpawnEntries.put(group, entryList);      
       }
-    AWLog.logDebug("loaded entity list for: "+group+" of : "+entryList);
+    AWLog.log("Loaded entity list for structure group: "+group+" of : "+entryList);
     }    
   
   
