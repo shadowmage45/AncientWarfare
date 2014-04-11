@@ -21,6 +21,7 @@
 package shadowmage.jas_compat;
 
 import jas.api.CompatibilityRegistrationEvent;
+import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import shadowmage.ancient_structures.common.config.AWLog;
@@ -50,11 +51,14 @@ public class AWStructuresJAS
 @Instance("AncientStructuresJAS")
 public static AWStructuresJAS instance;  
 
+private AWStructureInterpreter interpreter;
 
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {
   MinecraftForge.EVENT_BUS.register(this);
+  interpreter = new AWStructureInterpreter();
+  interpreter.loadStructureGroups(new Configuration(evt.getSuggestedConfigurationFile()));
   }
 
 @EventHandler
@@ -71,7 +75,7 @@ public void postInit(FMLPostInitializationEvent evt)
 public void onCompatEvent(CompatibilityRegistrationEvent evt)
   {
   AWLog.logDebug("JAS registration event...");
-  evt.loader.registerObject(new AWStuctureInterpreter());
+  evt.loader.registerObject(interpreter);
   }
 
 }
