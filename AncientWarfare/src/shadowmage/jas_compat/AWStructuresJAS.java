@@ -56,9 +56,11 @@ private AWStructureInterpreter interpreter;
 @EventHandler
 public void preInit(FMLPreInitializationEvent evt) 
   {
+  AWLog.log("Loading Ancient Warfare Structures JAS Compatibility Plugin configuration.");
   MinecraftForge.EVENT_BUS.register(this);
   interpreter = new AWStructureInterpreter();
   interpreter.loadStructureGroups(new Configuration(evt.getSuggestedConfigurationFile()));
+  AWLog.log("Ancient Warfare Structures JAS Compatibility Plugin configuration has been loaded.");
   }
 
 @EventHandler
@@ -74,7 +76,7 @@ public void postInit(FMLPostInitializationEvent evt)
 @ForgeSubscribe
 public void onCompatEvent(CompatibilityRegistrationEvent evt)
   {
-  AWLog.logDebug("JAS registration event...");
+  AWLog.log("Registering Ancient Warfare Structures JAS Compatibility Plugin with JAS.");
   evt.loader.registerObject(interpreter);
   }
 
