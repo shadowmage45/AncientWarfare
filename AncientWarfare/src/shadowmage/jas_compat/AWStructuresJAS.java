@@ -35,15 +35,16 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 
-@Mod( modid = "AncientStructuresJAS", name="Ancient Structures JAS", version=Config.VERSION, dependencies="required-after:AncientStructures")
+@Mod( modid = "AncientStructuresJAS", name="Ancient Structures JAS", version="1.0.001-alpha", dependencies="required-after:AncientStructures")
 @NetworkMod
 (
 clientSideRequired = true,
 serverSideRequired = true,
-versionBounds="["+Config.VERSION+",)"
+versionBounds="["+"1.0.001-alpha"+",)"
 )
 
 //https://github.com/Crudedragos/JustAnotherSpawner/archive/5be05aeb67c90005640f3a8793b8b9d13384ccc9.zip -- 1.6.4 source zip
+//https://github.com/Crudedragos/JustAnotherSpawner/archive/a64880eb1c68fd4246dd6fb8c8f00e57929149f4.zip -- later (latest) 1.6.4 source zip
 
 public class AWStructuresJAS
 {

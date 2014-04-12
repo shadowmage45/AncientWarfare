@@ -144,10 +144,10 @@ public void loadStructureGroups(Configuration config)
   		"An couple of example structure groups are:\n" +
   		"S:example_group <\n" +
   		"    logCabin\n" +
-  		"    fortress1\n" +
+  		"    fortress2\n" +
   		" >\n" +
   		"S:example_group_2 <\n" +
-  		"    fortress2\n" +
+  		"    fortress1\n" +
   		"    towerLarge\n" +
   		"    \"Large Crypt\"\n" +
   		" >\n");
@@ -181,17 +181,17 @@ public void loadStructureGroups(Configuration config)
   		"Values are the weight/spawn settings for that entity.\n" +
   		"Entries follow use the MC convention for definitions:\n" +
       "(Name=weight-min-max)\n" +
-  		"If no entry is found, it will be defaulted to Zombie, 4-4-4-4.\n" +
+  		"If no entry is found, it will be defaulted to Zombie, 4-4-4.\n" +
   		"These lists can further be customized in the JAS per-world settings\n" +
   		"located in the file StructureSpawns.cfg.\n\n" +
   		"Example groups:\n" +
   		"  example_group {\n"+
-      "      S:Zombie=8-4-4-4\n"+
-      "      S:Creeper=2-4-4-4\n"+
+      "      S:Zombie=5-1-4\n"+
+      "      S:Creeper=1-1-1\n"+
       "  }\n\n" +
       "  example_group_2 {\n" +
-      "      S:Skeleton=10-4-4-4\n" +
-      "      S:PigZombie=2-4-4-4\n"+
+      "      S:Skeleton=10-4-4\n" +
+      "      S:PigZombie=2-4-4\n"+
       "  }\n");
   
   category = config.getCategory(GROUP_SPAWNS_CATEGORY);
@@ -208,36 +208,48 @@ public void loadStructureGroups(Configuration config)
   Configuration dummyConfig;
   for(ConfigCategory child : children)
     {        
-    entryList = new ArrayList<SpawnListEntry>();
     entrySet = child.entrySet();
-    group = child.getQualifiedName().replace(GROUP_SPAWNS_CATEGORY+".", "");
+    group = child.getQualifiedName().replace(GROUP_SPAWNS_CATEGORY+".", "");//kind of hacky.  Need to find a way to retrieve the actual category name
+    entryList = new ArrayList<SpawnListEntry>();
+    
     for(Entry<String, Property> entry : entrySet)
       {
       name = entry.getKey();
       clz = (Class) EntityList.stringToClassMapping.get(name);
       if(clz==null)
         {
-        AWLog.logError("could not locate entity class for: "+name+" while loading entity group for:"+group+". Please verify the entity name and fix the config file.");
+        AWLog.logError("Could not locate entity class for entity of name: "+name+" while loading entity group for:"+group+". Please verify the entity name and fix the entry in the configuration file.");
         continue;
         }
       settings = entry.getValue().getString();
       splitSettings = settings.split("-", -1);
       if(splitSettings==null || splitSettings.length<3)
         {
-        AWLog.logError("Entity spawn settings length is <3!! Entity : "+name+" Settings: "+settings+".  Please verify this entry and fix the error in order to load this entity setting.");
+        AWLog.logError("Entity spawn settings length is < 3.  There is not enough data to construct a spawn entry for this entity. Entity : "+name+" Settings: "+settings+".  Please verify this entry and fix the error in order to load this entity setting.");
         continue;
         }
-      spawnEntry = new SpawnListEntry(clz, Integer.parseInt(splitSettings[0]), Integer.parseInt(splitSettings[1]), Integer.parseInt(splitSettings[2]));
-      entryList.add(spawnEntry);
+      try
+        {
+        spawnEntry = new SpawnListEntry(clz, Integer.parseInt(splitSettings[0]), Integer.parseInt(splitSettings[1]), Integer.parseInt(splitSettings[2]));
+        entryList.add(spawnEntry);
+        }
+      catch(NumberFormatException e)//just in case someone fills out the config improperly....
+        {
+        AWLog.logError("Could not parse integer value from entity settings.  Group: "+group+" Entity: "+name+" Settings Values: "+settings);
+        continue;
+        }
       }    
+    
     if(!entryList.isEmpty())
       {
-      structureGroupDefaultSpawnEntries.put(group, entryList);      
+      structureGroupDefaultSpawnEntries.put(group, entryList);    
+      AWLog.log("Loaded entity list for structure group: "+group+" of : "+entryList);  
       }
-    AWLog.log("Loaded entity list for structure group: "+group+" of : "+entryList);
+    else
+      {
+      AWLog.logError("Found entity list setting for group: "+group+" but did not parse any entity settings.  If this was not intentional, this may indicate an error in your config file.");
+      }
     }    
-  
-  
   config.save();
   }
 
