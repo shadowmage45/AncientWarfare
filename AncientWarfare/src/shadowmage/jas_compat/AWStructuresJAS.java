@@ -35,7 +35,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 
 
-@Mod( modid = "AncientStructuresJAS", name="Ancient Structures JAS", version="1.0.001-alpha", dependencies="required-after:AncientStructures")
+@Mod( modid = "AncientStructuresJAS", name="Ancient Structures JAS", version="1.0.001-alpha", dependencies="required-after:AncientStructures;required-after:JASCompatability")
 @NetworkMod
 (
 clientSideRequired = true,
@@ -58,15 +58,15 @@ private AWStructureInterpreter interpreter;
 public void preInit(FMLPreInitializationEvent evt) 
   {
   AWLog.log("Loading Ancient Warfare Structures JAS Compatibility Plugin configuration.");
-  MinecraftForge.EVENT_BUS.register(this);
   interpreter = new AWStructureInterpreter();
-  interpreter.loadStructureGroups(new Configuration(evt.getSuggestedConfigurationFile()));
-  AWLog.log("Ancient Warfare Structures JAS Compatibility Plugin configuration has been loaded.");
+  interpreter.loadStructureGroups(new Configuration(evt.getSuggestedConfigurationFile())); 
+  AWLog.log("Ancient Warfare Structures JAS Compatibility Plugin configuration has been loaded.");  
   }
 
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
+  MinecraftForge.EVENT_BUS.register(this);
   }
 
 @EventHandler
