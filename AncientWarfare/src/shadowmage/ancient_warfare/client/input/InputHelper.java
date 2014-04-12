@@ -36,11 +36,13 @@ import net.minecraft.util.Vec3;
 
 import org.lwjgl.input.Keyboard;
 
+import shadowmage.ancient_structures.common.item.IItemKeyInterface;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.config.Settings;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
 import shadowmage.ancient_warfare.common.network.Packet01ModData;
 import shadowmage.ancient_warfare.common.network.Packet02Vehicle;
+import shadowmage.ancient_warfare.common.network.Packet08ItemKeyInput;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 import cpw.mods.fml.client.registry.KeyBindingRegistry.KeyHandler;
 import cpw.mods.fml.common.TickType;
@@ -92,6 +94,7 @@ public static Keybind turretRight;
 public static Keybind mouseAim;
 public static Keybind ammoSelect;
 public static Keybind control;
+public static Keybind itemKey;
 
 public void loadKeysFromConfig()
   {
@@ -124,6 +127,8 @@ public void loadKeysFromConfig()
   KeybindManager.addKeybind(ammoSelect);
   control = new Keybind(Config.getKeyBindID("keybind.control", Keyboard.KEY_LCONTROL, "Control/Alt function key"), "Control");
   KeybindManager.addKeybind(control);
+  itemKey = new Keybind(Config.getKeyBindID("keybind.itemKey", Keyboard.KEY_Z, "Alternate item function key"), "Item Alt. Use");
+  KeybindManager.addKeybind(itemKey);
   }
 
 @Override
@@ -185,6 +190,11 @@ public void onKeyUp(Keybind kb)
     tag.setString("id", mc.thePlayer.getEntityName());
     tag.setBoolean("down", control.isPressed);
     pkt.packetData.setCompoundTag("keySynch", tag);
+    pkt.sendPacketToServer();
+    }
+  else if(kb==itemKey && mc!=null && mc.thePlayer!=null && mc.theWorld!=null && mc.thePlayer.inventory.getCurrentItem()!=null && mc.thePlayer.inventory.getCurrentItem().getItem() instanceof IItemKeyInterface)
+    {
+    Packet08ItemKeyInput pkt = new Packet08ItemKeyInput();
     pkt.sendPacketToServer();
     }
   }

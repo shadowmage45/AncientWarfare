@@ -52,6 +52,7 @@ public PacketHandler()
   this.packetTypes.put(5, Packet05TE.class);
   this.packetTypes.put(6, Packet06Entity.class);
   this.packetTypes.put(7, Packet07StructureData.class);
+  this.packetTypes.put(8, Packet08ItemKeyInput.class);
   }
 
 @Override

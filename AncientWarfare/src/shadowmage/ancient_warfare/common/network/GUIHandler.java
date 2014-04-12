@@ -158,6 +158,13 @@ public static final int VEHICLE_AMMO_SELECT = 98;
 public static final int VEHICLE_DEBUG = 99;
 public static final int PERFORMANCE = 100;
 
+public static final int SPAWNER_ITEM = 110;
+public static final int SPAWNER_BLOCK = 111;
+public static final int SPAWNER_ITEM_INVENTORY = 110;
+public static final int SPAWNER_BLOCK_INVENTORY = 111;
+
+
+
 private static GUIHandler INSTANCE;
 private GUIHandler(){}
 public static GUIHandler instance()

@@ -24,6 +24,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.Configuration;
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.common.block.BlockAdvancedSpawner;
+import shadowmage.ancient_structures.common.tile.TileAdvancedSpawner;
 import shadowmage.ancient_warfare.common.config.Config;
 import shadowmage.ancient_warfare.common.item.AWItemBase;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
@@ -59,6 +61,8 @@ public static ItemSpawnerPlacer spawnerPlacer = new ItemSpawnerPlacer(Config.get
 public static ItemStructureGenerator structureGenerator = new ItemStructureGenerator(Config.getItemID("item.single.structureGenerator", 24025));
 public static ItemCivicBuilder civicBuilder = new ItemCivicBuilder(Config.getItemID("item.multi.civicBuilder", 24026));
 
+public static BlockAdvancedSpawner spawnerBlock = new BlockAdvancedSpawner(Config.getBlockID("block.advancedSpawner", 1355), "block.advancedSpawner");
+
 public void registerItems()
   {
   this.registerItemSingle(structureScanner, "item.single.structureScanner", "item.single.structureScanner.description", "item.single.structureScanner.tooltip").setIconTexture("ancientwarfare:builder/structureScanner1", 0);
@@ -66,6 +70,9 @@ public void registerItems()
   this.registerItemSingle(structureGenerator, "item.single.structureGenerator", "item.single.structureGenerator.description", "item.single.structureGenerator.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(spawnerPlacer, "item.single.spawnerPlacer", "item.single.spawnerPlacer.description", "item.single.spawnerPlacer.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(civicBuilder, "item.single.civicBuilder", "item.single.civicBuilder.description", "item.single.civicBuilder.tooltip");
+  
+  GameRegistry.registerBlock(spawnerBlock, ItemBlockAdvancedSpawner.class, "block.advancedSpawner");
+  GameRegistry.registerTileEntity(TileAdvancedSpawner.class, "tile.advancedSpawner");
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)
