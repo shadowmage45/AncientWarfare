@@ -56,7 +56,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   if(world.getBlockId(x, y-1, z)!=block.blockID)//this is the bottom door block, call placeDoor from our block...
     {     
     world.setBlock(x, y, z, block.blockID, localMeta, 2);
-    world.setBlock(x, y+1, z, block.blockID, sideFlag, 2);    
+    world.setBlock(x, y+1, z, block.blockID, sideFlag==0? 8 : sideFlag, 2);    
     }  
   }
 
