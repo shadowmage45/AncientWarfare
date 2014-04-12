@@ -116,9 +116,9 @@ public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p
       {
       GUIHandler.instance().openGUI(GUIHandler.SPAWNER_BLOCK, player, world, x, y, z);    
       }
-    return false;
+    return true;
     }
-  return super.onBlockActivated(world, x, y, z, player, sideHit, hitX, hitY, hitZ);
+  return true;
   }
 
 }
