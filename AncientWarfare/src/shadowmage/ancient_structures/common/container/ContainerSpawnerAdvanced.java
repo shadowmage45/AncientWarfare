@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.tile.SpawnerSettings;
 
 public class ContainerSpawnerAdvanced extends ContainerSpawnerAdvancedBase
@@ -23,10 +24,19 @@ public ContainerSpawnerAdvanced(EntityPlayer player)
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  if(tag.hasKey("spawnerSettings"))
+  data = tag;
+  }
+
+NBTTagCompound data = null;
+
+@Override
+public void onContainerClosed(EntityPlayer par1EntityPlayer)
+  {
+  super.onContainerClosed(par1EntityPlayer);
+  ItemStack item = player.inventory.getCurrentItem();
+  if(!par1EntityPlayer.worldObj.isRemote && item!=null && data!=null)
     {
-    ItemStack item = player.inventory.getCurrentItem();
-    item.setTagInfo("spawnerSettings", tag.getCompoundTag("spawnerSettings"));
+    item.setTagInfo("spawnerSettings", data);
     }
   }
 
