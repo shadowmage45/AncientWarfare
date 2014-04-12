@@ -44,7 +44,7 @@ public void addHandledBlocks(StructurePluginManager manager)
 @Override
 public void addHandledEntities(StructurePluginManager manager)
   {
-  manager.registerEntityHandler("awVehicle", VehicleBase.class, TemplateRuleVehicle.class);
+  manager.registerEntityHandler("awVehicleOld", VehicleBase.class, TemplateRuleVehicle.class);
   }
 
 public static void load()
