@@ -37,7 +37,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class BlockTools

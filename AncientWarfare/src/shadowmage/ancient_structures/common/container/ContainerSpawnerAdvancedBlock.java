@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import shadowmage.ancient_structures.common.tile.TileAdvancedSpawner;
 
 public class ContainerSpawnerAdvancedBlock extends ContainerSpawnerAdvancedBase

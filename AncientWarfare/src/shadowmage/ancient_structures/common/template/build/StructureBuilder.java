@@ -21,7 +21,6 @@
 package shadowmage.ancient_structures.common.template.build;
 
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;

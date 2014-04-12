@@ -28,7 +28,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidationType.ValidationProperty;

@@ -29,7 +29,6 @@ import java.util.List;
 
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_warfare.client.gui.GuiContainerAdvanced;

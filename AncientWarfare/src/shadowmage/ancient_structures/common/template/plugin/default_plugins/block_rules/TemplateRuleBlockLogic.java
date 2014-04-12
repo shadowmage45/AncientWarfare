@@ -20,12 +20,12 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules;
 
-import shadowmage.ancient_structures.common.config.AWLog;
-import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.config.AWLog;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
 public class TemplateRuleBlockLogic extends TemplateRuleVanillaBlocks
 {

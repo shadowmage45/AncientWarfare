@@ -27,10 +27,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import shadowmage.ancient_warfare.common.AWCore;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Property;
+import shadowmage.ancient_warfare.common.AWCore;
 
 public class AWStructureStatics extends ModConfiguration
 {

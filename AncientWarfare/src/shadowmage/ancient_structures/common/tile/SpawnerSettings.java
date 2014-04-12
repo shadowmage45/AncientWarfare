@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.inventory.InventoryBasic;
-import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 
 public class SpawnerSettings
 {

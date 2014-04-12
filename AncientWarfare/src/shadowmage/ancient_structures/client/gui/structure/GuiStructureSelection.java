@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import net.minecraft.nbt.NBTTagCompound;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
 import shadowmage.ancient_structures.common.manager.StructureTemplateManager;
 import shadowmage.ancient_structures.common.template.StructureTemplateClient;

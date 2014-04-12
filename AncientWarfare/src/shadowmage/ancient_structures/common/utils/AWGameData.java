@@ -28,7 +28,6 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
-import shadowmage.ancient_structures.common.config.AWLog;
 
 public class AWGameData
 {

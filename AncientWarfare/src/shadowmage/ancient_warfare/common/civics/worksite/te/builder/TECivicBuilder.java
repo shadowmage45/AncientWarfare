@@ -24,7 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.item.ItemCivicBuilder;
 import shadowmage.ancient_structures.common.template.build.StructureBuilderTicked;
 import shadowmage.ancient_warfare.common.civics.worksite.TEWorkSite;

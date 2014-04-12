@@ -26,7 +26,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 
 public class TemplateRuleEntityLogic extends TemplateRuleVanillaEntity

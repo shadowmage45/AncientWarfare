@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;

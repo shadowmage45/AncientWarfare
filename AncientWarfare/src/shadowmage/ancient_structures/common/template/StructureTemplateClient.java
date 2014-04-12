@@ -26,7 +26,6 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import shadowmage.ancient_structures.common.config.AWLog;
 
 public class StructureTemplateClient
 {

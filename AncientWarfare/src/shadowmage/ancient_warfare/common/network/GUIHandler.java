@@ -27,12 +27,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.client.gui.GuiSpawnerAdvanced;
+import shadowmage.ancient_structures.client.gui.GuiSpawnerAdvancedInventory;
 import shadowmage.ancient_structures.client.gui.structure.GuiSpawnerPlacer;
 import shadowmage.ancient_structures.client.gui.structure.GuiStructureScanner;
 import shadowmage.ancient_structures.client.gui.structure.GuiStructureSelection;
 import shadowmage.ancient_structures.common.container.ContainerCSB;
+import shadowmage.ancient_structures.common.container.ContainerSpawnerAdvanced;
+import shadowmage.ancient_structures.common.container.ContainerSpawnerAdvancedBlock;
+import shadowmage.ancient_structures.common.container.ContainerSpawnerAdvancedInventoryBlock;
+import shadowmage.ancient_structures.common.container.ContainerSpawnerAdvancedInventoryItem;
 import shadowmage.ancient_structures.common.container.ContainerSpawnerPlacer;
 import shadowmage.ancient_structures.common.container.ContainerStructureScanner;
+import shadowmage.ancient_structures.common.tile.TileAdvancedSpawner;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicBase;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHall;
 import shadowmage.ancient_warfare.client.gui.civic.GuiCivicTownHallInfo;
@@ -160,8 +167,8 @@ public static final int PERFORMANCE = 100;
 
 public static final int SPAWNER_ITEM = 110;
 public static final int SPAWNER_BLOCK = 111;
-public static final int SPAWNER_ITEM_INVENTORY = 110;
-public static final int SPAWNER_BLOCK_INVENTORY = 111;
+public static final int SPAWNER_ITEM_INVENTORY = 112;
+public static final int SPAWNER_BLOCK_INVENTORY = 113;
 
 
 
@@ -405,6 +412,32 @@ public Object getServerGuiElement(int ID, EntityPlayer player, World world, int 
   case PERFORMANCE:
   return new ContainerDebugInfo(player);  
   
+  case SPAWNER_BLOCK:
+    {
+    TileAdvancedSpawner t = (TileAdvancedSpawner) world.getBlockTileEntity(x, y, z);
+    ContainerSpawnerAdvancedBlock c = new ContainerSpawnerAdvancedBlock(player, t);
+    return c;
+    }
+  
+  case SPAWNER_ITEM:
+    {
+    ContainerSpawnerAdvanced c = new ContainerSpawnerAdvanced(player);
+    return c;
+    }
+  
+  case SPAWNER_BLOCK_INVENTORY:
+    {
+    TileAdvancedSpawner t = (TileAdvancedSpawner) world.getBlockTileEntity(x, y, z);
+    ContainerSpawnerAdvancedInventoryBlock c = new ContainerSpawnerAdvancedInventoryBlock(player, t);
+    return c;
+    }
+  
+  case SPAWNER_ITEM_INVENTORY:
+    {
+    ContainerSpawnerAdvancedInventoryItem c = new ContainerSpawnerAdvancedInventoryItem(player);
+    return c;
+    }
+  
   } 
   return null;
   }
@@ -641,6 +674,32 @@ public Object getClientGuiElement(int ID, EntityPlayer player, World world, int 
   
   case PERFORMANCE:
   return new GuiDebugInfo(new ContainerDebugInfo(player));
+  
+  case SPAWNER_BLOCK:
+    {
+    TileAdvancedSpawner t = (TileAdvancedSpawner) world.getBlockTileEntity(x, y, z);
+    ContainerSpawnerAdvancedBlock c = new ContainerSpawnerAdvancedBlock(player, t);
+    return new GuiSpawnerAdvanced(c);
+    }
+  
+  case SPAWNER_ITEM:
+    {
+    ContainerSpawnerAdvanced c = new ContainerSpawnerAdvanced(player);    
+    return new GuiSpawnerAdvanced(c);
+    }
+  
+  case SPAWNER_BLOCK_INVENTORY:
+    {
+    TileAdvancedSpawner t = (TileAdvancedSpawner) world.getBlockTileEntity(x, y, z);
+    ContainerSpawnerAdvancedInventoryBlock c = new ContainerSpawnerAdvancedInventoryBlock(player, t);
+    return new GuiSpawnerAdvancedInventory(c);
+    }
+  
+  case SPAWNER_ITEM_INVENTORY:
+    {
+    ContainerSpawnerAdvancedInventoryItem c = new ContainerSpawnerAdvancedInventoryItem(player);
+    return new GuiSpawnerAdvancedInventory(c);
+    }
   
   } 
   return null;

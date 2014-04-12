@@ -1,14 +1,10 @@
 package shadowmage.ancient_structures.common.container;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import shadowmage.ancient_structures.common.tile.SpawnerSettings;
 import shadowmage.ancient_structures.common.tile.TileAdvancedSpawner;
 
 public class ContainerSpawnerAdvancedInventoryBlock extends ContainerSpawnerAdvancedInventoryBase
