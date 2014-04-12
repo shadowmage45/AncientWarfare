@@ -2,7 +2,43 @@
 # en_US (default)
 
 # major to-do areas:
-# guiStrings (lots and lots..and even more...)
+
+# guiStrings
+guistrings.spawner.delay=Delay
+guistrings.spawner.min_spawn_delay=Min Spawn Delay
+guistrings.spawner.max_spawn_delay=Max Spawn Delay
+guistrings.spawner.spawn_count=Spawn Count
+guistrings.spawner.max_nearby_entities=Max Nearby Entities
+guistrings.spawner.required_player_range=Req. Player Range
+guistrings.spawner.spawn_range=Spawn Range
+guistrings.spawner.warning_1=WARNING!! SOME MOD-MOBS MAY CRASH WHEN PLACED IN SPAWNER
+guistrings.spawner.warning_2=TEST ALL MOBS / SETTINGS ON AN UNCARED FOR WORLD FIRST
+guistrings.spawner.group_count=Total Spawn Groups
+guistrings.spawner.group_number=Group Number
+guistrings.spawner.entity_type=Entity Type
+guistrings.spawner.group_weight=Group Weight
+guistrings.spawner.light_sensitive=Light Sensitive
+guistrings.spawner.redstone_sensitive=Redstone Sensitive
+guistrings.spawner.redstone_mode=Redstone Pulse Mode
+guistrings.spawner.spawn_groups=Spawn Groups
+guistrings.spawner.set_spawn_settings=Advanced Spawner Settings
+guistrings.spawner.add_group=Add Group
+guistrings.spawner.remove_group=Remove Group
+guistrings.spawner.entity_list=Spawn List
+guistrings.spawner.min=Min
+guistrings.spawner.max=Max
+guistrings.spawner.total=Total
+guistrings.spawner.add_entity=Add Entity
+guistrings.spawner.remove=-
+guistrings.spawner.add=+
+guistrings.spawner.set_entity_properties=Entity Spawning Properties
+guistrings.spawner.custom_tag=Custom Tag (optional)
+guistrings.spawner.add_custom_tag=Add Custom Tag
+guistrings.spawner.add_custom_tag_line=Add New Line
+guistrings.spawner.select_entity=Selected Entity
+guistrings.spawner.xp_to_drop=XP To Drop
+guistrings.spawner.block_hardness=Block Hardness (-1 for invulnerable)
+
 
 # commands
 commands.awteam.usage=Valid commands are list, list (teamnum), set (teamnum playername), setrank (playername newrank)
@@ -249,6 +285,7 @@ block.multi.crafting.5=NPC Recruiting Center
 block.multi.crafting.6=Alchemy Station
 block.multi.crafting.7=AutoCrafting Station
 block.multi.engine.0=Hand Cranked Engine
+tile.block.advancedSpawner.name=Advanced Spawner
 
 #civics
 civic.farm.wheat=Wheat Farm
