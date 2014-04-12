@@ -82,7 +82,7 @@ public void parseRuleData(NBTTagCompound tag)
 public boolean shouldReuseRule(World world, Block block, int meta, int turns, TileEntity te, int x, int y, int z)
   {  
   Block block1 = Block.blocksList[world.getBlockId(x, y+1, z)];
-  return super.shouldReuseRule(world, block, meta, turns, te, x, y, z) &&  blockName.equals(BlockDataManager.getBlockName(block1)) && world.getBlockMetadata(x, y+1, z)==sideFlag;
+  return super.shouldReuseRule(world, block, meta, turns, te, x, y, z) && block1!=null && blockName.equals(BlockDataManager.getBlockName(block1)) && world.getBlockMetadata(x, y+1, z)==sideFlag;
   }
 
 @Override
