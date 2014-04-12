@@ -85,23 +85,6 @@ public void addResources(List<ItemStack> resources)
     {
     resources.add(new ItemStack(count.id, count.count, count.meta));
     }
-//  if(count==null || count.id==0)
-//    {
-//    return;    
-//    }
-//  for(ItemStack stack : resources)
-//    {
-//    if(stack.itemID==count.id && stack.getItemDamage()==count.meta && stack.stackSize<stack.getMaxStackSize())
-//      {
-//      stack.stackSize+=count.count;
-//      found = true;
-//      break;
-//      }
-//    }
-//  if(!found)
-//    {
-//    resources.add(new ItemStack(count.id, count.count, count.meta));
-//    }
   }
 
 @Override

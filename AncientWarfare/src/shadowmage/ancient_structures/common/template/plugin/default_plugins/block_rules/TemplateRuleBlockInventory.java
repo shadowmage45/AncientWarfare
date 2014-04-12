@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.utils.LootGenerator;
 
 public class TemplateRuleBlockInventory extends TemplateRuleVanillaBlocks
@@ -60,6 +61,13 @@ public TemplateRuleBlockInventory(World world, int x, int y, int z, Block block,
         }      
       }
     this.randomLootLevel = useKey? keyStack.getItem()==Item.ingotGold? 1 : keyStack.getItem()==Item.diamond ? 2 : 3 : 0;
+    if(randomLootLevel<=0)
+      {
+      te.writeToNBT(tag);
+      tag.removeTag("x");
+      tag.removeTag("y");
+      tag.removeTag("z");
+      }
     }  
   }
 
@@ -71,7 +79,10 @@ public TemplateRuleBlockInventory()
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {
-  super.handlePlacement(world, turns, x, y, z);
+  Block block = BlockDataManager.getBlockByName(blockName);
+  int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns);  
+  world.setBlock(x, y, z, block.blockID, localMeta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
+  world.setBlockMetadataWithNotify(x, y, z, localMeta, 3);
   TileEntity te = world.getBlockTileEntity(x, y, z);
   IInventory inventory = (IInventory)te;
   if(inventory!=null && randomLootLevel>0)
@@ -85,6 +96,9 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     tag.setInteger("z", z);
     te.readFromNBT(tag);
     world.markBlockForUpdate(x, y, z);
+    tag.removeTag("x");
+    tag.removeTag("y");
+    tag.removeTag("z");
     }
   }
 
