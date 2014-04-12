@@ -28,10 +28,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.registry.VehicleRegistry;
+import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
+import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 
-public class TemplateRuleNpc extends TemplateRuleEntity
+public class TemplateRuleVehicle extends TemplateRuleEntity
 {
 
 public float xOffset;
@@ -39,14 +41,18 @@ public float yOffset;
 public float zOffset;
 public float rotation;
 
-int npcType, npcLevel, npcTeam;
+int vehicleType, vehicleLevel, vehicleTeam;
 
-public TemplateRuleNpc(World world, Entity entity, int turns, int x, int y, int z)
-  {  
-  NpcBase npc = (NpcBase)entity;
-  npcType = npc.npcType.getGlobalNpcType();
-  npcLevel = npc.rank;
-  npcTeam = npc.teamNum;
+NBTTagCompound vehicleInventory;
+
+public TemplateRuleVehicle(World world, Entity entity, int turns, int x, int y, int z)
+  {
+  VehicleBase vehicle = (VehicleBase)entity;
+  vehicleType = vehicle.vehicleType.getGlobalVehicleType();
+  vehicleLevel = vehicle.vehicleMaterialLevel;
+  vehicleTeam = vehicle.teamNum;
+  vehicleInventory = new NBTTagCompound();
+  vehicle.inventory.writeToNBT(vehicleInventory);
   rotation = (entity.rotationYaw + 90.f*turns)%360.f;
   float x1, z1;
   x1 = (float) (entity.posX%1.d);
@@ -58,20 +64,17 @@ public TemplateRuleNpc(World world, Entity entity, int turns, int x, int y, int 
   yOffset = (float)(entity.posY % 1.d);
   }
 
-public TemplateRuleNpc()
+public TemplateRuleVehicle()
   {
-  
+  vehicleInventory = new NBTTagCompound();
   }
-
 
 @Override
 public void handlePlacement(World world, int turns, int x, int y, int z)
   {  
-  Entity e = NpcRegistry.getNpcForType(npcType, world, npcLevel, npcTeam);
-  if(e instanceof NpcBase)
-    {
-    ((NpcBase)e).teamNum = npcTeam;
-    }
+  VehicleBase e = VehicleType.getVehicleForType(world, vehicleType, vehicleLevel);
+  e.teamNum = vehicleTeam;
+  e.inventory.readFromNBT(vehicleInventory);
   float x1 = BlockTools.rotateFloatX(xOffset, zOffset, turns);
   float z1 = BlockTools.rotateFloatZ(xOffset, zOffset, turns);
   float yaw = (rotation + 90.f * turns)%360.f;
@@ -87,9 +90,10 @@ public void writeRuleData(NBTTagCompound tag)
   tag.setFloat("zOffset", zOffset);
   tag.setFloat("yOffset", yOffset);
   tag.setFloat("rotation", rotation);
-  tag.setInteger("npcType", npcType);
-  tag.setInteger("npcLevel", npcLevel);
-  tag.setInteger("npcTeam", npcTeam);
+  tag.setInteger("vehicleType", vehicleType);
+  tag.setInteger("vehicleLevel", vehicleLevel);
+  tag.setInteger("vehicleTeam", vehicleTeam);
+  tag.setCompoundTag("vehicleInventory", vehicleInventory);
   }
 
 @Override
@@ -99,9 +103,10 @@ public void parseRuleData(NBTTagCompound tag)
   zOffset = tag.getFloat("zOffset");
   yOffset = tag.getFloat("yOffset");
   rotation = tag.getFloat("rotation");
-  npcType = tag.getInteger("npcType");
-  npcLevel = tag.getInteger("npcLevel");
-  npcTeam = tag.getInteger("npcTeam");
+  vehicleType = tag.getInteger("vehicleType");
+  vehicleLevel = tag.getInteger("vehicleLevel");
+  vehicleTeam = tag.getInteger("vehicleTeam");
+  vehicleInventory = tag.getCompoundTag("vehicleInventory");
   }
 
 @Override
@@ -113,7 +118,7 @@ public void addResources(List<ItemStack> resources)
 @Override
 public boolean shouldPlaceOnBuildPass(World world, int turns, int x, int y, int z, int buildPass)
   {
-  return false;//noop
+  return false;//noop...
   }
 
 }

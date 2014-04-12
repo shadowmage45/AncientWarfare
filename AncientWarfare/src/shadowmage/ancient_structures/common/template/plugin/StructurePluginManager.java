@@ -31,6 +31,7 @@ import net.minecraft.world.World;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginGates;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;
 import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
@@ -57,6 +58,7 @@ public void loadPlugins()
   this.addPlugin(vanillaPlugin);
   this.addPlugin(new StructurePluginGates());
   StructurePluginNpcs.load();
+  StructurePluginVehicles.load();
   
   for(StructureContentPlugin plugin : this.loadedContentPlugins)
     {
