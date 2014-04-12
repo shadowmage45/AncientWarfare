@@ -32,6 +32,9 @@ import shadowmage.ancient_warfare.common.utils.StringTools;
 public abstract class TemplateRuleEntity extends TemplateRule
 {
 
+/**
+ * set directly from the scanner after the rule has been initialized
+ */
 public int x, y, z;
 
 /**

@@ -20,12 +20,11 @@
  */
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
-import java.util.List;
-
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleNpc;
+import shadowmage.ancient_warfare.common.npcs.NpcBase;
 
 public class StructurePluginNpcs extends StructureContentPlugin
 {
@@ -44,14 +43,12 @@ public void addHandledBlocks(StructurePluginManager manager)
 @Override
 public void addHandledEntities(StructurePluginManager manager)
   {
-
+  manager.registerEntityHandler("awNpcOld", NpcBase.class, TemplateRuleNpc.class);
   }
 
 public static void load()
   {
   AWStructures.instance.pluginManager.addPlugin(new StructurePluginNpcs());
   }
-
-public static TemplateRuleEntity parseNpcRule(List<String> lines){return null;}
 
 }
