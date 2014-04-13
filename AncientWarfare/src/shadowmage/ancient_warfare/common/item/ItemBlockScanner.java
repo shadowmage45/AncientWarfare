@@ -20,6 +20,7 @@
  */
 package shadowmage.ancient_warfare.common.item;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -74,12 +75,14 @@ private boolean onActivated(World world, EntityPlayer player, ItemStack stack, B
     {
     return true;
     }
+   
   int id = world.getBlockId(hit.x, hit.y, hit.z);
+  Block block = Block.blocksList[id];
   int meta = world.getBlockMetadata(hit.x, hit.y, hit.z);
   int rotation = BlockTools.getPlayerFacingFromYaw(player.rotationYaw);
   String facing = rotation==0 ? "South": rotation==1? "West": rotation==2?"North":rotation==3?"East":"huh?";  
   player.addChatMessage("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation +  " side: "+side);
-  Config.logDebug("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation+" player yaw: "+player.rotationYaw);
+  Config.logDebug("ID: "+id+"  M: "+meta+"  player facing: "+facing+" "+rotation+" player yaw: "+player.rotationYaw);  
   return true;
   }
 

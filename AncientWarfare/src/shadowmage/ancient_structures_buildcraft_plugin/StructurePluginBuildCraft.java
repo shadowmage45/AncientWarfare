@@ -26,6 +26,7 @@ import shadowmage.ancient_structures.api.StructureContentPlugin;
 import shadowmage.ancient_structures.api.StructurePluginRegistrationEvent;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import buildcraft.BuildCraftEnergy;
+import buildcraft.BuildCraftTransport;
 
 public class StructurePluginBuildCraft extends StructureContentPlugin
 {
@@ -45,6 +46,7 @@ public void onRegisterEvent(StructurePluginRegistrationEvent evt)
 public void addHandledBlocks(IStructurePluginManager manager)
   {
   manager.registerBlockHandler("buildcraftEngine", BuildCraftEnergy.engineBlock, TemplateRuleBuildCraftEngine.class);  
+  manager.registerBlockHandler("buildcraftPipe", BuildCraftTransport.genericPipeBlock, TemplateRuleBuildCraftPipe.class);
   }
 
 @Override
