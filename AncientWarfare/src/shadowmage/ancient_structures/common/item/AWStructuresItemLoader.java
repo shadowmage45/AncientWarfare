@@ -71,8 +71,8 @@ public void registerItems()
   this.registerItemSingle(spawnerPlacer, "item.single.spawnerPlacer", "item.single.spawnerPlacer.description", "item.single.spawnerPlacer.tooltip").setIconTexture("ancientwarfare:builder/structureBuilder1", 0);
   this.registerItemSingle(civicBuilder, "item.single.civicBuilder", "item.single.civicBuilder.description", "item.single.civicBuilder.tooltip");
   
-  GameRegistry.registerBlock(spawnerBlock, ItemBlockAdvancedSpawner.class, "block.advancedSpawner");
-  GameRegistry.registerTileEntity(TileAdvancedSpawner.class, "tile.advancedSpawner");
+  GameRegistry.registerBlock(spawnerBlock, ItemBlockAdvancedSpawner.class, "advanced_spawner");
+  GameRegistry.registerTileEntity(TileAdvancedSpawner.class, "advanced_spawner_tile");
   }
 
 public Description registerItemSubtyped(AWItemBase item, String baseName)
