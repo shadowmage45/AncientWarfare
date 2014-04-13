@@ -1,5 +1,7 @@
 package shadowmage.ancient_structures.common.block;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -11,7 +13,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.tile.TileAdvancedSpawner;
 import shadowmage.ancient_warfare.common.network.GUIHandler;
@@ -136,6 +137,12 @@ public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer p
     return true;
     }
   return true;
+  }
+
+@Override
+public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z,    int metadata, int fortune)
+  {
+  return new ArrayList<ItemStack>();
   }
 
 }
