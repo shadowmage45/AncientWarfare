@@ -45,6 +45,12 @@ public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
   }
 
 @Override
+public int getLightOpacity(World world, int x, int y, int z)
+  {
+  return 0;
+  }
+
+@Override
 public boolean shouldSideBeRendered(IBlockAccess par1iBlockAccess, int par2, int par3, int par4, int par5)
   {
   return true;

@@ -21,8 +21,10 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleGates;
 import shadowmage.ancient_warfare.common.gates.EntityGate;
 
@@ -43,6 +45,7 @@ public void addHandledBlocks(StructurePluginManager manager)
 @Override
 public void addHandledEntities(StructurePluginManager manager)
   {
+  manager.registerBlockHandler("awAdvancedSpawner", AWStructuresItemLoader.spawnerBlock, TemplateRuleBlockLogic.class);
   manager.registerEntityHandler("awGates", EntityGate.class, TemplateRuleGates.class);
   }
 

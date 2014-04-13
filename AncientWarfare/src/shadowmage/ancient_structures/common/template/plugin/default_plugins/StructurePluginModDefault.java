@@ -21,8 +21,10 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import net.minecraft.block.Block;
+import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
 import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockLogic;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 
 public class StructurePluginModDefault extends StructureContentPlugin
