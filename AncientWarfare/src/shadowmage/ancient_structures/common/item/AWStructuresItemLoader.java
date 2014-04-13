@@ -61,7 +61,7 @@ public static ItemSpawnerPlacer spawnerPlacer = new ItemSpawnerPlacer(Config.get
 public static ItemStructureGenerator structureGenerator = new ItemStructureGenerator(Config.getItemID("item.single.structureGenerator", 24025));
 public static ItemCivicBuilder civicBuilder = new ItemCivicBuilder(Config.getItemID("item.multi.civicBuilder", 24026));
 
-public static BlockAdvancedSpawner spawnerBlock = new BlockAdvancedSpawner(Config.getBlockID("block.advancedSpawner", 1355), "block.advancedSpawner");
+public static BlockAdvancedSpawner spawnerBlock = new BlockAdvancedSpawner(Config.getBlockID("block.advanced_spawner", 1355), "advanced_spawner");
 
 public void registerItems()
   {

@@ -31,24 +31,22 @@ private void sendSettingsToClient()
 @Override
 public void handlePacketData(NBTTagCompound tag)
   {
-  if(tag.hasKey("spawnerSettings"))
+  if(player.worldObj.isRemote)
     {
-    if(player.worldObj.isRemote)
-      {
-      settings.readFromNBT(tag.getCompoundTag("spawnerSettings"));
-      this.refreshGui();
-      }
-    else
-      {
-      spawner.readFromNBT(tag);
-      player.worldObj.markBlockForUpdate(spawner.xCoord, spawner.yCoord, spawner.zCoord);
-      }
+    settings.readFromNBT(tag);
+    this.refreshGui();
+    }
+  else
+    {
+    spawner.readFromNBT(tag);
+    player.worldObj.markBlockForUpdate(spawner.xCoord, spawner.yCoord, spawner.zCoord);
     }
   }
 
 @Override
 public void handleInitData(NBTTagCompound tag)
   {
+  handlePacketData(tag);
   }
 
 @Override

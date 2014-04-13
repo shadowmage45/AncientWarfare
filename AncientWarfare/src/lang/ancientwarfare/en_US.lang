@@ -38,6 +38,7 @@ guistrings.spawner.add_custom_tag_line=Add New Line
 guistrings.spawner.select_entity=Selected Entity
 guistrings.spawner.xp_to_drop=XP To Drop
 guistrings.spawner.block_hardness=Block Hardness (-1 for invulnerable)
+guistrings.done=Done
 
 
 # commands
@@ -285,7 +286,7 @@ block.multi.crafting.5=NPC Recruiting Center
 block.multi.crafting.6=Alchemy Station
 block.multi.crafting.7=AutoCrafting Station
 block.multi.engine.0=Hand Cranked Engine
-tile.block.advancedSpawner.name=Advanced Spawner
+tile.advanced_spawner.name=Advanced Spawner
 
 #civics
 civic.farm.wheat=Wheat Farm
