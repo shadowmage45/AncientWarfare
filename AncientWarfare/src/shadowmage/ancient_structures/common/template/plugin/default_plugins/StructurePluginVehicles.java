@@ -21,8 +21,8 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.api.IStructurePluginManager;
 import shadowmage.ancient_structures.api.StructureContentPlugin;
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleVehicle;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
@@ -35,13 +35,13 @@ public StructurePluginVehicles()
   }
 
 @Override
-public void addHandledBlocks(StructurePluginManager manager)
+public void addHandledBlocks(IStructurePluginManager manager)
   {
 
   }
 
 @Override
-public void addHandledEntities(StructurePluginManager manager)
+public void addHandledEntities(IStructurePluginManager manager)
   {
   manager.registerEntityHandler("awVehicleOld", VehicleBase.class, TemplateRuleVehicle.class);
   }

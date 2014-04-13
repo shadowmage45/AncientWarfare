@@ -23,6 +23,7 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 import java.util.List;
 
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.api.IStructurePluginManager;
 import shadowmage.ancient_structures.api.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
@@ -39,14 +40,14 @@ public StructurePluginAutomation()
   }
 
 @Override
-public void addHandledBlocks(StructurePluginManager manager)
+public void addHandledBlocks(IStructurePluginManager manager)
   {
   // TODO Auto-generated method stub
 
   }
 
 @Override
-public void addHandledEntities(StructurePluginManager manager)
+public void addHandledEntities(IStructurePluginManager manager)
   {
   // TODO Auto-generated method stub
 

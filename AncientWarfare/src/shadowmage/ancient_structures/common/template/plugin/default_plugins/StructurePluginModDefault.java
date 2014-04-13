@@ -21,8 +21,8 @@
 package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 
 import net.minecraft.block.Block;
+import shadowmage.ancient_structures.api.IStructurePluginManager;
 import shadowmage.ancient_structures.api.StructureContentPlugin;
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 
 public class StructurePluginModDefault extends StructureContentPlugin
@@ -34,7 +34,7 @@ public StructurePluginModDefault()
   }
 
 @Override
-public void addHandledBlocks(StructurePluginManager manager)
+public void addHandledBlocks(IStructurePluginManager manager)
   {
   Block block;
   for(int i = 256; i < 4096; i++)
@@ -46,7 +46,7 @@ public void addHandledBlocks(StructurePluginManager manager)
   }
 
 @Override
-public void addHandledEntities(StructurePluginManager manager)
+public void addHandledEntities(IStructurePluginManager manager)
   {
   
   }

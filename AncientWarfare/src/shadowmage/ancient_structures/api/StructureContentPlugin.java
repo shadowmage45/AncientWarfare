@@ -20,7 +20,6 @@
  */
 package shadowmage.ancient_structures.api;
 
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 
 
 public abstract class StructureContentPlugin
@@ -32,7 +31,7 @@ public abstract class StructureContentPlugin
  * call manager.registerBlockHandler() to register your rule classes
  * @param manager
  */
-public abstract void addHandledBlocks(StructurePluginManager manager);
+public abstract void addHandledBlocks(IStructurePluginManager manager);
 
 /**
  * implementing classes should use this callback to register any 
@@ -40,7 +39,7 @@ public abstract void addHandledBlocks(StructurePluginManager manager);
  * call manager.registerEntityHandler() to register your rule classes
  * @param manager
  */
-public abstract void addHandledEntities(StructurePluginManager manager);
+public abstract void addHandledEntities(IStructurePluginManager manager);
 
 
 
