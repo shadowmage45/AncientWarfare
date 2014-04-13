@@ -18,37 +18,19 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.plugin.default_plugins;
+package shadowmage.ancient_structures.api;
 
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.api.StructureContentPlugin;
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleNpc;
-import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import net.minecraftforge.event.Event;
 
-public class StructurePluginNpcs extends StructureContentPlugin
+
+public class StructurePluginRegistrationEvent extends Event
 {
 
-public StructurePluginNpcs()
-  {
-  
-  }
+public final IStructurePluginManager manager;
 
-@Override
-public void addHandledBlocks(StructurePluginManager manager)
+public StructurePluginRegistrationEvent(IStructurePluginManager manager)
   {
-
-  }
-
-@Override
-public void addHandledEntities(StructurePluginManager manager)
-  {
-  manager.registerEntityHandler("awNpcOld", NpcBase.class, TemplateRuleNpc.class);
-  }
-
-public static void load()
-  {
-  AWStructures.instance.pluginManager.registerPlugin(new StructurePluginNpcs());
+  this.manager = manager;
   }
 
 }

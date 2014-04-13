@@ -18,28 +18,20 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.plugin;
+package shadowmage.ancient_structures.api;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
+import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
-public abstract class StructureContentPlugin
+public interface IStructurePluginManager
 {
 
-/**
- * implementing classes should use this callback to register any 
- * block handlers with the passed in manager<br>
- * call manager.registerBlockHandler() to register your rule classes
- * @param manager
- */
-public abstract void addHandledBlocks(StructurePluginManager manager);
+public void registerPlugin(StructureContentPlugin plugin);
 
-/**
- * implementing classes should use this callback to register any 
- * entity handlers with the passed in manager
- * call manager.registerEntityHandler() to register your rule classes
- * @param manager
- */
-public abstract void addHandledEntities(StructurePluginManager manager);
+public void registerEntityHandler(String pluginName, Class<?extends Entity> entityClass, Class<? extends TemplateRuleEntity> ruleClass);
 
-
+public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRuleBlock> ruleClass);
 
 }

@@ -23,7 +23,7 @@ package shadowmage.ancient_structures.common.template.plugin.default_plugins;
 import java.util.List;
 
 import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
+import shadowmage.ancient_structures.api.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 
@@ -54,7 +54,7 @@ public void addHandledEntities(StructurePluginManager manager)
 
 public static void load()
   {
-  AWStructures.instance.pluginManager.addPlugin(new StructurePluginAutomation());
+  AWStructures.instance.pluginManager.registerPlugin(new StructurePluginAutomation());
   }
 
 public static TemplateRuleBlock parseAutomationRule(List<String> lines){return null;}

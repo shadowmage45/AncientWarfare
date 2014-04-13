@@ -28,6 +28,8 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructurePluginManager;
+import shadowmage.ancient_structures.api.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginGates;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
@@ -36,7 +38,7 @@ import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 
-public class StructurePluginManager
+public class StructurePluginManager implements IStructurePluginManager
 {
 
 
@@ -55,8 +57,8 @@ private StructurePluginVanillaHandler vanillaPlugin;
 public void loadPlugins()
   {
   vanillaPlugin = new StructurePluginVanillaHandler();  
-  this.addPlugin(vanillaPlugin);
-  this.addPlugin(new StructurePluginGates());
+  this.registerPlugin(vanillaPlugin);
+  this.registerPlugin(new StructurePluginGates());
   StructurePluginNpcs.load();
   StructurePluginVehicles.load();
   
@@ -67,7 +69,7 @@ public void loadPlugins()
     }
   }
 
-public void addPlugin(StructureContentPlugin plugin)
+public void registerPlugin(StructureContentPlugin plugin)
   {
   loadedContentPlugins.add(plugin);
   }

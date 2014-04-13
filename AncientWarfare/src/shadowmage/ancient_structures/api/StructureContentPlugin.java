@@ -18,37 +18,30 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.plugin.default_plugins;
+package shadowmage.ancient_structures.api;
 
-import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.api.StructureContentPlugin;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.plugin.default_plugins.entity_rules.TemplateRuleVehicle;
-import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
 
-public class StructurePluginVehicles extends StructureContentPlugin
+
+public abstract class StructureContentPlugin
 {
 
-public StructurePluginVehicles()
-  {
-  
-  }
+/**
+ * implementing classes should use this callback to register any 
+ * block handlers with the passed in manager<br>
+ * call manager.registerBlockHandler() to register your rule classes
+ * @param manager
+ */
+public abstract void addHandledBlocks(StructurePluginManager manager);
 
-@Override
-public void addHandledBlocks(StructurePluginManager manager)
-  {
+/**
+ * implementing classes should use this callback to register any 
+ * entity handlers with the passed in manager
+ * call manager.registerEntityHandler() to register your rule classes
+ * @param manager
+ */
+public abstract void addHandledEntities(StructurePluginManager manager);
 
-  }
 
-@Override
-public void addHandledEntities(StructurePluginManager manager)
-  {
-  manager.registerEntityHandler("awVehicleOld", VehicleBase.class, TemplateRuleVehicle.class);
-  }
-
-public static void load()
-  {
-  AWStructures.instance.pluginManager.registerPlugin(new StructurePluginVehicles());
-  }
 
 }
