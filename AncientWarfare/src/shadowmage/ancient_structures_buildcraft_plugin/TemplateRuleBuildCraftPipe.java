@@ -37,25 +37,30 @@ public class TemplateRuleBuildCraftPipe extends TemplateRuleBlock
 {
 
 NBTTagCompound pipeTagData = new NBTTagCompound();
+int meta;
 
 public TemplateRuleBuildCraftPipe(World world, int x, int y, int z, Block block, int meta, int turns)
   {
   super(world, x, y, z, block, meta, turns);
   TileGenericPipe pipe = (TileGenericPipe) world.getBlockTileEntity(x, y, z); 
   pipe.writeToNBT(pipeTagData);
-  
+  this.meta = meta;
   int[] facadeBlocks = new int[ForgeDirection.VALID_DIRECTIONS.length];
   int[] facadeMeta = new int[ForgeDirection.VALID_DIRECTIONS.length];
   boolean[] plugs = new boolean[ForgeDirection.VALID_DIRECTIONS.length];
   int side;
+  ForgeDirection d;
   for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) 
     {
     side = i;
     if(i>=2)
       {
-      side = i-2;
-      side = (side + turns)%4;
-      side = side + 2;
+      d = ForgeDirection.values()[i];
+      for(int k = 0; k < turns; k++)
+        {
+        d = d.getRotation(ForgeDirection.UP);        
+        }
+      side = d.ordinal();
       }
     facadeBlocks[side] = pipeTagData.getInteger("facadeBlocks[" + i + "]");
     facadeMeta[side] = pipeTagData.getInteger("facadeMeta[" + i + "]");
@@ -88,14 +93,18 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   int[] facadeMeta = new int[ForgeDirection.VALID_DIRECTIONS.length];
   boolean[] plugs = new boolean[ForgeDirection.VALID_DIRECTIONS.length];
   int side;
+  ForgeDirection d;
   for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) 
     {
     side = i;
     if(i>=2)
       {
-      side = i-2;
-      side = (side + turns)%4;
-      side = side + 2;
+      d = ForgeDirection.values()[i];
+      for(int k = 0; k < turns; k++)
+        {
+        d = d.getRotation(ForgeDirection.UP);        
+        }
+      side = d.ordinal();
       }
     facadeBlocks[side] = pipeTagData.getInteger("facadeBlocks[" + i + "]");
     facadeMeta[side] = pipeTagData.getInteger("facadeMeta[" + i + "]");
@@ -107,7 +116,10 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
     pipeTagData.setInteger("facadeMeta[" + i + "]", facadeMeta[i]);
     pipeTagData.setBoolean("plug[" + i + "]", plugs[i]);
     }
-  world.setBlock(x, y, z, BuildCraftTransport.genericPipeBlock.blockID);
+  pipeTagData.setInteger("x", x);
+  pipeTagData.setInteger("y", y);
+  pipeTagData.setInteger("z", z);
+  world.setBlock(x, y, z, BuildCraftTransport.genericPipeBlock.blockID, meta, 2);
   TileGenericPipe tile = (TileGenericPipe) world.getBlockTileEntity(x, y, z);
   tile.readFromNBT(pipeTagData);
   world.markBlockForUpdate(x, y, z);
@@ -117,12 +129,14 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
 public void parseRuleData(NBTTagCompound tag)
   {
   pipeTagData = tag.getCompoundTag("pipeData");
+  tag.setInteger("meta", meta);
   }
 
 @Override
 public void writeRuleData(NBTTagCompound tag)
   {
   tag.setCompoundTag("pipeData", pipeTagData);
+  meta = tag.getInteger("meta");
   }
 
 @Override
