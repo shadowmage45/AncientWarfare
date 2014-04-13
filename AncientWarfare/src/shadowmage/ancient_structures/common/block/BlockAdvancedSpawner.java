@@ -26,7 +26,7 @@ public BlockAdvancedSpawner(int id, String regName)
   super(id, Material.rock);
   this.setCreativeTab(AWStructuresItemLoader.structureTab);
   this.setUnlocalizedName(regName);
-  this.setTextureName("ancientwarfare:civic/civicMineQuarrySides");
+  this.setTextureName("ancientwarfare:advanced_spawner");
   }
 
 @Override
@@ -38,7 +38,6 @@ public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
     TileAdvancedSpawner spawner = (TileAdvancedSpawner)te;
     if(spawner.getSettings().isTransparent())
       {
-      AWLog.logDebug("returning transparent icon...");
       return transparentIcon;
       }
     }
@@ -46,10 +45,22 @@ public Icon getBlockTexture(IBlockAccess world, int x, int y, int z, int side)
   }
 
 @Override
+public boolean shouldSideBeRendered(IBlockAccess par1iBlockAccess, int par2, int par3, int par4, int par5)
+  {
+  return true;
+  }
+
+@Override
+public boolean isOpaqueCube()
+  {
+  return false;
+  }
+
+@Override
 public void registerIcons(IconRegister p_149651_1_)
   {
   super.registerIcons(p_149651_1_);
-  transparentIcon = p_149651_1_.registerIcon("ancientwarfare:fooToFixThisReference");
+  transparentIcon = p_149651_1_.registerIcon("ancientwarfare:advanced_spawner2");
   }
 
 @Override
