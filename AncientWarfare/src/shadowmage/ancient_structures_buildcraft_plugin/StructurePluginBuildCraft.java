@@ -20,10 +20,12 @@
  */
 package shadowmage.ancient_structures_buildcraft_plugin;
 
-import buildcraft.BuildCraftEnergy;
-import buildcraft.energy.BlockEngine;
-import shadowmage.ancient_structures.common.template.plugin.StructureContentPlugin;
+import net.minecraftforge.event.ForgeSubscribe;
+import shadowmage.ancient_structures.api.IStructurePluginManager;
+import shadowmage.ancient_structures.api.StructureContentPlugin;
+import shadowmage.ancient_structures.api.StructurePluginRegistrationEvent;
 import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import buildcraft.BuildCraftEnergy;
 
 public class StructurePluginBuildCraft extends StructureContentPlugin
 {
@@ -33,14 +35,20 @@ public StructurePluginBuildCraft()
   
   }
 
-@Override
-public void addHandledBlocks(StructurePluginManager manager)
+@ForgeSubscribe
+public void onRegisterEvent(StructurePluginRegistrationEvent evt)
   {
-	manager.registerBlockHandler("buildcraftEngine", BuildCraftEnergy.engineBlock, TemplateRuleBuildCraftEngine.class);
+  evt.register.registerPlugin(this);
   }
 
 @Override
-public void addHandledEntities(StructurePluginManager manager)
+public void addHandledBlocks(IStructurePluginManager manager)
+  {
+  manager.registerBlockHandler("buildcraftEngine", BuildCraftEnergy.engineBlock, TemplateRuleBuildCraftEngine.class);  
+  }
+
+@Override
+public void addHandledEntities(IStructurePluginManager manager)
   {
   
   }

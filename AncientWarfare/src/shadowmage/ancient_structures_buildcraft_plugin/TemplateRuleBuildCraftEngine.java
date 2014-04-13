@@ -22,16 +22,16 @@ package shadowmage.ancient_structures_buildcraft_plugin;
 
 import java.util.List;
 
-import buildcraft.BuildCraftEnergy;
-import buildcraft.energy.TileEngine;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import shadowmage.ancient_structures.api.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.config.AWLog;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
+import buildcraft.BuildCraftEnergy;
+import buildcraft.energy.TileEngine;
 
 public class TemplateRuleBuildCraftEngine extends TemplateRuleBlock
 {
@@ -53,7 +53,6 @@ public TemplateRuleBuildCraftEngine(World world, int x, int y, int z, Block bloc
       d = d.getRotation(ForgeDirection.UP);
       }
     orientation = d;
-    AWLog.logDebug("read post-rotation orientation of: "+orientation);
     engine.writeToNBT(engineTag);
     }
   this.engineType = meta;
@@ -84,10 +83,12 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   if(te instanceof TileEngine)
     {
     TileEngine engine = (TileEngine)te;
+    engineTag.setInteger("x", x);
+    engineTag.setInteger("y", y);
+    engineTag.setInteger("z", z);
     engine.readFromNBT(engineTag);
     engine.orientation = d;
     world.markBlockForUpdate(x, y, z);
-    AWLog.logDebug("set engine orientation to: " +d);
     }
   }
 

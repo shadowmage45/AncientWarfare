@@ -22,27 +22,15 @@ package shadowmage.ancient_structures_buildcraft_plugin;
 
 import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_structures.AWStructures;
-import shadowmage.ancient_structures.client.proxy.CommonProxy;
 import shadowmage.ancient_structures.common.config.AWLog;
-import shadowmage.ancient_structures.common.item.AWStructuresItemLoader;
-import shadowmage.ancient_structures.common.manager.BlockDataManager;
-import shadowmage.ancient_structures.common.manager.WorldGenStructureManager;
-import shadowmage.ancient_structures.common.template.load.TemplateLoader;
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.utils.AWGameData;
-import shadowmage.ancient_structures.common.world_gen.StructureMap;
-import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 import shadowmage.ancient_warfare.common.config.Config;
-import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 
 @Mod( modid = "AncientStructuresBCPlugin", name="Ancient Structures BuildCraft Plugin", version=Config.VERSION, dependencies="required-after:AncientStructures")
@@ -62,14 +50,13 @@ public static AWStructuresBCPlugin instance;
 public void preInit(FMLPreInitializationEvent evt) 
   {  
   AWLog.log("Ancient Warfare Structures BuildCraft Plugin Starting Loading.  Version: "+Config.VERSION);
-  AWStructures.instance.pluginManager.addPlugin(new StructurePluginBuildCraft());
+  MinecraftForge.EVENT_BUS.register(new StructurePluginBuildCraft());
   AWLog.log("Ancient Warfare Structures BuildCraft Plugin Pre-Init finished.");
   }
 
 @EventHandler
 public void init(FMLInitializationEvent evt)
   {
-
   }
 
 @EventHandler
