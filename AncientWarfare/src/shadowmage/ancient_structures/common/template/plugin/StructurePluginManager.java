@@ -29,10 +29,12 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.api.IStructurePluginLookup;
 import shadowmage.ancient_structures.api.IStructurePluginManager;
 import shadowmage.ancient_structures.api.StructureContentPlugin;
+import shadowmage.ancient_structures.api.StructurePluginRegistrationEvent;
 import shadowmage.ancient_structures.api.TemplateRule;
 import shadowmage.ancient_structures.api.TemplateRuleBlock;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
@@ -59,12 +61,14 @@ private StructurePluginVanillaHandler vanillaPlugin;
 
 
 public void loadPlugins()
-  {
+  {  
   vanillaPlugin = new StructurePluginVanillaHandler();  
   this.registerPlugin(vanillaPlugin);
   this.registerPlugin(new StructurePluginGates());
   StructurePluginNpcs.load();
   StructurePluginVehicles.load();
+  
+  MinecraftForge.EVENT_BUS.post(new StructurePluginRegistrationEvent(this));
   
   for(StructureContentPlugin plugin : this.loadedContentPlugins)
     {
