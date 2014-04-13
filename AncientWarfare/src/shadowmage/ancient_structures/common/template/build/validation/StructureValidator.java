@@ -35,13 +35,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import shadowmage.ancient_structures.api.StringTools;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
 import shadowmage.ancient_structures.common.template.load.TemplateParser;
-import shadowmage.ancient_structures.common.utils.StringTools;
 import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public abstract class StructureValidator

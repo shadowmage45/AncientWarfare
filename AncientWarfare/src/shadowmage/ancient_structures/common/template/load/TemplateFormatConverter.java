@@ -36,6 +36,9 @@ import net.minecraft.tileentity.TileEntityDropper;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.tileentity.TileEntitySkull;
+import shadowmage.ancient_structures.api.StringTools;
+import shadowmage.ancient_structures.api.TemplateRule;
+import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
@@ -46,10 +49,7 @@ import shadowmage.ancient_structures.common.template.plugin.default_plugins.bloc
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleBlockSign;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleVanillaBlocks;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.save.TemplateExporter;
-import shadowmage.ancient_structures.common.utils.StringTools;
 
 
 

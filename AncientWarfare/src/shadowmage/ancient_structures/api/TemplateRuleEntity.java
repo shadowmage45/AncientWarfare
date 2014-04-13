@@ -18,7 +18,7 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.rule;
+package shadowmage.ancient_structures.api;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -27,7 +27,6 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public abstract class TemplateRuleEntity extends TemplateRule
 {

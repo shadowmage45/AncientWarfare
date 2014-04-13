@@ -31,10 +31,10 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.api.TemplateRule;
+import shadowmage.ancient_structures.api.TemplateRuleBlock;
+import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 

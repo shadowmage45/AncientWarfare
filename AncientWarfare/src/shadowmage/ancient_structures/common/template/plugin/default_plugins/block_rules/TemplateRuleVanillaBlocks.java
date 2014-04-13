@@ -27,8 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.utils.BlockInfo;
 import shadowmage.ancient_warfare.common.utils.IDPairCount;
 

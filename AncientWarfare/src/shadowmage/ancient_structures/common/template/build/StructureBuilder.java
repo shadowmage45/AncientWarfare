@@ -21,9 +21,9 @@
 package shadowmage.ancient_structures.common.template.build;
 
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.TemplateRule;
+import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 

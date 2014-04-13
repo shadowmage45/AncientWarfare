@@ -20,15 +20,7 @@
  */
 package shadowmage.ancient_structures.api;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-
-public interface IStructurePluginManager extends IStructurePluginRegister
+public interface IStructurePluginLookup
 {
-
-public void registerEntityHandler(String pluginName, Class<?extends Entity> entityClass, Class<? extends TemplateRuleEntity> ruleClass);
-
-public void registerBlockHandler(String pluginName, Block block, Class<? extends TemplateRuleBlock> ruleClass);
-
-
+public String getPluginNameFor(Class<?extends TemplateRule> clz);
 }

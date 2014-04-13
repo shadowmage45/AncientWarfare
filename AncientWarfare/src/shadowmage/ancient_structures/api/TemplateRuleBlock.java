@@ -18,9 +18,12 @@
    You should have received a copy of the GNU General Public License
    along with Ancient Warfare.  If not, see <http://www.gnu.org/licenses/>.
  */
-package shadowmage.ancient_structures.common.template.rule;
+package shadowmage.ancient_structures.api;
+
+import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -35,6 +38,14 @@ public TemplateRuleBlock(World world, int x, int y, int z, Block block, int meta
 public TemplateRuleBlock()
   {
   
+  }
+
+@Override
+public final void parseRule(int ruleNumber, List<String> lines)
+  {
+  this.ruleNumber = ruleNumber;
+  NBTTagCompound tag = readTag(lines);
+  parseRuleData(tag);
   }
 
 /**

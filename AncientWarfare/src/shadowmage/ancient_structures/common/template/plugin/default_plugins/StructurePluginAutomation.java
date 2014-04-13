@@ -25,8 +25,7 @@ import java.util.List;
 import shadowmage.ancient_structures.AWStructures;
 import shadowmage.ancient_structures.api.IStructurePluginManager;
 import shadowmage.ancient_structures.api.StructureContentPlugin;
-import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleBlock;
+import shadowmage.ancient_structures.api.TemplateRuleBlock;
 
 public class StructurePluginAutomation extends StructureContentPlugin
 {

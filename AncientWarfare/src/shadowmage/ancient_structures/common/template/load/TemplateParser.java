@@ -29,12 +29,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import shadowmage.ancient_structures.api.StringTools;
+import shadowmage.ancient_structures.api.TemplateRule;
+import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule.TemplateRuleException;
-import shadowmage.ancient_structures.common.template.rule.TemplateRuleEntity;
-import shadowmage.ancient_structures.common.utils.StringTools;
+import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager;
+import shadowmage.ancient_structures.common.template.plugin.StructurePluginManager.TemplateRuleException;
 
 public class TemplateParser
 {
@@ -313,7 +314,7 @@ private StructureTemplate parseTemplateLines(File file, List<String> lines) thro
 
 private TemplateRule parseRule(List<String> templateLines, String ruleType) throws TemplateRuleException
   {
-  return TemplateRule.getRule(templateLines, ruleType);
+  return StructurePluginManager.getRule(templateLines, ruleType);
   }
 
 private StructureTemplate constructTemplate(String name, int x, int y, int z, int xo, int yo, int zo, short[] templateData, TemplateRule[] rules, TemplateRuleEntity[] entityRules, StructureValidator validation)

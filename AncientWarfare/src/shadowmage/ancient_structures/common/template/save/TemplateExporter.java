@@ -26,11 +26,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 
+import shadowmage.ancient_structures.AWStructures;
+import shadowmage.ancient_structures.api.TemplateRule;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.validation.StructureValidator;
-import shadowmage.ancient_structures.common.template.rule.TemplateRule;
 
 public class TemplateExporter
 {
@@ -66,14 +67,14 @@ public static void exportTo(StructureTemplate template, File directory)
     TemplateRule[] templateRules = template.getTemplateRules();
     for(TemplateRule rule : templateRules)
       {
-      TemplateRule.writeRuleLines(rule, writer, "rule");
+      TemplateRule.writeRuleLines(rule, writer, "rule", AWStructures.instance.pluginManager);
       }    
     writer.write("#### ENTITIES ####");
     writer.newLine();
     templateRules = template.getEntityRules();
     for(TemplateRule rule : templateRules)
       {
-      TemplateRule.writeRuleLines(rule, writer, "entity");
+      TemplateRule.writeRuleLines(rule, writer, "entity", AWStructures.instance.pluginManager);
       }    
     } 
   catch (IOException e)

@@ -26,11 +26,11 @@ import net.minecraftforge.event.Event;
 public class StructurePluginRegistrationEvent extends Event
 {
 
-public final IStructurePluginManager manager;
+public final IStructurePluginRegister register;
 
-public StructurePluginRegistrationEvent(IStructurePluginManager manager)
+public StructurePluginRegistrationEvent(IStructurePluginRegister register)
   {
-  this.manager = manager;
+  this.register = register;
   }
 
 }
