@@ -78,9 +78,8 @@ public void parseRuleData(NBTTagCompound tag)
 @Override
 public void addResources(List<ItemStack> resources)
   {
-  /**
-   * TODO
-   */
+  Block b = BlockDataManager.getBlockByName(blockName);
+  resources.add(new ItemStack(b,1,meta));
   }
 
 @Override
