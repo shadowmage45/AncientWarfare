@@ -51,17 +51,6 @@ public GuiResearchGoal(GuiContainerAdvanced parent, IResearchGoal goal)
   {
   super(parent, AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1,goal.getGlobalResearchNum())));
   this.goal = goal;
-//  int ticks = goal.getResearchTime();
-//  int seconds = ticks/20;
-//  int minutes = seconds/60;
-//  seconds = seconds % 60;
-//  ticks *= 5;//set to 100 scale
-//  ticks %= 100;//mod 100 to set 100==0
-//  ticks /=10;//div 10 to get tenths...
-//  String timeLabel = minutes + "m " + seconds + "."+ticks+"s";
-//  this.detailText.add("Research Time: "+timeLabel);
-//  this.detailText.add("");
-//  this.detailText.addAll(goal.getDetailedDescription());
   }
 
 @Override

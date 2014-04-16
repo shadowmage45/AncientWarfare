@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
@@ -41,6 +43,7 @@ import shadowmage.ancient_warfare.common.container.ContainerDummy;
 import shadowmage.ancient_warfare.common.crafting.AWCraftingManager;
 import shadowmage.ancient_warfare.common.crafting.RecipeType;
 import shadowmage.ancient_warfare.common.crafting.ResourceListRecipe;
+import shadowmage.ancient_warfare.common.item.ItemLoader;
 import shadowmage.ancient_warfare.common.registry.DescriptionRegistry2;
 import shadowmage.ancient_warfare.common.registry.entry.Description;
 import shadowmage.ancient_warfare.common.research.IResearchGoal;
@@ -52,8 +55,6 @@ import shadowmage.ancient_warfare.common.vehicles.types.VehicleType;
 public class GuiInfoBase extends GuiContainerAdvanced
 {
 
-
-GuiContainerAdvanced baseParent;
 GuiContainerAdvanced parent;
 ResourceListRecipe recipe;
 GuiScrollableArea area;
@@ -71,7 +72,7 @@ public GuiInfoBase(GuiContainerAdvanced parent, ResourceListRecipe recipe)
   {
   super(new ContainerDummy());
   this.parent = parent;
-  this.recipe = recipe;
+  this.recipe = recipe; 
   Description d = DescriptionRegistry2.instance().getDescriptionFor(recipe.getResult().itemID);
   if(d!=null)
     {
@@ -135,7 +136,10 @@ public void onElementActivated(IGuiElement element)
     }
   if(buttonGoalMap.containsKey(element))
     {
-    mc.displayGuiScreen(new GuiResearchGoal(this , buttonGoalMap.get(element)));
+	IResearchGoal goal = buttonGoalMap.get(element);
+	ResourceListRecipe recipe = AWCraftingManager.instance().getRecipeByResult(new ItemStack(ItemLoader.researchNotes,1, goal.getGlobalResearchNum()));
+	if(recipe==null){return;}
+    mc.displayGuiScreen(new GuiResearchGoal(this , goal));
     }
   if(buttonRecipeMap.containsKey(element))
     {
@@ -153,6 +157,7 @@ public void onElementActivated(IGuiElement element)
 
 protected void handleRecipeClick(ResourceListRecipe recipe)
   {  
+  if(recipe==null || recipe.getResult()==null){return;}
   if(recipe.type==RecipeType.RESEARCH)
     {
     this.handleResearchDetailsClick(recipe);
@@ -273,8 +278,7 @@ public void setupControls()
 @Override
 public void updateControls()
   {
-  // TODO Auto-generated method stub
-
+  
   }
 
 }
