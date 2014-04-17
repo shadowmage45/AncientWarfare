@@ -135,6 +135,7 @@ public static void loadBlockList()
   addBlock(Block.stairsWoodBirch).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsWoodJungle).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   addBlock(Block.stairsNetherQuartz).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
+  addBlock(Block.stairsNetherBrick).setRotatable().setMeta(0, 2, 1, 3, 0).setMeta(1, 6, 5, 7, 4);
   
   addBlock(Block.vine).setPriority(1).setRotatable().setMeta(0, 1, 2, 4, 8);
     
