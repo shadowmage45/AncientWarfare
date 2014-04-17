@@ -150,6 +150,7 @@ public static void loadBlockList()
   addBlock(Block.wood).setMeta(0, 0, 0, 0, 0).setRotatable().setMeta(1, 8, 4, 8, 4).setMeta(2, 1, 1, 1, 1).setMeta(3, 9, 5, 9, 5).setMeta(4, 2, 2, 2, 2).setMeta(5, 10, 6, 10, 6).setMeta(6, 3, 3, 3, 3).setMeta(7, 11, 7, 11, 7);
   
   addBlock(Block.trapdoor).setRotatable().setPriority(1).setMeta(0, 1, 2, 0, 3).setMeta(1, 5, 6, 4, 7).setMeta(2, 9, 10, 8, 11).setMeta(3, 13, 14, 12, 15);
+  addBlock(Block.hay).setRotatable().setPriority(0).setMeta(0, 8, 4, 8, 4).setMeta(2, 0, 0, 0, 0);
   /**
    * add single slabs, and double slabs for stone
    */
