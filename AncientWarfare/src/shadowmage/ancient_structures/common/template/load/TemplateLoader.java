@@ -154,6 +154,7 @@ private int loadTemplatesFromZip()
           parsed++;
           }
         }
+      z.close();
       } 
     catch (ZipException e)
       {
