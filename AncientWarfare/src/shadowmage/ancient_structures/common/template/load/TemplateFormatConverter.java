@@ -90,7 +90,7 @@ specialHandledBlocks.add(Block.hopperBlock);
 
 int lineNumber = -1;
 
-public StructureTemplate convertOldTemplate(File file, List<String> templateLines)
+public StructureTemplate convertOldTemplate(String fileName, List<String> templateLines)
   {  
   lineNumber = -1;
   /**
@@ -102,7 +102,7 @@ public StructureTemplate convertOldTemplate(File file, List<String> templateLine
   int xSize = 0, ySize = 0, zSize = 0;
   int xOffset = 0, yOffset = 0, zOffset = 0;
   
-  String name = file.getName();
+  String name = fileName;
   if(name.length()>=4)
     {
     name = name.substring(0, name.length()-4);

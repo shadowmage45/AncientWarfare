@@ -38,7 +38,6 @@ public class AWStructureStatics extends ModConfiguration
 public static String templateExtension = "aws";
 public static boolean enableVillageGen = true;
 public static boolean enableStructureGeneration = true;
-public static boolean shouldExport = false;
 public static int chunkSearchRadius = 16;
 public static int maxClusterValue = 500;
 public static int randomChance = 75;
@@ -90,9 +89,7 @@ public void initializeValues()
   randomChance = config.get(worldGenCategory, "random_chance", randomChance).getInt(randomChance);
   randomRange = config.get(worldGenCategory, "random_range", randomRange).getInt(randomRange);
   spawnProtectionRange = config.get(worldGenCategory, "spawn_protection_chunk_radius", spawnProtectionRange).getInt(spawnProtectionRange);
-  
-  shouldExport = config.get(worldGenCategory, "export_defaults", shouldExport, "If true, will re-export the included structure templates.\nShould be re-set after every update that adds or changes templates.").getBoolean(shouldExport);
-  
+    
   String[] defaultExcludedEntities = new String[]
         {
             "EnderCrystal",
