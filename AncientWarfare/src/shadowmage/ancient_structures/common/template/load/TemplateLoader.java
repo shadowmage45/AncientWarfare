@@ -146,6 +146,10 @@ private int loadTemplatesFromZip()
         {
         entry = zipEntries.nextElement();
         if(entry.isDirectory()){continue;}//TODO how to handle subfolders in a zip-file?
+        if(!entry.getName().toLowerCase().endsWith("."+AWStructureStatics.templateExtension))
+          {
+          continue;
+          }
         AWLog.logDebug("loading template: "+entry.getName());
         template = loadTemplateFromZip(entry, z.getInputStream(entry));
         if(template!=null)
