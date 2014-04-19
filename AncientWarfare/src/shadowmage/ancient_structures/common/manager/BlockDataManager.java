@@ -335,7 +335,7 @@ private static void load17names()
   add17NameMaping(Block.blockIron, "iron_block");
   add17NameMaping(Block.stoneDoubleSlab, "double_stone_slab");
   add17NameMaping(Block.stoneSingleSlab, "stone_slab");
-  add17NameMaping(Block.brick, "brick");
+  add17NameMaping(Block.brick, "brick_block");
   add17NameMaping(Block.tnt, "tnt");
   add17NameMaping(Block.bookShelf, "bookshelf");
   add17NameMaping(Block.cobblestoneMossy, "mossy_cobblestone");
