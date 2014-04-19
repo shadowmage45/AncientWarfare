@@ -143,6 +143,7 @@ protected void placeAir()
 
 protected void placeRule(TemplateRule rule)
   {  
+  if(destination.y<=0){return;}
   if(rule.shouldPlaceOnBuildPass(world, turns, destination.x, destination.y, destination.z, currentPriority))
     {
     rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);    

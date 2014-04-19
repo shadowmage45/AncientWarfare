@@ -72,7 +72,7 @@ public static void loadBlockList()
   addBlock(Block.plantYellow).setPriority(1);
   addBlock(Block.mushroomBrown).setPriority(1);
   addBlock(Block.mushroomRed).setPriority(1);
-  addBlock(Block.redstoneWire).setPriority(1).setBasicInventoryItem(Item.redstone.itemID, 0, 1);
+  addBlock(Block.redstoneWire).setPriority(2).setBasicInventoryItem(Item.redstone.itemID, 0, 1);
   addBlock(Block.crops).setPriority(1).setBasicInventoryItem(Item.seeds.itemID, 0, 4);
   addBlock(Block.signPost).setPriority(1).setBasicInventoryItem(Item.sign.itemID, 0, 1);
   addBlock(Block.cactus).setPriority(1);
@@ -110,17 +110,17 @@ public static void loadBlockList()
   addBlock(Block.pistonExtension).setRotatable().setMeta(0, 0, 0, 0, 0).setMeta(1, 1, 1, 1, 1).setMeta(2, 2, 5, 3, 4);
   addBlock(Block.pistonMoving).setRotatable();//TODO ??
   
-  addBlock(Block.lever).setPriority(1).setRotatable().setMeta(0, 5, 6, 5, 6).setMeta(1, 13, 14, 13, 14).setMeta(2, 4, 1, 3, 2).setMeta(3, 12, 9, 11, 10).setMeta(4, 7, 0, 7, 0).setMeta(5, 8, 15, 8, 15);
-  addBlock(Block.redstoneRepeaterIdle).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 10, 11, 8, 9).setMeta(3, 14, 15, 12, 13).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);
-  addBlock(Block.redstoneRepeaterActive).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 10, 11, 8, 9).setMeta(3, 14, 15, 12, 13).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);
-  addBlock(Block.woodenButton).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 12, 9, 11, 10);
-  addBlock(Block.stoneButton).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 12, 9, 11, 10);
-  addBlock(Block.tripWireSource).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 14, 15, 12, 13);
-  addBlock(Block.tripWire).setPriority(1).setRotatable().setMeta(0, 1, 1, 1, 1).setMeta(1, 0, 0, 0, 0);
+  addBlock(Block.lever).setPriority(3).setRotatable().setMeta(0, 5, 6, 5, 6).setMeta(1, 13, 14, 13, 14).setMeta(2, 4, 1, 3, 2).setMeta(3, 12, 9, 11, 10).setMeta(4, 7, 0, 7, 0).setMeta(5, 8, 15, 8, 15);
+  addBlock(Block.redstoneRepeaterIdle).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 10, 11, 8, 9).setMeta(3, 14, 15, 12, 13).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);
+  addBlock(Block.redstoneRepeaterActive).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 10, 11, 8, 9).setMeta(3, 14, 15, 12, 13).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);
+  addBlock(Block.woodenButton).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 12, 9, 11, 10).setPriority(3);
+  addBlock(Block.stoneButton).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 12, 9, 11, 10).setPriority(3);
+  addBlock(Block.tripWireSource).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 14, 15, 12, 13);
+  addBlock(Block.tripWire).setPriority(3).setRotatable().setMeta(0, 1, 1, 1, 1).setMeta(1, 0, 0, 0, 0);
   
   addBlock(Block.torchWood).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
-  addBlock(Block.torchRedstoneIdle).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
-  addBlock(Block.torchRedstoneActive).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
+  addBlock(Block.torchRedstoneIdle).setPriority(3).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
+  addBlock(Block.torchRedstoneActive).setPriority(3).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
    
   addBlock(Block.doorWood).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorWood.itemID, 0, 1);
   addBlock(Block.doorIron).setPriority(1).setRotatable().setMeta(0, 1, 2, 3, 0).setMeta(1, 5, 6, 7, 4).setMeta(2, 8, 8, 8, 8).setBasicInventoryItem(Item.doorIron.itemID, 0, 1);
@@ -145,8 +145,8 @@ public static void loadBlockList()
   
   addBlock(Block.blockNetherQuartz).setRotatable().setMeta(0, 0, 0, 0, 0).setMeta(1, 1, 1, 1, 1).setMeta(2, 2, 2, 2, 2).setMeta(3, 4, 3, 4, 3);
   
-  addBlock(Block.redstoneComparatorIdle).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1);
-  addBlock(Block.redstoneComparatorActive).setPriority(1).setRotatable().setMeta(0, 2, 3, 0, 1).setBasicInventoryItem(Block.redstoneComparatorIdle.blockID, 0, 1);
+  addBlock(Block.redstoneComparatorIdle).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1);
+  addBlock(Block.redstoneComparatorActive).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1).setBasicInventoryItem(Block.redstoneComparatorIdle.blockID, 0, 1);
   
   addBlock(Block.wood).setMeta(0, 0, 0, 0, 0).setRotatable().setMeta(1, 8, 4, 8, 4).setMeta(2, 1, 1, 1, 1).setMeta(3, 9, 5, 9, 5).setMeta(4, 2, 2, 2, 2).setMeta(5, 10, 6, 10, 6).setMeta(6, 3, 3, 3, 3).setMeta(7, 11, 7, 11, 7);
   
