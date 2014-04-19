@@ -42,7 +42,7 @@ public static String configPath = "";
 /**
  * should debug features be enabled? (debug keybinds, debug overlay rendering, load and enable debug items)
  */
-public static boolean DEBUG = true;
+public static boolean DEBUG = false;
 
 //***************************************************LOADED CONFIGS******************************************//
 
