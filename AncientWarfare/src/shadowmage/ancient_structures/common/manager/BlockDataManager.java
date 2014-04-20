@@ -105,10 +105,10 @@ public static void loadBlockList()
   addBlock(Block.railDetector).setPriority(1).setRotatable().setMeta(0, 5, 3, 4, 2).setMeta(1, 0, 1, 0, 1).setMeta(2, 13, 11, 12, 10).setMeta(3, 8, 9, 8, 9);
   addBlock(Block.railActivator).setPriority(1).setRotatable().setMeta(0, 5, 3, 4, 2).setMeta(1, 0, 1, 0, 1).setMeta(2, 13, 11, 12, 10).setMeta(3, 8, 9, 8, 9);
   
-  addBlock(Block.pistonStickyBase).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12).setMeta(4, 9, 9, 9, 9).setMeta(5, 8, 8, 8, 8);; 
-  addBlock(Block.pistonBase).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12).setMeta(4, 9, 9, 9, 9).setMeta(5, 8, 8, 8, 8);
-  addBlock(Block.pistonExtension).setRotatable().setMeta(0, 0, 0, 0, 0).setMeta(1, 1, 1, 1, 1).setMeta(2, 2, 5, 3, 4).setMeta(3, 11, 12, 10, 13).setMeta(4, 8, 8, 8, 8).setMeta(5, 9, 9, 9, 9);
-  addBlock(Block.pistonMoving).setRotatable();//TODO ??
+  addBlock(Block.pistonStickyBase).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12).setMeta(4, 9, 9, 9, 9).setMeta(5, 8, 8, 8, 8).setPriority(1);
+  addBlock(Block.pistonBase).setRotatable().setMeta(0, 2, 5, 3, 4).setMeta(1, 1, 1, 1, 1).setMeta(2, 0, 0, 0, 0).setMeta(3, 10, 13, 11, 12).setMeta(4, 9, 9, 9, 9).setMeta(5, 8, 8, 8, 8).setPriority(1);
+  addBlock(Block.pistonExtension).setRotatable().setMeta(0, 0, 0, 0, 0).setMeta(1, 1, 1, 1, 1).setMeta(2, 2, 5, 3, 4).setMeta(3, 11, 12, 10, 13).setMeta(4, 8, 8, 8, 8).setMeta(5, 9, 9, 9, 9).setPriority(1);
+  addBlock(Block.pistonMoving).setRotatable().setPriority(1);//TODO ??
   
   addBlock(Block.lever).setPriority(3).setRotatable().setMeta(0, 5, 6, 5, 6).setMeta(1, 13, 14, 13, 14).setMeta(2, 4, 1, 3, 2).setMeta(3, 12, 9, 11, 10).setMeta(4, 7, 0, 7, 0).setMeta(5, 8, 15, 8, 15);
   addBlock(Block.redstoneRepeaterIdle).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 10, 11, 8, 9).setMeta(3, 14, 15, 12, 13).setBasicInventoryItem(Item.redstoneRepeater.itemID, 0, 1);
