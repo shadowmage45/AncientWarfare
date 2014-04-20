@@ -37,7 +37,9 @@ guistrings.spawner.add_custom_tag=Add Custom Tag
 guistrings.spawner.add_custom_tag_line=Add New Line
 guistrings.spawner.select_entity=Selected Entity
 guistrings.spawner.xp_to_drop=XP To Drop
-guistrings.spawner.block_hardness=Block Hardness (-1 for invulnerable)
+guistrings.spawner.block_hardness=Hardness (-1 for invulnerable)
+guistrings.spawner.transparent=Transparent Mode
+guistrings.spawner.debug_mode=Trigger On Creative Players
 guistrings.done=Done
 
 
@@ -85,6 +87,8 @@ item.single.debug.blockScanner=Block Scanner
 item.single.debug.blockScanner.tooltip=Display ID/Meta of block clicked on
 item.single.researchBook=Research Book
 item.single.researchBook.tooltip=Records Progress and Provides Info
+item.single.spawnerPlacer=Mob Spawner Tool
+item.single.structureGenerator=Structure Generator(World Gen)
 
 #gate spawner items
 item.gate.0=Wooden Gate
