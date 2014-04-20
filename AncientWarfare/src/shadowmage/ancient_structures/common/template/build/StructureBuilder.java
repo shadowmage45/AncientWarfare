@@ -23,6 +23,7 @@ package shadowmage.ancient_structures.common.template.build;
 import net.minecraft.world.World;
 import shadowmage.ancient_structures.api.TemplateRule;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -88,11 +89,18 @@ public boolean isFinished()
 
 public void instantConstruction()
   {
+  AWLog.logDebug("Initiating instant construction of: "+template.name);
+  long t1 = System.nanoTime();
   while(!this.isFinished)
     {
     this.placeCurrentPosition();
     }
   this.placeEntities();
+  long t2 = System.nanoTime();
+  long t3 = t2-t1;
+  long t4 = t3/1000000;
+  float t5 = (float)t4/(float)1000.f;
+  AWLog.logDebug("generation time: "+ t3 + " ("+(t4)+"ms) ("+t5+"s)");
   }
 
 protected void placeEntities()

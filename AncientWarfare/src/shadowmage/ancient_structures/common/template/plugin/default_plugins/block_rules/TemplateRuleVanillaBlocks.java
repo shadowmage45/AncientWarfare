@@ -27,6 +27,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import shadowmage.ancient_structures.api.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.utils.BlockInfo;
@@ -66,7 +68,31 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   {
   Block block = BlockDataManager.getBlockByName(blockName);
   int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns);  
-  world.setBlock(x, y, z, block.blockID, localMeta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
+  if(this.buildPass==0)
+    {
+    world.setBlock(x, y, z, block.blockID, localMeta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
+    }
+  else
+    {    
+    Chunk chunk = world.getChunkFromBlockCoords(x, z);
+    int cx = x&15; //(bitwise-and to scrub all bits above 15
+    int cz = z&15;
+    ExtendedBlockStorage[] st = chunk.getBlockStorageArray();
+    ExtendedBlockStorage stc = st[y>>4];
+    
+    if (stc == null)
+      {
+      stc = st[y >> 4] = new ExtendedBlockStorage(y >> 4 << 4, !world.provider.hasNoSky);
+      }
+    TileEntity te = chunk.getChunkBlockTileEntityUnsafe(x & 0xf, y, z & 0xf);
+    if (te != null)
+      {
+      world.removeBlockTileEntity(x, y, z);
+      }
+    stc.setExtBlockID(cx, y&15, cz, block.blockID);
+    stc.setExtBlockMetadata(cx, y&15, cz, localMeta);
+    world.markBlockForUpdate(x, y, z);       
+    }
   }
   
 @Override
