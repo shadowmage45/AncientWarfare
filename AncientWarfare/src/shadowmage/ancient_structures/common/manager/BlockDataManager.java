@@ -191,6 +191,9 @@ public static void loadBlockList()
   addBlock(Block.cauldron);
   addBlock(Block.tallGrass);
   
+  
+  addBlock(Block.redstoneLampActive).setBasicInventoryItem(Block.redstoneLampIdle.blockID, 0, 1);
+  
   for(int i = 0; i <16; i++)
     {
     BlockInfo.setInventoryBlock(id, i, Item.flowerPot.itemID, 0, 1);
