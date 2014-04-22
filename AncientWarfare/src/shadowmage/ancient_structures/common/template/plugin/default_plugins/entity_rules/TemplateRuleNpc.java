@@ -29,7 +29,9 @@ import net.minecraft.world.World;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
+import shadowmage.ancient_warfare.common.npcs.waypoints.WayPoint;
 import shadowmage.ancient_warfare.common.registry.NpcRegistry;
+import shadowmage.ancient_warfare.common.targeting.TargetType;
 
 public class TemplateRuleNpc extends TemplateRuleEntity
 {
@@ -70,7 +72,9 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
   Entity e = NpcRegistry.getNpcForType(npcType, world, npcLevel, npcTeam);
   if(e instanceof NpcBase)
     {
-    ((NpcBase)e).teamNum = npcTeam;
+    NpcBase npc = (NpcBase)e;
+    npc.teamNum = npcTeam;
+    npc.wayNav.setHomePoint(new WayPoint(x, y, z, TargetType.SHELTER));    
     }
   float x1 = BlockTools.rotateFloatX(xOffset, zOffset, turns);
   float z1 = BlockTools.rotateFloatZ(xOffset, zOffset, turns);
