@@ -84,11 +84,7 @@ public void handlePlacement(World world, int turns, int x, int y, int z)
       {
       stc = st[y >> 4] = new ExtendedBlockStorage(y >> 4 << 4, !world.provider.hasNoSky);
       }
-    TileEntity te = chunk.getChunkBlockTileEntityUnsafe(x & 0xf, y, z & 0xf);
-    if (te != null)
-      {
-      world.removeBlockTileEntity(x, y, z);
-      }
+    world.removeBlockTileEntity(x, y, z);
     stc.setExtBlockID(cx, y&15, cz, block.blockID);
     stc.setExtBlockMetadata(cx, y&15, cz, localMeta);
     world.markBlockForUpdate(x, y, z);       
