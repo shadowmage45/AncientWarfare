@@ -104,8 +104,8 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
 @Override
 public void addResources(List<ItemStack> resources)
   {
-  boolean found = false;
   Block block = BlockDataManager.getBlockByName(blockName);
+  if(block==Block.bed && meta>8){return;}
   IDPairCount count = BlockInfo.getInventoryBlock(block.blockID, meta);
   if(count!=null && count.id>0)
     {
