@@ -116,7 +116,7 @@ public static void loadBlockList()
   addBlock(Block.woodenButton).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 12, 9, 11, 10).setPriority(3);
   addBlock(Block.stoneButton).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 12, 9, 11, 10).setPriority(3);
   addBlock(Block.tripWireSource).setPriority(3).setRotatable().setMeta(0, 2, 3, 0, 1).setMeta(1, 6, 7, 4, 5).setMeta(2, 14, 15, 12, 13);
-  addBlock(Block.tripWire).setPriority(3).setRotatable().setMeta(0, 1, 1, 1, 1).setMeta(1, 0, 0, 0, 0);
+  addBlock(Block.tripWire).setPriority(3).setRotatable().setMeta(0, 1, 1, 1, 1).setMeta(1, 0, 0, 0, 0).setBasicInventoryItem(Item.silk.itemID, 0, 1);
   
   addBlock(Block.torchWood).setPriority(1).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);  
   addBlock(Block.torchRedstoneIdle).setPriority(3).setRotatable().setMeta(0, 4, 1, 3, 2).setMeta(1, 5, 5, 5, 5);
@@ -152,6 +152,12 @@ public static void loadBlockList()
   
   addBlock(Block.trapdoor).setRotatable().setPriority(1).setMeta(0, 1, 2, 0, 3).setMeta(1, 5, 6, 4, 7).setMeta(2, 9, 10, 8, 11).setMeta(3, 13, 14, 12, 15);
   addBlock(Block.hay).setRotatable().setPriority(0).setMeta(0, 8, 4, 8, 4).setMeta(2, 0, 0, 0, 0);
+  addBlock(Block.fire).setBasicInventoryItem(Block.netherrack.blockID, 0, 1);
+  addBlock(Block.carpet).setIsBasicSubtype();
+  addBlock(Block.cloth).setIsBasicSubtype();
+  addBlock(Block.sandStone).setIsBasicSubtype();
+  addBlock(Block.tilledField).setBasicInventoryItem(Block.dirt.blockID, 0, 1);
+  
   /**
    * add single slabs, and double slabs for stone
    */
