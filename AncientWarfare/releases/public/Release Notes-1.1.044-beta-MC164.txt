@@ -1,0 +1,67 @@
+Change Log AW-1.1.044-beta-MC164
+* FIX (NPCs) - Fix a crash potential crash related to NPCs and healing.
+* FIX (Research) - Fix a client-side crash that could occur when attempting
+    to view recipes with disabled research, or disabled recipes.
+* FIX (Automation Module) - Fix a NPE error in Civics that could cause crashes.
+* FIX (Crafting) - Fix issue related to buckets (duplication/deletion) in the auto-crafting station.
+* FIX (Structure Module) - Gate spawning items should now clear their cached location after placing a gate --
+    fixes issues of gate items becoming un-useable in creative mode after spawning the first gate.
+* FIX (Structure Module) - Add rotation mapping for:
+    Nether Brick Stairs
+    Trapdoors
+    Piston Extensions
+    Hay Bales
+* FIX (Structure Module) - Add Inventory item mapping for survival-mode structure building:
+    Lit Redstone Lamp (unlit lamp)  
+    Tall grass (seeds)
+    Dead Bush (seeds)
+    Cauldron (meta remap)
+    Fire (netherrack)
+    Tilled Dirt (dirt)
+
+*NEW (NPCs) - Add config option to disable the use of backpacks as an item.
+    
+*NEW (Structure Module) - Advanced Spawner
+
+*NEW (Structure Module) - Template System.  
+    Updated/back ported the new template system I was designing for 1.7 to the 1.6 branch.
+    Can load templates from the old system (however, does not load entities, or some of the other special data)
+    This template system has many major advantages over the previous system:
+        Plugin system for easy addition of more mod-handled blocks and entities 
+            (plugins need to written by the original mod author, or someone knowledgeable
+            with that mods' source)
+        Ability to handle complex tile-entity / nbt based blocks. (command blocks, mob spawners)
+        Improved ability to handle complex Entities (NBT tag support)
+        Selectable and configurable validation types.  Structures can now be flagged to spawn as:
+             Ground (normal)
+             Underground (dungeons/etc, non-visible from surface)
+             Water (floating on water -- floating islands / boats)
+             Island (in water with base extending to ocean floor)
+             Underwater (sunken ruins, ship-wrecks)
+             Harbor (partially on land and over water)
+             Sky (floating in the sky -- flying temples/cloud palaces/whatever)
+        Greaty improved structure placement validation, including:
+            Leveling / clearing validation with per-template block-targets list, and global/configurable 'skippables' blocks lists
+            Duplicate structure detection / minimum duplicate range specify-able in templates on a per-template basis.
+            Structures may be flagged as unique to only generate a single time.
+            Much improved detection for structure intersection (with either other AW structures, or those added by other mods)
+        User-definable biome aliases -- ability to specify different structure spawns for 
+            bop.meadows and highlands.meadows
+        Ability to load templates from .zip files (template packs)
+    Plugin is available for JAS (Just Another Spawner) to enable structure-specific mob-spawning. (will be posting shortly, along with example configs)
+    
+    NOTE If you had previously used the template system with custom templates, you likely need to
+        re-scan these templates into the new format.  While the new template system will _load_ old templates 
+        (and export a converted new-format copy of that template), it does not include support for placing entities
+        or many of the other complex features from the old system. If you wish to retain your structures, create a 
+        'building' world prior to updating to this version, place all structures, and rescan them with the new template system. 
+        Any 'old' format templates found in the /include directory will have a converted new-format copy placed 
+        into the /export directory.  From there you may copy the new format templates from the /export directory and
+        overwrite the old-format copies in the /include directory (Make sure to back up your originals first, just in case
+        something did not convert properly).
+    
+    NOTE This release does not include any templates.  Template packs are available as separate downloads.
+        There should be template packs available which include basic world-gen structures, and some structures
+        for survival mode (drafing station) use.  Additional structure packs will be made available over time.
+                         
+        
