@@ -1,3 +1,6 @@
+Change Log AW-1.1.045-beta-MC164
+* FIX (Structure Module) - Fix a crash when loading on a dedicated server related to loading templates.
+
 Change Log AW-1.1.044-beta-MC164
 * FIX (NPCs) - Fix a crash potential crash related to NPCs and healing.
 * FIX (Research) - Fix a client-side crash that could occur when attempting
