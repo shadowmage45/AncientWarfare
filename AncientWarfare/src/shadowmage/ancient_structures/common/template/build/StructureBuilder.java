@@ -143,6 +143,7 @@ protected void placeCurrentPosition()
 
 protected void placeAir()
   {
+  if(destination.y<=0){return;}
   if(!template.getValidationSettings().isPreserveBlocks())
     {
     template.getValidationSettings().handleClearAction(world, destination.x, destination.y, destination.z, template, bb);    
