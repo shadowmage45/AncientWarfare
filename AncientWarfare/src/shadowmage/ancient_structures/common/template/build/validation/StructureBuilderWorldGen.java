@@ -83,7 +83,6 @@ public void placeBlock(int x, int y, int z, Block block, int meta, int priority)
 
 protected Block getBiomeSpecificBlock(Block par1, int par2, BiomeGenBase biome)
   {
-  AWLog.logDebug("biome: "+biome);
   if(biome == BiomeGenBase.desert || biome == BiomeGenBase.desertHills || biome.topBlock==Block.sand.blockID)
     {
     if (par1 == Block.wood)
@@ -125,7 +124,7 @@ protected Block getBiomeSpecificBlock(Block par1, int par2, BiomeGenBase biome)
  */
 protected int getBiomeSpecificBlockMetadata(int par1, int par2, BiomeGenBase biome)
   {
-  if(biome == BiomeGenBase.desert || biome == BiomeGenBase.desertHills)
+  if(biome == BiomeGenBase.desert || biome == BiomeGenBase.desertHills || biome.topBlock==Block.sand.blockID)
     {
     if (par1 == Block.wood.blockID)
       {
