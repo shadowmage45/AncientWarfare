@@ -25,6 +25,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
 public class TemplateRuleBlockSign extends TemplateRuleVanillaBlocks
@@ -54,7 +55,7 @@ public TemplateRuleBlockSign()
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
   Block block = wall? Block.signWall : Block.signPost;//BlockDataManager.getBlockByName(blockName);
   int meta = 0;

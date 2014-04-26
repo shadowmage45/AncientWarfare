@@ -57,7 +57,7 @@ public TemplateRule()
  * @param y
  * @param z 
  */
-public abstract void handlePlacement(World world, int turns, int x, int y, int z);
+public abstract void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder);
 
 public abstract void parseRuleData(NBTTagCompound tag);
 public abstract void writeRuleData(NBTTagCompound tag);

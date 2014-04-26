@@ -24,6 +24,12 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.event.terraingen.BiomeEvent;
+import net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID;
+import net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockMeta;
+import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBuilder;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
@@ -43,6 +49,98 @@ protected void placeAir()
     {
     template.getValidationSettings().handleClearAction(world, destination.x, destination.y, destination.z, template, bb);    
     }
+  }
+
+@Override
+public void placeBlock(int x, int y, int z, Block block, int meta, int priority)
+  {
+  if(template.getValidationSettings().isBlockSwap())
+    {
+    BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
+    BiomeEvent.GetVillageBlockID evt1 = new GetVillageBlockID(biome, block.blockID, meta);
+    MinecraftForge.EVENT_BUS.post(evt1);
+    if(evt1.getResult() == Result.DENY && evt1.replacement!=block.blockID)
+      {
+      block = Block.blocksList[evt1.replacement];
+      }   
+    else
+      {
+      block = getBiomeSpecificBlock(block, meta, biome);
+      }
+    BiomeEvent.GetVillageBlockMeta evt2 = new GetVillageBlockMeta(biome, block.blockID, meta);
+    MinecraftForge.EVENT_BUS.post(evt2);
+    if(evt2.getResult()==Result.DENY)
+      {
+      meta = evt2.replacement;
+      }  
+    else
+      {
+      meta = getBiomeSpecificBlockMetadata(block.blockID, meta, biome);
+      }
+    }
+  super.placeBlock(x, y, z, block, meta, priority);
+  }
+
+protected Block getBiomeSpecificBlock(Block par1, int par2, BiomeGenBase biome)
+  {
+  AWLog.logDebug("biome: "+biome);
+  if(biome == BiomeGenBase.desert || biome == BiomeGenBase.desertHills || biome.topBlock==Block.sand.blockID)
+    {
+    if (par1 == Block.wood)
+      {
+      return Block.sandStone;
+      }
+
+    if (par1 == Block.cobblestone)
+      {
+      return Block.sandStone;
+      }
+
+    if (par1 == Block.planks)
+      {
+      return Block.sandStone;
+      }
+
+    if (par1 == Block.stairsWoodOak)
+      {
+      return Block.stairsSandStone;
+      }
+
+    if (par1 == Block.stairsCobblestone)
+      {
+      return Block.stairsSandStone;
+      }
+
+    if (par1 == Block.gravel)
+      {
+      return Block.sandStone;
+      }
+    }
+
+  return par1;
+  }
+
+/**
+ * Gets the replacement block metadata for the current biome
+ */
+protected int getBiomeSpecificBlockMetadata(int par1, int par2, BiomeGenBase biome)
+  {
+  if(biome == BiomeGenBase.desert || biome == BiomeGenBase.desertHills)
+    {
+    if (par1 == Block.wood.blockID)
+      {
+      return 0;
+      }
+    if (par1 == Block.cobblestone.blockID)
+      {
+      return 0;
+      }
+    if (par1 == Block.planks.blockID)
+      {
+      return 2;
+      }
+    }
+  return par2;
   }
 
 public void instantConstruction()

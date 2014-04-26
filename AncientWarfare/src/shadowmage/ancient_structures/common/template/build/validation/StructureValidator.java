@@ -55,7 +55,7 @@ private boolean survival;
 private boolean worldGenEnabled;
 private boolean isUnique;//should this structure generate only once?
 private boolean preserveBlocks;//should this structure preserve any existing blocks when a rule '0' is encountered?
-
+private boolean blockSwap;
 private boolean biomeWhiteList;//should treat biome list as white or blacklist?
 private Set<String> biomeList;//list of biomes for white/black list.  treated as white/black list from whitelist toggle
 
@@ -110,7 +110,7 @@ public void readFromTag(NBTTagCompound tag)
   maxFill = tag.getInteger("maxFill");  
   biomeWhiteList = tag.getBoolean("biomeWhiteList");
   dimensionWhiteList = tag.getBoolean("dimensionWhiteList");
-  
+  blockSwap = tag.getBoolean("blockSwap");
   if(tag.hasKey("biomeList"))
     {
     ArrayList<String> biomes = new ArrayList<String>();
@@ -189,7 +189,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   List<String> tagLines = new ArrayList<String>();
   Iterator<String> it = lines.iterator();
   String line;
-  boolean unique = false, worldGen = false, biome = false, dimension = false, blocks = false, survival = false;
+  boolean unique = false, worldGen = false, biome = false, dimension = false, blocks = false, survival = false, swapBlocks = false;
   int selectionWeight=1, clusterValue=1, duplicate=1, maxLeveling = 0, maxFill = 0, borderSize = 0;
   int[] dimensions = null;
   Set<String> biomes = new HashSet<String>();
@@ -204,12 +204,13 @@ public static final StructureValidator parseValidator(List<String> lines)
     else if(line.toLowerCase().startsWith("biomewhitelist=")){biome = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("dimensionwhitelist=")){dimension = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("preserveblocks=")){blocks = StringTools.safeParseBoolean("=", line);}
+    else if(line.toLowerCase().startsWith("blockswap=")){swapBlocks = StringTools.safeParseBoolean("=", line);}
     else if(line.toLowerCase().startsWith("dimensionlist=")){dimensions = StringTools.safeParseIntArray("=", line);}
     else if(line.toLowerCase().startsWith("biomelist=")){StringTools.safeParseStringsToSet(biomes, "=", line, true);}
     else if(line.toLowerCase().startsWith("selectionweight=")){selectionWeight = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("clustervalue=")){clusterValue = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("minduplicatedistance=")){duplicate = StringTools.safeParseInt("=", line);}
-    if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
+    else if(line.toLowerCase().startsWith("leveling=")){maxLeveling = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("fill=")){maxFill = StringTools.safeParseInt("=", line);}
     else if(line.toLowerCase().startsWith("border=")){borderSize = StringTools.safeParseInt("=", line);}   
     else if(line.toLowerCase().startsWith("validtargetblocks=")){StringTools.safeParseStringsToSet(validTargetBlocks, "=", line, false);}
@@ -246,6 +247,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   validator.survival = survival;
   validator.isUnique = unique;
   validator.preserveBlocks = blocks;
+  validator.blockSwap = swapBlocks;
   validator.clusterValue = clusterValue;
   validator.selectionWeight = selectionWeight;
   validator.minDuplicateDistance = duplicate;  
@@ -254,6 +256,9 @@ public static final StructureValidator parseValidator(List<String> lines)
   validator.maxLeveling = maxLeveling;      
   validator.borderSize = borderSize;
   validator.validTargetBlocks = validTargetBlocks;
+  
+  
+  AWLog.logDebug("parsed validator...blockSwap = "+swapBlocks);
   return validator;
   }
 
@@ -268,6 +273,8 @@ public static final void writeValidator(BufferedWriter out, StructureValidator v
   out.write("unique="+validator.isUnique);
   out.newLine();
   out.write("preserveBlocks="+validator.preserveBlocks);
+  out.newLine();
+  out.write("blockSwap="+validator.isBlockSwap());
   out.newLine();
   out.write("selectionWeight="+validator.selectionWeight);
   out.newLine();
@@ -603,4 +610,14 @@ public boolean isSurvival()
   {
   return survival;
   }
+
+/**
+ * @return the blockSwap
+ */
+public boolean isBlockSwap()
+  {
+  AWLog.logDebug("returning isBlockSwap: "+blockSwap);
+  return blockSwap;
+  }
+
 }

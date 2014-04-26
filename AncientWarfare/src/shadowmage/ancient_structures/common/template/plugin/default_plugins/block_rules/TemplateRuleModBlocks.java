@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.api.TemplateRuleBlock;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
@@ -55,7 +56,7 @@ public boolean shouldReuseRule(World world, Block block, int meta, int turns, Ti
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
   Block block = BlockDataManager.getBlockByName(blockName);
   world.setBlock(x, y, z, block.blockID, meta, 3);

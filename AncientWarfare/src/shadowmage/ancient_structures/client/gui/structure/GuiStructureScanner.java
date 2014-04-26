@@ -237,21 +237,22 @@ public void updateControls()
   
   totalHeight += 8;
   
-  totalHeight = addBooleanProp(22, "survival", "Available in Survival: ", false, totalHeight);
+  totalHeight = addBooleanProp(23, "survival", "Available in Survival: ", false, totalHeight);
   
   totalHeight = addBooleanProp(13, "enableWorldGen", "Enable World Gen: ", false, totalHeight);
   totalHeight = addBooleanProp(14, "unique", "Is Unique: ", false, totalHeight);
   totalHeight = addBooleanProp(15, "preserveBlocks", "Preserve Blocks: ", false, totalHeight);
+  totalHeight = addBooleanProp(16, "blockSwap", "Swap Blocks: ", false, totalHeight);
   
-  totalHeight = addIntegerProp(16, "selectionWeight", "Selection Weight: ", 1, totalHeight);
-  totalHeight = addIntegerProp(17, "clusterValue", "Cluster Value: ", 1, totalHeight);
-  totalHeight = addIntegerProp(18, "minDuplicateDistance", "Min Duplicate Distance: ", 1, totalHeight);
+  totalHeight = addIntegerProp(17, "selectionWeight", "Selection Weight: ", 1, totalHeight);
+  totalHeight = addIntegerProp(18, "clusterValue", "Cluster Value: ", 1, totalHeight);
+  totalHeight = addIntegerProp(19, "minDuplicateDistance", "Min Duplicate Distance: ", 1, totalHeight);
   
-  totalHeight = addIntegerProp(19, "borderSize", "Border Size: ", 0, totalHeight);
-  totalHeight = addIntegerProp(20, "maxLeveling", "Max Leveling: ", 0, totalHeight);
-  totalHeight = addIntegerProp(21, "maxFill", "Max Underfill: ", 0, totalHeight);
+  totalHeight = addIntegerProp(20, "borderSize", "Border Size: ", 0, totalHeight);
+  totalHeight = addIntegerProp(21, "maxLeveling", "Max Leveling: ", 0, totalHeight);
+  totalHeight = addIntegerProp(22, "maxFill", "Max Underfill: ", 0, totalHeight);
   
-  int elementNum = 23;
+  int elementNum = 24;
   for(ValidationProperty prop : currentValidationType.getValidationProperties())
     {
     if(prop.clz == int.class)

@@ -26,6 +26,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.npcs.NpcBase;
@@ -67,7 +68,7 @@ public TemplateRuleNpc()
 
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {  
   Entity e = NpcRegistry.getNpcForType(npcType, world, npcLevel, npcTeam);
   if(e instanceof NpcBase)

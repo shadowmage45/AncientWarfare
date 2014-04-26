@@ -25,6 +25,7 @@ import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 public class TemplateRuleEntityHanging extends TemplateRuleVanillaEntity
@@ -51,7 +52,7 @@ public TemplateRuleEntityHanging()
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
   int direction = (this.direction+turns)%4;
   hangTarget.reassign(x, y, z);

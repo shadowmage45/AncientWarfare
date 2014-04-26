@@ -1,0 +1,12 @@
+villagers need to save/load recipe nbt? -- have corrupt villagers in some of mohawky's template, need to examine
+way for server ops to remove templates
+
+
+Inventory block handling:
+    bed (duplicates)
+
+
+
+Templates to do:
+Log Cabin (survival)
+redstone mechanics (default)

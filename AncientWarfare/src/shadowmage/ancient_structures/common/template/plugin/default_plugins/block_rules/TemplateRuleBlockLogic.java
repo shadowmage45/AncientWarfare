@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.common.config.AWLog;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 
@@ -44,9 +45,9 @@ public TemplateRuleBlockLogic()
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
-  super.handlePlacement(world, turns, x, y, z);
+  super.handlePlacement(world, turns, x, y, z, builder);
   Block block = BlockDataManager.getBlockByName(blockName);
   tag.setInteger("x", x);
   tag.setInteger("y", y);

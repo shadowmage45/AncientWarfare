@@ -20,7 +20,12 @@
  */
 package shadowmage.ancient_structures.common.template.build;
 
+import net.minecraft.block.Block;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.api.TemplateRule;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.config.AWLog;
@@ -29,7 +34,7 @@ import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.utils.BlockPosition;
 
 
-public class StructureBuilder
+public class StructureBuilder implements IStructureBuilder
 {
 
 protected StructureTemplate template;
@@ -116,7 +121,49 @@ protected void placeEntities()
     BlockTools.rotateInArea(destination, template.xSize, template.zSize, turns);
     
     destination.offsetBy(bb.min);
-    rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);
+    rule.handlePlacement(world, turns, destination.x, destination.y, destination.z, this);
+    }
+  }
+
+/**
+ * should be called by template-rules to handle block-placement in the world.
+ * Handles village-block swapping during world-gen, and chunk-insert for blocks
+ * with priority > 0
+ * @param x
+ * @param y
+ * @param z
+ * @param block
+ * @param meta
+ * @param priority
+ */
+@Override
+public void placeBlock(int x, int y, int z, Block block, int meta, int priority)
+  {
+  if(priority==0)
+    {
+    world.setBlock(x, y, z, block.blockID, meta, 2);//using flag=2 -- no block update, but send still send to clients (should help with issues of things popping off)
+    }
+  else
+    {    
+    Chunk chunk = world.getChunkFromBlockCoords(x, z);
+    int cx = x&15; //(bitwise-and to scrub all bits above 15
+    int cz = z&15;
+    ExtendedBlockStorage[] st = chunk.getBlockStorageArray();
+    ExtendedBlockStorage stc = st[y>>4];    
+    if (stc == null)
+      {
+      stc = st[y >> 4] = new ExtendedBlockStorage(y >> 4 << 4, !world.provider.hasNoSky);
+      }
+    world.removeBlockTileEntity(x, y, z);
+    stc.setExtBlockID(cx, y&15, cz, block.blockID);
+    stc.setExtBlockMetadata(cx, y&15, cz, meta);
+    if(block.hasTileEntity(meta))
+      {
+      TileEntity te = block.createTileEntity(world, meta);
+      chunk.setChunkBlockTileEntity(x & 15, y, z & 15, te);
+      world.addTileEntity(te);//add TE to world added/loaded TE list
+      }
+    world.markBlockForUpdate(x, y, z);       
     }
   }
 
@@ -155,7 +202,7 @@ protected void placeRule(TemplateRule rule)
   if(destination.y<=0){return;}
   if(rule.shouldPlaceOnBuildPass(world, turns, destination.x, destination.y, destination.z, currentPriority))
     {
-    rule.handlePlacement(world, turns, destination.x, destination.y, destination.z);    
+    rule.handlePlacement(world, turns, destination.x, destination.y, destination.z, this);    
     }
   }
 

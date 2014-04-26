@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.utils.LootGenerator;
 
@@ -77,7 +78,7 @@ public TemplateRuleBlockInventory()
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
   Block block = BlockDataManager.getBlockByName(blockName);
   int localMeta = BlockDataManager.getRotatedMeta(block, this.meta, turns);  

@@ -26,6 +26,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 import shadowmage.ancient_warfare.common.vehicles.VehicleBase;
@@ -68,7 +69,7 @@ public TemplateRuleVehicle()
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {  
   VehicleBase e = VehicleType.getVehicleForType(world, vehicleType, vehicleLevel);
   e.teamNum = vehicleTeam;

@@ -27,6 +27,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 
@@ -59,7 +60,7 @@ public TemplateRuleVanillaEntity()
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
   Entity e = EntityList.createEntityByName(mobID, world);
   float x1 = BlockTools.rotateFloatX(xOffset, zOffset, turns);

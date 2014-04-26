@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import shadowmage.ancient_structures.api.IStructureBuilder;
 import shadowmage.ancient_structures.common.utils.BlockTools;
 
 public class TemplateRuleEntityLogic extends TemplateRuleVanillaEntity
@@ -44,7 +45,7 @@ public TemplateRuleEntityLogic(World world, Entity entity, int turns, int x, int
   }
 
 @Override
-public void handlePlacement(World world, int turns, int x, int y, int z)
+public void handlePlacement(World world, int turns, int x, int y, int z, IStructureBuilder builder)
   {
   Entity e = EntityList.createEntityByName(mobID, world);
   NBTTagList list = tag.getTagList("Pos");
