@@ -260,6 +260,7 @@ public void setCoreInfo()
   this.allowFriendlyFire = config.get("a-general-options", "allow_friendly_fire", false, "If true, soldiers can/will injure other friendly soldiers with arrows/ammunitions").getBoolean(false);
   this.mailDimensionalTime = config.get("a-general-options", "mailbox_dimensional_delay", mailDimensionalTime, "Delay introduced for cross-dimensional mail in ticks. Any mail sent across dimensions will take this number of ticks to arrive").getInt(mailDimensionalTime);
   this.backpacksEnabled = config.get("a-general-options", "backpacks_enabled", true, "Enable/disable the opening of the backpack GUI (essentially enabling/disabling backpacks)").getBoolean(true);
+  this.npcUpkeepTicks = config.get("a-general-options", "npc_upkeep_ticks", npcUpkeepTicks, "Number of ticks for upkeep (food) timer for NPCs").getInt(npcUpkeepTicks);
   
   /**
    * performance options
