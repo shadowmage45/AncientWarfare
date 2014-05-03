@@ -638,7 +638,6 @@ public boolean isSurvival()
  */
 public boolean isBlockSwap()
   {
-  AWLog.logDebug("returning isBlockSwap: "+blockSwap);
   return blockSwap;
   }
 
