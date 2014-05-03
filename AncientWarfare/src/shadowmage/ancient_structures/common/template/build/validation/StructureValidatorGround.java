@@ -64,7 +64,7 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
 
 @Override
 public void handleClearAction(World world, int x, int y, int z, StructureTemplate template, StructureBB bb)
-  {
+  {  
   world.setBlock(x, y, z, 0);
   }
 

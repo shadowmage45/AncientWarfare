@@ -114,6 +114,11 @@ protected Block getBiomeSpecificBlock(Block par1, int par2, BiomeGenBase biome)
       {
       return Block.sandStone;
       }
+    
+    if(par1 == Block.woodSingleSlab && par2==0)
+      {
+      return Block.stoneSingleSlab;
+      }
     }
 
   return par1;
@@ -137,6 +142,10 @@ protected int getBiomeSpecificBlockMetadata(int par1, int par2, BiomeGenBase bio
     if (par1 == Block.planks.blockID)
       {
       return 2;
+      }
+    if(par1 == Block.stoneSingleSlab.blockID && par2==0)
+      {
+      return 1;
       }
     }
   return par2;

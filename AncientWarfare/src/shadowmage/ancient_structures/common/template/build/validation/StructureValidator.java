@@ -521,6 +521,28 @@ protected void borderLeveling(World world, int x, int z, StructureTemplate templ
     {
     world.setBlock(x, y, z, fillBlockID);
     }  
+  if(validationType==StructureValidationType.GROUND)
+    {
+    int skipCount = 0;
+    for(int y1 = y+1; y1<world.provider.getHeight(); y1++)//lazy clear block handling
+      {
+      block = Block.blocksList[world.getBlockId(x, y1, z)]; 
+      if(block==null)
+        {
+        skipCount++;
+        if(skipCount>=10)//exit out if 10 blocks are found that are not clearable
+          {
+          break;
+          }
+        continue;
+        }
+      skipCount = 0;//if we didn't skip this block, reset skipped count
+      if(AWStructureStatics.skippableBlocksContains(BlockDataManager.instance().getBlockName(block)))
+        {
+        world.setBlockToAir(x, y1, z);      
+        }      
+      }
+    }
   }
 
 protected void borderFill(World world, int x, int z, StructureTemplate template, StructureBB bb)
