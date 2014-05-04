@@ -22,10 +22,13 @@ package shadowmage.ancient_structures.common.template.build.validation;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import shadowmage.ancient_structures.common.config.AWLog;
+import shadowmage.ancient_structures.common.config.AWStructureStatics;
 import shadowmage.ancient_structures.common.manager.BlockDataManager;
 import shadowmage.ancient_structures.common.template.StructureTemplate;
 import shadowmage.ancient_structures.common.template.build.StructureBB;
+import shadowmage.ancient_structures.common.world_gen.WorldStructureGenerator;
 
 public class StructureValidatorGround extends StructureValidator
 {
@@ -66,6 +69,52 @@ public void preGeneration(World world, int x, int y, int z, int face, StructureT
 public void handleClearAction(World world, int x, int y, int z, StructureTemplate template, StructureBB bb)
   {  
   world.setBlock(x, y, z, 0);
+  }
+
+@Override
+protected void borderLeveling(World world, int x, int z, StructureTemplate template, StructureBB bb)
+  {
+  if(maxLeveling<=0){return;}
+  int topFilledY = WorldStructureGenerator.getTargetY(world, x, z, true);
+  int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);  
+  for(int y = bb.min.y + template.yOffset + step; y <= topFilledY ; y++)
+    {
+    handleClearAction(world, x, y, z, template, bb);
+    }
+  BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
+  int fillBlockID = Block.grass.blockID;
+  if(biome!=null && biome.topBlock>=1)
+    {
+    fillBlockID = biome.topBlock;
+    }
+  int y = bb.min.y + template.yOffset + step - 1;
+  Block block = Block.blocksList[world.getBlockId(x, y, z)];
+  if(block!=null && block!= Block.waterMoving && block!=Block.waterStill && !AWStructureStatics.skippableBlocksContains(BlockDataManager.getBlockName(block)))
+    {
+    world.setBlock(x, y, z, fillBlockID);
+    }  
+  if(validationType==StructureValidationType.GROUND)
+    {
+    int skipCount = 0;
+    for(int y1 = y+1; y1<world.provider.getHeight(); y1++)//lazy clear block handling
+      {
+      block = Block.blocksList[world.getBlockId(x, y1, z)]; 
+      if(block==null)
+        {
+        skipCount++;
+        if(skipCount>=10)//exit out if 10 blocks are found that are not clearable
+          {
+          break;
+          }
+        continue;
+        }
+      skipCount = 0;//if we didn't skip this block, reset skipped count
+      if(AWStructureStatics.skippableBlocksContains(BlockDataManager.instance().getBlockName(block)))
+        {
+        world.setBlockToAir(x, y1, z);      
+        }      
+      }
+    }
   }
 
 }
