@@ -505,13 +505,13 @@ protected void borderLeveling(World world, int x, int z, StructureTemplate templ
   if(maxLeveling<=0){return;}
   int topFilledY = WorldStructureGenerator.getTargetY(world, x, z, true);
   int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);  
-  for(int y = bb.min.y + template.yOffset + step; y <= topFilledY ; y++)
+  for(int y = bb.min.y + template.yOffset + step; y <= topFilledY && y<256; y++)
     {
     handleClearAction(world, x, y, z, template, bb);
     }
   BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
   int fillBlockID = Block.grass.blockID;
-  if(biome!=null && biome.topBlock>=1)
+  if(biome!=null && biome.topBlock>=1 && Block.blocksList[biome.topBlock]!=null)
     {
     fillBlockID = biome.topBlock;
     }
@@ -529,10 +529,14 @@ protected void borderFill(World world, int x, int z, StructureTemplate template,
   int maxFillY = getMaxFillY(template, bb);  
   int step = WorldStructureGenerator.getStepNumber(x, z, bb.min.x, bb.max.x, bb.min.z, bb.max.z);  
   maxFillY -= step;
+  if(maxFillY>=256)
+    {
+    maxFillY=255;
+    }
   Block block;
   BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
   int fillBlockID = Block.grass.blockID;
-  if(biome!=null && biome.topBlock>=1)
+  if(biome!=null && biome.topBlock>=1 && Block.blocksList[biome.topBlock]!=null)
     {
     fillBlockID = biome.topBlock;
     }
@@ -551,7 +555,7 @@ protected void underFill(World world, int x, int z, StructureTemplate template, 
   int topFilledY = WorldStructureGenerator.getTargetY(world, x, z, true);
   BiomeGenBase biome = world.getBiomeGenForCoords(x, z);  
   int fillBlockID = Block.grass.blockID;
-  if(biome!=null && biome.topBlock>=1)
+  if(biome!=null && biome.topBlock>=1 && Block.blocksList[biome.topBlock]!=null)
     {
     fillBlockID = biome.topBlock;
     }
