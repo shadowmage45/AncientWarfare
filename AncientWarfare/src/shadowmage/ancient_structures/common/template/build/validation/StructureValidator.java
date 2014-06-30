@@ -256,9 +256,7 @@ public static final StructureValidator parseValidator(List<String> lines)
   validator.maxLeveling = maxLeveling;      
   validator.borderSize = borderSize;
   validator.validTargetBlocks = validTargetBlocks;
-  
-  
-  AWLog.logDebug("parsed validator...blockSwap = "+swapBlocks);
+    
   return validator;
   }
 

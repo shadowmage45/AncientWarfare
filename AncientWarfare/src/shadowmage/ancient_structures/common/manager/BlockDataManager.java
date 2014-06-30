@@ -25,6 +25,7 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import shadowmage.ancient_structures.common.utils.BlockInfo;
+import shadowmage.ancient_warfare.common.block.BlockLoader;
 
 public class BlockDataManager
 {
@@ -208,8 +209,12 @@ public static void loadBlockList()
     BlockInfo.setInventoryBlock(Block.cauldron.blockID, i, Item.cauldron.itemID, 0, 1);
     }
   
+  addBlock(BlockLoader.reinforced).setIsBasicSubtype();
+  
   load17names();
   loadRegNames();
+  
+  
   }
 
 private static void loadRegNames()
@@ -463,6 +468,7 @@ private static void load17names()
   add17NameMaping(Block.carpet, "carpet");
   add17NameMaping(Block.hardenedClay, "hardened_clay");
   add17NameMaping(Block.coalBlock, "coal_block");
+  add17NameMaping(BlockLoader.reinforced, "reinforced_block");
   }
 
 private static void add17NameMaping(Block block, String name)

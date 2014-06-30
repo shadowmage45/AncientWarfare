@@ -40,9 +40,11 @@ import shadowmage.ancient_structures.api.TemplateRuleBlock;
 import shadowmage.ancient_structures.api.TemplateRuleEntity;
 import shadowmage.ancient_structures.common.template.load.TemplateParser;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginGates;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginModDefault;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginNpcs;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVanillaHandler;
 import shadowmage.ancient_structures.common.template.plugin.default_plugins.StructurePluginVehicles;
+import shadowmage.ancient_structures.common.template.plugin.default_plugins.block_rules.TemplateRuleModBlocks;
 import shadowmage.ancient_warfare.common.utils.StringTools;
 
 public class StructurePluginManager implements IStructurePluginManager, IStructurePluginLookup
@@ -59,7 +61,6 @@ private HashMap<Class<? extends Entity>, String> pluginByEntity = new HashMap<Cl
 
 private StructurePluginVanillaHandler vanillaPlugin;
 
-
 public void loadPlugins()
   {  
   vanillaPlugin = new StructurePluginVanillaHandler();  
@@ -67,8 +68,9 @@ public void loadPlugins()
   this.registerPlugin(new StructurePluginGates());
   StructurePluginNpcs.load();
   StructurePluginVehicles.load();
-  
+    
   MinecraftForge.EVENT_BUS.post(new StructurePluginRegistrationEvent(this));
+  this.registerPlugin(new StructurePluginModDefault());
   
   for(StructureContentPlugin plugin : this.loadedContentPlugins)
     {
@@ -107,9 +109,9 @@ public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, in
   {
   TemplateRule rule;    
   Class<?extends TemplateRule> clz = blockRules.get(block);
+  int meta = world.getBlockMetadata(x, y, z);  
   if(clz!=null)
     {
-    int meta = world.getBlockMetadata(x, y, z);  
     try
       {
       rule = clz.getConstructor(World.class, int.class, int.class, int.class, Block.class, int.class, int.class).newInstance(world, x, y, z, block, meta, turns);
@@ -139,7 +141,7 @@ public TemplateRuleBlock getRuleForBlock(World world, Block block, int turns, in
       {
       e.printStackTrace();
       }      
-    }  
+    }
   return null;
   }
 
