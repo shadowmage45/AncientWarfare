@@ -1,0 +1,361 @@
+/* ==== LINK and TEXT COLORS ==== */
+.WikiLogoName a { color: #FFF; }
+.WikiFooterNav, .WikiFooterNav a, .WikiLicense, .WikiLicense a { color: #000000; }
+#wikiBox { color: #000; }
+.sidebar a { color: #000000; }
+.sidebar .wiki span a { color: inherit; }
+
+/* ==== GENERAL STYLES ==== */
+body { background-color: #DEDEDE; font-family: 'Lucida Grande', Arial, Helvetica, sans-serif; font-size: 18px; margin: 0; padding: 0; display: grid; grid-template-rows: auto auto; margin-right: calc(-1 * (100vw - 100%)); overflow-x: hidden; }
+#wrapper { background-color: #DEDEDE; /*float: left;  position: relative; min-width: 925px;*/ }
+/*#wrapper, .header, #wikiBody { width: 100%; }*/
+img { border: 0; max-width: 100% }
+.footer a, .sidebar a { text-decoration: none; }
+.footer a:hover, .sidebar a:hover { text-decoration: underline; }
+details { cursor: pointer; }
+
+/* ==== HEADER ==== */
+.header { background: #000000 url(i/header-overlay.png) repeat-x bottom left; /*float: left; overflow: visible; position: relative;*/ }
+.WikiLogoTable { float: left; padding-left: 17px; margin: 13px 0; }
+.WikiLogo { float: left; padding-left: 17px; margin: 5px 0; }
+.WikiLogoName a { font-size: 1.5em; font-weight: normal; text-decoration: none; }
+.headerSwoop { background: transparent url('i/pl-background.png') no-repeat 100% -20px; min-height: 85px; width: 100%; }
+.headerInner { float: right; line-height: 1; min-height: 52px; width: 100%; }
+
+/* ==== CONTENT ==== */
+#wikiBody { /*clear: both;*/ padding-top: 15px; display: grid; grid-template-areas: "left nav content right"; grid-template-columns: 1fr 25ch 80ch 1fr; gap: 2ch }
+#wikiBox { /*margin: 0 15px 5px 228px; min-width: 682px; width: auto; */ grid-area: content }
+#wikiBoxTable { table-layout: fixed; width: 100%; }
+#leftGradient { background: transparent url(i/left-gradient.png) repeat-y top right; width: 5px; }
+#rightGradient { background: transparent url(i/right-gradient.png) repeat-y top left; width: 5px; }
+#topGradient { background: transparent url(i/top-gradient.png) repeat-x top left; height: 3px; }
+#topLeftGradient { background: transparent url(i/top-left-gradient.png) no-repeat top right; height: 3px; width: 5px; }
+#topRightGradient { background: transparent url(i/top-right-gradient.png) no-repeat top left; height: 3px; width: 5px; }
+#bottomGradient { background: transparent url(i/bottom-gradient.png) repeat-x top left; height: 5px; }
+#bottomLeftGradient { background: transparent url(i/bottom-left-gradient.png) no-repeat top right; height: 5px; width: 5px; }
+#bottomRightGradient { background: transparent url(i/bottom-right-gradient.png) no-repeat top left; height: 5px; width: 5px; }
+#centerCell { background-color: #FFF; padding: 15px; }
+#content_view.wiki { /*overflow-x: auto;*/ overflow-y: }
+
+/* ==== FOOTER ==== */
+.footer { padding: 10px 0 15px; text-align: center; }
+.WikiFooterNav { padding-bottom: 5px; }
+.WikiFooterNav a { font-size: 1em; padding: 0 8px; }
+.WikiLicense img { vertical-align: text-bottom; }
+
+/* ==== SIDEBAR ==== */
+.sidebar { /*position: absolute; left: 0; padding: 5px 6px 0 17px; width: 200px;*/ grid-area: nav; }
+.actions { padding-bottom: 15px; min-height: 9em }
+.WikiActions { list-style-type: none; margin: 0; padding: 0; }
+.WikiCustomNav { padding: 0; width: 100%; }
+.WikiCustomNav ul { margin: 0; padding: 0 0 0 1em; }
+.WikiCustomNav ol { padding-left: 1.5em; }
+.WikiCustomNav ol.includePageList { padding-left: 0; }
+.WikiCustomNav a { font-family: 'Lucida Grande', Arial, Helvetica, sans-serif; font-size: 1em; }
+.WikiActions li { padding-bottom: 6px; white-space: nowrap; height: 1.2em; }
+.WikiActions a { font-size: 1em; font-family: 'Lucida Grande',Arial,Helvetica,sans-serif; }
+.WikiActions img { padding-right: 0.5em; }
+.editNav { padding: 5px 0 15px; text-align: center; }
+.editNav a { color: #666; }
+
+ul.sidenav,
+ul.sidenav details ul { list-style-type: none; margin: 0; padding: 0; }
+ul.sidenav details ul { padding-left: 20; }
+ul.sidenav details { margin: 5 0 5 0; }
+ul.sidenav details li { margin: 5 0 5 0; }
+
+/* ==== ICONS ==== */
+.icon-home::before { content: "\f015"; }
+.icon-time::before { content: "\f017"; }
+.icon-file-text-alt::before { content: "\f0f6"; }
+.icon-user::before { content: "\f007"; }
+
+.wiki { line-height: 1.5; font-family: arial, helvetica, sans-serif; /*font-size: 13px;*/ }
+.wiki h1 { font-weight: bold; padding: 5px 0 0 0; margin: 0; font-size: 1.4em; }
+.wiki h2 { font-weight: bold; padding: 5px 0 0 0; margin: 0; font-size: 1.3em; }
+.wiki h3 { font-weight: bold; padding: 5px 0 0 0; margin: 0; font-size: 1.1em; }
+.wiki h4 { font-weight: normal; padding: 5px 0 0 0; margin: 0; font-size: 1.066em; }
+.wiki h5 { font-weight: normal; padding: 5px 0 0 0; margin: 0; font-size: 1.033em; }
+.wiki h6 { font-weight: normal; padding: 5px 0 0 0; margin: 0; font-size: 1.0em; }
+.wiki table { border-collapse: collapse; margin: 10px 1px; font-size: 13px; }
+.wiki p { margin: 0; padding: 0; padding: 5px 0; }
+.wiki td { border: 1px solid #DDD; vertical-align: top; min-width: 5px; min-height: 20px; }
+.wiki th { min-width: 5px; min-height: 20px; }
+.wiki #toc { border: 1px solid #DCDCDC; background: #F3F3F3; padding: 6px; margin: 0 0 10px 10px; width: 25%; float: right; clear: right; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; }
+.wiki #toc h1 { font-weight: normal; font-size: 1.2em; padding: 0; }
+.wiki #toc div { padding-bottom:  3px; }
+.wiki pre { background-color: #EEE; border: 1px solid #CCC; padding: 10px; font-size: 13px; overflow-x: auto; }
+.wiki .nob td { border: 0; }
+.wiki hr { height: 1px; color: #AAA; background-color: #AAA; border: 0; margin: 0.5em 0; }
+.wiki ul { padding: 0 0 0 3em; margin: 0; margin-top: 0.5em; }
+.wiki ol { padding: 0 0 0 3em; margin: 0; margin-top: 0.5em; }
+.wiki ul.quotelist { list-style: none; }
+.wiki a.ext { background: url(i/a.gif) center right no-repeat; padding-right: 10px; }
+.wiki a.wiki_link_new { color: #600; }
+.wiki a.wiki_link_ext { background: url(i/a.gif) center right no-repeat; padding-right: 10px; }
+.wiki img { border: 0; padding: 4px; }
+
+.wiki .includeBodyActive { background: #fffacd; }
+.wiki .includeBody { background: inherit; clear: left; }
+.wiki .includeHeader { padding: 2px; padding-top: 2px; }
+.wiki .includeTitle { font-size: 120%; font-weight: bold; }
+.wiki .includeEditButton { float: right; padding-left: 10px; padding-right: 10px;}
+.wiki .includeEditButtonActive { float: right; padding-left: 10px; padding-right: 10px; }
+.wiki .includeEditButton a { color: #888888; font-size: 80%; text-decoration: none; }
+.wiki .includeEditButtonActive a { color: black; font-size: 80%; text-decoration: none; }
+
+.wiki .captionBox { border: 1px #CCC solid; padding: 5px; margin: 2px; /*width: 1em;*/ text-align: center; }
+
+.wiki .userLink { font-weight: bold; }
+.wiki .userLinkGuest { font-weight: bold; }
+
+.wiki .comment { display: none; }
+
+/* Adjust custom nav list padding */
+.WikiCustomNav ol { padding-left: 1.5em; }
+.WikiCustomNav ul { padding-left: 1em; }
+.WikiCustomNav ol.includePageList { padding-left: 0; }
+
+.wiki .RssAuthor { color: #666; font-size: 80%; }
+.wiki .RssDate { color: #666; font-size: 80%; }
+
+.wiki table.includeComments { border-collapse: collapse; padding: 0; margin: 0; width: 100%; }
+.wiki table.includeComments td, .wiki table.includeComments th { border: 1px solid #DDD; padding: 4px; margin: 0; }
+.wiki table.includeComments th { color: #333; padding: 4px; margin: 0; text-align: center; white-space: nowrap; }
+.wiki table.includeComments thead th { background:url(i/gradient_grey.gif) top left repeat-x #FFF; }
+.wiki table.includeComments tfoot th { background-color: #EEE; }
+
+.wiki table.includeHistory { border-collapse: collapse; padding: 0; margin: 0; width: 100%; }
+.wiki table.includeHistory td, .wiki table.includeHistory th { border: 1px solid #DDD; padding: 4px; margin: 0; }
+.wiki table.includeHistory th { color: #333; padding: 4px; margin: 0; text-align: center; white-space: nowrap; }
+.wiki table.includeHistory thead th { background:url(i/gradient_grey.gif) top left repeat-x #FFF; }
+.wiki table.includeHistory tfoot th { background-color: #EEE; }
+
+.wiki table.includeBacklinks { border-collapse: collapse; padding: 0; margin: 0; width: 100%; }
+.wiki table.includeBacklinks td, .wiki table.includeBacklinks th { border: 1px solid #DDD; padding: 4px; margin: 0; }
+.wiki table.includeBacklinks th { color: #333; padding: 4px; margin: 0; text-align: center; white-space: nowrap; }
+.wiki table.includeBacklinks thead th { background:url(i/gradient_grey.gif) top left repeat-x #FFF; }
+.wiki table.includeBacklinks tfoot th { background-color: #EEE; }
+
+.wiki ul.includeEditorsLarge { list-style: none; display: inline; padding: 0; }
+.wiki ul.includeEditorsSmall { list-style: none; display: inline; padding: 0; }
+.wiki ul.includeEditorsLarge li { display: inline; padding: 2px; }
+.wiki ul.includeEditorsSmall li { display: block; padding: 2px; }
+
+.wiki ol.includePageList { list-style: none; margin-left: 6px; padding: 0; text-indent: -6px; }
+.wiki ol.includeWikiList { list-style: none; margin-left: 6px; padding: 0; text-indent: -6px; }
+
+.wiki ol.includeTagCloud { list-style: none; display: inline; padding: 0; }
+.wiki ol.includeTagCloud li { display: inline; padding: 2px;}
+
+.wiki .objectEmbed { font-size: 13px; font-family: arial, helvetica, sans-serif; line-height: 1.5; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; border: 1px solid #DCDCDC; background: #F3F3F3; padding: 6px; display: inline-block; }
+.wiki .objectEmbed div { float: left; width: 268px; margin: 0 0 0 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wiki .objectEmbed div.notfound { margin-top: 10px; }
+.wiki .objectEmbed a.filename { margin-top: 4px; text-decoration: none; font-weight: bold; color: inherit; }
+.wiki .objectEmbed img { float: left; padding: 0; margin: 2px 0; }
+.wiki .objectEmbed ul { margin: 0; padding: 0; }
+.wiki .objectEmbed li { display: inline; list-style-type: none; padding-right: .5em; white-space: nowrap; }
+
+.ws-menu-bar {
+  margin-bottom: 10px;
+  padding-bottom: 0;
+  position: relative;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.ws-menu-bar .ws-star {
+  cursor: pointer;
+  vertical-align: 10%;
+}
+.ws-menu-bar .ws-star .ws-star-no {
+  color: #ddd;
+}
+.ws-menu-bar .ws-star .ws-star-yes {
+  color: #e3cf7a;
+}
+.ws-menu-bar .ws-star.ws-star-yes .ws-star-no {
+  display: none;
+}
+.ws-menu-bar .ws-star.ws-star-no .ws-star-yes {
+  display: none;
+}
+.ws-menu-bar .PageTitle {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 32px;
+  /* match MenuBar */
+
+}
+.ws-menu-bar .PageTitle a {
+  color: black;
+  text-decoration: none;
+}
+.ws-menu-bar .PageTitle a:hover {
+  text-decoration: underline;
+}
+.ws-menu-bar .ws-more-menu .dropdown .ws-tag-dropdown-menu {
+  padding: 5px;
+}
+
+/*!
+ *  Font Awesome 3.2.1
+ *  the iconic font designed for Bootstrap
+ *  ------------------------------------------------------------------------------
+ *  The full suite of pictographic icons, examples, and documentation can be
+ *  found at http://fontawesome.io.  Stay up to date on Twitter at
+ *  http://twitter.com/fontawesome.
+ *
+ *  License
+ *  ------------------------------------------------------------------------------
+ *  - The Font Awesome font is licensed under SIL OFL 1.1 -
+ *    http://scripts.sil.org/OFL
+ *  - Font Awesome CSS, LESS, and SASS files are licensed under MIT License -
+ *    http://opensource.org/licenses/mit-license.html
+ *  - Font Awesome documentation licensed under CC BY 3.0 -
+ *    http://creativecommons.org/licenses/by/3.0/
+ *  - Attribution is no longer required in Font Awesome 3.0, but much appreciated:
+ *    "Font Awesome by Dave Gandy - http://fontawesome.io"
+ *
+ *  Author - Dave Gandy
+ *  ------------------------------------------------------------------------------
+ *  Email: dave@fontawesome.io
+ *  Twitter: http://twitter.com/davegandy
+ *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
+ */
+/* FONT PATH
+ * -------------------------- */
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('fontawesome-webfont.eot');
+  src: url('fontawesome-webfont-iefix.eot') format('embedded-opentype'), url('fontawesome-webfont.woff') format('woff'), url('fontawesome-webfont.ttf') format('truetype'), url('fontawesome-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* FONT AWESOME CORE
+ * -------------------------- */
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  /*-webkit-font-smoothing: antialiased;*/
+  margin-right: .3em;
+  display: inline-block;
+  width: 1em;
+}
+[class^="icon-"]:before,
+[class*=" icon-"]:before {
+  text-decoration: inherit;
+  display: inline-block;
+  speak: none;
+}
+/* makes the font 33% larger relative to the icon container */
+.icon-large:before {
+  vertical-align: -10%;
+  font-size: 1.3333333333333333em;
+}
+/* makes sure icons active on rollover in links */
+a [class^="icon-"],
+a [class*=" icon-"] {
+  /*display: inline;*/
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+/* increased font size for icon-large */
+[class^="icon-"].icon-fixed-width,
+[class*=" icon-"].icon-fixed-width {
+  display: inline-block;
+  width: 1.1428571428571428em;
+  text-align: right;
+  padding-right: 0.2857142857142857em;
+}
+[class^="icon-"].icon-fixed-width.icon-large,
+[class*=" icon-"].icon-fixed-width.icon-large {
+  width: 1.4285714285714286em;
+}
+.icons-ul {
+  margin-left: 2.142857142857143em;
+  list-style-type: none;
+}
+.icons-ul > li {
+  position: relative;
+}
+.icons-ul .icon-li {
+  position: absolute;
+  left: -2.142857142857143em;
+  width: 2.142857142857143em;
+  text-align: center;
+  line-height: inherit;
+}
+[class^="icon-"].hide,
+[class*=" icon-"].hide {
+  display: none;
+}
+.icon-muted {
+  color: #eeeeee;
+}
+.icon-light {
+  color: #ffffff;
+}
+.icon-dark {
+  color: #333333;
+}
+.icon-border {
+  border: solid 1px #eeeeee;
+  padding: .2em .25em .15em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.icon-2x {
+  font-size: 2em;
+}
+.icon-2x.icon-border {
+  border-width: 2px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.icon-3x {
+  font-size: 3em;
+}
+.icon-3x.icon-border {
+  border-width: 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.icon-4x {
+  font-size: 4em;
+}
+.icon-4x.icon-border {
+  border-width: 4px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+.icon-5x {
+  font-size: 5em;
+}
+.icon-5x.icon-border {
+  border-width: 5px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+}
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+[class^="icon-"].pull-left,
+[class*=" icon-"].pull-left {
+  margin-right: .3em;
+}
+[class^="icon-"].pull-right,
+[class*=" icon-"].pull-right {
+  margin-left: .3em;
+}
